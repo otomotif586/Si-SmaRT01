@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"> <!-- Font Inter -->
     <!-- Modular CSS (split by function) -->
+    <link rel="stylesheet" href="public/css/animations.css?v=<?= time() ?>">
     <link rel="stylesheet" href="public/css/core.css?v=<?= time() ?>">
     <link rel="stylesheet" href="public/css/layout.css?v=<?= time() ?>">
     <link rel="stylesheet" href="public/css/components.css?v=<?= time() ?>">

@@ -71,28 +71,36 @@ function renderPosCards(posData) {
     }
 
     let html = '';
-    posData.forEach(p => {
-        const pct = p.pemasukan > 0 ? ((p.pengeluaran / p.pemasukan) * 100).toFixed(0) : 0;
+    posData.forEach((p, index) => {
+        const pct = p.pemasukan > 0 ? Math.min(((p.pengeluaran / p.pemasukan) * 100), 100).toFixed(0) : 0;
+        const delay = (index % 3 + 1) * 0.1;
+        
         html += `
-            <div class="glass-card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+            <div class="glass-card-deluxe stagger-item" style="animation-delay: ${delay}s; padding: 20px; display: flex; flex-direction: column; height: 100%; border-bottom: 3px solid var(--accent-color);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                     <div>
-                        <h4 style="margin: 0; font-size: 1.1rem; color: var(--accent-color); font-weight: 700;">Pos ${p.pos}</h4>
-                        <p class="text-secondary" style="font-size: 0.8rem; margin-top: 4px;">Sisa Anggaran Tersedia</p>
+                        <p class="card-label" style="text-transform: uppercase; font-weight: 700; font-size: 0.7rem;">Pos ${p.pos}</p>
                     </div>
-                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center;"><i data-lucide="briefcase"></i></div>
+                    <div class="card-icon-deluxe" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; width: 32px; height: 32px; border-radius: 8px; margin: 0;">
+                        <i data-lucide="briefcase" style="width: 16px; height: 16px;"></i>
+                    </div>
                 </div>
-                <h2 style="margin: 0 0 16px 0; font-size: 1.8rem; font-weight: 800; color: var(--text-color);">Rp ${p.sisa.toLocaleString('id-ID')}</h2>
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px;">
-                    <span class="text-secondary">Terkumpul: <b class="text-emerald">Rp ${p.pemasukan.toLocaleString('id-ID')}</b></span>
-                    <span class="text-secondary">Terpakai: <b class="text-red">Rp ${p.pengeluaran.toLocaleString('id-ID')}</b></span>
+                
+                <h3 class="card-value text-color" style="font-size: 1.4rem; margin: 4px 0;">Rp ${p.sisa.toLocaleString('id-ID')}</h3>
+                <p class="text-secondary" style="font-size: 0.7rem; margin-bottom: 12px;">Saldo Tersedia</p>
+                
+                <div style="display: flex; justify-content: space-between; font-size: 0.65rem; margin-bottom: 6px;">
+                    <span class="text-secondary">Masuk: <b class="text-emerald">${(p.pemasukan/1000).toFixed(0)}k</b></span>
+                    <span class="text-secondary">Keluar: <b class="text-red">${(p.pengeluaran/1000).toFixed(0)}k</b></span>
                 </div>
-                <div style="width: 100%; height: 6px; background: var(--border-color); border-radius: 4px; overflow: hidden; margin-bottom: 20px;">
-                    <div style="width: ${Math.min(pct, 100)}%; height: 100%; background: var(--accent-color);"></div>
+                
+                <div class="progress-bar" style="height: 6px; margin-bottom: 16px;">
+                    <div class="progress-fill" style="width: ${pct}%; background: ${pct > 90 ? '#ef4444' : 'var(--accent-color)'};"></div>
                 </div>
-                <div style="display: flex; gap: 8px; width: 100%;">
-                    <button class="button-secondary" style="flex: 1; justify-content: center; padding: 10px 0; font-size: 0.8rem;" onclick="postPemasukanPos('${p.pos}', ${p.pemasukan})"><i data-lucide="upload-cloud" style="margin-right: 6px; width: 16px; height: 16px;"></i> Posting</button>
-                    <button class="button-primary" style="flex: 1; justify-content: center; padding: 10px 0; font-size: 0.8rem;" onclick="openCatatPengeluaranPos('${p.pos}')"><i data-lucide="minus-circle" style="margin-right: 6px; width: 16px; height: 16px;"></i> Keluar</button>
+
+                <div style="display: flex; gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px dashed var(--border-color);">
+                    <button class="button-secondary" style="flex: 1; padding: 6px; font-size: 0.65rem; border-radius: 8px; border:none; background: rgba(128,128,128,0.05);" onclick="postPemasukanPos('${p.pos}', ${p.pemasukan})"><i data-lucide="upload-cloud" style="width: 12px; height: 12px;"></i> Setor</button>
+                    <button class="button-primary" style="flex: 1; padding: 6px; font-size: 0.65rem; border-radius: 8px;" onclick="openCatatPengeluaranPos('${p.pos}')"><i data-lucide="minus-circle" style="width: 12px; height: 12px;"></i> Keluar</button>
                 </div>
             </div>
         `;

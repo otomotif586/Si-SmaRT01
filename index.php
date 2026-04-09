@@ -14,6 +14,7 @@ include 'views/layout/head.php';
     // Include the sidebar navigation
     include 'views/layout/sidebar.php';
     ?>
+    <div class="sidebar-overlay"></div>
     <main id="main-content">
         <?php
         // Include the main content header
@@ -26,6 +27,7 @@ include 'views/layout/head.php';
         include 'views/pages/global_warga.php';
         include 'views/pages/laporan_iuran_blok.php';
         include 'views/pages/laporan_iuran_warga.php';
+        include 'views/pages/rekonsiliasi.php';
         include 'views/pages/warga.php';
         include 'views/pages/keuangan.php';
         include 'views/pages/detail_keuangan.php';

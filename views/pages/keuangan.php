@@ -1,64 +1,64 @@
 <!-- Page: Keuangan Jurnal Kas RT -->
 <div id="page-keuangan" class="page-content hidden page-section">
-    <!-- Header -->
-    <div class="section-header">
-        <div>
-            <h3 class="section-title">Buku Kas Utama</h3>
-            <p class="text-secondary" style="font-size: 0.875rem; margin-top: 4px;">Pencatatan arus kas masuk dan keluar tingkat pusat (RT).</p>
+    <!-- Premium Summary Section -->
+    <div class="summary-3-grid">
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+                <i data-lucide="wallet"></i>
+            </div>
+            <p class="card-label">Saldo Kas Tersedia</p>
+            <h3 id="keuangan-saldo" class="card-value text-color" style="font-size: 1.5rem;">Rp 0</h3>
+            <div class="card-sub-info">Total dana saat ini</div>
         </div>
-        <div class="header-actions">
-            <button class="button-primary button-sm" style="border-radius: 12px; padding: 10px 16px;" onclick="openFormKeuangan()"><i data-lucide="plus" style="margin-right: 6px; width: 18px; height: 18px;"></i> Catat Transaksi</button>
+        
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+                <i data-lucide="arrow-down-left"></i>
+            </div>
+            <p class="card-label">Total Pemasukan</p>
+            <h3 id="keuangan-pemasukan" class="card-value text-emerald" style="font-size: 1.5rem;">Rp 0</h3>
+            <div class="card-sub-info">Arus kas masuk</div>
         </div>
-    </div>
 
-    <!-- Summary Cards -->
-    <div class="summary-wrapper">
-        <div class="summary-card-modern" style="flex: 1;">
-            <div class="summary-icon-wrapper bg-blue-light text-blue"><i data-lucide="wallet"></i></div>
-            <p class="card-label m-0">Saldo Kas Tersedia</p>
-            <h3 id="keuangan-saldo" class="card-value text-color m-0">Rp 0</h3>
-        </div>
-        <div class="summary-card-modern" style="flex: 1;">
-            <div class="summary-icon-wrapper bg-emerald-light text-emerald"><i data-lucide="arrow-down-left"></i></div>
-            <p class="card-label m-0">Total Pemasukan</p>
-            <h3 id="keuangan-pemasukan" class="card-value text-emerald m-0">Rp 0</h3>
-        </div>
-        <div class="summary-card-modern" style="flex: 1;">
-            <div class="summary-icon-wrapper bg-red-light text-red"><i data-lucide="arrow-up-right"></i></div>
-            <p class="card-label m-0">Total Pengeluaran</p>
-            <h3 id="keuangan-pengeluaran" class="card-value text-red m-0">Rp 0</h3>
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+            <div class="card-icon-deluxe" style="color: #ef4444; background: rgba(239, 68, 68, 0.1);">
+                <i data-lucide="arrow-up-right"></i>
+            </div>
+            <p class="card-label">Total Pengeluaran</p>
+            <h3 id="keuangan-pengeluaran" class="card-value text-red" style="font-size: 1.5rem;">Rp 0</h3>
+            <div class="card-sub-info">Arus kas keluar</div>
         </div>
     </div>
 
     <!-- Multi-Filter Canggih -->
-    <div class="glass-card" style="padding: 20px; margin-bottom: 24px; border-radius: 20px; display: flex; flex-direction: column; gap: 16px;">
-        <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
-            <div class="input-with-icon" style="flex: 1; min-width: 200px;">
+    <div class="glass-card" style="padding: 20px; margin-bottom: 12px; border-radius: 20px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <p class="text-secondary" style="font-size: 0.8125rem; margin: 0;">Pencatatan arus kas masuk dan keluar tingkat pusat (RT).</p>
+            <button class="button-primary button-sm" style="border-radius: 12px; padding: 10px 16px; font-size: 0.8125rem;" onclick="openFormKeuangan()"><i data-lucide="plus" style="margin-right: 6px; width: 16px; height: 16px;"></i> Catat Transaksi</button>
+        </div>
+        
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; border-top: 1px dashed var(--border-color); padding-top: 16px;">
+            <div class="input-with-icon" style="flex: 2; min-width: 180px;">
                 <i data-lucide="search"></i>
                 <input type="text" id="keuangan-search" class="input-field" placeholder="Cari keterangan..." style="padding-left: 40px; border-radius: 12px;" oninput="filterKeuangan()">
             </div>
-            <div style="flex: 1; min-width: 140px;">
-                <label class="card-label" style="margin-bottom: 4px; display: block;">Jenis Transaksi</label>
+            <div style="flex: 1; min-width: 130px;">
                 <select id="keuangan-jenis" class="input-field select-custom" style="border-radius: 12px;" onchange="filterKeuangan()">
-                    <option value="">Semua Transaksi</option>
-                    <option value="Masuk">Pemasukan (Masuk)</option>
-                    <option value="Keluar">Pengeluaran (Keluar)</option>
+                    <option value="">Semua Jenis</option>
+                    <option value="Masuk">Masuk</option>
+                    <option value="Keluar">Keluar</option>
                 </select>
             </div>
-            <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column;">
-                <label class="card-label" style="margin-bottom: 4px; display: block;">Periode Bulan</label>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="prevMonthKeuangan()" title="Bulan Sebelumnya"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
-                    <select id="filter-bulan-keuangan" class="input-field select-custom" style="font-size: 0.875rem; padding: 10px; flex: 1; min-width: 80px; border-radius: 12px;" onchange="filterKeuangan()"></select>
-                    <select id="filter-tahun-keuangan" class="input-field select-custom" style="font-size: 0.875rem; padding: 10px;flex: 1; min-width: 80px; border-radius: 12px;" onchange="filterKeuangan()"></select>
-                    <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="nextMonthKeuangan()" title="Bulan Selanjutnya"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
-                </div>
+            <div style="flex: 1.5; min-width: 220px; display: flex; gap: 6px; align-items: center;">
+                <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="prevMonthKeuangan()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
+                <select id="filter-bulan-keuangan" class="input-field select-custom" style="font-size: 0.8125rem; padding: 10px; flex: 1; border-radius: 12px;" onchange="filterKeuangan()"></select>
+                <select id="filter-tahun-keuangan" class="input-field select-custom" style="font-size: 0.8125rem; padding: 10px;flex: 1; border-radius: 12px;" onchange="filterKeuangan()"></select>
+                <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="nextMonthKeuangan()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
             </div>
         </div>
     </div>
 
-    <!-- List Data Dinamis -->
-    <div id="keuangan-list-container" style="display: flex; flex-direction: column; gap: 12px;"></div>
+    <div id="keuangan-list-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
     
     <div id="keuangan-pagination" style="display: none; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
         <span id="keuangan-page-info" class="text-secondary" style="font-size: 0.875rem;">Menampilkan 0 data</span>
@@ -118,7 +118,14 @@
             </div>
             <div class="form-group" style="margin-bottom: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
                 <label class="card-label">Lampiran Bukti (Nota/Kwitansi/Foto)</label>
-                <input type="file" id="form-keuangan-lampiran" class="input-field file-input-modern" style="width: 100%;">
+                <div class="upload-premium-container">
+                    <input type="file" id="form-keuangan-lampiran" class="upload-premium-input">
+                    <div class="upload-premium-label">
+                        <i data-lucide="upload-cloud" class="text-accent mb-2" style="width: 32px; height: 32px;"></i>
+                        <span class="text-color font-bold">Tekan atau Seret File</span>
+                        <span class="text-secondary text-xs mt-1">PNG, JPG, PDF (Maks. 5MB)</span>
+                    </div>
+                </div>
                 <div id="form-keuangan-lampiran-preview" style="margin-top: 8px;"></div>
             </div>
         </div>

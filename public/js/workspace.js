@@ -90,6 +90,11 @@ function switchModalTab(tabId, element) {
     // Aktifkan tombol yang diklik
     if(element) element.classList.add('active');
 
+    // Trigger stagger animations for the new tab
+    target.classList.remove('stagger-ready');
+    void target.offsetWidth;
+    target.classList.add('stagger-ready');
+
     // Jika tab keuangan diklik, inisialisasi fungsinya
     if (tabId === 'modal-keuangan') {
         initKeuanganBlok();
@@ -111,8 +116,17 @@ function loadDashboardSummary(blokId) {
             const d = res.data;
             document.getElementById('dash-stat-warga').innerText = d.total_warga + ' KK';
             document.getElementById('dash-stat-kas').innerText = 'Rp ' + parseInt(d.kas_blok).toLocaleString('id-ID');
-            document.getElementById('dash-stat-laporan').innerText = d.laporan_aktif + ' Laporan';
-            document.getElementById('dash-stat-agenda').innerText = d.agenda_terdekat;
+            
+            // Consolidated Status Card logic
+            const statusMain = document.getElementById('dash-stat-status-main');
+            const statusSub = document.getElementById('dash-stat-status-sub');
+            if (statusMain) {
+                statusMain.innerText = d.laporan_aktif > 0 ? 'Siaga' : 'Aman';
+                statusMain.style.color = d.laporan_aktif > 0 ? '#f59e0b' : '#10b981';
+            }
+            if (statusSub) {
+                statusSub.innerText = `${d.laporan_aktif} Laporan / ${d.agenda_terdekat || '0 Agenda'}`;
+            }
             
             renderDashboardCharts(d.demografi, d.iuran_labels, d.iuran_data);
         }

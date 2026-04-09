@@ -106,8 +106,20 @@ function filterIuranList() {
 
     document.getElementById('summary-lunas').innerText = 'Rp ' + totalLunas.toLocaleString('id-ID');
     document.getElementById('summary-menunggak').innerText = 'Rp ' + totalMenunggak.toLocaleString('id-ID');
-    document.getElementById('summary-count-lunas').innerHTML = `<i data-lucide="users" style="width: 14px; height: 14px;"></i> ${countLunas} Warga`;
-    document.getElementById('summary-count-menunggak').innerHTML = `<i data-lucide="users" style="width: 14px; height: 14px;"></i> ${countMenunggak} Warga`;
+    
+    // Update Sub-info
+    const lunasSub = document.getElementById('summary-count-lunas');
+    const menunggakSub = document.getElementById('summary-count-menunggak');
+    if (lunasSub) lunasSub.innerText = `${countLunas} Warga Terdata`;
+    if (menunggakSub) menunggakSub.innerText = `${countMenunggak} Warga Tertunggak`;
+
+    // 3rd Card: Setoran Status
+    const setoranStatus = document.getElementById('summary-setoran-status');
+    if (setoranStatus) {
+        const needsDeposit = window.currentIuranData.some(d => d.status === 'LUNAS' && !d.tgl_setor);
+        setoranStatus.innerText = needsDeposit ? 'Pending' : 'Cleared';
+        setoranStatus.className = 'card-value ' + (needsDeposit ? 'text-orange' : 'text-blue');
+    }
 
     // Logika Paginasi (Membagi data per 15 baris)
     const totalItems = filtered.length;

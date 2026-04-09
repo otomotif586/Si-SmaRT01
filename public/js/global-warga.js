@@ -1,4 +1,4 @@
-﻿// --- GLOBAL WARGA (DIRECTORY) LOGIC ---
+// --- GLOBAL WARGA (DIRECTORY) LOGIC ---
 window.allBloks = [];
 window.globalWargaData = [];
 window.globalWargaPage = 1;
@@ -53,10 +53,26 @@ function filterGlobalWargaList() {
     // Extract Unique Blocks
     const uniqueBloks = [...new Set(filtered.map(item => item.blok_id))];
     
-    document.getElementById('sum-global-warga').innerText = filtered.length;
+    const total = filtered.length;
+    const tetap = filtered.filter(w => w.status_kependudukan === 'Tetap').length;
+    const kontrak = filtered.filter(w => w.status_kependudukan === 'Kontrak').length;
+    const percentTetap = total > 0 ? Math.round((tetap / total) * 100) : 0;
+    
+    document.getElementById('sum-global-warga').innerText = total;
     document.getElementById('sum-global-blok').innerText = uniqueBloks.length + ' Blok';
-    document.getElementById('sum-global-tetap').innerText = filtered.filter(w => w.status_kependudukan === 'Tetap').length;
-    document.getElementById('sum-global-kontrak').innerText = filtered.filter(w => w.status_kependudukan === 'Kontrak').length;
+    
+    // Consolidated Status Card
+    const mainStatusEl = document.getElementById('sum-global-status-main');
+    const subStatusEl = document.getElementById('sum-global-status-sub');
+    const badgeEl = document.getElementById('sum-global-status-badge');
+    const percentEl = document.getElementById('sum-global-status-percent');
+
+    if (mainStatusEl) mainStatusEl.innerText = tetap;
+    if (subStatusEl) subStatusEl.innerText = `${kontrak} Kontrak / ${total - tetap - kontrak} Lainnya`;
+    if (badgeEl) {
+        badgeEl.style.display = total > 0 ? 'inline-flex' : 'none';
+        if (percentEl) percentEl.innerText = `${percentTetap}%`;
+    }
 
     const totalItems = filtered.length;
     const totalPages = Math.ceil(totalItems / globalWargaItemsPerPage);

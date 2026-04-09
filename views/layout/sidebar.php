@@ -41,6 +41,10 @@
                 <i data-lucide="file-text"></i>
                 <span>Tunggakan</span>
             </button>
+            <button onclick="showPage('rekonsiliasi')" id="nav-rekonsiliasi" title="Audit Tahunan">
+                <i data-lucide="activity"></i>
+                <span>Audit Iuran</span>
+            </button>
         </div>
         
         <!-- Grup Keuangan & Pembukuan -->
@@ -68,13 +72,21 @@
             </button>
         </div>
 
-        <button onclick="showPage('keamanan')" id="nav-keamanan" title="Keamanan Lingkungan"> <!-- Updated title -->
-            <i data-lucide="shield-check"></i>
-            <span>Keamanan</span>
-        </button>
-        <button onclick="showPage('info')" id="nav-info" title=" Informasi Umum">
-            <i data-lucide="megaphone"></i>
+        <!-- Grup Informasi & Layanan -->
+        <button onclick="toggleSubmenu('submenu-info')" id="nav-group-info" class="nav-group-toggle" title="Menu Informasi">
+            <i data-lucide="info"></i>
             <span>Info</span>
+            <i data-lucide="chevron-down" class="submenu-icon"></i>
         </button>
+        <div id="submenu-info" class="submenu-items hidden">
+            <button onclick="showPage('keamanan')" id="nav-keamanan" title="Keamanan Lingkungan">
+                <i data-lucide="shield-check"></i>
+                <span>Keamanan</span>
+            </button>
+            <button onclick="showPage('info')" id="nav-info" title="Informasi Umum">
+                <i data-lucide="megaphone"></i>
+                <span>Informasi</span>
+            </button>
+        </div>
     </nav>
 </aside>

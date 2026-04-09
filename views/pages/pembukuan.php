@@ -1,55 +1,46 @@
 <!-- Page: Laporan Pembukuan (Trial Balance) -->
 <div id="page-pembukuan" class="page-content hidden page-section">
-    <!-- Header -->
-    <div class="section-header">
-        <div>
-            <h3 class="section-title">Laporan Pembukuan Akhir</h3>
-            <p class="text-secondary" style="font-size: 0.875rem; margin-top: 4px;">Neraca lajur (Trial Balance) perputaran Debit, Kredit, dan sisa Saldo.</p>
-        </div>
-        <div class="header-actions" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-            <div style="display: flex; gap: 8px; align-items: center;">
-                <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="prevMonthPembukuan()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
-                <select id="filter-bulan-pembukuan" class="input-field select-custom" style="font-size: 0.875rem; padding: 10px; min-width: 120px; border-radius: 12px;" onchange="loadPembukuan()"></select>
-                <select id="filter-tahun-pembukuan" class="input-field select-custom" style="font-size: 0.875rem; padding: 10px; min-width: 100px; border-radius: 12px;" onchange="loadPembukuan()"></select>
-                <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="nextMonthPembukuan()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
+    <!-- SaaS Style Summary Dashboard -->
+    <div class="summary-3-grid" style="margin-bottom: 24px;">
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s; border-top: 4px solid var(--accent-color);">
+            <div class="card-icon-deluxe" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                <i data-lucide="trending-up"></i>
             </div>
-            <button class="button-secondary button-sm" style="padding: 10px 16px; border-radius: 12px;" onclick="exportPembukuanCSV()"><i data-lucide="download" style="margin-right: 6px; width: 18px; height: 18px;"></i> Export Neraca</button>
+            <p class="card-label">Total Debit (Masuk)</p>
+            <h3 id="pb-debit" class="card-value text-emerald">Rp 0</h3>
+            <div class="card-sub-info">Penerimaan iuran & dana</div>
+        </div>
+        
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s; border-top: 4px solid #ef4444;">
+            <div class="card-icon-deluxe" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                <i data-lucide="trending-down"></i>
+            </div>
+            <p class="card-label">Total Kredit (Keluar)</p>
+            <h3 id="pb-kredit" class="card-value text-red">Rp 0</h3>
+            <div class="card-sub-info">Pengeluaran & alokasi pos</div>
+        </div>
+
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s; border: 1px solid var(--accent-color); background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 5%, transparent), transparent);">
+            <div class="card-icon-deluxe" style="background: var(--accent-color); color: white; box-shadow: 0 4px 12px -2px var(--accent-color);">
+                <i data-lucide="wallet"></i>
+            </div>
+            <p class="card-label">Net Saldo Tersedia</p>
+            <h3 id="pb-saldo" class="card-value text-color">Rp 0</h3>
+            <div class="card-sub-info">Total dana kas RT pusat</div>
         </div>
     </div>
 
-    <!-- SaaS Style Summary Dashboard -->
-    <div class="grid-container" style="margin-bottom: 24px;">
-        <div class="glass-card" style="padding: 24px; border-radius: 24px; display: flex; flex-direction: column; justify-content: space-between; border-top: 4px solid var(--accent-color);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <p class="text-secondary" style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Total Debit (Masuk)</p>
-                    <h2 id="pb-debit" class="text-emerald" style="font-size: 2rem; font-weight: 800; margin: 0;">Rp 0</h2>
-                </div>
-                <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(16, 185, 129, 0.1); color: #10b981; display: flex; align-items: center; justify-content: center;"><i data-lucide="trending-up" style="width: 24px; height: 24px;"></i></div>
+    <!-- Filter & Periode -->
+    <div class="glass-card" style="padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <p class="text-secondary" style="font-size: 0.8125rem; margin: 0;">Neraca lajur (Trial Balance) perputaran kas RT.</p>
+        <div class="header-actions" style="display: flex; gap: 8px; align-items: center;">
+            <div style="display: flex; gap: 6px; align-items: center;">
+                <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="prevMonthPembukuan()"><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>
+                <select id="filter-bulan-pembukuan" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 120px; border-radius: 10px;" onchange="loadPembukuan()"></select>
+                <select id="filter-tahun-pembukuan" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 90px; border-radius: 10px;" onchange="loadPembukuan()"></select>
+                <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="nextMonthPembukuan()"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
             </div>
-            <p class="text-secondary" style="font-size: 0.8rem; margin: 16px 0 0 0;"><span class="badge bg-emerald-light text-emerald" style="padding: 2px 6px;">+ Pemasukan</span> pada periode terpilih</p>
-        </div>
-        
-        <div class="glass-card" style="padding: 24px; border-radius: 24px; display: flex; flex-direction: column; justify-content: space-between; border-top: 4px solid #ef4444;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <p class="text-secondary" style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Total Kredit (Keluar)</p>
-                    <h2 id="pb-kredit" class="text-red" style="font-size: 2rem; font-weight: 800; margin: 0;">Rp 0</h2>
-                </div>
-                <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(239, 68, 68, 0.1); color: #ef4444; display: flex; align-items: center; justify-content: center;"><i data-lucide="trending-down" style="width: 24px; height: 24px;"></i></div>
-            </div>
-            <p class="text-secondary" style="font-size: 0.8rem; margin: 16px 0 0 0;"><span class="badge bg-red-light text-red" style="padding: 2px 6px;">- Pengeluaran</span> pada periode terpilih</p>
-        </div>
-
-        <div class="glass-card" style="padding: 24px; border-radius: 24px; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 15%, transparent), transparent); border: 1px solid var(--accent-color);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <p class="text-secondary" style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Net Saldo Tersedia</p>
-                    <h2 id="pb-saldo" class="text-color" style="font-size: 2rem; font-weight: 800; margin: 0;">Rp 0</h2>
-                </div>
-                <div style="width: 48px; height: 48px; border-radius: 14px; background: var(--accent-color); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px -5px var(--accent-color);"><i data-lucide="wallet" style="width: 24px; height: 24px;"></i></div>
-            </div>
-            <p class="text-secondary" style="font-size: 0.8rem; margin: 16px 0 0 0;">Akumulasi kas akhir (Global)</p>
+            <button class="button-secondary button-sm" style="padding: 8px 14px; border-radius: 10px; font-size: 0.8125rem;" onclick="exportPembukuanCSV()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
         </div>
     </div>
 
@@ -85,7 +76,7 @@
                 <tbody id="pb-ledger-body">
                     <!-- Rows generated by JS -->
                 </tbody>
-                <tfoot id="pb-ledger-foot" style="background: var(--secondary-bg); font-weight: bold;">
+                <tfoot id="pb-ledger-foot" style="background: var(--secondary-bg); color: var(--text-color); font-weight: bold;">
                     <!-- Footer generated by JS -->
                 </tfoot>
             </table>

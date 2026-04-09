@@ -82,6 +82,9 @@ function renderDetailKeuangan(res) {
     
     document.getElementById('dk-total-lunas').innerText = res.grand_total['Total Lunas'] + ' Setoran';
     document.getElementById('dk-total-pendapatan').innerText = 'Rp ' + res.grand_total['Total Nominal'].toLocaleString('id-ID');
+    if (document.getElementById('dk-total-warga')) {
+        document.getElementById('dk-total-warga').innerText = res.grand_total['Total Warga'] + ' KK';
+    }
 
     let headHtml = '<tr><th style="position: sticky; left: 0; background: var(--secondary-bg); z-index: 10;">Blok</th><th class="text-center">Total KK Blok</th><th class="text-center text-emerald">Jml Setoran Lunas</th>';
     res.komponen_headers.forEach(c => { headHtml += `<th class="text-right">${c}</th>`; });

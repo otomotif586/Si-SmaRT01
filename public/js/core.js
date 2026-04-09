@@ -75,8 +75,22 @@ function toggleDesktopSidebar() {
  */
 function toggleMobileSidebar() {
     const sidebar = document.getElementById('sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
     if (sidebar) {
-        sidebar.classList.toggle('active'); // 'active' class for mobile visibility
+        sidebar.classList.toggle('active');
+        if (overlay) overlay.classList.toggle('active');
+    }
+}
+
+/**
+ * Force close mobile sidebar.
+ */
+function closeMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    if (sidebar) {
+        sidebar.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
     }
 }
 
@@ -119,6 +133,12 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileSidebarToggleButton.addEventListener('click', toggleMobileSidebar);
     }
 
+    // Sidebar overlay click-to-close
+    const sidebarOverlay = document.querySelector('.sidebar-overlay');
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeMobileSidebar);
+    }
+
     // Modal sidebar toggle
     const modalSidebarToggle = document.getElementById('modal-sidebar-toggle');
     if (modalSidebarToggle) {
@@ -135,6 +155,11 @@ function showPage(pageId) {
     // Simpan halaman yang sedang dibuka ke Local Storage
     localStorage.setItem('activePage', pageId);
 
+    // Di Mobile: Tutup sidebar otomatis saat berpindah halaman
+    if (window.innerWidth < 1024) {
+        closeMobileSidebar();
+    }
+
     // Hide all pages
     document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
     // Remove active state from nav
@@ -145,9 +170,9 @@ function showPage(pageId) {
     targetPage.classList.remove('hidden');
     
     // Trigger fade-in animation
-    targetPage.classList.remove('page-enter');
+    targetPage.classList.remove('page-enter', 'stagger-ready');
     void targetPage.offsetWidth; // Trigger DOM reflow to restart animation
-    targetPage.classList.add('page-enter');
+    targetPage.classList.add('page-enter', 'stagger-ready');
 
     // Set active state to nav
     const activeNav = document.getElementById('nav-' + pageId);
@@ -181,18 +206,18 @@ function showPage(pageId) {
 
     // Update Header
     const titles = {
-        'dashboard': ['Beranda', 'Selamat datang di dashboard warga.'],
-        'global-warga': ['Daftar Warga', 'Pusat direktori data seluruh warga.'],
-        'laporan-iuran-blok': ['Iuran Blok', ''],
-        'warga': ['Workspace', 'Kelola workspace blok dan data warga.'],
-        'keuangan': ['Laporan Keuangan', 'Transparansi kas dan iuran RT.'],
-        'detail-keuangan': ['Detail Keuangan', 'Rincian pendapatan berdasarkan master pembayaran.'],
-        'pos-keuangan': ['Pos Anggaran', 'Kelola pengeluaran berdasarkan pos kas/anggaran.'],
-        'pembukuan': ['Buku Besar & Neraca', 'Trial balance arus kas dan saldo akhir keseluruhan.'],
-        'keamanan': ['Keamanan', 'Pusat kendali laporan dan bantuan.'],
-        'info': ['Informasi Umum', 'Pusat dokumen dan nomor darurat.'],
-        'rekonsiliasi': ['Rekonsiliasi & Audit', 'Monitoring kedisiplinan iuran warga per tahun buku.'],
-        'laporan-iuran-warga': ['Laporan & Relasi', 'Visualisasi hubungan pembayaran iuran.']
+        'dashboard': ['Beranda', 'Ringkasan data warga'],
+        'global-warga': ['Data Warga', 'Direktori seluruh warga'],
+        'laporan-iuran-blok': ['Iuran Blok', 'Laporan iuran per blok'],
+        'warga': ['Workspace', 'Kelola data & workspace'],
+        'keuangan': ['Buku Kas', 'Transparansi kas RT'],
+        'detail-keuangan': ['Detail', 'Rincian pendapatan'],
+        'pos-keuangan': ['Pos Anggaran', 'Kelola pengeluaran'],
+        'pembukuan': ['Pembukuan', 'Neraca & trial balance'],
+        'keamanan': ['Keamanan', 'Laporan & bantuan'],
+        'info': ['Informasi', 'Dokumen & kontak'],
+        'rekonsiliasi': ['Rekonsiliasi', 'Audit iuran tahunan'],
+        'laporan-iuran-warga': ['Tunggakan', 'Visualisasi iuran']
     };
 
     document.getElementById('page-title').innerText = titles[pageId][0];
@@ -232,25 +257,43 @@ function getLocalDateString() {
     return `${year}-${month}-${day}`;
 }
 
-// Handle Mobile Interaction (vibration etc)
-document.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('touchstart', function() {
-        if ('vibrate' in navigator) {
-            navigator.vibrate(5);
-        }
-    });
+// Handle Interactive Elements
+document.addEventListener('click', function(e) {
+    const target = e.target.closest('button, .ripple');
+    if (!target) return;
+
+    // 1. Ripple Effect
+    const ripple = document.createElement('span');
+    ripple.classList.add('ripple-effect');
+    target.appendChild(ripple);
+
+    const rect = target.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+    ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+
+    setTimeout(() => ripple.remove(), 600);
+
+    // 2. Mobile Vibrate
+    if ('vibrate' in navigator) {
+        navigator.vibrate(5);
+    }
 });
 
 window.showToast = function(title, icon = 'success') {
     if (typeof Swal !== 'undefined') {
         Swal.fire({
             toast: true,
-            position: 'top-end',
+            position: 'top',
             icon: icon,
             title: title,
             showConfirmButton: false,
-            timer: 3000,
+            timer: 2500,
             timerProgressBar: true,
+            background: 'var(--secondary-bg)',
+            color: 'var(--text-color)',
+            iconColor: icon === 'success' ? '#10b981' : undefined,
             didOpen: (toast) => {
                 toast.onmouseenter = Swal.stopTimer;
                 toast.onmouseleave = Swal.resumeTimer;
@@ -258,5 +301,20 @@ window.showToast = function(title, icon = 'success') {
         });
     } else {
         alert(title);
+    }
+};
+
+window.showLoading = function(title = 'Memuat...') {
+    if (typeof Swal !== 'undefined') {
+        return Swal.fire({
+            title: title,
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            background: 'var(--secondary-bg)',
+            color: 'var(--text-color)',
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
     }
 };

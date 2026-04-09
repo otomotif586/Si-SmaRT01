@@ -1,11 +1,8 @@
 <!-- Page: Warga -->
 <div id="page-warga" class="page-content hidden page-section"> <!-- Added page-section class -->
     
-    <div class="section-header">
-        <div>
-            <h3 class="section-title">Pilih Workspace</h3>
-            <p class="text-secondary" style="font-size: 0.875rem; margin-top: 4px;">Pilih blok untuk mengelola data, iuran, dan agenda spesifik.</p>
-        </div>
+    <div class="glass-card" style="padding: 20px; margin-bottom: 24px; border-radius: 20px;">
+        <p class="text-secondary" style="font-size: 0.875rem; margin: 0;">Pilih blok untuk mengelola data, iuran, dan agenda spesifik.</p>
     </div>
 
     <div class="grid-container">
@@ -136,26 +133,30 @@
                     </div>
 
                     <h3 class="section-title" style="margin-bottom: 16px;">Overview Utama</h3>
-                    <div class="summary-wrapper">
-                        <div class="summary-card-modern">
-                            <div class="summary-icon-wrapper bg-blue-light text-blue"><i data-lucide="users"></i></div>
-                            <p class="card-label m-0" style="margin:0;">Total Penghuni</p>
-                            <h3 id="dash-stat-warga" class="card-value text-color m-0" style="margin:0;">0 KK</h3>
+                    <div class="summary-3-grid">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+                            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <p class="card-label">Total Penghuni</p>
+                            <h3 id="dash-stat-warga" class="card-value text-color" style="font-size: 1.5rem;">0 KK</h3>
+                            <div class="card-sub-info">Data terdaftar di blok</div>
                         </div>
-                        <div class="summary-card-modern">
-                            <div class="summary-icon-wrapper bg-emerald-light text-emerald"><i data-lucide="banknote"></i></div>
-                            <p class="card-label m-0" style="margin:0;">Saldo Kas Internal</p>
-                            <h3 id="dash-stat-kas" class="card-value text-emerald m-0" style="margin:0;">Rp 0</h3>
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+                            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+                                <i data-lucide="banknote"></i>
+                            </div>
+                            <p class="card-label">Saldo Kas Internal</p>
+                            <h3 id="dash-stat-kas" class="card-value text-emerald" style="font-size: 1.5rem;">Rp 0</h3>
+                            <div class="card-sub-info">Dana kelolaan blok</div>
                         </div>
-                        <div class="summary-card-modern">
-                            <div class="summary-icon-wrapper bg-orange-light text-orange"><i data-lucide="alert-triangle"></i></div>
-                            <p class="card-label m-0" style="margin:0;">Laporan Aktif</p>
-                            <h3 id="dash-stat-laporan" class="card-value text-color m-0" style="margin:0;">0 Laporan</h3>
-                        </div>
-                        <div class="summary-card-modern">
-                            <div class="summary-icon-wrapper bg-purple-light text-purple"><i data-lucide="calendar-clock"></i></div>
-                            <p class="card-label m-0" style="margin:0;">Agenda Terdekat</p>
-                            <h3 id="dash-stat-agenda" class="card-value text-color m-0" style="font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Menunggu Data">Memuat...</h3>
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+                            <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
+                                <i data-lucide="activity"></i>
+                            </div>
+                            <p class="card-label">Status Lingkungan</p>
+                            <h3 id="dash-stat-status-main" class="card-value text-color" style="font-size: 1.5rem;">Aman</h3>
+                            <div class="card-sub-info" id="dash-stat-status-sub">0 Laporan / 0 Agenda</div>
                         </div>
                     </div>
                     
@@ -191,22 +192,31 @@
                         </div>
                     </div>
                     
-                    <!-- SUMMARY Warga -->
-                    <div class="summary-wrapper">
-                        <div class="summary-card-modern">
-                            <div class="summary-icon-wrapper bg-blue-light text-blue"><i data-lucide="users"></i></div>
-                            <p class="card-label m-0" style="margin:0;">Total Warga (Filter)</p>
-                            <h3 id="sum-warga-total" class="card-value m-0" style="margin:0;">0</h3>
+                    <!-- SUMMARY Warga (Deluxe 3-Across) -->
+                    <div class="summary-3-grid">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+                            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <p class="card-label">Total Warga</p>
+                            <h3 id="sum-warga-total" class="card-value text-color" style="font-size: 1.5rem;">0</h3>
+                            <div class="card-sub-info">Data setelah filter</div>
                         </div>
-                        <div class="summary-card-modern">
-                            <div class="summary-icon-wrapper bg-emerald-light text-emerald"><i data-lucide="user-check"></i></div>
-                            <p class="card-label m-0" style="margin:0;">Warga Tetap</p>
-                            <h3 id="sum-warga-tetap" class="card-value m-0" style="margin:0;">0</h3>
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+                            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+                                <i data-lucide="user-check"></i>
+                            </div>
+                            <p class="card-label">Warga Tetap</p>
+                            <h3 id="sum-warga-tetap" class="card-value text-emerald" style="font-size: 1.5rem;">0</h3>
+                            <div class="card-sub-info">Domisili permanen</div>
                         </div>
-                        <div class="summary-card-modern">
-                            <div class="summary-icon-wrapper bg-orange-light text-orange"><i data-lucide="user-minus"></i></div>
-                            <p class="card-label m-0" style="margin:0;">Warga Kontrak</p>
-                            <h3 id="sum-warga-kontrak" class="card-value m-0" style="margin:0;">0</h3>
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+                            <div class="card-icon-deluxe" style="color: #f97316; background: rgba(249, 115, 22, 0.1);">
+                                <i data-lucide="user-minus"></i>
+                            </div>
+                            <p class="card-label">Warga Kontrak</p>
+                            <h3 id="sum-warga-kontrak" class="card-value text-orange" style="font-size: 1.5rem;">0</h3>
+                            <div class="card-sub-info">Domisili sementara</div>
                         </div>
                     </div>
                         
@@ -255,23 +265,33 @@
                         </div>
                     </div>
 
-                    <!-- Summary Iuran Dinamis -->
-                    <div id="iuran-summary" class="summary-wrapper">
-                        <div class="summary-card-modern">
-                            <div class="summary-icon-wrapper bg-emerald-light text-emerald"><i data-lucide="wallet"></i></div>
-                            <p class="card-label m-0" style="margin:0;">Sudah Bayar (Lunas)</p>
-                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                                <h3 id="summary-lunas" class="card-value text-color m-0" style="margin: 0; font-size: 1.2rem;">Rp 0</h3>
-                                <span id="summary-count-lunas" class="badge bg-emerald-light text-emerald" style="display: inline-flex; align-items: center; gap: 4px;">0 Warga</span>
+                    <!-- Summary Iuran Deluxe (3-Across Adaptive) -->
+                    <div id="iuran-summary" class="summary-3-grid">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.15s">
+                            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+                                <i data-lucide="check-circle"></i>
                             </div>
+                            <p class="card-label">Sudah Bayar</p>
+                            <h3 id="summary-lunas" class="card-value text-emerald" style="font-size: 1.35rem;">Rp 0</h3>
+                            <div id="summary-count-lunas" class="card-sub-info">0 Warga Terdata</div>
                         </div>
-                        <div class="summary-card-modern">
-                            <div class="summary-icon-wrapper bg-red-light text-red"><i data-lucide="alert-circle"></i></div>
-                            <p class="card-label m-0" style="margin:0;">Belum Dibayar</p>
-                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                                <h3 id="summary-menunggak" class="card-value text-color m-0" style="margin: 0; font-size: 1.2rem;">Rp 0</h3>
-                                <span id="summary-count-menunggak" class="badge bg-red-light text-red" style="display: inline-flex; align-items: center; gap: 4px;">0 Warga</span>
+
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.25s">
+                            <div class="card-icon-deluxe" style="color: #ef4444; background: rgba(239, 68, 68, 0.1);">
+                                <i data-lucide="alert-circle"></i>
                             </div>
+                            <p class="card-label">Belum Bayar</p>
+                            <h3 id="summary-menunggak" class="card-value text-red" style="font-size: 1.35rem;">Rp 0</h3>
+                            <div id="summary-count-menunggak" class="card-sub-info">0 Warga Tertunggak</div>
+                        </div>
+
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.35s">
+                            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+                                <i data-lucide="send"></i>
+                            </div>
+                            <p class="card-label">Setoran RT</p>
+                            <h3 id="summary-setoran-status" class="card-value text-blue" style="font-size: 1.35rem;">Ready</h3>
+                            <div class="card-sub-info">Status antrean setor</div>
                         </div>
                     </div>
                     
@@ -667,9 +687,16 @@
         
         <div class="drawer-body hide-scrollbar">
             <input type="hidden" id="agenda_id" value="0">
-            <div class="form-group" style="margin-bottom: 16px;">
-                <label class="card-label">Judul Kegiatan</label>
-                <input type="text" id="agenda_judul" class="input-field" style="margin-top: 8px;">
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label class="card-label">Unggah Dokumen Warga</label>
+                <div class="upload-premium-container">
+                    <input type="file" class="upload-premium-input dokumen-file">
+                    <div class="upload-premium-label" style="padding: 24px;">
+                        <i data-lucide="file-text" class="text-secondary mb-2" style="width: 24px; height: 24px;"></i>
+                        <span class="text-color font-bold" style="font-size: 0.8125rem;">Pilih File (PDF/Gambar)</span>
+                    </div>
+                </div>
+                <div id="container-dokumen"></div>
             </div>
             <div class="form-group" style="margin-bottom: 16px;">
                 <label class="card-label">Tanggal & Waktu</label>
@@ -692,9 +719,16 @@
                 </select>
             </div>
             
-            <div class="form-group" style="margin-bottom: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
-                <label class="card-label">Lampiran Dokumen / Surat (Opsional)</label>
-                <input type="file" id="agenda_lampiran_files" multiple class="input-field file-input-modern" style="margin-top: 8px; width: 100%;">
+            <div class="form-group" style="margin-bottom: 20px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+                <label class="card-label">Lampiran Berkas Agenda</label>
+                <div class="upload-premium-container">
+                    <input type="file" id="agenda_lampiran_files" multiple class="upload-premium-input">
+                    <div class="upload-premium-label" style="padding: 24px;">
+                        <i data-lucide="file-plus" class="text-secondary mb-2" style="width: 24px; height: 24px;"></i>
+                        <span class="text-color font-bold" style="font-size: 0.8125rem;">Klik untuk Unggah Berkas</span>
+                    </div>
+                </div>
+                <div id="agenda-lampiran-preview" class="mt-1"></div>
                 <div id="agenda_existing_lampiran" style="display: flex; gap: 8px; flex-direction: column; margin-top: 12px;"></div>
             </div>
             
@@ -751,9 +785,15 @@
                 <input type="datetime-local" id="laporan_tanggal_selesai" class="input-field" style="margin-top: 8px; padding-left: 20px;">
             </div>
             
-            <div class="form-group" style="margin-bottom: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
-                <label class="card-label">Lampiran Bukti (Foto/Dokumen)</label>
-                <input type="file" id="laporan_lampiran_files" multiple class="input-field file-input-modern" style="margin-top: 8px; width: 100%;">
+            <div class="form-group" style="margin-bottom: 20px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+                <label class="card-label">Lampiran Bukti Kejadian</label>
+                <div class="upload-premium-container">
+                    <input type="file" id="laporan_lampiran_files" multiple class="upload-premium-input">
+                    <div class="upload-premium-label" style="padding: 24px;">
+                        <i data-lucide="camera" class="text-secondary mb-2" style="width: 24px; height: 24px;"></i>
+                        <span class="text-color font-bold" style="font-size: 0.8125rem;">Foto atau Video Kejadian</span>
+                    </div>
+                </div>
                 <div id="laporan_existing_lampiran" style="display: flex; gap: 8px; flex-direction: column; margin-top: 12px;"></div>
             </div>
         </div>

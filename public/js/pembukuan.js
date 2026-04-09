@@ -84,45 +84,72 @@ function renderPembukuan(res) {
     const periodeText = `${selBulan.options[selBulan.selectedIndex].text} ${selTahun.options[selTahun.selectedIndex].text}`;
     document.getElementById('laporan-periode-text').innerText = 'Periode: ' + periodeText;
 
+    const isMobile = window.innerWidth < 768;
     const posCardsContainer = document.getElementById('laporan-pos-cards');
-    posCardsContainer.style.display = 'block'; // Ubah layout grid menjadi block agar tabel full width
+    posCardsContainer.style.display = 'block'; 
     let posCardsHtml = '';
-    const posDataArray = res.pos_estimasi || []; // Pastikan array tidak undefined
+    const posDataArray = res.pos_estimasi || [];
     
     if (posDataArray.length === 0) {
         posCardsHtml = '<div style="text-align: center; padding: 32px; color: var(--text-secondary-color);">Belum ada data pos anggaran pada periode ini.</div>';
     } else {
-        posCardsHtml = `
-            <div class="table-responsive" style="border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden;">
-                <table class="modern-table rekon-table" style="width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap;">
-                    <thead style="background: var(--secondary-bg); border-bottom: 2px solid var(--border-color);">
-                        <tr>
-                            <th style="padding: 16px 20px;">Kategori Pos Anggaran</th>
-                            <th style="padding: 16px 20px; text-align: right;">Total Pemasukan</th>
-                            <th style="padding: 16px 20px; text-align: right;">Total Pengeluaran</th>
-                            <th style="padding: 16px 20px; text-align: right;">Sisa Saldo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-        `;
-
-        posDataArray.forEach(p => {
-            const pDebit = parseFloat(p.pemasukan) || 0;
-            const pKredit = parseFloat(p.pengeluaran) || 0;
-            const saldo = parseFloat(p.sisa) || 0;
-            const sColor = saldo < 0 ? 'text-red' : 'text-emerald';
-            
-            posCardsHtml += `
-                <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.3s;" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background='transparent'">
-                    <td style="padding: 16px 20px; font-weight: 600; color: var(--text-color);"><i data-lucide="folder" style="color: var(--text-secondary-color); width: 16px; height: 16px; display: inline-block; margin-right: 8px; vertical-align: middle;"></i> ${p.nama_pos || 'Kas Tak Dikenal'}</td>
-                    <td style="padding: 16px 20px; text-align: right; color: var(--text-color);">Rp ${pDebit.toLocaleString('id-ID')}</td>
-                    <td style="padding: 16px 20px; text-align: right; color: var(--text-color);">Rp ${pKredit.toLocaleString('id-ID')}</td>
-                    <td style="padding: 16px 20px; text-align: right; font-weight: 800; font-size: 1.05rem;" class="${sColor}">Rp ${saldo.toLocaleString('id-ID')}</td>
-                </tr>
+        if (isMobile) {
+            // RENDER CARDS ON MOBILE FOR POS STATS
+            posDataArray.forEach(p => {
+                const pDebit = parseFloat(p.pemasukan) || 0;
+                const pKredit = parseFloat(p.pengeluaran) || 0;
+                const saldo = parseFloat(p.sisa) || 0;
+                const sColor = saldo < 0 ? 'text-red' : 'text-emerald';
+                
+                posCardsHtml += `
+                    <div class="transaction-card-mobile">
+                        <div class="transaction-card-header">
+                            <span class="font-bold text-color">${p.nama_pos || 'Kas RT'}</span>
+                            <span class="font-bold ${sColor}">Rp ${saldo.toLocaleString('id-ID')}</span>
+                        </div>
+                        <div class="transaction-card-body" style="border-top: 1px dashed var(--border-color); padding-top: 8px; margin-top: 4px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                                <span class="text-secondary">Masuk:</span>
+                                <span class="text-emerald">Rp ${pDebit.toLocaleString('id-ID')}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                                <span class="text-secondary">Keluar:</span>
+                                <span class="text-red">Rp ${pKredit.toLocaleString('id-ID')}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            posCardsHtml = `
+                <div class="table-responsive" style="border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden;">
+                    <table class="modern-table rekon-table" style="width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap;">
+                        <thead style="background: var(--secondary-bg); border-bottom: 2px solid var(--border-color);">
+                            <tr>
+                                <th style="padding: 16px 20px;">Kategori Pos Anggaran</th>
+                                <th style="padding: 16px 20px; text-align: right;">Total Pemasukan</th>
+                                <th style="padding: 16px 20px; text-align: right;">Total Pengeluaran</th>
+                                <th style="padding: 16px 20px; text-align: right;">Sisa Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
-        });
-        
-        posCardsHtml += `</tbody></table></div>`;
+            posDataArray.forEach(p => {
+                const pDebit = parseFloat(p.pemasukan) || 0;
+                const pKredit = parseFloat(p.pengeluaran) || 0;
+                const saldo = parseFloat(p.sisa) || 0;
+                const sColor = saldo < 0 ? 'text-red' : 'text-emerald';
+                posCardsHtml += `
+                    <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.3s;" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 16px 20px; font-weight: 600; color: var(--text-color);"><i data-lucide="folder" style="color: var(--text-secondary-color); width: 16px; height: 16px; display: inline-block; margin-right: 8px; vertical-align: middle;"></i> ${p.nama_pos || 'Kas Tak Dikenal'}</td>
+                        <td style="padding: 16px 20px; text-align: right; color: var(--text-color);">Rp ${pDebit.toLocaleString('id-ID')}</td>
+                        <td style="padding: 16px 20px; text-align: right; color: var(--text-color);">Rp ${pKredit.toLocaleString('id-ID')}</td>
+                        <td style="padding: 16px 20px; text-align: right; font-weight: 800; font-size: 1.05rem;" class="${sColor}">Rp ${saldo.toLocaleString('id-ID')}</td>
+                    </tr>
+                `;
+            });
+            posCardsHtml += `</tbody></table></div>`;
+        }
     }
     posCardsContainer.innerHTML = posCardsHtml;
     
@@ -138,18 +165,45 @@ function renderPembukuan(res) {
     });
 
     // REVERSE array agar transaksi terbaru berada di atas (Descending Sort)
-    res.transactions.reverse();
-    
-    const trxArray = res.transactions || [];
+    const trxArray = [...res.transactions].reverse();
     const posHistoryArray = trxArray.filter(t => t.raw_pos_anggaran !== null);
 
     // Render History di Tab 2 (Laporan Pos) khusus transaksi dari Pos Anggaran
     const historyBody = document.getElementById('laporan-pos-history-body');
+    const historyTable = historyBody ? historyBody.closest('table') : null;
+    const historyTableContainer = historyTable ? historyTable.closest('.table-responsive') : null;
+
     if (historyBody) {
         let historyHtml = '';
         if (posHistoryArray.length === 0) {
-                historyHtml = '<tr><td colspan="4" class="text-center py-4 text-secondary">Tidak ada riwayat transaksi spesifik pos anggaran pada periode ini.</td></tr>';
+            historyHtml = '<tr><td colspan="4" class="text-center py-4 text-secondary">Tidak ada riwayat transaksi spesifik pos anggaran pada periode ini.</td></tr>';
+            if (isMobile) historyHtml = '<div class="text-center py-4 text-secondary">Tidak ada riwayat transaksi.</div>';
+        } else {
+            if (isMobile) {
+                if (historyTableContainer) historyTableContainer.style.border = 'none';
+                if (historyTable) historyTable.style.display = 'none';
+                
+                posHistoryArray.forEach(t => {
+                    const tgl = new Date(t.tanggal).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'});
+                    const isMasuk = t.jenis === 'Masuk';
+                    const sign = isMasuk ? '+' : '-';
+                    const amountColor = isMasuk ? 'text-emerald' : 'text-red';
+                    
+                    historyHtml += `
+                        <div class="transaction-card-mobile">
+                            <div class="transaction-card-header">
+                                <span class="transaction-card-date">${tgl}</span>
+                                <span class="transaction-card-amount ${amountColor}">${sign} Rp ${parseFloat(t.nominal).toLocaleString('id-ID')}</span>
+                            </div>
+                            <div class="transaction-card-body">
+                                <div class="transaction-card-title" style="font-size: 0.85rem;">${t.keterangan || '-'}</div>
+                                <div class="transaction-card-meta"><span class="badge bg-secondary-light text-secondary">${t.pos_anggaran || '-'}</span></div>
+                            </div>
+                        </div>
+                    `;
+                });
             } else {
+                if (historyTable) historyTable.style.display = '';
                 posHistoryArray.forEach(t => {
                     const tgl = new Date(t.tanggal).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'});
                     const isMasuk = t.jenis === 'Masuk';
@@ -166,8 +220,23 @@ function renderPembukuan(res) {
                     `;
                 });
             }
+        }
+        
+        if (isMobile) {
+            // Jika mobile, masukkan ke container khusus atau timpa body dengan div
+            const parent = historyBody.parentElement.parentElement; // table-responsive
+            if (!document.getElementById('mobile-history-list')) {
+                const mobileList = document.createElement('div');
+                mobileList.id = 'mobile-history-list';
+                parent.appendChild(mobileList);
+            }
+            document.getElementById('mobile-history-list').innerHTML = historyHtml;
+            historyBody.innerHTML = ''; // Kosongkan tabel
+        } else {
+            if(document.getElementById('mobile-history-list')) document.getElementById('mobile-history-list').innerHTML = '';
             historyBody.innerHTML = historyHtml;
         }
+    }
 
     // 3. Paginasi & Render General Ledger
     const ledgerBody = document.getElementById('pb-ledger-body');
@@ -184,33 +253,69 @@ function renderPembukuan(res) {
     const paginatedData = res.transactions.slice(startIdx, endIdx);
 
     if (totalItems === 0) {
-        ledgerHtml += '<tr><td colspan="6" class="text-center py-5 text-secondary">Tidak ada rincian transaksi.</td></tr>';
+        ledgerHtml = '<tr><td colspan="6" class="text-center py-5 text-secondary">Tidak ada rincian transaksi.</td></tr>';
     } else {
+        const isMobile = window.innerWidth < 768;
+        
+        // Sembunyikan Header Tabel di Mobile agar tidak aneh
+        const tableHeader = document.querySelector('#pb-tab-ledger thead');
+        if (tableHeader) tableHeader.style.display = isMobile ? 'none' : '';
+
         paginatedData.forEach(t => {
             const tgl = new Date(t.tanggal).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'});
             const isMasuk = t.jenis === 'Masuk';
             const debit = isMasuk ? `Rp ${parseFloat(t.nominal).toLocaleString('id-ID')}` : '-';
             const kredit = !isMasuk ? `Rp ${parseFloat(t.nominal).toLocaleString('id-ID')}` : '-';
             const sColor = t.running_saldo < 0 ? 'text-red' : 'text-emerald';
+            const sign = isMasuk ? '+' : '-';
+            const amountColor = isMasuk ? 'text-emerald' : 'text-red';
 
-            ledgerHtml += `<tr style="transition: background 0.3s;" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background='transparent'">
-                <td style="padding: 16px 24px; font-size: 0.85rem;">${tgl}</td>
-                <td style="padding: 16px 24px;">
-                    <div class="font-bold text-color">${t.keterangan}</div>
-                    <div class="text-secondary" style="font-size:0.75rem;"><i data-lucide="hash" style="width:10px; height:10px; display:inline;"></i> ${t.doc_number || '-'}</div>
-                </td>
-                <td style="padding: 16px 24px; font-size: 0.85rem;"><span class="badge bg-secondary-light text-secondary">${t.pos_anggaran}</span></td>
-                <td class="text-right text-emerald" style="padding: 16px 24px; font-size: 0.9rem;">${debit}</td>
-                <td class="text-right text-red" style="padding: 16px 24px; font-size: 0.9rem;">${kredit}</td>
-                <td class="text-right font-bold ${sColor}" style="padding: 16px 24px; font-size: 0.95rem; background: rgba(128,128,128,0.02);">Rp ${t.running_saldo.toLocaleString('id-ID')}</td>
-            </tr>`;
+            if (isMobile) {
+                // RENDER AS CARD ON MOBILE
+                ledgerHtml += `
+                <tr><td colspan="6" style="padding: 0; border: none;">
+                    <div class="transaction-card-mobile">
+                        <div class="transaction-card-header">
+                            <span class="transaction-card-date">${tgl}</span>
+                            <span class="transaction-card-amount ${amountColor}">${sign} Rp ${parseFloat(t.nominal).toLocaleString('id-ID')}</span>
+                        </div>
+                        <div class="transaction-card-body">
+                            <div class="transaction-card-title">${t.keterangan}</div>
+                            <div class="transaction-card-meta">
+                                <span class="badge bg-secondary-light text-secondary" style="font-size: 0.65rem;">${t.pos_anggaran}</span>
+                                <span style="margin-left: 8px;"><i data-lucide="hash" style="width:10px; height:10px; display:inline;"></i> ${t.doc_number || '-'}</span>
+                            </div>
+                        </div>
+                        <div class="transaction-card-footer">
+                            <span class="text-secondary" style="font-size: 0.75rem;">Saldo Berjalan:</span>
+                            <span class="font-bold ${sColor}" style="font-size: 0.85rem;">Rp ${t.running_saldo.toLocaleString('id-ID')}</span>
+                        </div>
+                    </div>
+                </td></tr>`;
+            } else {
+                // RENDER AS TABLE ROW ON DESKTOP
+                ledgerHtml += `<tr style="transition: background 0.3s;" onmouseover="this.style.background='var(--hover-bg)'" onmouseout="this.style.background='transparent'">
+                    <td style="padding: 16px 24px; font-size: 0.85rem;">${tgl}</td>
+                    <td style="padding: 16px 24px;">
+                        <div class="font-bold text-color">${t.keterangan}</div>
+                        <div class="text-secondary" style="font-size:0.75rem;"><i data-lucide="hash" style="width:10px; height:10px; display:inline;"></i> ${t.doc_number || '-'}</div>
+                    </td>
+                    <td style="padding: 16px 24px; font-size: 0.85rem;"><span class="badge bg-secondary-light text-secondary">${t.pos_anggaran}</span></td>
+                    <td class="text-right text-emerald" style="padding: 16px 24px; font-size: 0.9rem;">${debit}</td>
+                    <td class="text-right text-red" style="padding: 16px 24px; font-size: 0.9rem;">${kredit}</td>
+                    <td class="text-right font-bold ${sColor}" style="padding: 16px 24px; font-size: 0.95rem; background: rgba(128,128,128,0.02);">Rp ${t.running_saldo.toLocaleString('id-ID')}</td>
+                </tr>`;
+            }
         });
         
-        // Letakkan Saldo Awal di halaman terakhir, karena urutan tabel dibalik (terlama di bawah)
+        // Letakkan Saldo Awal
         if (window.pbCurrentPage === totalPages) {
             ledgerHtml += `<tr style="background: rgba(59, 130, 246, 0.05);">
-                <td colspan="5" class="text-right font-bold text-secondary" style="padding: 12px 24px;">SALDO AWAL (KAS SEBELUM PERIODE INI)</td>
-                <td class="text-right font-bold text-color" style="padding: 12px 24px;">Rp ${(res.saldo_awal || 0).toLocaleString('id-ID')}</td>
+                <td colspan="${isMobile ? '6' : '5'}" class="text-right" style="padding: 12px 24px;">
+                    <span class="font-bold text-secondary" style="font-size: 0.75rem; vertical-align: middle;">SALDO AWAL (KAS SEBELUM PERIODE INI)</span>
+                    <span class="font-bold text-color" style="margin-left: 12px; font-size: 0.9rem; vertical-align: middle;">Rp ${(res.saldo_awal || 0).toLocaleString('id-ID')}</span>
+                </td>
+                ${!isMobile ? `<td class="text-right font-bold text-color" style="padding: 12px 24px;">Rp ${(res.saldo_awal || 0).toLocaleString('id-ID')}</td>` : ''}
             </tr>`;
         }
     }
@@ -219,7 +324,7 @@ function renderPembukuan(res) {
     if (totalItems > 0) {
         const endSaldo = (res.saldo_awal || 0) + res.summary.debit - res.summary.kredit;
         ledgerFoot.innerHTML = `<tr>
-            <td colspan="3" class="text-right" style="padding: 16px 24px;">SALDO AKHIR PERIODE</td>
+            <td colspan="3" class="text-right text-color" style="padding: 16px 24px;">SALDO AKHIR PERIODE</td>
             <td class="text-right text-emerald" style="padding: 16px 24px;">Rp ${res.summary.debit.toLocaleString('id-ID')}</td>
             <td class="text-right text-red" style="padding: 16px 24px;">Rp ${res.summary.kredit.toLocaleString('id-ID')}</td>
             <td class="text-right text-color" style="padding: 16px 24px; font-size: 1.1rem;">Rp ${endSaldo.toLocaleString('id-ID')}</td>

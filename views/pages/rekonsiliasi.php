@@ -1,48 +1,56 @@
 <!-- Page: Rekonsiliasi & Audit Iuran (Annual Summary) -->
 <div id="page-rekonsiliasi" class="page-content hidden page-section">
     
-    <div class="section-header">
-        <div>
-            <h3 class="section-title">Audit & Rekonsiliasi Iuran</h3>
-            <p class="section-subtitle">Monitoring kedisiplinan pembayaran warga per tahun buku.</p>
-        </div>
+    <div class="glass-card" style="padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <p class="text-secondary" style="font-size: 0.8125rem; margin: 0;">Monitoring kedisiplinan pembayaran warga per tahun buku.</p>
         <div class="header-actions" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-            <div style="display: flex; gap: 12px; align-items: center;">
-                <label for="filter-tahun-rekonsiliasi" class="text-secondary" style="font-size: 0.8125rem; font-weight: 600;">Tahun Buku:</label>
-                <input type="number" id="filter-tahun-rekonsiliasi" class="input-field" style="font-size: 0.875rem; padding: 10px; width: 100px; border-radius: 12px;" value="<?= date('Y') ?>" onchange="loadGlobalRekonsiliasi()">
-                
-                <label for="filter-blok-rekonsiliasi" class="text-secondary" style="font-size: 0.8125rem; font-weight: 600; margin-left: 8px;">Filter Blok:</label>
-                <select id="filter-blok-rekonsiliasi" class="input-field select-custom" style="font-size: 0.875rem; padding: 10px; width: auto; min-width: 130px; border-radius: 12px;" onchange="loadGlobalRekonsiliasi()">
-                    <option value="all">Semua Blok</option>
-                </select>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <label style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary-color);">Tahun:</label>
+                    <input type="number" id="filter-tahun-rekonsiliasi" class="input-field" style="font-size: 0.8125rem; padding: 8px 12px; width: 85px; border-radius: 10px;" value="<?= date('Y') ?>" onchange="loadGlobalRekonsiliasi()">
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <label style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary-color);">Blok:</label>
+                    <select id="filter-blok-rekonsiliasi" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 120px; border-radius: 10px;" onchange="loadGlobalRekonsiliasi()">
+                        <option value="all">Semua Blok</option>
+                    </select>
+                </div>
             </div>
-            <button class="button-secondary button-sm" style="padding: 10px 16px; border-radius: 12px;" onclick="exportRekonsiliasiCSV()"><i data-lucide="download" style="margin-right: 6px; width: 18px; height: 18px;"></i> Export Data</button>
+            <button class="button-secondary button-sm" style="padding: 8px 14px; border-radius: 10px; font-size: 0.8125rem;" onclick="exportRekonsiliasiCSV()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
         </div>
     </div>
 
     <!-- Reconciliation Summary Cards -->
-    <div class="summary-wrapper" style="margin-bottom: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px;">
-        <div class="summary-card-modern glass-card" style="border-bottom: 4px solid var(--accent-color);">
-            <div class="summary-icon-wrapper bg-blue-light text-blue"><i data-lucide="users"></i></div>
-            <p class="card-label m-0">Total Warga</p>
-            <h3 id="rekon-stat-warga" class="card-value text-color m-0">0</h3>
+    <div class="summary-3-grid">
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+                <i data-lucide="users"></i>
+            </div>
+            <p class="card-label">Warga Audit</p>
+            <h3 id="rekon-stat-warga" class="card-value text-color">0</h3>
+            <div class="card-sub-info">Total KK terdaftar</div>
         </div>
-        <div class="summary-card-modern glass-card" style="border-bottom: 4px solid #10b981;">
-            <div class="summary-icon-wrapper bg-emerald-light text-emerald"><i data-lucide="check-circle-2"></i></div>
-            <p class="card-label m-0">Lunas 100% (1th)</p>
-            <h3 id="rekon-stat-lunas" class="card-value text-emerald m-0">0</h3>
+        
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+                <i data-lucide="check-circle"></i>
+            </div>
+            <p class="card-label">Lunas 100%</p>
+            <h3 id="rekon-stat-lunas" class="card-value text-emerald">0</h3>
+            <div class="card-sub-info">Pembayaran setahun penuh</div>
         </div>
-        <div class="summary-card-modern glass-card" style="border-bottom: 4px solid #ef4444;">
-            <div class="summary-icon-wrapper bg-red-light text-red"><i data-lucide="alert-triangle"></i></div>
-            <p class="card-label m-0">Warga Menunggak</p>
-            <h3 id="rekon-stat-menunggak" class="card-value text-red m-0">0</h3>
-        </div>
-        <div class="summary-card-modern glass-card" style="border-bottom: 4px solid #f59e0b;">
-            <div class="summary-icon-wrapper bg-orange-light text-orange"><i data-lucide="help-circle"></i></div>
-            <p class="card-label m-0">Estimasi Piutang</p>
-            <h3 id="rekon-stat-piutang" class="card-value text-orange m-0">Rp 0</h3>
+
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+            <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
+                <i data-lucide="help-circle"></i>
+            </div>
+            <p class="card-label">Potensi Piutang</p>
+            <h3 id="rekon-stat-piutang" class="card-value text-orange">Rp 0</h3>
+            <div id="rekon-stat-menunggak-info" class="card-sub-info">0 Warga belum lunas</div>
         </div>
     </div>
+    <!-- Hidden element to maintain JS compatibility for menunggak count if needed -->
+    <div id="rekon-stat-menunggak" class="hidden">0</div>
 
     <!-- Legend -->
     <div class="glass-card" style="padding: 12px 24px; margin-bottom: 16px; border-radius: 12px; display: flex; gap: 20px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">

@@ -1,20 +1,19 @@
 <!-- Page: Pos Keuangan -->
 <div id="page-pos-keuangan" class="page-content hidden page-section">
-    <div class="section-header">
-        <div>
-            <h3 class="section-title">Pos Anggaran</h3>
-            <p class="text-secondary" style="font-size: 0.875rem; margin-top: 4px;">Kelola alokasi dana dan catat pengeluaran per komponen (Sampah, Keamanan, dll).</p>
-        </div>
-        <div class="header-actions" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="prevMonthPos()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
-            <select id="filter-bulan-pos" class="input-field select-custom" style="font-size: 0.875rem; padding: 10px; min-width: 120px; border-radius: 12px;" onchange="loadPosKeuangan()"></select>
-            <select id="filter-tahun-pos" class="input-field select-custom" style="font-size: 0.875rem; padding: 10px; min-width: 100px; border-radius: 12px;" onchange="loadPosKeuangan()"></select>
-            <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="nextMonthPos()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
-        </div>
+    <div id="pos-cards-container" class="summary-3-grid-responsive" style="margin-bottom: 24px;">
+        <p class="text-secondary text-center py-4" style="grid-column: 1 / -1;">Memuat data anggaran...</p>
     </div>
 
-    <div id="pos-cards-container" class="grid-container" style="margin-bottom: 24px; gap: 16px;">
-        <p class="text-secondary text-center py-4" style="grid-column: 1 / -1;">Memuat data anggaran...</p>
+    <div class="glass-card" style="padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <p class="text-secondary" style="font-size: 0.8125rem; margin: 0;">Kelola alokasi dana dan pengeluaran per komponen.</p>
+        <div class="header-actions" style="display: flex; gap: 8px; align-items: center;">
+            <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="prevMonthPos()"><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>
+            <div style="display: flex; gap: 6px;">
+                <select id="filter-bulan-pos" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 120px; border-radius: 10px;" onchange="loadPosKeuangan()"></select>
+                <select id="filter-tahun-pos" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 100px; border-radius: 10px;" onchange="loadPosKeuangan()"></select>
+            </div>
+            <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="nextMonthPos()"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
+        </div>
     </div>
 
     <div class="glass-card" style="padding: 0; overflow: hidden; border-radius: 20px;">
