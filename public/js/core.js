@@ -214,7 +214,7 @@ function showPage(pageId) {
         'detail-keuangan': ['Detail', 'Rincian pendapatan'],
         'pos-keuangan': ['Pos Anggaran', 'Kelola pengeluaran'],
         'pembukuan': ['Pembukuan', 'Neraca & trial balance'],
-        'keamanan': ['Keamanan', 'Laporan & bantuan'],
+        'keamanan': ['Keamanan', 'Manajemen pengawasan'],
         'info': ['Informasi', 'Dokumen & kontak'],
         'rekonsiliasi': ['Rekonsiliasi', 'Audit iuran tahunan'],
         'laporan-iuran-warga': ['Tunggakan', 'Visualisasi iuran']
@@ -242,6 +242,8 @@ function showPage(pageId) {
         if (typeof initPosKeuangan === 'function') initPosKeuangan();
     } else if (pageId === 'pembukuan') {
         if (typeof initPembukuan === 'function') initPembukuan();
+    } else if (pageId === 'keamanan') {
+        if (typeof initKeamanan === 'function') initKeamanan();
     }
     
     // Scroll to top
