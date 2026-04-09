@@ -343,9 +343,15 @@
 /* Specialized 3-Column Grid (Universal Adaptive) */
 .summary-3-grid, .summary-wrapper-3, .summary-wrapper {
     display: grid;
-    grid-template-columns: repeat(3, 1fr) !important; /* Force 3 columns at all times for dashboard style */
+    grid-template-columns: repeat(3, 1fr); /* Adaptive 3-column */
     gap: 12px;
     margin-bottom: 24px;
+}
+
+@media (max-width: 360px) {
+    .summary-3-grid, .summary-wrapper-3, .summary-wrapper {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for super narrow screens */
+    }
 }
 
 /* Responsive 3-Column Grid (Stacked on Mobile) */
@@ -372,13 +378,34 @@
     max-width: 100%; /* Fix for horizontal stretching */
 }
 
-/* Allow text wrap in tables for better mobile fit */
-.table-responsive .modern-table,
-.table-responsive .modern-table th,
-.table-responsive .modern-table td {
-    white-space: normal !important;
-    word-break: break-word;
+/* Helper for mobile filter dropdowns to prevent truncation */
+.filter-mobile-flex {
+    flex: 1;
+    min-width: 110px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+/* Table Scrollable for Dense Data (Preventing wrap from breaking numbers) */
+.table-scrollable {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+}
+
+.table-scrollable .modern-table {
+    white-space: nowrap !important; /* Force single line for readability */
+    min-width: 600px; /* Ensure it scrolls on small screens */
+}
+
+.table-scrollable .modern-table th,
+.table-scrollable .modern-table td {
+    padding: 12px 16px !important;
+}
+
+/* Allow text wrap in tables ... */
 
 @media (min-width: 992px) {
     .summary-3-grid, .summary-wrapper-3 {

@@ -223,9 +223,11 @@
         flex-direction: row;
         justify-content: flex-start;
         padding: 14px 18px; /* Disesuaikan agar lebih rapi */
-        text-align: left;
         font-size: 0.9rem; /* Ukuran font disesuaikan */
         border-radius: 16px;
+    }
+
+    #sidebar .sidebar-nav button {
         width: 100%; /* Memaksa menu memenuhi lebar sidebar */
         flex: none; /* Mereset flex: 1 yang terbawa dari versi mobile */
         transition: all 0.4s var(--bezier);
@@ -337,11 +339,16 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    background-color: var(--card-bg);
+    background-color: color-mix(in srgb, var(--card-bg) 95%, var(--accent-color) 5%);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border-bottom: 1px solid var(--card-border);
-    padding: 12px 16px;
+    padding: 16px 20px;
+    padding-top: calc(16px + env(safe-area-inset-top)); 
+    box-shadow: 0 4px 30px -10px var(--shadow-color);
+    display: flex;
+    align-items: center;
+    min-height: 64px;
     transition: all 0.4s var(--bezier);
 }
 
@@ -355,12 +362,12 @@
 }
 
 #main-header .header-left h2 {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1.2rem; /* Slightly larger for better mobile presence */
+    font-weight: 800; /* Bolder for premium feel */
     color: var(--text-color);
     margin: 0;
-    letter-spacing: -0.01em;
-    line-height: 1.2;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
 }
 
 #main-header .header-left p {
@@ -527,5 +534,24 @@ input[type="text"]:focus, input[type="search"]:focus {
 @media (min-width: 768px) {
     .grid-container-2-col {
         grid-template-columns: repeat(2, 1fr); /* 2 columns on desktop */
+    }
+}
+
+@media (max-width: 480px) {
+    .summary-3-grid, .summary-wrapper-3, .summary-wrapper {
+        grid-template-columns: repeat(3, 1fr); /* Keep 3-across but with tighter scaling */
+        gap: 6px;
+    }
+    
+    /* Specific for Keamanan where labels are longer */
+    #page-keamanan .summary-3-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 per row for better text fit */
+        gap: 12px;
+    }
+}
+
+@media (max-width: 360px) {
+    .summary-3-grid, .summary-wrapper-3, .summary-wrapper {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for super narrow screens */
     }
 }

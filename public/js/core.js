@@ -22,6 +22,12 @@ function applyTheme(theme) {
             lucide.createIcons(); // Re-render the icon
         }
     }
+
+    // Update Meta Theme Color for Mobile Status Bar
+    const metaTheme = document.getElementById('theme-meta');
+    if (metaTheme) {
+        metaTheme.setAttribute('content', theme === 'dark-theme' ? '#0f172a' : '#f8fafc');
+    }
 }
 
 /**

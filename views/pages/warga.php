@@ -222,17 +222,17 @@
                         
                     <!-- Pencarian & Filter -->
                     <div style="display: flex; gap: 12px; width: 100%; flex-wrap: wrap; margin-bottom: 24px;">
-                        <div class="input-with-icon" style="flex: 1; min-width: 200px;">
+                        <div class="input-with-icon" style="flex: 2; min-width: 200px;">
                             <i data-lucide="search"></i>
                             <input type="text" id="search-warga-input" placeholder="Cari nama atau NIK..." class="input-field" style="padding: 10px 16px 10px 40px; font-size: 0.875rem;" oninput="filterWargaList()">
                         </div>
-                        <select id="filter-pernikahan" class="input-field select-custom" style="font-size: 0.875rem; padding-top: 10px; padding-bottom: 10px; width: auto; min-width: 140px;" onchange="filterWargaList()">
+                        <select id="filter-pernikahan" class="input-field select-custom filter-mobile-flex" style="font-size: 0.875rem; padding-top: 10px; padding-bottom: 10px; flex: 1; min-width: 120px;" onchange="filterWargaList()">
                             <option value="">Pernikahan (Semua)</option>
                             <option value="Lajang">Lajang</option>
                             <option value="Menikah">Menikah</option>
                             <option value="Pisah">Pisah</option>
                         </select>
-                        <select id="filter-status" class="input-field select-custom" style="font-size: 0.875rem; padding-top: 10px; padding-bottom: 10px; width: auto; min-width: 140px;" onchange="filterWargaList()">
+                        <select id="filter-status" class="input-field select-custom filter-mobile-flex" style="font-size: 0.875rem; padding-top: 10px; padding-bottom: 10px; flex: 1; min-width: 120px;" onchange="filterWargaList()">
                             <option value="">Status (Semua)</option>
                             <option value="Tetap">Tetap</option>
                             <option value="Kontrak">Kontrak</option>
