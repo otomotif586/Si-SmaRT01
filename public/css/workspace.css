@@ -1,0 +1,708 @@
+﻿/* --- Workspace (Data Warga) Styles --- */
+.interactive-ws-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 28px;
+    padding: 0.5rem;
+    height: 350px;
+    overflow: clip;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s var(--bezier);
+    box-shadow: 0 10px 40px -10px var(--shadow-color);
+}
+
+/* Glassmorphism bottom overlay */
+.interactive-ws-card::before {
+    content: "";
+    position: absolute;
+    width: calc(100% - 1rem);
+    height: 40%;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    mask: linear-gradient(#0000, #000f 80%);
+    -webkit-mask: linear-gradient(#0000, #000f 80%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 0 0 24px 24px;
+    translate: 0 0;
+    transition: translate 0.4s var(--bezier);
+    z-index: 1;
+    pointer-events: none; /* Allows clicking through the blur layer */
+}
+
+.ws-hero {
+    width: 100%;
+    height: 100%; /* Initially fills the whole card */
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: height 0.4s var(--bezier);
+    flex-shrink: 0;
+}
+
+.ws-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 24px;
+    transition: all 0.4s var(--bezier);
+}
+
+.hero-letter {
+    font-size: 7rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transition: transform 0.4s var(--bezier);
+}
+
+.interactive-ws-card > section {
+    margin: 1rem 0.5rem;
+    height: calc(45% - 1.5rem);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 2;
+}
+
+.interactive-ws-card > section h2 {
+    margin: 0;
+    margin-block-end: 0.5rem;
+    font-size: 1.5rem;
+    opacity: 0;
+    translate: 0 -200%;
+    color: var(--text-color);
+    transition: opacity 0.4s, translate 0.4s var(--bezier), margin-block-end 0.4s;
+}
+
+.interactive-ws-card > section p {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--text-secondary-color);
+    opacity: 0;
+    margin: 0;
+    translate: 0 100%;
+    transition: opacity 0.4s 0.1s, translate 0.4s 0.1s var(--bezier), margin-block-end 0.4s;
+}
+
+.interactive-ws-card > section .card-footer {
+    flex: 1;
+    align-items: flex-end;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0;
+    translate: 0 50%;
+    transition: translate 0.4s 0.2s var(--bezier), opacity 0.4s 0.2s;
+    padding-bottom: 0.5rem;
+}
+
+.interactive-ws-card > section .card-footer .tag {
+    align-self: center;
+    font-size: 1rem;
+}
+
+.ws-action-btn {
+    border: 1px solid var(--border-color);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem 0.5rem 2.25rem;
+    translate: 1rem;
+    background: var(--primary-bg);
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s, translate 0.4s;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Tombol plus (+) unik di dalam tombol */
+.ws-action-btn::before,
+.ws-action-btn::after {
+    content: "";
+    background: currentcolor;
+    position: absolute;
+    border-radius: 1rem;
+    transition: all 0.25s ease-out;
+}
+.ws-action-btn::before {
+    width: 0.75rem; height: 0.1rem;
+    top: 50%; left: 0.75rem;
+    translate: 0 -50%;
+}
+.ws-action-btn::after {
+    width: 0.75rem; height: 0.1rem;
+    top: 50%; left: 0.75rem;
+    rotate: 90deg;
+    translate: 0 -50%;
+}
+
+/* Modifikasi interaksi Hover pada Card */
+.interactive-ws-card:hover, .interactive-ws-card:focus-within {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px -10px var(--shadow-strong);
+    border-color: var(--accent-color);
+}
+.interactive-ws-card:hover::before {
+    translate: 0 100%;
+}
+.interactive-ws-card:hover .ws-hero {
+    height: 55%; /* Menyusut untuk memberi ruang teks */
+}
+.interactive-ws-card:hover .hero-letter {
+    transform: scale(0.6) translateY(-10px);
+}
+.interactive-ws-card:hover > section h2,
+.interactive-ws-card:hover > section p {
+    translate: 0 0;
+    opacity: 1;
+    margin-block-end: 0.5rem;
+}
+.interactive-ws-card:hover > section .card-footer {
+    translate: 0 0;
+    opacity: 1;
+}
+.interactive-ws-card:hover > section .card-footer .ws-action-btn {
+    translate: 0 0;
+}
+.interactive-ws-card:hover > section .card-footer .ws-action-btn:hover {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
+/* Block Logo Container */
+.ws-logo-container {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.15), 0 8px 16px -4px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+    transition: all 0.3s var(--bezier);
+}
+.logo-a { background: linear-gradient(135deg, #3b82f6, #1d4ed8); } /* Gradient Biru */
+.logo-b { background: linear-gradient(135deg, #f59e0b, #b45309); } /* Gradient Oranye */
+.logo-new {
+    background: transparent;
+    border: 2px dashed var(--text-secondary-color);
+    color: var(--text-secondary-color);
+    box-shadow: none;
+}
+.ws-modal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+/* Font judul yang digunakan di header modal */
+.ws-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-color);
+}
+
+/* --- Full-Screen Modal (System in a System) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Full screen on mobile */
+    animation: pageFadeIn 0.3s forwards;
+}
+@media (min-width: 768px) {
+    .modal-overlay { padding: 0; } /* Jadikan 0 agar menempel sempurna di PC */
+}
+
+.fullscreen-modal {
+    width: 100%;
+    max-width: 1100px;
+    height: 100dvh; /* 100% viewport dinamis HP */
+    background-color: var(--primary-bg);
+    border-radius: 0; /* Ujung datar layaknya layar HP native */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: none;
+}
+@media (min-width: 768px) {
+    .fullscreen-modal {
+        height: 100vh;
+        max-width: 100%;
+        border-radius: 0; /* Hapus lengkungan di mode full-screen PC */
+        box-shadow: none;
+    }
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--secondary-bg);
+}
+@media (min-width: 768px) {
+    .modal-header { padding: 24px 32px; }
+}
+.modal-header-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.modal-toggle-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary-color);
+    cursor: pointer;
+    padding: 8px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s var(--bezier);
+}
+.modal-toggle-btn:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-color);
+}
+@media (min-width: 768px) {
+    .modal-toggle-btn { display: flex; }
+}
+.modal-close-btn {
+    background-color: var(--hover-bg);
+    border: none;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: all 0.3s var(--bezier);
+}
+.modal-close-btn:hover { background-color: #ef4444; color: white; transform: rotate(90deg); }
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+@media (min-width: 768px) {
+    .modal-body { flex-direction: row; }
+}
+.modal-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 8px 12px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    background-color: var(--secondary-bg);
+    border-top: 1px solid var(--border-color);
+    order: 2; /* Memindahkan navigasi ke area paling bawah */
+    z-index: 10;
+}
+@media (min-width: 768px) {
+    .modal-nav {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Mereset efek renggang (space-around) dari versi mobile */
+        width: 260px;
+        border-top: none;
+        border-right: 1px solid var(--border-color);
+        padding: 32px 24px;
+        gap: 12px;
+        order: 1; /* Mengembalikan navigasi ke sebelah kiri di Desktop */
+        transition: width 0.4s var(--bezier);
+    }
+    .modal-nav.collapsed {
+        width: 100px;
+        padding: 32px 12px;
+    }
+    .modal-nav.collapsed .modal-tab span {
+        display: none;
+    }
+    .modal-nav.collapsed .modal-tab {
+        justify-content: center;
+        padding: 14px 0;
+    }
+}
+.modal-tab {
+    padding: 8px 4px;
+    border-radius: 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary-color);
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 0.65rem;
+    flex: 1;
+    transition: all 0.3s var(--bezier);
+}
+.modal-tab i { width: 22px; height: 22px; }
+.modal-tab:hover { color: var(--accent-color); }
+.modal-tab.active {
+    background-color: transparent;
+    color: var(--accent-color);
+    transform: translateY(-4px) scale(1.05);
+    font-weight: 700;
+}
+@media (min-width: 768px) {
+    .modal-tab {
+        padding: 14px 20px;
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+        font-size: 0.875rem;
+        background: transparent;
+        border: none;
+        white-space: nowrap;
+        gap: 12px;
+        width: 100%; /* Memaksa menu memenuhi lebar sidebar */
+        flex: none; /* Mereset efek melar dari versi mobile */
+    }
+    .modal-tab i { width: 18px; height: 18px; }
+    .modal-tab:hover {
+        background-color: var(--hover-bg);
+        transform: translateX(6px);
+    }
+    .modal-tab.active {
+        background-color: var(--accent-color);
+        color: white;
+        box-shadow: 0 8px 20px -5px color-mix(in srgb, var(--accent-color) 40%, transparent);
+        transform: translateX(4px);
+        font-weight: 600;
+    }
+}
+.modal-content-area {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+    background-color: var(--primary-bg);
+    order: 1; /* Mendorong area konten ke atas */
+}
+@media (min-width: 768px) {
+    .modal-content-area {
+        padding: 48px;
+        order: 2; /* Mengembalikan area konten ke posisi kanan di Desktop */
+    }
+}
+.modal-tab-content {
+    animation: pageFadeIn 0.4s var(--bezier) forwards;
+}
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* --- Add Workspace Stack Form --- */
+.modal-stack-bg {
+    background-color: var(--primary-bg);
+    background-image: radial-gradient(var(--border-color) 2px, transparent 2px);
+    background-size: 30px 30px;
+}
+.stack-container {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    height: 480px;
+    perspective: 1500px;
+    margin: auto;
+}
+.stack-card {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border-radius: 28px;
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 32px;
+    box-shadow: 0 20px 50px -10px var(--shadow-strong);
+    border: 1px solid var(--card-border);
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s ease, filter 0.6s ease;
+    transform-origin: center 80%;
+    will-change: transform, opacity;
+}
+.stack-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.stack-chip {
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: var(--theme-color, var(--accent-color));
+    color: white;
+}
+.stack-card-number {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+    font-size: 1.2rem;
+}
+.stack-card h2 {
+    font-size: 2rem;
+    color: var(--text-color);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+.stack-card p {
+    color: var(--text-secondary-color);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+.stack-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+.variant-1 { --theme-color: var(--accent-color); }
+.variant-2 { --theme-color: #f59e0b; }
+.variant-3 { --theme-color: #ec4899; }
+.variant-4 { --theme-color: #8b5cf6; } /* Warna Ungu untuk Form Upload */
+
+.throw-out-left {
+    animation: flyOutLeft 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+    pointer-events: none;
+}
+@keyframes flyOutLeft {
+    0% { transform: scale(1) translateY(0) rotate(0); opacity: 1; }
+    100% { transform: translate(-120%, -100px) rotate(-30deg); opacity: 0; }
+}
+.no-transition { transition: none !important; }
+
+/* --- Custom Upload Box --- */
+.upload-box-container {
+    position: relative;
+    margin-top: 16px;
+    width: 100%;
+}
+.upload-input-hidden {
+    opacity: 0;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    cursor: pointer;
+    z-index: 10;
+}
+.upload-box-visual {
+    border: 2px dashed var(--border-color);
+    border-radius: 16px;
+    padding: 32px 16px;
+    text-align: center;
+    background: rgba(128,128,128,0.05);
+    transition: all 0.3s var(--bezier);
+}
+.upload-input-hidden:hover + .upload-box-visual {
+    border-color: var(--accent-color);
+    background: color-mix(in srgb, var(--accent-color) 5%, transparent);
+}
+.upload-icon {
+    width: 32px; height: 32px;
+    color: var(--text-secondary-color);
+    margin-bottom: 12px;
+}
+.upload-text-main {
+    font-size: 0.9rem; font-weight: 600; color: var(--text-color); margin: 0 0 4px 0 !important;
+}
+.upload-text-sub {
+    font-size: 0.75rem; color: var(--text-secondary-color); margin: 0 !important;
+}
+
+/* --- Drawer Panel (Slide-in Form Data Warga) --- */
+.drawer-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    max-width: 500px;
+    height: 100dvh;
+    background-color: var(--primary-bg);
+    border-radius: 28px 0 0 28px;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.4s var(--bezier);
+    box-shadow: -15px 0 50px rgba(0,0,0,0.1);
+}
+@media (max-width: 767px) {
+    .drawer-panel { max-width: 100%; border-radius: 0; }
+}
+.modal-overlay.drawer-active .drawer-panel {
+    transform: translateX(0);
+}
+.drawer-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--secondary-bg);
+}
+.drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px;
+}
+.drawer-footer {
+    padding: 24px 32px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 16px;
+    background-color: var(--secondary-bg);
+}
+.form-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin: 32px 0 16px 0;
+    border-bottom: 2px dashed var(--border-color);
+    padding-bottom: 8px;
+}
+.form-section-title:first-child { margin-top: 0; }
+.form-grid {
+    display: grid; grid-template-columns: 1fr; gap: 16px;
+}
+@media (min-width: 768px) {
+    .form-grid { grid-template-columns: 1fr 1fr; }
+}
+.form-group { display: flex; flex-direction: column; }
+.dynamic-section {
+    background: color-mix(in srgb, var(--hover-bg) 50%, transparent);
+    padding: 24px;
+    border-radius: 20px;
+    margin-top: 16px;
+    border: 1px dashed var(--border-color);
+    animation: pageFadeIn 0.4s forwards;
+}
+
+.select-custom { 
+    padding-left: 20px !important; 
+    padding-right: 48px !important; 
+    appearance: none; 
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    cursor: pointer;
+    border-radius: 9999px !important;
+    transition: all 0.3s var(--bezier);
+}
+.select-custom:hover, .select-custom:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--accent-color) 15%, transparent);
+    outline: none;
+}
+:root.dark-theme .select-custom {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.dynamic-add-section { margin-top: 24px; }
+.dynamic-add-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.dynamic-add-header button i { width: 14px; height: 14px; display: inline; margin-right: 4px; }
+.file-input-modern { padding: 10px 20px !important; border-radius: 16px !important; margin-bottom: 8px; }
+
+/* --- Drawer Panel (Slide-in Form Data Warga) --- */
+.drawer-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    max-width: 500px;
+    height: 100dvh;
+    background-color: var(--primary-bg);
+    border-radius: 28px 0 0 28px;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.4s var(--bezier);
+    box-shadow: -15px 0 50px rgba(0,0,0,0.1);
+}
+@media (max-width: 767px) {
+    .drawer-panel { max-width: 100%; border-radius: 0; }
+}
+.modal-overlay.drawer-active .drawer-panel {
+    transform: translateX(0);
+}
+.drawer-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--secondary-bg);
+}
+.drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px;
+}
+.drawer-footer {
+    padding: 24px 32px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 16px;
+    background-color: var(--secondary-bg);
+}
+.form-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin: 32px 0 16px 0;
+    border-bottom: 2px dashed var(--border-color);
+    padding-bottom: 8px;
+}
+.form-section-title:first-child { margin-top: 0; }
+.form-grid {
+    display: grid; grid-template-columns: 1fr; gap: 16px;
+}
+@media (min-width: 768px) {
+    .form-grid { grid-template-columns: 1fr 1fr; }
+}
+.form-group { display: flex; flex-direction: column; }
+.dynamic-section {
+    background: color-mix(in srgb, var(--hover-bg) 50%, transparent);
+    padding: 24px;
+    border-radius: 20px;
+    margin-top: 16px;
+    border: 1px dashed var(--border-color);
+    animation: pageFadeIn 0.4s forwards;
+}
+.select-custom { padding-left: 20px !important; appearance: none; }
+.dynamic-add-section { margin-top: 24px; }
+.dynamic-add-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.dynamic-add-header button i { width: 14px; height: 14px; display: inline; margin-right: 4px; }
+.file-input-modern { padding: 10px 20px !important; border-radius: 16px !important; margin-bottom: 8px; }

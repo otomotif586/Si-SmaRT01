@@ -1,0 +1,65 @@
+﻿/* --- Agenda & Laporan Sub-navigation --- */
+.sub-nav-container {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 24px;
+}
+.sub-nav-tab {
+    background: transparent;
+    border: none;
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s var(--bezier);
+    margin-bottom: -1px; /* Agar border bawah menyatu */
+}
+.sub-nav-tab:hover {
+    color: var(--text-color);
+}
+.sub-nav-tab.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+.sub-nav-tab i {
+    width: 16px;
+    height: 16px;
+}
+
+/* --- Agenda & Laporan Cards --- */
+.agenda-card, .laporan-card {
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: all 0.3s var(--bezier);
+}
+.agenda-card:hover, .laporan-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px var(--shadow-color);
+    border-color: var(--accent-color);
+}
+.agenda-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+}
+.gallery-item {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s var(--bezier);
+}
+.gallery-item:hover {
+    transform: scale(1.05);
+}

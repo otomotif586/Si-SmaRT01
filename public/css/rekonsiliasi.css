@@ -1,0 +1,35 @@
+﻿/* --- Laporan Relasi Iuran --- */
+.rekon-table th, .rekon-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+.rekon-table th {
+    text-align: left;
+    font-size: 0.875rem;
+    color: var(--text-secondary-color);
+    font-weight: 600;
+}
+.rekon-table .text-center { text-align: center; }
+.rekon-table tbody tr {
+    transition: background-color 0.3s;
+}
+.rekon-table tbody tr:hover {
+    background-color: var(--hover-bg);
+}
+.rekon-dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    z-index: 2;
+    position: relative;
+    transition: transform 0.2s;
+}
+.rekon-dot:hover { transform: scale(1.5); }
+.rekon-dot-lunas { background-color: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+.rekon-dot-menunggak { background-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+.rekon-dot-sebelum { background-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
+.rekon-dot-empty { background-color: var(--border-color); }
+.relation-line { fill: none; stroke: var(--accent-color); stroke-width: 2; stroke-dasharray: 4; animation: dash 20s linear infinite; opacity: 0.6; }
+@keyframes dash { to { stroke-dashoffset: -200; } }

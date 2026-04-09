@@ -1,0 +1,76 @@
+﻿/* --- GSAP INFINITY GALLERY OVERLAY --- */
+#gsap-gallery-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 999999; background: #000; overflow: hidden;
+    font-family: "Inter", sans-serif; color: white;
+    --card-width: 15rem; --card-height: 22rem;
+    animation: pageFadeIn 0.5s ease forwards;
+}
+@media (max-width: 768px) {
+    #gsap-gallery-modal { --card-width: 65vw; --card-height: 55vh; }
+}
+.gsap-bg-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
+.gsap-bg-image {
+    position: absolute; top: -10%; left: -10%; width: 120%; height: 120%;
+    background-size: cover; background-position: center;
+    filter: blur(40px) brightness(0.4); opacity: 0; transition: opacity 1s ease-in-out; will-change: opacity;
+}
+.gsap-bg-image.active { opacity: 1; }
+.gsap-bg-noise {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    opacity: 0.04; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+.gsap-scroll-container {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    overflow-y: auto; z-index: 10;
+}
+.gsap-ui-layer {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 1000; padding: 2.5rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+}
+@media (max-width: 768px) { .gsap-ui-layer { padding: 1.5rem; } }
+.gsap-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.gsap-brand { font-size: 1.4rem; font-weight: bold; letter-spacing: 1px; pointer-events: auto; display: flex; align-items: center; gap: 10px; }
+.gsap-close-btn {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: white; width: 44px; height: 44px; border-radius: 50%;
+    cursor: pointer; pointer-events: auto; transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center;
+}
+.gsap-close-btn:hover { background: #ef4444; transform: rotate(90deg); }
+.gsap-controls { pointer-events: auto; align-self: center; display: flex; gap: 20px; margin-bottom: 2rem; }
+@media (max-width: 768px) {
+    .gsap-controls { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); margin-bottom: 0; gap: 30px; z-index: 1001; }
+}
+.gsap-nav-btn {
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white; width: 55px; height: 55px; border-radius: 50%; cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);
+}
+@media (max-width: 768px) { .gsap-nav-btn { width: 50px; height: 50px; background: rgba(0, 0, 0, 0.5); } }
+.gsap-nav-btn:hover { background: white; color: black; transform: scale(1.1); }
+.gsap-gallery { position: absolute; width: 100%; height: 100%; overflow: hidden; perspective: 1000px; touch-action: none; top:0; left:0; z-index:5; pointer-events:none; }
+.gsap-cards {
+    position: absolute; width: var(--card-width); height: var(--card-height);
+    top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; padding: 0; transform-style: preserve-3d;
+}
+.gsap-card {
+    list-style: none; padding: 0; margin: 0; width: 100%; height: 100%;
+    border-radius: 14px; position: absolute; top: 0; left: 0;
+    background-size: cover; background-position: center; overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); opacity: 0; visibility: hidden;
+    backface-visibility: hidden; transform: translateZ(0); will-change: transform, opacity; pointer-events:none;
+}
+@media (max-width: 768px) { .gsap-card { box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); } }
+.gsap-card::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 60%); }
+.gsap-card-content {
+    position: absolute; bottom: 25px; left: 0; width: 100%; padding: 0 25px; z-index: 10;
+    text-align: center; opacity: 0; transform: translateY(10px); transition: all 0.6s ease;
+}
+.gsap-card.active .gsap-card-content { opacity: 1; transform: translateY(0); }
+.gsap-card-title { font-size: 1.6rem; font-weight: 500; margin: 0; color: #fff; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); }
+@media (max-width: 768px) { .gsap-card-title { font-size: 1.3rem; } }
+.gsap-card-num { font-size: 0.8rem; opacity: 0.7; margin-bottom: 5px; letter-spacing: 2px; text-transform: uppercase; display: block; }
+.gsap-loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 0.7rem; letter-spacing: 3px; z-index: 9999; transition: opacity 0.5s; pointer-events: none; }

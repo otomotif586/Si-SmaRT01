@@ -1,0 +1,51 @@
+﻿/* General Body Styles */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme Variables - Light Mode (Default) */
+:root,
+:root.light-theme {
+    --primary-bg: #f8fafc;
+    --secondary-bg: #ffffff;
+    --text-color: #0f172a;
+    --text-secondary-color: #64748b;
+    --accent-color: #10b981; /* Emerald Green */
+    --accent-text-color: #ffffff; /* Text color on accent background */
+    --border-color: #f1f5f9;
+    --shadow-color: rgba(15, 23, 42, 0.05);
+    --shadow-strong: rgba(15, 23, 42, 0.1);
+    --hover-bg: #f1f5f9;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --card-border: rgba(255, 255, 255, 0.6);
+    --input-bg: #ffffff;
+    --input-border: #e2e8f0;
+    --bezier: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Theme Variables - Dark Mode */
+:root.dark-theme {
+    --primary-bg: #090e17;
+    --secondary-bg: #0f172a;
+    --text-color: #f8fafc;
+    --text-secondary-color: #94a3b8;
+    --accent-color: #10b981; /* Emerald Green */
+    --accent-text-color: #1a202c;
+    --border-color: #1e293b;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --shadow-strong: rgba(0, 0, 0, 0.5);
+    --hover-bg: #1e293b;
+    --card-bg: rgba(15, 23, 42, 0.85);
+    --card-border: rgba(255, 255, 255, 0.05);
+    --input-bg: #090e17;
+    --input-border: #1e293b;
+    --bezier: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Apply theme variables to common elements */
+body {
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+}
