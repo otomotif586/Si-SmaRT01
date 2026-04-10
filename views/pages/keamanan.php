@@ -1,35 +1,21 @@
 <!-- Page: Keamanan -->
 <div id="page-keamanan" class="page-content hidden page-section">
     
-    <!-- Header with Tabs -->
-    <div class="section-header" style="margin-bottom: 20px;">
-        <div>
-            <h2 class="section-title">Manajemen Keamanan</h2>
-            <p class="text-secondary" style="font-size: 0.8rem;">Pusat kendali pengawasan & keselamatan lingkungan</p>
-        </div>
-        <div class="header-actions">
-            <button class="button-secondary" onclick="openPanicSettings()" title="Pengaturan Panic Button">
-                <i data-lucide="settings"></i>
-                <span class="hide-text-mobile">Pengaturan</span>
-            </button>
-        </div>
-    </div>
-
     <!-- Sub Navigation Tabs -->
-    <div class="sub-nav-tabs" style="margin-bottom: 24px; display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 8px; padding-bottom: 8px;">
-        <button class="sub-nav-tab active" style="flex: 0 0 auto; white-space: nowrap;" onclick="switchKeamananTab('km-ringkasan', this)">
+    <div class="sub-nav-tabs" style="margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 8px;">
+        <button class="sub-nav-tab active" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchKeamananTab('km-ringkasan', this)">
             <i data-lucide="layout-dashboard"></i> Ringkasan
         </button>
-        <button class="sub-nav-tab" style="flex: 0 0 auto; white-space: nowrap;" onclick="switchKeamananTab('km-jadwal', this)">
+        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchKeamananTab('km-jadwal', this)">
             <i data-lucide="calendar"></i> Jadwal
         </button>
-        <button class="sub-nav-tab" style="flex: 0 0 auto; white-space: nowrap;" onclick="switchKeamananTab('km-master', this)">
+        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchKeamananTab('km-master', this)">
             <i data-lucide="users"></i> Master Satpam
         </button>
-        <button class="sub-nav-tab" style="flex: 0 0 auto; white-space: nowrap;" onclick="switchKeamananTab('km-laporan', this)">
+        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchKeamananTab('km-laporan', this)">
             <i data-lucide="clipboard-list"></i> Laporan
         </button>
-        <button class="sub-nav-tab" style="flex: 0 0 auto; white-space: nowrap;" onclick="switchKeamananTab('km-izin', this)">
+        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchKeamananTab('km-izin', this)">
             <i data-lucide="user-minus"></i> Izin/Cuti
         </button>
     </div>
