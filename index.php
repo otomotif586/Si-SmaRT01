@@ -631,6 +631,7 @@ foreach($pengurus as $p) {
 
         menuBtn.addEventListener('click', () => {
             overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
             setTimeout(() => overlay.classList.add('open'), 10);
             document.body.style.overflow = 'hidden';
         });
@@ -639,6 +640,7 @@ foreach($pengurus as $p) {
             overlay.classList.remove('open');
             setTimeout(() => {
                 overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
                 document.body.style.overflow = 'auto';
             }, 600);
         };
