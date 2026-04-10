@@ -163,7 +163,8 @@
     box-shadow: 0 15px 40px rgba(0,0,0,0.2);
     z-index: 1050;
     gap: 4px;
-    min-width: 220px;
+    min-width: 250px; /* Sedikit dilebarkan */
+    width: max-content; /* Pastikan selebar teks agar tidak membungkus ke bawah */
     animation: submenuPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 @keyframes submenuPop {
@@ -171,13 +172,15 @@
     to { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
 #sidebar .sidebar-nav .submenu-items.active button {
-    flex-direction: row;
+    flex-direction: row !important; /* Paksa menyamping walau sedang status aktif */
+    align-items: center;
     justify-content: flex-start; /* Untuk submenu, biasanya menyamping (row) */
     padding: 14px 20px;
     text-align: left;
     width: 100%;
     height: auto; /* Reset tinggi agar tidak terpengaruh menu utama */
     gap: 12px;
+    border-radius: 12px; /* Konsisten UI seperti baris list pengaturan */
 }
 #sidebar .sidebar-nav .submenu-items.active button span {
     font-size: 0.85rem; /* Teks submenu lebih besar karena orientasinya horizontal */
@@ -185,12 +188,22 @@
     margin: 0; /* Reset margin center */
     height: auto; /* Reset tinggi statis */
     width: auto;
+    flex: 1; /* Biarkan teks mengisi penuh sisa ruang di kanan */
 }
 #sidebar .sidebar-nav .submenu-items.active button i,
 #sidebar .sidebar-nav .submenu-items.active button svg {
     width: 18px;
     height: 18px;
     margin: 0; /* Reset margin center agar sejajar di kiri */
+}
+
+#sidebar .sidebar-nav .submenu-items.active button.active-tab {
+    background-color: color-mix(in srgb, var(--accent-color) 10%, transparent); /* Highlight modern khas Startup UI */
+    color: var(--accent-color);
+}
+#sidebar .sidebar-nav .submenu-items.active button.active-tab i,
+#sidebar .sidebar-nav .submenu-items.active button.active-tab svg {
+    transform: none; /* Mencegah ikon membesar yang bisa merusak tata letak sejajar */
 }
 #sidebar .sidebar-nav button .submenu-icon {
     display: none;
@@ -205,8 +218,10 @@
     margin-left: 0; /* Default for mobile, no sidebar margin */
     padding: 16px;
     padding-top: 130px; /* Reduksi jarak header mobile */
-    padding-bottom: 90px;
+    padding-bottom: 100px; /* Tambah jarak bawah agar tidak tertutup navbar */
     transition: margin-left 0.3s ease-in-out;
+    width: 100%;
+    box-sizing: border-box; /* Memastikan padding tidak menambah total lebar layar */
 }
 
 /* Desktop styles */

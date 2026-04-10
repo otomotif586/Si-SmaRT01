@@ -1,4 +1,9 @@
-﻿/* General Body Styles */
+﻿﻿/* General Body Styles */
+html, body {
+    overflow-x: hidden; /* Mencegah layar tergeser ke samping yang merusak posisi navbar mobile */
+    width: 100%;
+}
+
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
