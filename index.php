@@ -1,43 +1,244 @@
 <?php
-// index.php - Main entry point
-
-// Load Database Connection
+// Load Database
 require_once 'config/database.php';
 
-// Include the head section (meta, title, CSS, JS libraries)
-include 'views/layout/head.php';
+// Ambil Data Pengaturan Web CMS
+$stmt = $pdo->query("SELECT setting_key, setting_value FROM web_settings");
+$settingsData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+$web_nama = $settingsData['web_nama'] ?? 'Pesona Kahuripan';
+$web_title = $settingsData['web_title'] ?? 'Pesona Kahuripan - Hunian Asri & Modern';
+$web_hero_title = $settingsData['web_hero_title'] ?? "Kampung Impian <br> <span class='text-gradient'>Kini Jadi Nyata.</span>";
+$web_visi = $settingsData['web_visi'] ?? 'Nikmati harmoni pemandangan bukit, sawah, dan suasana religius pesantren. Kawasan mandiri di mana memiliki rumah asri bukan lagi sekadar angan.';
+$web_hero_image = $settingsData['web_hero_image'] ?? 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=2000';
+$web_logo = $settingsData['web_logo'] ?? '';
+$web_favicon = $settingsData['web_favicon'] ?? '';
+
+// Ambil Data Menu Dinamis
+$stmtMenu = $pdo->query("SELECT * FROM web_menus WHERE status='Aktif' ORDER BY urutan ASC");
+$menus = $stmtMenu->fetchAll(PDO::FETCH_ASSOC);
+
+// Ambil Data Artikel/Blog Publik
+$stmtBlog = $pdo->query("SELECT * FROM web_blogs WHERE status='Publish' ORDER BY created_at DESC LIMIT 3");
+$blogs = $stmtBlog->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
-<html lang="id">
-<body>
-    <?php
-    // Include the sidebar navigation
-    include 'views/layout/sidebar.php';
-    ?>
-    <div class="sidebar-overlay"></div>
-    <main id="main-content">
-        <?php
-        // Include the main content header
-        include 'views/layout/header.php';
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($web_title) ?></title>
+    <?php if($web_favicon): ?>
+    <link rel="icon" href="<?= $web_favicon ?>" type="image/x-icon">
+    <?php endif; ?>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #041a14;
+            color: #ecfdf5;
+            overflow-x: hidden;
+        }
 
-        // Determine which page content to load
-        // For simplicity, we'll load all page contents and use JavaScript to show/hide them
-        // In a more complex PHP application, you might use a router and load only one page.
-        include 'views/pages/dashboard.php';
-        include 'views/pages/global_warga.php';
-        include 'views/pages/laporan_iuran_blok.php';
-        include 'views/pages/laporan_iuran_warga.php';
-        include 'views/pages/rekonsiliasi.php';
-        include 'views/pages/warga.php';
-        include 'views/pages/keuangan.php';
-        include 'views/pages/detail_keuangan.php';
-        include 'views/pages/pos_keuangan.php';
-        include 'views/pages/pembukuan.php';
-        include 'views/pages/keamanan.php';
-        include 'views/pages/info.php';
-        ?>
-    </main>
-    <!-- Include the footer section (closing tags and main JS script) -->
-    <?php include 'views/layout/footer.php'; ?>
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-nav {
+            background: rgba(4, 26, 20, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #6ee7b7, #d1fae5, #99f6e4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes slow-zoom {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-slow-zoom {
+            animation: slow-zoom 30s ease-in-out infinite;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card-glow:hover {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-6">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <?php if($web_logo): ?>
+                    <img src="<?= $web_logo ?>" class="w-10 h-10 object-contain rounded-xl bg-white/10 p-1 shadow-lg" alt="Logo">
+                <?php else: ?>
+                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-mountain text-white"></i>
+                    </div>
+                <?php endif; ?>
+                <span class="text-xl font-bold tracking-tighter uppercase"><?= htmlspecialchars($web_nama) ?></span>
+            </div>
+            
+            <!-- Integrasi Menu CMS Dinamis -->
+            <div class="hidden md:flex items-center space-x-8 text-[11px] font-bold tracking-[0.2em] uppercase opacity-90">
+                <?php if(empty($menus)): ?>
+                    <a href="#kawasan" class="hover:text-emerald-400 transition-colors">Kawasan</a>
+                    <a href="#fasilitas" class="hover:text-emerald-400 transition-colors">Fasilitas</a>
+                    <a href="#wisata" class="hover:text-emerald-400 transition-colors">Wisata</a>
+                <?php else: ?>
+                    <?php foreach($menus as $m): ?>
+                        <a href="<?= htmlspecialchars($m['url']) ?>" class="hover:text-emerald-400 transition-colors"><?= htmlspecialchars($m['nama_menu']) ?></a>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                
+                <!-- TOMBOL MASUK SISTEM SI-SMART -->
+                <a href="app.php" class="px-6 py-2.5 bg-emerald-500 text-emerald-950 rounded-full hover:bg-emerald-400 transition-all duration-300 font-bold shadow-lg shadow-emerald-500/20 flex items-center gap-2">
+                    <i class="fas fa-sign-in-alt"></i> Portal SmaRT
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img 
+                src="<?= $web_hero_image ?>" 
+                alt="Hero Cover" 
+                class="w-full h-full object-cover opacity-20 animate-slow-zoom"
+                onerror="this.src='https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=2000'"
+            >
+            <div class="absolute inset-0 bg-gradient-to-b from-[#041a14] via-transparent to-[#041a14]"></div>
+        </div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="max-w-4xl">
+                <div class="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold tracking-[0.2em] uppercase mb-8">
+                    <i class="fas fa-bolt"></i>
+                    <span>Hunian Subsidi Berkualitas Pemerintah</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-bold leading-[1.1] mb-8">
+                    <?= $web_hero_title ?> <!-- Output langsung agar format HTML gradient bisa terbaca -->
+                </h1>
+                
+                <p class="text-lg md:text-xl text-emerald-100/60 leading-relaxed mb-10 max-w-2xl font-light">
+                    <?= nl2br(htmlspecialchars($web_visi)) ?>
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-5">
+                    <!-- TOMBOL MASUK SISTEM SI-SMART UTAMA -->
+                    <a href="app.php" class="px-10 py-5 bg-emerald-500 text-emerald-950 font-bold rounded-2xl flex items-center justify-center space-x-3 hover:bg-emerald-400 transition-all shadow-xl shadow-emerald-500/20">
+                        <span>Masuk Sistem Si-SmaRT</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <button class="px-10 py-5 glass font-bold rounded-2xl hover:bg-white/10 transition-all">
+                        Tur Virtual 360°
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bagian Kawasan, Fasilitas, dan Wisata tetap utuh seperti desain asli -->
+    <section id="kawasan" class="py-24 relative">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-[2rem] card-glow reveal">
+                    <div class="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 text-2xl"><i class="fas fa-mountain"></i></div>
+                    <h3 class="text-2xl font-bold mb-3">View Bukit</h3>
+                    <p class="text-emerald-100/40 text-sm leading-relaxed">Pemandangan hijau yang membentang luas di sisi kanan dan kiri kawasan perumahan.</p>
+                </div>
+                <div class="glass p-8 rounded-[2rem] card-glow reveal border-emerald-500/30 bg-emerald-500/5">
+                    <div class="w-14 h-14 bg-emerald-500/30 rounded-2xl flex items-center justify-center text-emerald-300 mb-6 text-2xl"><i class="fas fa-mosque"></i></div>
+                    <h3 class="text-2xl font-bold mb-3">Religius</h3>
+                    <p class="text-emerald-100/40 text-sm leading-relaxed">Suasana tenang dan damai dengan lingkungan yang dekat dengan area pesantren.</p>
+                </div>
+                <div class="glass p-8 rounded-[2rem] card-glow reveal">
+                    <div class="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 text-2xl"><i class="fas fa-store"></i></div>
+                    <h3 class="text-2xl font-bold mb-3">Wirausaha</h3>
+                    <p class="text-emerald-100/40 text-sm leading-relaxed">Warga yang berboyong usaha mandiri membuat kawasan ini menjadi lengkap dan hidup.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTEGRASI BLOG & PENGUMUMAN CMS -->
+    <?php if(!empty($blogs)): ?>
+    <section id="berita" class="py-24 bg-white/5 relative">
+        <div class="container mx-auto px-6 md:px-12">
+            <h2 class="text-4xl font-bold mb-16 text-center">Kabar & Pengumuman Terbaru</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <?php foreach($blogs as $b): ?>
+                <div class="glass p-8 rounded-[2rem] card-glow reveal flex flex-col">
+                    <div class="text-emerald-400 text-xs tracking-widest font-bold uppercase mb-4"><i class="fas fa-calendar-alt mr-2"></i> <?= date('d M Y', strtotime($b['created_at'])) ?></div>
+                    <h3 class="text-xl font-bold mb-4 line-clamp-2"><?= htmlspecialchars($b['judul']) ?></h3>
+                    <p class="text-emerald-100/60 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
+                        <?= strip_tags($b['konten']) ?>
+                    </p>
+                    <a href="#" class="text-emerald-400 font-bold hover:text-emerald-300 transition-colors text-sm">Baca Selengkapnya &rarr;</a>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
+
+    <!-- Footer -->
+    <footer class="py-20 border-t border-white/5 text-center bg-[#031510]">
+        <div class="container mx-auto px-6">
+            <i class="fas fa-heart text-emerald-500 text-4xl mb-6"></i>
+            <h2 class="text-3xl font-bold italic mb-12 uppercase tracking-widest">We Love You <?= htmlspecialchars($web_nama) ?></h2>
+            <p class="text-emerald-100/30 text-sm tracking-widest uppercase mb-2">
+                &copy; <?= date('Y') ?> <?= htmlspecialchars($web_nama) ?>
+            </p>
+            <p class="text-emerald-100/10 text-[10px] tracking-widest uppercase">
+                Diberdayakan oleh Si-SmaRT
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) { nav.classList.add('glass-nav', 'py-4'); nav.classList.remove('py-6'); } 
+            else { nav.classList.remove('glass-nav', 'py-4'); nav.classList.add('py-6'); }
+        });
+
+        // Scroll Reveal Animation
+        function reveal() {
+            document.querySelectorAll(".reveal").forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add("active");
+            });
+        }
+        window.addEventListener("scroll", reveal); reveal();
+    </script>
 </body>
 </html>
