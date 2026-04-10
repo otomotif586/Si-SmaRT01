@@ -243,6 +243,17 @@ window.saveSatpam = function() {
         }).catch(e => { showToast("Sistem backend API belum ditambahkan.", "info"); closeKmModal('modal-satpam'); });
 }
 
+window.deleteSatpam = function(id) {
+    if(confirm('Hapus personel ini secara permanen?')) {
+        const fd = new FormData(); fd.append('id', id);
+        fetch('api/keamanan/delete_satpam.php', { method: 'POST', body: fd })
+            .then(r=>r.json()).then(res=>{
+                if(res.status==='success') loadMasterSatpam();
+                else showToast(res.message, 'error');
+            });
+    }
+}
+
 // =========================================
 // 2. CRUD JADWAL SHIFT
 // =========================================
@@ -279,6 +290,26 @@ window.addJadwal = function() {
     document.getElementById('km-jadwal-tanggal').value = '';
     populateSatpamSelect('km-jadwal-satpam');
     document.getElementById('modal-jadwal').classList.remove('hidden');
+}
+
+window.saveJadwal = function() {
+    const fd = new FormData();
+    fd.append('id', document.getElementById('km-jadwal-id').value);
+    fd.append('satpam_id', document.getElementById('km-jadwal-satpam').value);
+    fd.append('tanggal', document.getElementById('km-jadwal-tanggal').value);
+    fd.append('shift', document.getElementById('km-jadwal-shift').value);
+    showLoading('Menyimpan...');
+    fetch('api/keamanan/save_jadwal.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
+        if(res.status==='success') { showToast(res.message); closeKmModal('modal-jadwal'); loadJadwalSatpam(); } 
+        else showToast(res.message, 'error'); 
+    }).catch(e => showToast("API Belum Tersedia", "info"));
+}
+
+window.deleteJadwal = function(id) {
+    if(confirm('Hapus jadwal ini?')) {
+        const fd = new FormData(); fd.append('id', id);
+        fetch('api/keamanan/delete_jadwal.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadJadwalSatpam(); });
+    }
 }
 
 // =========================================
@@ -373,6 +404,28 @@ window.viewDetailLaporan = function(id, dataStr) {
     document.getElementById('modal-detail-lap-keamanan').classList.remove('hidden');
 }
 
+window.saveLaporanKeamanan = function() {
+    const fd = new FormData();
+    fd.append('id', document.getElementById('km-lap-id').value);
+    fd.append('judul', document.getElementById('km-lap-judul').value);
+    fd.append('waktu_kejadian', document.getElementById('km-lap-waktu').value.replace('T', ' '));
+    fd.append('lokasi', document.getElementById('km-lap-lokasi').value);
+    fd.append('deskripsi', document.getElementById('km-lap-deskripsi').value);
+    fd.append('status', document.getElementById('km-lap-status').value);
+    showLoading('Menyimpan...');
+    fetch('api/keamanan/save_laporan.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
+        if(res.status==='success') { showToast(res.message); closeKmModal('modal-lap-keamanan'); loadLaporanKeamanan(); loadKeamananRingkasan(); } 
+        else showToast(res.message, 'error'); 
+    }).catch(e => showToast("API Belum Tersedia", "info"));
+}
+
+window.deleteLaporan = function(id) {
+    if(confirm('Hapus laporan ini?')) {
+        const fd = new FormData(); fd.append('id', id);
+        fetch('api/keamanan/delete_laporan.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') { loadLaporanKeamanan(); loadKeamananRingkasan(); } });
+    }
+}
+
 // =========================================
 // 4. CRUD IZIN & CUTI
 // =========================================
@@ -434,4 +487,26 @@ window.editIzin = function(id, satpam_id, mulai, selesai, jenis, status, ketEnco
     document.getElementById('km-izin-status-group').classList.remove('hidden'); // Tampilkan status approve jika edit (oleh admin)
     document.getElementById('modal-izin-title').innerText = 'Kelola Izin / Cuti';
     document.getElementById('modal-izin').classList.remove('hidden');
+}
+
+window.saveIzin = function() {
+    const fd = new FormData();
+    fd.append('id', document.getElementById('km-izin-id').value);
+    fd.append('satpam_id', document.getElementById('km-izin-satpam').value);
+    fd.append('tanggal_mulai', document.getElementById('km-izin-mulai').value);
+    fd.append('tanggal_selesai', document.getElementById('km-izin-selesai').value);
+    fd.append('jenis', document.getElementById('km-izin-jenis').value);
+    fd.append('keterangan', document.getElementById('km-izin-ket').value);
+    fd.append('status', document.getElementById('km-izin-status').value || 'Pending');
+    showLoading('Menyimpan...');
+    fetch('api/keamanan/save_izin.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
+        if(res.status==='success') { showToast(res.message); closeKmModal('modal-izin'); loadIzinSatpam(); } else showToast(res.message, 'error'); 
+    }).catch(e => showToast("API Belum Tersedia", "info"));
+}
+
+window.deleteIzin = function(id) {
+    if(confirm('Hapus pengajuan izin ini?')) {
+        const fd = new FormData(); fd.append('id', id);
+        fetch('api/keamanan/delete_izin.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadIzinSatpam(); });
+    }
 }
