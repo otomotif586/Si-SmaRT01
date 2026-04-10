@@ -163,8 +163,9 @@
     box-shadow: 0 15px 40px rgba(0,0,0,0.2);
     z-index: 1050;
     gap: 4px;
-    min-width: 250px; /* Sedikit dilebarkan */
-    width: max-content; /* Pastikan selebar teks agar tidak membungkus ke bawah */
+    min-width: 260px; /* Sedikit dilebarkan lagi */
+    width: max-content; /* Popup akan otomatis selebar teks */
+    max-width: 90vw; /* Mencegah terpotong pada layar HP yang sangat kecil */
     animation: submenuPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 @keyframes submenuPop {
@@ -181,6 +182,7 @@
     height: auto; /* Reset tinggi agar tidak terpengaruh menu utama */
     gap: 12px;
     border-radius: 12px; /* Konsisten UI seperti baris list pengaturan */
+    flex-wrap: nowrap !important; /* Memaksa ikon dan teks selalu di 1 baris */
 }
 #sidebar .sidebar-nav .submenu-items.active button span {
     font-size: 0.85rem; /* Teks submenu lebih besar karena orientasinya horizontal */
@@ -188,7 +190,9 @@
     margin: 0; /* Reset margin center */
     height: auto; /* Reset tinggi statis */
     width: auto;
-    flex: 1; /* Biarkan teks mengisi penuh sisa ruang di kanan */
+    flex: 1 0 auto; /* Memastikan ruang teks tidak dikompresi */
+    white-space: nowrap !important; /* STRICT: Larang teks untuk membuat baris baru */
+    overflow: visible; /* Pastikan teks utuh */
 }
 #sidebar .sidebar-nav .submenu-items.active button i,
 #sidebar .sidebar-nav .submenu-items.active button svg {
