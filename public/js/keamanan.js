@@ -33,7 +33,7 @@ window.loadKeamananRingkasan = function() {
     if (reportEl) reportEl.innerText = '-';
     if (activityEl) activityEl.innerHTML = '<p class="text-center text-secondary py-4">Memuat aktivitas...</p>';
 
-    fetch('api/keamanan/get_ringkasan.php')
+    fetch('api/get_ringkasan.php')
         .then(r => r.ok ? r.json() : {status:'error'})
         .then(res => {
             if (res.status === 'success') {
@@ -154,7 +154,7 @@ window.triggerPanic = function() {
 // Helper untuk mengisi opsi Personel
 window.populateSatpamSelect = function(selectId, selectedId = null) {
     const sel = document.getElementById(selectId);
-    fetch('api/keamanan/get_satpam.php')
+    fetch('api/get_satpam.php')
         .then(r => r.ok ? r.json() : {status:'error'})
         .then(res => {
             sel.innerHTML = '<option value="">-- Pilih Personel --</option>';
@@ -178,7 +178,7 @@ window.loadMasterSatpam = function() {
     const container = document.getElementById('km-guard-list');
     container.innerHTML = '<p class="text-secondary col-span-full text-center py-5">Memuat data personel...</p>';
     
-    fetch('api/keamanan/get_satpam.php')
+    fetch('api/get_satpam.php')
         .then(r => r.ok ? r.json() : {status:'error', message:'API Endpoint (get_satpam.php) Belum Tersedia.'})
         .then(res => {
             if (res.status === 'success' && res.data.length > 0) {
@@ -235,7 +235,7 @@ window.saveSatpam = function() {
     fd.append('status', document.getElementById('km-satpam-status').value);
 
     showLoading('Menyimpan...');
-    fetch('api/keamanan/save_satpam.php', { method: 'POST', body: fd })
+    fetch('api/save_satpam.php', { method: 'POST', body: fd })
         .then(r => r.json())
         .then(res => {
             if (res.status === 'success') { showToast(res.message); closeKmModal('modal-satpam'); loadMasterSatpam(); } 
@@ -246,7 +246,7 @@ window.saveSatpam = function() {
 window.deleteSatpam = function(id) {
     if(confirm('Hapus personel ini secara permanen?')) {
         const fd = new FormData(); fd.append('id', id);
-        fetch('api/keamanan/delete_satpam.php', { method: 'POST', body: fd })
+        fetch('api/delete_satpam.php', { method: 'POST', body: fd })
             .then(r=>r.json()).then(res=>{
                 if(res.status==='success') loadMasterSatpam();
                 else showToast(res.message, 'error');
@@ -261,7 +261,7 @@ window.loadJadwalSatpam = function() {
     const tbody = document.getElementById('km-schedule-body');
     tbody.innerHTML = '<tr><td colspan="4" class="text-center py-5">Memuat jadwal...</td></tr>';
     
-    fetch('api/keamanan/get_jadwal.php')
+    fetch('api/get_jadwal.php')
         .then(r => r.ok ? r.json() : {status:'error', message:'API Endpoint Belum Tersedia.'})
         .then(res => {
             if (res.status === 'success' && res.data.length > 0) {
@@ -299,7 +299,7 @@ window.saveJadwal = function() {
     fd.append('tanggal', document.getElementById('km-jadwal-tanggal').value);
     fd.append('shift', document.getElementById('km-jadwal-shift').value);
     showLoading('Menyimpan...');
-    fetch('api/keamanan/save_jadwal.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
+    fetch('api/save_jadwal.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
         if(res.status==='success') { showToast(res.message); closeKmModal('modal-jadwal'); loadJadwalSatpam(); } 
         else showToast(res.message, 'error'); 
     }).catch(e => showToast("API Belum Tersedia", "info"));
@@ -308,7 +308,7 @@ window.saveJadwal = function() {
 window.deleteJadwal = function(id) {
     if(confirm('Hapus jadwal ini?')) {
         const fd = new FormData(); fd.append('id', id);
-        fetch('api/keamanan/delete_jadwal.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadJadwalSatpam(); });
+        fetch('api/delete_jadwal.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadJadwalSatpam(); });
     }
 }
 
@@ -319,7 +319,7 @@ window.loadLaporanKeamanan = function() {
     const tbody = document.getElementById('km-incident-body');
     tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5">Memuat laporan kejadian...</td></tr>';
     
-    fetch('api/keamanan/get_laporan.php')
+    fetch('api/get_laporan.php')
         .then(r => r.ok ? r.json() : {status:'error', message:'API Endpoint Belum Tersedia.'})
         .then(res => {
             if (res.status === 'success' && res.data.length > 0) {
@@ -413,7 +413,7 @@ window.saveLaporanKeamanan = function() {
     fd.append('deskripsi', document.getElementById('km-lap-deskripsi').value);
     fd.append('status', document.getElementById('km-lap-status').value);
     showLoading('Menyimpan...');
-    fetch('api/keamanan/save_laporan.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
+    fetch('api/save_laporan.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
         if(res.status==='success') { showToast(res.message); closeKmModal('modal-lap-keamanan'); loadLaporanKeamanan(); loadKeamananRingkasan(); } 
         else showToast(res.message, 'error'); 
     }).catch(e => showToast("API Belum Tersedia", "info"));
@@ -422,7 +422,7 @@ window.saveLaporanKeamanan = function() {
 window.deleteLaporan = function(id) {
     if(confirm('Hapus laporan ini?')) {
         const fd = new FormData(); fd.append('id', id);
-        fetch('api/keamanan/delete_laporan.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') { loadLaporanKeamanan(); loadKeamananRingkasan(); } });
+        fetch('api/delete_laporan.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') { loadLaporanKeamanan(); loadKeamananRingkasan(); } });
     }
 }
 
@@ -433,7 +433,7 @@ window.loadIzinSatpam = function() {
     const container = document.getElementById('km-leave-requests');
     container.innerHTML = '<p class="text-secondary text-center py-5">Memuat pengajuan...</p>';
     
-    fetch('api/keamanan/get_izin.php')
+    fetch('api/get_izin.php')
         .then(r => r.ok ? r.json() : {status:'error', message:'API Endpoint Belum Tersedia.'})
         .then(res => {
             if (res.status === 'success' && res.data.length > 0) {
@@ -499,7 +499,7 @@ window.saveIzin = function() {
     fd.append('keterangan', document.getElementById('km-izin-ket').value);
     fd.append('status', document.getElementById('km-izin-status').value || 'Pending');
     showLoading('Menyimpan...');
-    fetch('api/keamanan/save_izin.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
+    fetch('api/save_izin.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
         if(res.status==='success') { showToast(res.message); closeKmModal('modal-izin'); loadIzinSatpam(); } else showToast(res.message, 'error'); 
     }).catch(e => showToast("API Belum Tersedia", "info"));
 }
@@ -507,6 +507,6 @@ window.saveIzin = function() {
 window.deleteIzin = function(id) {
     if(confirm('Hapus pengajuan izin ini?')) {
         const fd = new FormData(); fd.append('id', id);
-        fetch('api/keamanan/delete_izin.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadIzinSatpam(); });
+        fetch('api/delete_izin.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadIzinSatpam(); });
     }
 }
