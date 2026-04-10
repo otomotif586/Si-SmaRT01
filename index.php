@@ -163,9 +163,10 @@ $blogs = $stmtBlog->fetchAll(PDO::FETCH_ASSOC);
                         <span>Masuk Sistem Si-SmaRT</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
-                    <button class="px-10 py-5 glass font-bold rounded-2xl hover:bg-white/10 transition-all">
-                        Tur Virtual 360°
-                    </button>
+                    <a href="https://www.google.com/maps/place/Bimbel+Become/@-6.4617173,106.9727219,3a,73.9y,173.83h,88.65t/data=!3m7!1e1!3m5!1s0-jsU8IuF6zRD2dAo4a4pQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D1.3543519995511133%26panoid%3D0-jsU8IuF6zRD2dAo4a4pQ%26yaw%3D173.82917027237332!7i16384!8i8192!4m6!3m5!1s0x2e69bf52d8d30d3b:0x94ee6f0e357a0db5!8m2!3d-6.4600501!4d106.9744559!16s%2Fg%2F11y2dtt465?entry=ttu&g_ep=EgoyMDI2MDQwNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="px-10 py-5 glass font-bold rounded-2xl hover:bg-white/10 transition-all flex items-center justify-center space-x-3 text-center">
+                        <span>Tur Virtual 360°</span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
                 </div>
             </div>
         </div>
