@@ -3,8 +3,17 @@
 require_once 'config/database.php';
 
 // Ambil Data Pengaturan Web CMS
-$stmt = $pdo->query("SELECT setting_key, setting_value FROM web_settings");
-$settingsData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+try {
+    $stmt = $pdo->query("SELECT setting_key, setting_value FROM web_settings");
+    $settingsData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+} catch (Exception $e) {
+    $settingsData = [];
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `web_settings` (
+      `setting_key` varchar(50) NOT NULL,
+      `setting_value` text,
+      PRIMARY KEY (`setting_key`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+}
 
 $web_nama = $settingsData['web_nama'] ?? 'Pesona Kahuripan';
 $web_title = $settingsData['web_title'] ?? 'Pesona Kahuripan - Hunian Asri & Modern';
@@ -20,12 +29,36 @@ $web_transparansi_deskripsi = $settingsData['web_transparansi_deskripsi'] ?? 'Ka
 $web_transparansi_file = $settingsData['web_transparansi_file'] ?? '';
 
 // Ambil Data Menu Dinamis
-$stmtMenu = $pdo->query("SELECT * FROM web_menus WHERE status='Aktif' ORDER BY urutan ASC");
-$menus = $stmtMenu->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $stmtMenu = $pdo->query("SELECT * FROM web_menus WHERE status='Aktif' ORDER BY urutan ASC");
+    $menus = $stmtMenu->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $menus = [];
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `web_menus` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `nama_menu` varchar(100) NOT NULL,
+      `url` varchar(255) NOT NULL,
+      `urutan` int(11) DEFAULT 0,
+      `status` enum('Aktif','Draft') DEFAULT 'Aktif',
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+}
 
 // Ambil Data Artikel/Blog Publik
-$stmtBlog = $pdo->query("SELECT * FROM web_blogs WHERE status='Publish' ORDER BY created_at DESC LIMIT 3");
-$blogs = $stmtBlog->fetchAll(PDO::FETCH_ASSOC);
+try {
+    $stmtBlog = $pdo->query("SELECT * FROM web_blogs WHERE status='Publish' ORDER BY created_at DESC LIMIT 3");
+    $blogs = $stmtBlog->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $blogs = [];
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `web_blogs` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `judul` varchar(255) NOT NULL,
+      `konten` longtext,
+      `status` enum('Publish','Draft') DEFAULT 'Publish',
+      `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+}
 
 // Ambil Data Struktur Organisasi
 try {
@@ -151,9 +184,8 @@ foreach($pengurus as $p) {
         }
 
         #mobile-menu-overlay {
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);
             transform: translateX(100%);
-            will-change: transform;
         }
 
         #mobile-menu-overlay.open {
@@ -162,6 +194,12 @@ foreach($pengurus as $p) {
     </style>
 </head>
 <body>
+
+    <!-- Latar Belakang Gambar Alam Semi-Transparan -->
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=2000" class="absolute inset-0 w-full h-full object-cover opacity-[0.06] mix-blend-multiply" alt="Latar Belakang">
+        <div class="absolute inset-0 bg-[#fdfaf3]/60 backdrop-blur-[1px]"></div>
+    </div>
 
     <!-- Animasi Elemen Latar Belakang -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -218,8 +256,7 @@ foreach($pengurus as $p) {
         </div>
     </nav>
 
-    <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 bg-[#fdfaf3] z-[150] hidden flex-col items-center justify-center space-y-12 text-3xl font-black uppercase tracking-widest text-emerald-950">
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-[#fdfaf3] z-[150] hidden flex flex-col items-center justify-center space-y-12 text-3xl font-black uppercase tracking-widest text-emerald-950">
         <button id="close-btn" class="absolute top-8 right-8 w-14 h-14 glass rounded-3xl text-emerald-600 flex items-center justify-center">
             <i class="fas fa-times"></i>
         </button>
@@ -266,29 +303,19 @@ foreach($pengurus as $p) {
                         </a>
                     </div>
 
-                    <!-- Suasana Warga Card (Visible on Mobile & Tablet) -->
-                    <div class="lg:hidden mt-12 glass p-8 rounded-[2.5rem] shadow-xl border-emerald-100 reveal">
-                        <div class="flex items-center space-x-4 mb-4">
-                            <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-emerald-950">
-                                <i class="fas fa-quote-left text-xs"></i>
-                            </div>
-                            <span class="font-bold text-sm text-emerald-900 tracking-tight">Suasana Warga</span>
-                        </div>
-                        <p class="text-sm text-emerald-900/60 leading-relaxed font-medium italic">"View bukit & sawah di sini luar biasa, ekonomi warganya juga hidup sekali."</p>
-                    </div>
                 </div>
                 
                 <!-- Hero Image Decor -->
-                <div class="relative hidden lg:block float">
+                <div class="relative mt-12 lg:mt-0 float w-full">
                     <div class="absolute -inset-10 bg-emerald-500/10 blur-[120px] rounded-full animate-pulse"></div>
                     <img 
                         src="<?= $web_hero_image ?>" 
                         alt="View Pesona" 
-                        class="relative z-10 rounded-[5rem] border-[16px] border-white/60 shadow-2xl object-cover h-[650px] w-full"
+                        class="relative z-10 rounded-[3rem] lg:rounded-[5rem] border-[12px] lg:border-[16px] border-white/60 shadow-2xl object-cover h-[400px] lg:h-[650px] w-full"
                         loading="lazy"
                         onerror="this.src='https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&q=80&w=1200'"
                     >
-                    <div class="absolute -bottom-10 -left-10 glass p-10 rounded-[3.5rem] z-20 shadow-2xl max-w-[320px]">
+                    <div class="absolute -bottom-6 left-4 right-4 lg:right-auto lg:-bottom-10 lg:-left-10 glass p-6 lg:p-10 rounded-[2.5rem] lg:rounded-[3.5rem] z-20 shadow-2xl max-w-[320px] mx-auto lg:mx-0">
                         <div class="flex items-center space-x-4 mb-4">
                             <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-emerald-950">
                                 <i class="fas fa-quote-left text-xs"></i>
@@ -311,7 +338,7 @@ foreach($pengurus as $p) {
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <div class="glass p-12 rounded-[4rem] card-glow reveal">
                     <div class="w-20 h-20 bg-emerald-600/10 rounded-3xl flex items-center justify-center text-emerald-600 mb-8 text-4xl shadow-inner border border-emerald-100">
-                        <i class="fas fa-mountain-sun"></i>
+                        <i class="fas fa-mountain"></i>
                     </div>
                     <h3 class="text-2xl font-bold mb-4 text-emerald-950">Bukit & Sawah</h3>
                     <p class="text-emerald-900/50 text-sm leading-relaxed font-medium">Pemandangan alam murni di kanan-kiri yang menyejukkan mata setiap hari.</p>
@@ -454,8 +481,14 @@ foreach($pengurus as $p) {
                 <div class="w-32 h-32 rounded-[2.5rem] bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center mb-8 group-hover:bg-emerald-600 transition-all shadow-inner overflow-hidden">
                     <?php if($a['foto']): ?>
                         <img src="<?= htmlspecialchars($a['foto']) ?>" alt="<?= htmlspecialchars($a['nama']) ?>" class="w-full h-full object-cover">
-                    <?php else: ?>
-                        <i class="fas fa-user-tie text-5xl text-emerald-600 group-hover:text-white transition-colors"></i>
+                    <?php else: 
+                        $icon = 'fa-user-tie'; // Default
+                        $jab_lower = strtolower($a['jabatan']);
+                        if(strpos($jab_lower, 'sekretaris') !== false) $icon = 'fa-file-signature';
+                        elseif(strpos($jab_lower, 'bendahara') !== false) $icon = 'fa-coins';
+                        elseif(strpos($jab_lower, 'keamanan') !== false || strpos($jab_lower, 'satgas') !== false) $icon = 'fa-user-shield';
+                    ?>
+                        <i class="fas <?= $icon ?> text-5xl text-emerald-600 group-hover:text-white transition-colors"></i>
                     <?php endif; ?>
                 </div>
                 <h4 class="text-xl font-bold text-emerald-900"><?= htmlspecialchars($a['jabatan']) ?></h4>
@@ -556,7 +589,7 @@ foreach($pengurus as $p) {
         </div>
         <div class="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12">
             <div class="group relative h-[500px] overflow-hidden rounded-[4rem] reveal shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1544123232-220b8069572c?auto=format&fit=crop&q=80&w=1200" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 opacity-60" alt="Mata Air Sodong" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1751945142122-08edb4107d3e?q=80&w=816&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 opacity-60" alt="Mata Air Sodong" loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-emerald-950/10 to-transparent"></div>
                 <div class="absolute bottom-12 left-12 text-white text-left">
                     <span class="text-[10px] font-bold tracking-[0.4em] uppercase opacity-70 mb-2 block">Ekologi</span>
@@ -565,7 +598,7 @@ foreach($pengurus as $p) {
                 </div>
             </div>
             <div class="group relative h-[500px] overflow-hidden rounded-[4rem] reveal shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&q=80&w=1200" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 opacity-60" alt="Kolam Renang" loading="lazy">
+                <img src="https://plus.unsplash.com/premium_photo-1669058431888-8c792a5a762d?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 opacity-60" alt="Goa Lalay Pool" loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-emerald-950/10 to-transparent"></div>
                 <div class="absolute bottom-12 left-12 text-white text-left">
                     <span class="text-[10px] font-bold tracking-[0.4em] uppercase opacity-70 mb-2 block">Rekreasi</span>
@@ -606,7 +639,7 @@ foreach($pengurus as $p) {
             </div>
             
             <p class="text-white/20 text-[9px] tracking-[0.8em] font-black uppercase">
-                &copy; 2024 Portal Warga RT 001 • Pesona Kahuripan Development
+                &copy; 2026 Portal Warga RT 001 • Pesona Kahuripan Development
             </p>
         </div>
     </footer>
@@ -632,7 +665,6 @@ foreach($pengurus as $p) {
 
         menuBtn.addEventListener('click', () => {
             overlay.classList.remove('hidden');
-            overlay.classList.add('flex');
             setTimeout(() => overlay.classList.add('open'), 10);
             document.body.style.overflow = 'hidden';
         });
@@ -641,9 +673,8 @@ foreach($pengurus as $p) {
             overlay.classList.remove('open');
             setTimeout(() => {
                 overlay.classList.add('hidden');
-                overlay.classList.remove('flex');
                 document.body.style.overflow = 'auto';
-            }, 300);
+            }, 600);
         };
 
         closeBtn.addEventListener('click', closeMenu);

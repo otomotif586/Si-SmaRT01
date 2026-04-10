@@ -1,7 +1,7 @@
 <?php
 // Konfigurasi Database PDO
 $host = 'localhost';
-$dbname = 'smart_a';
+$dbname = 'smart_b';
 $username = 'root'; // Default XAMPP username
 $password = '';     // Default XAMPP password (kosong)
 
