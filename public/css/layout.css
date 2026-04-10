@@ -6,7 +6,7 @@
     left: 0;
     top: auto;
     width: 100%;
-    height: auto;
+    height: calc(65px + env(safe-area-inset-bottom));
     background-color: var(--card-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -70,7 +70,7 @@
     flex-direction: row;
     justify-content: space-around; /* Distribute items evenly */
     align-items: center;
-    padding: 8px 4px; /* Reduced side padding */
+    padding: 4px 10px; /* Padding lebih tipis */
     margin: 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -90,26 +90,36 @@
     align-items: center;
     justify-content: center;
     flex: 1; /* Auto-fill width proportionally */
-    min-width: 70px; /* Reliable minimum */
-    padding: 10px 4px;
+    min-width: 0; /* Penting agar teks bisa dipotong jika kepanjangan */
+    padding: 8px 0;
     text-align: center;
     background: none;
     border: none;
     cursor: pointer;
     color: var(--text-secondary-color);
+    opacity: 0.6; /* Menu tidak aktif sedikit pudar */
     text-decoration: none;
     white-space: nowrap;
     transition: all 0.4s var(--bezier);
     border-radius: 12px;
-    font-size: 0.65rem; /* Slightly smaller to fit more on mobile */
-    font-weight: 500;
     scroll-snap-align: center;
-    gap: 4px;
+    gap: 3px; /* Jarak antara ikon dan teks */
+}
+
+#sidebar .sidebar-nav button span {
+    font-size: 0.62rem; /* Ukuran teks ideal untuk navigasi bawah */
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Jika teks menu terlalu panjang, akan ada titik-titik (...) */
+    width: 100%;
+    text-align: center;
 }
 
 #sidebar .sidebar-nav button i {
     margin-right: 0;
-    margin-bottom: 0; /* Hapus margin karena sudah pakai gap */
+    margin-bottom: 2px;
     width: 22px;
     height: 22px;
 }
@@ -118,11 +128,15 @@
 #sidebar .sidebar-nav button.active-tab {
     color: var(--accent-color);
     background-color: transparent;
+    opacity: 1;
 }
 
 #sidebar .sidebar-nav button.active-tab {
-    font-weight: 700;
     transform: translateY(-4px) scale(1.05);
+}
+
+#sidebar .sidebar-nav button.active-tab span {
+    font-weight: 700; /* Teks menu aktif lebih tebal */
 }
 
 /* Submenu Styles for Mobile (Bottom Nav) */
@@ -152,11 +166,15 @@
 }
 #sidebar .sidebar-nav .submenu-items.active button {
     flex-direction: row;
-    justify-content: flex-start;
-    padding: 14px 16px;
+    justify-content: flex-start; /* Untuk submenu, biasanya menyamping (row) */
+    padding: 14px 20px;
+    text-align: left;
     width: 100%;
-    font-size: 0.85rem;
     gap: 12px;
+}
+#sidebar .sidebar-nav .submenu-items.active button span {
+    font-size: 0.85rem; /* Teks submenu lebih besar karena orientasinya horizontal */
+    text-align: left;
 }
 #sidebar .sidebar-nav .submenu-items.active button i {
     width: 18px;
@@ -232,6 +250,11 @@
         flex: none; /* Mereset flex: 1 yang terbawa dari versi mobile */
         transition: all 0.4s var(--bezier);
         gap: 16px; /* Jarak ikon & teks untuk Desktop */
+    }
+    #sidebar .sidebar-nav button span {
+        font-size: 0.9rem; /* Mengembalikan teks ke ukuran asalnya khusus di PC */
+        text-align: left;
+        width: auto;
     }
     #sidebar .sidebar-nav button i {
         margin-right: 0; /* Hapus margin karena sudah pakai gap */
@@ -495,63 +518,4 @@ input[type="text"], input[type="search"] {
 
 input[type="text"]:focus, input[type="search"]:focus {
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color) 20%, transparent);
-    outline: none;
-}
-
-/* --- Custom Classes for Themed Elements --- */
-
-/* General Page Section */
-.page-section {
-    padding: 12px 0; /* Reduced vertical spacing */
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Reduced gap */
-}
-@media (min-width: 768px) {
-    .page-section {
-        padding: 0 0 32px 0;
-        gap: 32px; /* Reduced gap desktop */
-    }
-}
-
-/* Grid Containers */
-.grid-container {
-    display: grid;
-    grid-template-columns: 1fr; /* Single column on mobile */
-    gap: 15px;
-}
-@media (min-width: 768px) {
-    .grid-container {
-        grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
-    }
-}
-.grid-container-2-col {
-    display: grid;
-    grid-template-columns: 1fr; /* Single column on mobile */
-    gap: 15px;
-}
-@media (min-width: 768px) {
-    .grid-container-2-col {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns on desktop */
-    }
-}
-
-@media (max-width: 480px) {
-    .summary-3-grid, .summary-wrapper-3, .summary-wrapper {
-        grid-template-columns: repeat(3, 1fr); /* Keep 3-across but with tighter scaling */
-        gap: 6px;
-    }
-    
-    /* Specific for Keamanan where labels are longer */
-    #page-keamanan .summary-3-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 per row for better text fit */
-        gap: 12px;
-    }
-}
-
-@media (max-width: 360px) {
-    .summary-3-grid, .summary-wrapper-3, .summary-wrapper {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns for super narrow screens */
-    }
-}
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color) 20%, t
