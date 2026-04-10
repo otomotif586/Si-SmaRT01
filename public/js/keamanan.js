@@ -1,210 +1,307 @@
-function initKeamanan() {
-    loadKeamananData();
-    // Initialize default numbers if none exist
-    if (!localStorage.getItem('smartrt_panic_numbers')) {
-        localStorage.setItem('smartrt_panic_numbers', JSON.stringify(['08123456789', '08987654321']));
-    }
+window.initKeamanan = function() {
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+    loadKeamananRingkasan();
 }
 
-function loadKeamananData() {
-    renderRecentActivity();
-    renderSchedule();
-    renderGuardList();
-    renderIncidentLogs();
-    renderLeaveRequests();
-}
-
-function switchKeamananTab(tabId, element) {
+window.switchKeamananTab = function(tabId, btnElement) {
     document.querySelectorAll('.km-tab-content').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('#page-keamanan .sub-nav-tab').forEach(el => el.classList.remove('active'));
-
+    document.querySelectorAll('.sub-nav-tab').forEach(el => el.classList.remove('active'));
+    
     document.getElementById(tabId).classList.remove('hidden');
-    element.classList.add('active');
+    if (btnElement) btnElement.classList.add('active');
+    
+    if (tabId === 'km-ringkasan') loadKeamananRingkasan();
+    else if (tabId === 'km-master') loadMasterSatpam();
+    else if (tabId === 'km-jadwal') loadJadwalSatpam();
+    else if (tabId === 'km-laporan') loadLaporanKeamanan();
+    else if (tabId === 'km-izin') loadIzinSatpam();
 }
 
-// --- Panic Button Logic ---
-function triggerPanic() {
-    const numbers = JSON.parse(localStorage.getItem('smartrt_panic_numbers') || '[]');
-    const list = document.getElementById('panic-recipient-list');
-    list.innerHTML = '';
-
-    if (numbers.length === 0) {
-        list.innerHTML = '<p class="text-secondary py-4">Belum ada nomor kontak darurat. Klik ikon gerigi untuk mengatur.</p>';
-    } else {
-        numbers.forEach(num => {
-            const waLink = `https://wa.me/${num.replace(/^0/, '62')}?text=DARURAT! Saya membutuhkan bantuan segera di lokasi saya. (Sistem SmartRT Pro)`;
-            list.innerHTML += `
-                <a href="${waLink}" target="_blank" class="glass-card-deluxe p-4 text-center block no-underline" style="border: 1px solid rgba(239, 68, 68, 0.2);">
-                    <div style="color: #25d366; margin-bottom: 8px;"><i data-lucide="phone"></i></div>
-                    <div class="font-bold text-color" style="font-size: 0.85rem;">${num}</div>
-                    <div class="text-secondary" style="font-size: 0.65rem;">Hubungi via WhatsApp</div>
-                </a>
-            `;
-        });
-    }
-    
-    openModal('modal-panic-broadcast');
-    lucide.createIcons();
+window.closeKmModal = function(id) {
+    document.getElementById(id).classList.add('hidden');
 }
 
-function openPanicSettings() {
-    const numbers = JSON.parse(localStorage.getItem('smartrt_panic_numbers') || '[]');
-    const container = document.getElementById('panic-numbers-container');
-    container.innerHTML = '';
-    
-    numbers.forEach((num, index) => {
-        container.innerHTML += `
-            <div class="input-group">
-                <input type="text" class="input-field" value="${num}" placeholder="Contoh: 0812..." style="padding-left: 16px;">
-                <button class="button-secondary" onclick="this.parentElement.remove()" style="padding: 0 16px; border-radius: 99px;"><i data-lucide="trash-2"></i></button>
-            </div>
-        `;
-    });
-    
-    if (numbers.length === 0) addPanicNumber();
-    
-    openModal('modal-panic-settings');
-    lucide.createIcons();
+// Helper untuk mengisi opsi Personel
+window.populateSatpamSelect = function(selectId, selectedId = null) {
+    const sel = document.getElementById(selectId);
+    fetch('api/keamanan/get_satpam.php')
+        .then(r => r.ok ? r.json() : {status:'error'})
+        .then(res => {
+            sel.innerHTML = '<option value="">-- Pilih Personel --</option>';
+            if(res.status === 'success') {
+                res.data.forEach(s => {
+                    if(s.status === 'Aktif') {
+                        const opt = document.createElement('option');
+                        opt.value = s.id; opt.text = s.nama;
+                        sel.appendChild(opt);
+                    }
+                });
+                if(selectedId) sel.value = selectedId;
+            }
+        }).catch(e => { console.log('Silakan buat endpoint API get_satpam.php'); });
 }
 
-function addPanicNumber() {
-    const container = document.getElementById('panic-numbers-container');
-    const div = document.createElement('div');
-    div.className = 'input-group';
-    div.innerHTML = `
-        <input type="text" class="input-field" placeholder="Contoh: 0812..." style="padding-left: 16px;">
-        <button class="button-secondary" onclick="this.parentElement.remove()" style="padding: 0 16px; border-radius: 99px;"><i data-lucide="trash-2"></i></button>
-    `;
-    container.appendChild(div);
-    lucide.createIcons();
-}
-
-function savePanicSettings() {
-    const inputs = document.querySelectorAll('#panic-numbers-container input');
-    const numbers = Array.from(inputs).map(i => i.value.trim()).filter(v => v !== '');
-    
-    localStorage.setItem('smartrt_panic_numbers', JSON.stringify(numbers));
-    closeModal('modal-panic-settings');
-    
-    Swal.fire({
-        icon: 'success',
-        title: 'Pengaturan Disimpan',
-        text: 'Daftar kontak darurat telah diperbarui.',
-        timer: 1500,
-        showConfirmButton: false
-    });
-}
-
-// --- Mock Data Rendering ---
-
-function renderRecentActivity() {
-    const container = document.getElementById('km-recent-activity');
-    const activities = [
-        { title: 'Patroli Blok A Selesai', meta: '10 Menit lalu • Oleh Danu', color: 'emerald' },
-        { title: 'Tamu Bp. Salim (Blok B-02)', meta: '1 Jam lalu • Masuk via Pos 1', color: 'secondary' },
-        { title: 'Pengecekan CCTV Area Parkir', meta: '2 Jam lalu • Berfungsi Normal', color: 'emerald' }
-    ];
-    
-    container.innerHTML = activities.map(a => `
-        <div class="report-item border-left-${a.color}" style="padding: 12px 20px;">
-            <p class="report-title" style="font-weight: 700; margin: 0; font-size: 0.9rem;">${a.title}</p>
-            <p class="report-meta" style="font-size: 0.75rem; color: var(--text-secondary-color); margin-top: 4px;">${a.meta}</p>
-        </div>
-    `).join('');
-}
-
-function renderSchedule() {
-    const body = document.getElementById('km-schedule-body');
-    const days = ['Senin, 10 Apr', 'Selasa, 11 Apr', 'Rabu, 12 Apr', 'Kamis, 13 Apr', 'Jumat, 14 Apr'];
-    
-    body.innerHTML = days.map(d => `
-        <tr>
-            <td class="font-bold">${d}</td>
-            <td>Rudi, Ahmad, Danu</td>
-            <td>Suryo, Budi, Hendra</td>
-        </tr>
-    `).join('');
-}
-
-function renderGuardList() {
+// =========================================
+// 1. CRUD MASTER SATPAM
+// =========================================
+window.loadMasterSatpam = function() {
     const container = document.getElementById('km-guard-list');
-    const guards = [
-        { name: 'Danu Wijaya', role: 'Danru (Komandan Regu)', status: 'On Duty', id: 'S-001' },
-        { name: 'Ahmad Subast', role: 'Anggota', status: 'On Duty', id: 'S-002' },
-        { name: 'Rudi Hermawan', role: 'Anggota', status: 'On Duty', id: 'S-003' },
-        { name: 'Suryo Putro', role: 'Anggota', status: 'Off', id: 'S-004' }
-    ];
+    container.innerHTML = '<p class="text-secondary col-span-full text-center py-5">Memuat data personel...</p>';
     
-    container.innerHTML = guards.map(g => `
-        <div class="glass-card-deluxe p-4 flex items-center gap-4">
-            <div class="avatar" style="background: var(--accent-color); color: white; width: 50px; height: 50px; font-size: 1.2rem;">
-                ${g.name.split(' ').map(n => n[0]).join('')}
-            </div>
-            <div>
-                <h5 class="font-bold text-color" style="margin: 0;">${g.name}</h5>
-                <p class="text-secondary" style="font-size: 0.7rem; margin: 2px 0;">${g.role} • ${g.id}</p>
-                <span class="badge ${g.status === 'On Duty' ? 'badge-status-resolved' : 'badge-status-waiting'}">${g.status}</span>
-            </div>
-        </div>
-    `).join('');
+    fetch('api/keamanan/get_satpam.php')
+        .then(r => r.ok ? r.json() : {status:'error', message:'API Endpoint (get_satpam.php) Belum Tersedia.'})
+        .then(res => {
+            if (res.status === 'success' && res.data.length > 0) {
+                let html = '';
+                res.data.forEach(s => {
+                    const statusClass = s.status === 'Aktif' ? 'bg-emerald-light text-emerald' : 'bg-red-light text-red';
+                    html += `
+                    <div class="glass-card" style="padding: 20px; border-radius: 20px; display: flex; flex-direction: column; gap: 16px; border: 1px solid var(--border-color);">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="report-avatar bg-blue-light text-blue" style="width: 48px; height: 48px; font-size: 1.2rem;">${s.nama.charAt(0)}</div>
+                            <span class="badge ${statusClass}">${s.status}</span>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0 0 4px 0; font-size: 1.1rem; color: var(--text-color);">${s.nama}</h3>
+                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary-color);"><i data-lucide="phone" style="width: 14px; height: 14px; display: inline;"></i> ${s.no_hp || '-'}</p>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: auto; border-top: 1px dashed var(--border-color); padding-top: 16px;">
+                            <button class="button-secondary flex-1" style="padding: 8px; border-radius: 10px;" onclick="editSatpam(${s.id}, '${s.nama}', '${s.no_hp}', '${s.status}')"><i data-lucide="edit" style="width:16px; height:16px; margin-right:4px;"></i> Edit</button>
+                            <button class="button-secondary" style="padding: 8px; border-radius: 10px; color: #ef4444;" onclick="deleteSatpam(${s.id})"><i data-lucide="trash-2" style="width:16px; height:16px;"></i></button>
+                        </div>
+                    </div>`;
+                });
+                container.innerHTML = html;
+                if(typeof lucide !== 'undefined') lucide.createIcons();
+            } else {
+                container.innerHTML = `<div class="col-span-full text-center py-8"><i data-lucide="users" style="width:48px; height:48px; color:var(--text-secondary-color); opacity:0.3; margin: 0 auto 16px auto;"></i><p class="text-secondary">${res.message || 'Belum ada data personel.'}</p></div>`;
+            }
+        }).catch(() => container.innerHTML = '<p class="text-red col-span-full text-center py-5">Gagal terhubung ke API Keamanan.</p>');
 }
 
-function renderIncidentLogs() {
-    const body = document.getElementById('km-incident-body');
-    const logs = [
-        { time: '14:20', guard: 'Danu', event: 'Kurir J&T - Paket A-12', loc: 'Pos Utama', status: 'Selesai' },
-        { time: '10:15', guard: 'Ahmad', event: 'Tamu Bp. Budi (Keluarga)', loc: 'Blok B-05', status: 'Selesai' },
-        { time: '08:00', guard: 'System', event: 'Serah Terima Shift', loc: 'Ruang Keamanan', status: 'Internal' }
-    ];
-    
-    body.innerHTML = logs.map(l => `
-        <tr>
-            <td>${l.time}</td>
-            <td class="font-bold">${l.guard}</td>
-            <td>${l.event}</td>
-            <td>${l.loc}</td>
-            <td><span class="badge badge-status-resolved">${l.status}</span></td>
-        </tr>
-    `).join('');
+window.addSatpam = function() {
+    document.getElementById('km-satpam-id').value = '0';
+    document.getElementById('km-satpam-nama').value = '';
+    document.getElementById('km-satpam-nohp').value = '';
+    document.getElementById('km-satpam-status').value = 'Aktif';
+    document.getElementById('modal-satpam-title').innerText = 'Tambah Personel';
+    document.getElementById('modal-satpam').classList.remove('hidden');
 }
 
-function renderLeaveRequests() {
-    const container = document.getElementById('km-leave-requests');
-    const requests = [
-        { name: 'Hendra Saputra', type: 'Izin (Sakit)', date: '12 Apr - 13 Apr', status: 'Menunggu Approval' },
-        { name: 'Budi Santoso', type: 'Cuti Tahunan', date: '20 Apr - 25 Apr', status: 'Disetujui' }
-    ];
+window.editSatpam = function(id, nama, nohp, status) {
+    document.getElementById('km-satpam-id').value = id;
+    document.getElementById('km-satpam-nama').value = nama;
+    document.getElementById('km-satpam-nohp').value = nohp;
+    document.getElementById('km-satpam-status').value = status;
+    document.getElementById('modal-satpam-title').innerText = 'Edit Personel';
+    document.getElementById('modal-satpam').classList.remove('hidden');
+}
+
+window.saveSatpam = function() {
+    const fd = new FormData();
+    fd.append('id', document.getElementById('km-satpam-id').value);
+    fd.append('nama', document.getElementById('km-satpam-nama').value);
+    fd.append('no_hp', document.getElementById('km-satpam-nohp').value);
+    fd.append('status', document.getElementById('km-satpam-status').value);
+
+    showLoading('Menyimpan...');
+    fetch('api/keamanan/save_satpam.php', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(res => {
+            if (res.status === 'success') { showToast(res.message); closeKmModal('modal-satpam'); loadMasterSatpam(); } 
+            else showToast(res.message, 'error');
+        }).catch(e => { showToast("Sistem backend API belum ditambahkan.", "info"); closeKmModal('modal-satpam'); });
+}
+
+// =========================================
+// 2. CRUD JADWAL SHIFT
+// =========================================
+window.loadJadwalSatpam = function() {
+    const tbody = document.getElementById('km-schedule-body');
+    tbody.innerHTML = '<tr><td colspan="4" class="text-center py-5">Memuat jadwal...</td></tr>';
     
-    container.innerHTML = requests.map(r => `
-        <div class="report-item border-left-secondary" style="padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <p class="report-title" style="font-weight: 700; margin: 0;">${r.name}</p>
-                <p class="report-meta" style="font-size: 0.7rem;">${r.type} • ${r.date}</p>
+    fetch('api/keamanan/get_jadwal.php')
+        .then(r => r.ok ? r.json() : {status:'error', message:'API Endpoint Belum Tersedia.'})
+        .then(res => {
+            if (res.status === 'success' && res.data.length > 0) {
+                let html = '';
+                res.data.forEach(j => {
+                    html += `
+                    <tr>
+                        <td style="font-weight: 600;">${j.tanggal}</td>
+                        <td>${j.shift === 'Pagi' ? j.nama_satpam : '-'}</td>
+                        <td>${j.shift === 'Malam' ? j.nama_satpam : '-'}</td>
+                        <td class="text-right">
+                            <button class="button-secondary button-sm" style="color: #ef4444;" onclick="deleteJadwal(${j.id})"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
+                        </td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+                if(typeof lucide !== 'undefined') lucide.createIcons();
+            } else {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-5 text-secondary">${res.message || 'Belum ada data jadwal shift.'}</td></tr>`;
+            }
+        });
+}
+
+window.addJadwal = function() {
+    document.getElementById('km-jadwal-id').value = '0';
+    document.getElementById('km-jadwal-tanggal').value = '';
+    populateSatpamSelect('km-jadwal-satpam');
+    document.getElementById('modal-jadwal').classList.remove('hidden');
+}
+
+// =========================================
+// 3. CRUD LAPORAN KEAMANAN (INCIDENT)
+// =========================================
+window.loadLaporanKeamanan = function() {
+    const tbody = document.getElementById('km-incident-body');
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5">Memuat laporan kejadian...</td></tr>';
+    
+    fetch('api/keamanan/get_laporan.php')
+        .then(r => r.ok ? r.json() : {status:'error', message:'API Endpoint Belum Tersedia.'})
+        .then(res => {
+            if (res.status === 'success' && res.data.length > 0) {
+                let html = '';
+                res.data.forEach(l => {
+                    let statusClass = 'bg-secondary-light text-secondary';
+                    if(l.status === 'Baru') statusClass = 'bg-red-light text-red';
+                    if(l.status === 'Diproses') statusClass = 'bg-orange-light text-orange';
+                    if(l.status === 'Selesai') statusClass = 'bg-emerald-light text-emerald';
+                    
+                    html += `
+                    <tr>
+                        <td style="font-size:0.85rem;">${l.waktu_kejadian}</td>
+                        <td style="font-weight:600;">${l.pelapor || 'Sistem'}</td>
+                        <td>${l.judul}</td>
+                        <td>${l.lokasi || '-'}</td>
+                        <td><span class="badge ${statusClass}" style="font-size:0.7rem;">${l.status}</span></td>
+                        <td class="text-right" style="display:flex; justify-content:flex-end; gap:8px;">
+                            <button class="button-secondary button-sm" onclick="viewDetailLaporan(${l.id}, '${encodeURIComponent(JSON.stringify(l))}')"><i data-lucide="eye" style="width:14px; height:14px;"></i></button>
+                            <button class="button-secondary button-sm" onclick="editLaporan(${l.id}, '${l.judul}', '${l.waktu_kejadian}', '${l.lokasi}', '${l.status}', '${encodeURIComponent(l.deskripsi)}')"><i data-lucide="edit" style="width:14px; height:14px;"></i></button>
+                            <button class="button-secondary button-sm" style="color: #ef4444;" onclick="deleteLaporan(${l.id})"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
+                        </td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+                if(typeof lucide !== 'undefined') lucide.createIcons();
+            } else {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-secondary">${res.message || 'Lingkungan aman, belum ada laporan kejadian.'}</td></tr>`;
+            }
+        });
+}
+
+window.addIncident = function() {
+    document.getElementById('km-lap-id').value = '0';
+    document.getElementById('km-lap-judul').value = '';
+    document.getElementById('km-lap-waktu').value = '';
+    document.getElementById('km-lap-lokasi').value = '';
+    document.getElementById('km-lap-deskripsi').value = '';
+    document.getElementById('km-lap-status').value = 'Baru';
+    document.getElementById('modal-lap-title').innerText = 'Laporan Baru';
+    document.getElementById('modal-lap-keamanan').classList.remove('hidden');
+}
+
+window.editLaporan = function(id, judul, waktu, lokasi, status, descEncoded) {
+    document.getElementById('km-lap-id').value = id;
+    document.getElementById('km-lap-judul').value = judul;
+    document.getElementById('km-lap-waktu').value = waktu;
+    document.getElementById('km-lap-lokasi').value = lokasi;
+    document.getElementById('km-lap-status').value = status;
+    document.getElementById('km-lap-deskripsi').value = decodeURIComponent(descEncoded);
+    document.getElementById('modal-lap-title').innerText = 'Edit Laporan';
+    document.getElementById('modal-lap-keamanan').classList.remove('hidden');
+}
+
+window.viewDetailLaporan = function(id, dataStr) {
+    const l = JSON.parse(decodeURIComponent(dataStr));
+    let statusClass = 'bg-secondary-light text-secondary';
+    if(l.status === 'Baru') statusClass = 'bg-red-light text-red';
+    if(l.status === 'Diproses') statusClass = 'bg-orange-light text-orange';
+    if(l.status === 'Selesai') statusClass = 'bg-emerald-light text-emerald';
+
+    const content = `
+        <div style="margin-bottom: 16px;">
+            <span class="badge ${statusClass}" style="margin-bottom: 12px; display: inline-block;">Status: ${l.status}</span>
+            <h2 style="font-size: 1.25rem; font-weight: 800; margin: 0 0 8px 0; color: var(--text-color);">${l.judul}</h2>
+            <div style="display: flex; gap: 16px; font-size: 0.85rem; color: var(--text-secondary-color); margin-bottom: 16px;">
+                <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="clock" style="width:14px; height:14px;"></i> Waktu: ${l.waktu_kejadian}</span>
+                <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="map-pin" style="width:14px; height:14px;"></i> Lokasi: ${l.lokasi || '-'}</span>
             </div>
-            <span class="badge ${r.status === 'Disetujui' ? 'badge-status-resolved' : 'badge-status-waiting'}">${r.status}</span>
+            <p style="font-size: 0.85rem; color: var(--text-secondary-color);">Dilaporkan Oleh: <strong>${l.pelapor || 'Sistem'}</strong></p>
         </div>
-    `).join('');
-    
-    const stats = document.getElementById('km-attendance-stats');
-    stats.innerHTML = `
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-            <div class="flex justify-between items-center bg-emerald-light p-3 rounded-xl border border-emerald">
-                <span class="text-emerald font-bold">Hadir Hari Ini</span>
-                <span class="text-emerald font-bold">3/4</span>
-            </div>
-            <div class="flex justify-between items-center bg-orange-light p-3 rounded-xl border border-orange">
-                <span class="text-orange font-bold">Izin / Cuti</span>
-                <span class="text-orange font-bold">1</span>
-            </div>
-            <p class="text-secondary text-center" style="font-size: 0.7rem; font-style: italic;">Data diperbarui otomatis setiap pergantian shift.</p>
+        <div style="background: var(--hover-bg); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 24px;">
+            <h4 style="font-size: 0.9rem; font-weight: 700; margin: 0 0 8px 0;">Deskripsi Kejadian:</h4>
+            <p style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--text-color);">${l.deskripsi || 'Tidak ada deskripsi rinci.'}</p>
+        </div>
+        <div style="display: flex; justify-content: flex-end;">
+            <button class="button-secondary" onclick="closeKmModal('modal-detail-lap-keamanan')">Tutup Jendela</button>
         </div>
     `;
+    document.getElementById('km-detail-lap-content').innerHTML = content;
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+    document.getElementById('modal-detail-lap-keamanan').classList.remove('hidden');
 }
 
-// Global modal helpers if not defined
-if (typeof openModal !== 'function') {
-    window.openModal = function(id) { document.getElementById(id).classList.remove('hidden'); }
+// =========================================
+// 4. CRUD IZIN & CUTI
+// =========================================
+window.loadIzinSatpam = function() {
+    const container = document.getElementById('km-leave-requests');
+    container.innerHTML = '<p class="text-secondary text-center py-5">Memuat pengajuan...</p>';
+    
+    fetch('api/keamanan/get_izin.php')
+        .then(r => r.ok ? r.json() : {status:'error', message:'API Endpoint Belum Tersedia.'})
+        .then(res => {
+            if (res.status === 'success' && res.data.length > 0) {
+                let html = '';
+                res.data.forEach(i => {
+                    let statusClass = i.status === 'Pending' ? 'bg-orange-light text-orange' : (i.status === 'Disetujui' ? 'bg-emerald-light text-emerald' : 'bg-red-light text-red');
+                    html += `
+                    <div class="list-item" style="padding: 16px; border: 1px solid var(--border-color); border-radius: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: var(--secondary-bg);">
+                        <div style="display: flex; gap: 16px; align-items: center;">
+                            <div class="report-avatar bg-blue-light text-blue" style="width: 40px; height: 40px; flex-shrink: 0;">${(i.nama_satpam || 'U').charAt(0)}</div>
+                            <div>
+                                <h4 style="margin: 0 0 4px 0; font-size: 1rem;">${i.nama_satpam} <span class="badge bg-secondary-light text-secondary" style="font-size: 0.65rem; margin-left: 8px;">${i.jenis}</span></h4>
+                                <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary-color);"><i data-lucide="calendar" style="width:12px;height:12px;display:inline;"></i> ${i.tanggal_mulai} s/d ${i.tanggal_selesai}</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <span class="badge ${statusClass}">${i.status}</span>
+                            <button class="button-secondary button-sm" onclick="editIzin(${i.id}, ${i.satpam_id}, '${i.tanggal_mulai}', '${i.tanggal_selesai}', '${i.jenis}', '${i.status}', '${encodeURIComponent(i.keterangan)}')"><i data-lucide="edit" style="width:14px; height:14px;"></i></button>
+                            <button class="button-secondary button-sm" style="color: #ef4444;" onclick="deleteIzin(${i.id})"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
+                        </div>
+                    </div>`;
+                });
+                container.innerHTML = html;
+                if(typeof lucide !== 'undefined') lucide.createIcons();
+            } else {
+                container.innerHTML = `<p class="text-secondary text-center py-5">${res.message || 'Belum ada pengajuan izin.'}</p>`;
+            }
+        });
 }
-if (typeof closeModal !== 'function') {
-    window.closeModal = function(id) { document.getElementById(id).classList.add('hidden'); }
+
+window.addIzin = function() {
+    document.getElementById('km-izin-id').value = '0';
+    document.getElementById('km-izin-mulai').value = '';
+    document.getElementById('km-izin-selesai').value = '';
+    document.getElementById('km-izin-ket').value = '';
+    document.getElementById('km-izin-jenis').value = 'Sakit';
+    document.getElementById('km-izin-status-group').classList.add('hidden'); // Sembunyikan set status jika pengajuan baru
+    populateSatpamSelect('km-izin-satpam');
+    document.getElementById('modal-izin-title').innerText = 'Formulir Izin Baru';
+    document.getElementById('modal-izin').classList.remove('hidden');
+}
+
+window.editIzin = function(id, satpam_id, mulai, selesai, jenis, status, ketEncoded) {
+    document.getElementById('km-izin-id').value = id;
+    populateSatpamSelect('km-izin-satpam', satpam_id);
+    document.getElementById('km-izin-mulai').value = mulai;
+    document.getElementById('km-izin-selesai').value = selesai;
+    document.getElementById('km-izin-jenis').value = jenis;
+    document.getElementById('km-izin-status').value = status;
+    document.getElementById('km-izin-ket').value = decodeURIComponent(ketEncoded);
+    document.getElementById('km-izin-status-group').classList.remove('hidden'); // Tampilkan status approve jika edit (oleh admin)
+    document.getElementById('modal-izin-title').innerText = 'Kelola Izin / Cuti';
+    document.getElementById('modal-izin').classList.remove('hidden');
 }
