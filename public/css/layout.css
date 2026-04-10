@@ -215,6 +215,66 @@
         transform: none !important;
         box-shadow: none !important;
     }
+
+    /* --- AUTO ADJUST TEXT & CARD VIEW UNTUK BUKU KAS/PEMBUKUAN DI MOBILE --- */
+    
+    /* 1. Mencegah Teks Terpotong / Memanjang Keluar Layar pada Buku Kas */
+    #keuangan-list-container > div,
+    .list-item,
+    .report-row {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+        max-width: 100%;
+        height: auto !important;
+    }
+    
+    #keuangan-list-container * {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+
+    /* 2. Mengubah Tabel Buku Besar (Pembukuan) Menjadi Card View Spesifik Mobile */
+    #pb-tab-ledger .table-responsive thead {
+        display: none !important; /* Sembunyikan header tabel di mobile */
+    }
+    #pb-tab-ledger .table-responsive {
+        border: none !important;
+    }
+    #pb-ledger-body { display: block; width: 100%; }
+    #pb-ledger-body tr {
+        display: flex;
+        flex-direction: column;
+        background: var(--card-bg);
+        margin-bottom: 16px;
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 4px 12px var(--shadow-color);
+        border: 1px solid var(--card-border);
+    }
+    #pb-ledger-body td {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 8px 0 !important;
+        text-align: right !important;
+        border-bottom: 1px dashed var(--border-color);
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        gap: 12px;
+    }
+    #pb-ledger-body td:last-child { border-bottom: none; }
+    
+    /* Sisipkan Label Kolom secara Otomatis ke Sebelah Kiri Card */
+    #pb-ledger-body td:nth-child(1)::before { content: "Tanggal"; font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
+    #pb-ledger-body td:nth-child(2)::before { content: "Keterangan"; font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
+    #pb-ledger-body td:nth-child(3)::before { content: "Pos Alokasi"; font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
+    #pb-ledger-body td:nth-child(4)::before { content: "Debit (Masuk)"; font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
+    #pb-ledger-body td:nth-child(5)::before { content: "Kredit (Keluar)"; font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
+    #pb-ledger-body td:nth-child(6)::before { content: "Saldo Berjalan"; font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
 }
 #sidebar .sidebar-nav button .submenu-icon {
     display: none;
