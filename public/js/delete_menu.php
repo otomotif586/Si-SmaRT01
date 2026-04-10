@@ -1,4 +1,5 @@
 <?php
+// API Info - Hapus Data Menu
 require_once '../../config/database.php';
 header('Content-Type: application/json');
 try {

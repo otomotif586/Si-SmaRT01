@@ -1,4 +1,5 @@
 <?php
+// API Info - Simpan Data Blog
 require_once '../../config/database.php';
 header('Content-Type: application/json');
 try {
