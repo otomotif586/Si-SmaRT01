@@ -11,8 +11,10 @@ window.switchInfoTab = function(tabId, btnElement) {
     document.querySelectorAll('#page-info .sub-nav-tab').forEach(el => el.classList.remove('active'));
     
     const target = document.getElementById(tabId);
-    target.classList.remove('hidden');
-    target.classList.add('active-tab');
+    if(target) {
+        target.classList.remove('hidden');
+        target.classList.add('active-tab');
+    }
     if (btnElement) btnElement.classList.add('active');
     
     if (tabId === 'info-umum') loadWebSettings();
@@ -23,7 +25,8 @@ window.switchInfoTab = function(tabId, btnElement) {
 }
 
 window.closeInfoModal = function(id) {
-    document.getElementById(id).classList.add('hidden');
+    const modal = document.getElementById(id);
+    if(modal) modal.classList.add('hidden');
 }
 
 // ==========================================
