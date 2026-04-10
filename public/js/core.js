@@ -250,6 +250,8 @@ function showPage(pageId) {
         if (typeof initPembukuan === 'function') initPembukuan();
     } else if (pageId === 'keamanan') {
         if (typeof initKeamanan === 'function') initKeamanan();
+    } else if (pageId === 'info') {
+        if (typeof initInfo === 'function') initInfo();
     }
     
     // Scroll to top
