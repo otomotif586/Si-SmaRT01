@@ -4,10 +4,15 @@ window.initInfo = function() {
 }
 
 window.switchInfoTab = function(tabId, btnElement) {
-    document.querySelectorAll('.info-tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.info-tab-content').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('active-tab');
+    });
     document.querySelectorAll('#page-info .sub-nav-tab').forEach(el => el.classList.remove('active'));
     
-    document.getElementById(tabId).classList.remove('hidden');
+    const target = document.getElementById(tabId);
+    target.classList.remove('hidden');
+    target.classList.add('active-tab');
     if (btnElement) btnElement.classList.add('active');
     
     if (tabId === 'info-umum') loadWebSettings();
@@ -34,6 +39,22 @@ window.loadWebSettings = function() {
                 if(document.getElementById('web_alamat')) document.getElementById('web_alamat').value = data.web_alamat || '';
                 if(document.getElementById('web_visi')) document.getElementById('web_visi').value = data.web_visi || '';
                 if(document.getElementById('web_misi')) document.getElementById('web_misi').value = data.web_misi || '';
+                
+                if(document.getElementById('web_title')) document.getElementById('web_title').value = data.web_title || '';
+                if(document.getElementById('web_hero_title')) document.getElementById('web_hero_title').value = data.web_hero_title || '';
+                if(document.getElementById('web_use_gallery')) document.getElementById('web_use_gallery').value = data.web_use_gallery || 'Ya';
+
+                // Tampilkan Tautan Preview Gambar jika sudah ada datanya
+                if(document.getElementById('preview_web_logo') && data.web_logo) 
+                    document.getElementById('preview_web_logo').innerHTML = `<a href="${data.web_logo}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat</a>`;
+                if(document.getElementById('preview_web_favicon') && data.web_favicon) 
+                    document.getElementById('preview_web_favicon').innerHTML = `<a href="${data.web_favicon}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat</a>`;
+                if(document.getElementById('preview_web_hero_image') && data.web_hero_image) 
+                    document.getElementById('preview_web_hero_image').innerHTML = `<a href="${data.web_hero_image}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat Banner</a>`;
+                if(document.getElementById('preview_web_slider_images') && data.web_slider_images) {
+                    try { const sliders = JSON.parse(data.web_slider_images); document.getElementById('preview_web_slider_images').innerHTML = `<span class="badge bg-blue-light text-blue" style="font-size:0.6rem;">${sliders.length} Gambar Tersimpan</span>`; } 
+                    catch(e) {}
+                }
             }
         }).catch(e => console.log('API Settings belum siap'));
 }
@@ -46,12 +67,36 @@ window.saveWebSettings = function() {
     fd.append('web_alamat', document.getElementById('web_alamat').value);
     fd.append('web_visi', document.getElementById('web_visi').value);
     fd.append('web_misi', document.getElementById('web_misi').value);
+    
+    fd.append('web_title', document.getElementById('web_title').value);
+    fd.append('web_hero_title', document.getElementById('web_hero_title').value);
+    fd.append('web_use_gallery', document.getElementById('web_use_gallery').value);
+
+    // Mengelola Input File
+    const logoFile = document.getElementById('web_logo_file').files[0];
+    if(logoFile) fd.append('web_logo', logoFile);
+    
+    const faviconFile = document.getElementById('web_favicon_file').files[0];
+    if(faviconFile) fd.append('web_favicon', faviconFile);
+    
+    const heroFile = document.getElementById('web_hero_image_file').files[0];
+    if(heroFile) fd.append('web_hero_image', heroFile);
+    
+    const sliderFiles = document.getElementById('web_slider_images_files').files;
+    for(let i = 0; i < sliderFiles.length; i++) {
+        fd.append('web_slider_images[]', sliderFiles[i]);
+    }
 
     showLoading('Menyimpan Profil Web...');
     fetch('api/info/save_settings.php', { method: 'POST', body: fd })
         .then(r => r.json())
         .then(res => {
-            if (res.status === 'success') showToast("Pengaturan umum berhasil disimpan!");
+            if (res.status === 'success') {
+                showToast("Pengaturan web & media berhasil disimpan!");
+                // Bersihkan input file agar siap digunakan kembali dan memuat ulang preview
+                document.querySelectorAll('input[type="file"]').forEach(el => el.value = '');
+                loadWebSettings(); 
+            }
             else showToast(res.message, 'error');
         });
 }

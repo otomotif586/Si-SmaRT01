@@ -16,10 +16,42 @@
 
     <!-- Tab Content: Pengaturan Umum (Visi, Misi, Alamat) -->
     <div id="info-umum" class="info-tab-content active-tab">
-        <div class="grid-container-2-col">
+        <div class="grid-container-2-col" style="margin-bottom: 16px;">
+            <!-- SEO & Branding -->
+            <div class="glass-card card-section">
+                <h4 class="section-title" style="margin-bottom: 20px;"><i data-lucide="image" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> SEO & Branding</h4>
+                
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="card-label">Judul Tab / Meta Title (SEO)</label>
+                    <input type="text" id="web_title" class="input-field" style="margin-top: 8px;" placeholder="Cth: SmaRT 01 - Perumahan Nyaman & Aman">
+                </div>
+                <div class="grid-container-2-col" style="gap: 16px; margin-bottom: 16px;">
+                    <div class="form-group">
+                        <label class="card-label" style="display: flex; justify-content: space-between;">Logo Utama <span id="preview_web_logo"></span></label>
+                        <div class="upload-premium-container mt-2" style="border-radius: 12px; padding: 0;">
+                            <input type="file" id="web_logo_file" accept="image/*" class="upload-premium-input">
+                            <div class="upload-premium-label" style="padding: 12px;">
+                                <i data-lucide="upload" class="text-secondary" style="width: 20px; height: 20px;"></i>
+                                <span class="text-color" style="font-size: 0.75rem;">Unggah Logo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="card-label" style="display: flex; justify-content: space-between;">Favicon <span id="preview_web_favicon"></span></label>
+                        <div class="upload-premium-container mt-2" style="border-radius: 12px; padding: 0;">
+                            <input type="file" id="web_favicon_file" accept="image/png, image/x-icon, image/jpeg" class="upload-premium-input">
+                            <div class="upload-premium-label" style="padding: 12px;">
+                                <i data-lucide="upload" class="text-secondary" style="width: 20px; height: 20px;"></i>
+                                <span class="text-color" style="font-size: 0.75rem;">Unggah Favicon</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Profil & Kontak -->
             <div class="glass-card card-section">
-                <h4 class="section-title" style="margin-bottom: 20px;"><i data-lucide="building" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Profil & Kontak Website</h4>
+                <h4 class="section-title" style="margin-bottom: 20px;"><i data-lucide="building" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Profil & Kontak Publik</h4>
                 
                 <div class="form-group" style="margin-bottom: 16px;">
                     <label class="card-label">Nama Website / Perumahan</label>
@@ -38,10 +70,41 @@
                     <textarea id="web_alamat" class="input-field" style="margin-top: 8px; min-height: 80px; padding: 12px 20px; border-radius: 16px; resize: vertical;"></textarea>
                 </div>
             </div>
+        </div>
+
+        <div class="grid-container-2-col" style="margin-bottom: 16px;">
+            <!-- Tampilan Utama (Hero & Media) -->
+            <div class="glass-card card-section">
+                <h4 class="section-title" style="margin-bottom: 20px;"><i data-lucide="layout" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Tampilan Utama (Hero & Slider)</h4>
+                
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="card-label">Judul Utama (Hero Header)</label>
+                    <input type="text" id="web_hero_title" class="input-field" style="margin-top: 8px;" placeholder="Cth: Selamat Datang di Lingkungan SmaRT 01">
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="card-label" style="display: flex; justify-content: space-between;">Gambar Latar (Hero Banner) <span id="preview_web_hero_image"></span></label>
+                    <input type="file" id="web_hero_image_file" accept="image/*" class="input-field file-input-modern" style="margin-top: 8px; width: 100%;">
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="card-label" style="display: flex; justify-content: space-between;">Gambar Banner Slider <span id="preview_web_slider_images"></span></label>
+                    <input type="file" id="web_slider_images_files" accept="image/*" multiple class="input-field file-input-modern" style="margin-top: 8px; width: 100%;" title="Pilih beberapa gambar sekaligus">
+                    <small class="text-secondary" style="margin-top: 4px;">Pilih 1 atau lebih gambar untuk ditambahkan ke *carousel slider*.</small>
+                </div>
+                <div class="form-group" style="margin-bottom: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+                    <label class="card-label">Integrasi Galeri Warga (Infinity Gallery)</label>
+                    <select id="web_use_gallery" class="input-field select-custom" style="margin-top: 8px;">
+                        <option value="Ya">Ya, Tarik & Tampilkan Data Galeri Sistem</option>
+                        <option value="Tidak">Sembunyikan Galeri di Halaman Publik</option>
+                    </select>
+                    <small class="text-secondary" style="margin-top: 6px; display: block;">Jika <b>Ya</b>, galeri kegiatan yang diunggah di Workspace akan muncul secara dinamis di Landing Page.</small>
+                </div>
+            </div>
             
             <!-- Visi & Misi -->
             <div class="glass-card card-section">
-                <h4 class="section-title" style="margin-bottom: 20px;"><i data-lucide="target" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Visi & Misi Lingkungan</h4>
+                <div class="section-header" style="margin-bottom: 20px;">
+                    <h4 class="section-title"><i data-lucide="target" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Visi & Misi Lingkungan</h4>
+                </div>
                 
                 <div class="form-group" style="margin-bottom: 16px;">
                     <label class="card-label">Visi Utama</label>
@@ -174,6 +237,48 @@
 .text-accent { color: var(--accent-color); }
 
 @media (max-width: 767px) {
-    .info-tab-content { padding-bottom: 40px; } /* Ruang scroll ekstra di mobile */
+    .info-tab-content { padding-bottom: 60px; } /* Ruang scroll ekstra di mobile */
+    
+    /* Memaksa Grid menjadi 1 Kolom (Stack) di Layar HP */
+    #page-info .grid-container-2-col {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+    }
+
+    /* Mengubah Tabel Menu CMS Menjadi Card View yang Responsif */
+    #info-menu .table-responsive { border: none !important; padding: 0 !important; }
+    #info-menu .modern-table thead { display: none !important; }
+    #cms-menu-body { display: block !important; width: 100% !important; }
+    
+    #cms-menu-body tr {
+        display: flex; flex-direction: column;
+        background: var(--card-bg);
+        margin-bottom: 16px; border-radius: 16px; padding: 16px;
+        box-shadow: 0 4px 12px var(--shadow-color);
+        border: 1px solid var(--card-border);
+    }
+    #cms-menu-body td {
+        display: flex; justify-content: space-between; align-items: flex-start;
+        padding: 8px 0 !important; text-align: right !important;
+        border-bottom: 1px dashed var(--border-color);
+        white-space: normal !important; word-wrap: break-word !important; gap: 12px;
+    }
+    #cms-menu-body td:last-child { border-bottom: none; justify-content: flex-end; }
+    
+    /* Injeksi Label Header ke samping data */
+    #cms-menu-body td::before { font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
+    #cms-menu-body td:nth-child(1)::before { content: "Urutan"; }
+    #cms-menu-body td:nth-child(2)::before { content: "Nama Menu"; }
+    #cms-menu-body td:nth-child(3)::before { content: "URL / Link Target"; }
+    #cms-menu-body td:nth-child(4)::before { content: "Status"; }
+
+    /* Penyesuaian Modal (Popup) di Layar Kecil */
+    #modal-cms-menu .glass-card, 
+    #modal-cms-blog .glass-card {
+        padding: 24px 20px !important;
+        max-height: 90dvh;
+        overflow-y: auto;
+    }
 }
 </style>

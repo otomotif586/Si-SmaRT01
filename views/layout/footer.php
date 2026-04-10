@@ -14,3 +14,4 @@
 <script src="public/js/pos-keuangan.js?v=<?= time() ?>"></script>
 <script src="public/js/pembukuan.js?v=<?= time() ?>"></script>
 <script src="public/js/keamanan.js?v=<?= time() ?>"></script>
+<script src="public/js/info.js?v=<?= time() ?>"></script>
