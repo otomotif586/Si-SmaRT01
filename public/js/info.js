@@ -18,6 +18,7 @@ window.switchInfoTab = function(tabId, btnElement) {
     if (tabId === 'info-umum') loadWebSettings();
     else if (tabId === 'info-menu') loadCmsMenus();
     else if (tabId === 'info-blog') loadCmsBlogs();
+    else if (tabId === 'info-transparansi') loadWebSettings();
 }
 
 window.closeInfoModal = function(id) {
@@ -43,6 +44,8 @@ window.loadWebSettings = function() {
                 if(document.getElementById('web_title')) document.getElementById('web_title').value = data.web_title || '';
                 if(document.getElementById('web_hero_title')) document.getElementById('web_hero_title').value = data.web_hero_title || '';
                 if(document.getElementById('web_use_gallery')) document.getElementById('web_use_gallery').value = data.web_use_gallery || 'Ya';
+                if(document.getElementById('web_transparansi_judul')) document.getElementById('web_transparansi_judul').value = data.web_transparansi_judul || '';
+                if(document.getElementById('web_transparansi_deskripsi')) document.getElementById('web_transparansi_deskripsi').value = data.web_transparansi_deskripsi || '';
 
                 // Tampilkan Tautan Preview Gambar jika sudah ada datanya
                 if(document.getElementById('preview_web_logo') && data.web_logo) 
@@ -55,6 +58,8 @@ window.loadWebSettings = function() {
                     try { const sliders = JSON.parse(data.web_slider_images); document.getElementById('preview_web_slider_images').innerHTML = `<span class="badge bg-blue-light text-blue" style="font-size:0.6rem;">${sliders.length} Gambar Tersimpan</span>`; } 
                     catch(e) {}
                 }
+                if(document.getElementById('preview_web_transparansi_file') && data.web_transparansi_file) 
+                    document.getElementById('preview_web_transparansi_file').innerHTML = `<a href="${data.web_transparansi_file}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat Laporan</a>`;
             }
         }).catch(e => console.log('API Settings belum siap'));
 }
@@ -71,6 +76,8 @@ window.saveWebSettings = function() {
     fd.append('web_title', document.getElementById('web_title').value);
     fd.append('web_hero_title', document.getElementById('web_hero_title').value);
     fd.append('web_use_gallery', document.getElementById('web_use_gallery').value);
+    if (document.getElementById('web_transparansi_judul')) fd.append('web_transparansi_judul', document.getElementById('web_transparansi_judul').value);
+    if (document.getElementById('web_transparansi_deskripsi')) fd.append('web_transparansi_deskripsi', document.getElementById('web_transparansi_deskripsi').value);
 
     // Mengelola Input File
     const logoFile = document.getElementById('web_logo_file').files[0];
@@ -86,6 +93,9 @@ window.saveWebSettings = function() {
     for(let i = 0; i < sliderFiles.length; i++) {
         fd.append('web_slider_images[]', sliderFiles[i]);
     }
+    
+    const transFile = document.getElementById('web_transparansi_file_input') ? document.getElementById('web_transparansi_file_input').files[0] : null;
+    if(transFile) fd.append('web_transparansi_file', transFile);
 
     showLoading('Menyimpan Profil Web...');
     fetch('api/info/save_settings.php', { method: 'POST', body: fd })

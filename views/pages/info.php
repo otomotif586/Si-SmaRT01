@@ -12,6 +12,9 @@
         <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-blog', this)">
             <i data-lucide="newspaper"></i> Blog & Artikel
         </button>
+        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-transparansi', this)">
+            <i data-lucide="pie-chart"></i> Laporan Keuangan
+        </button>
     </div>
 
     <!-- Tab Content: Pengaturan Umum (Visi, Misi, Alamat) -->
@@ -163,6 +166,37 @@
             <div class="grid-container-2-col" id="cms-blog-list" style="margin-top: 16px;">
                 <!-- Diisi via JS -->
             </div>
+        </div>
+    </div>
+
+    <!-- Tab Content: Transparansi Keuangan (Baru) -->
+    <div id="info-transparansi" class="info-tab-content hidden">
+        <div class="glass-card card-section">
+            <div class="section-header" style="margin-bottom: 24px;">
+                <div>
+                    <h4 class="section-title">Transparansi Keuangan Publik</h4>
+                    <p class="text-secondary" style="font-size: 0.8rem;">Tampilkan informasi atau laporan saldo kas kepada warga di Landing Page depan.</p>
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+                <label class="card-label">Judul Bagian Transparansi</label>
+                <input type="text" id="web_transparansi_judul" class="input-field" style="margin-top: 8px;" placeholder="Cth: Transparansi Keuangan Warga">
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+                <label class="card-label">Deskripsi / Teks Pesan Laporan</label>
+                <textarea id="web_transparansi_deskripsi" class="input-field" style="margin-top: 8px; min-height: 120px; padding: 12px 20px; border-radius: 16px; resize: vertical;" placeholder="Jelaskan ringkasan keuangan kas atau pesan pengantar..."></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom: 24px;">
+                <label class="card-label" style="display: flex; justify-content: space-between;">Unggah Dokumen Laporan (PDF/Gambar) <span id="preview_web_transparansi_file"></span></label>
+                <div class="upload-premium-container mt-2" style="border-radius: 12px; padding: 0;">
+                    <input type="file" id="web_transparansi_file_input" accept=".pdf,image/*" class="upload-premium-input">
+                    <div class="upload-premium-label" style="padding: 16px;">
+                        <i data-lucide="upload" class="text-secondary" style="width: 24px; height: 24px; margin-bottom: 8px;"></i>
+                        <span class="text-color font-bold" style="font-size: 0.85rem;">Pilih File Laporan Bulanan</span>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end;"><button class="button-primary" style="padding: 14px 32px;" onclick="saveWebSettings()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Laporan Publik</button></div>
         </div>
     </div>
 

@@ -14,6 +14,11 @@ $web_hero_image = $settingsData['web_hero_image'] ?? 'https://images.unsplash.co
 $web_logo = $settingsData['web_logo'] ?? '';
 $web_favicon = $settingsData['web_favicon'] ?? '';
 
+// Data Transparansi Keuangan
+$web_transparansi_judul = $settingsData['web_transparansi_judul'] ?? 'Transparansi Keuangan Warga';
+$web_transparansi_deskripsi = $settingsData['web_transparansi_deskripsi'] ?? 'Kami berkomitmen untuk selalu terbuka dalam pengelolaan dana iuran. Laporan kas dapat diakses dan diunduh di bawah ini.';
+$web_transparansi_file = $settingsData['web_transparansi_file'] ?? '';
+
 // Ambil Data Menu Dinamis
 $stmtMenu = $pdo->query("SELECT * FROM web_menus WHERE status='Aktif' ORDER BY urutan ASC");
 $menus = $stmtMenu->fetchAll(PDO::FETCH_ASSOC);
@@ -184,6 +189,29 @@ $blogs = $stmtBlog->fetchAll(PDO::FETCH_ASSOC);
                     <div class="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 text-2xl"><i class="fas fa-store"></i></div>
                     <h3 class="text-2xl font-bold mb-3">Wirausaha</h3>
                     <p class="text-emerald-100/40 text-sm leading-relaxed">Warga yang berboyong usaha mandiri membuat kawasan ini menjadi lengkap dan hidup.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FITUR BARU: TRANSPARANSI KEUANGAN PUBLIK -->
+    <section id="transparansi" class="py-24 relative">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="glass p-10 md:p-16 rounded-[3rem] card-glow reveal relative overflow-hidden border-emerald-500/30 bg-emerald-500/5">
+                <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                    <i class="fas fa-chart-pie text-9xl text-emerald-500"></i>
+                </div>
+                <div class="relative z-10 max-w-3xl">
+                    <div class="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold tracking-[0.2em] uppercase mb-6">
+                        <i class="fas fa-shield-alt"></i><span>Akuntabel & Terbuka</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6"><?= htmlspecialchars($web_transparansi_judul) ?></h2>
+                    <p class="text-emerald-100/70 text-lg leading-relaxed mb-10"><?= nl2br(htmlspecialchars($web_transparansi_deskripsi)) ?></p>
+                    <?php if($web_transparansi_file): ?>
+                    <a href="<?= htmlspecialchars($web_transparansi_file) ?>" target="_blank" class="inline-flex items-center space-x-3 px-8 py-4 bg-emerald-500 text-emerald-950 font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20">
+                        <i class="fas fa-file-pdf"></i><span>Lihat Dokumen Laporan</span>
+                    </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
