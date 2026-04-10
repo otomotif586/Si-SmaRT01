@@ -172,42 +172,48 @@
     from { opacity: 0; transform: translate(-50%, 20px) scale(0.95); }
     to { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
-#sidebar .sidebar-nav .submenu-items.active button {
+
+/* Terapkan secara mutlak ke semua button dalam submenu */
+#sidebar .sidebar-nav .submenu-items button {
+    display: flex !important;
     flex-direction: row !important; /* Paksa menyamping walau sedang status aktif */
     align-items: center;
     justify-content: flex-start; /* Untuk submenu, biasanya menyamping (row) */
     padding: 14px 20px;
     text-align: left;
     width: 100%;
-    height: auto; /* Reset tinggi agar tidak terpengaruh menu utama */
+    height: auto !important; /* Reset tinggi agar tidak terpengaruh menu utama */
     gap: 12px;
     border-radius: 12px; /* Konsisten UI seperti baris list pengaturan */
     flex-wrap: nowrap !important; /* Memaksa ikon dan teks selalu di 1 baris */
+    transform: none !important; /* Hilangkan efek geser/angkat */
+    background: transparent;
 }
-#sidebar .sidebar-nav .submenu-items.active button span {
+#sidebar .sidebar-nav .submenu-items button span {
     font-size: 0.85rem; /* Teks submenu lebih besar karena orientasinya horizontal */
     text-align: left;
-    margin: 0; /* Reset margin center */
-    height: auto; /* Reset tinggi statis */
-    width: auto;
-    flex: 1 0 auto; /* Memastikan ruang teks tidak dikompresi */
+    margin: 0 !important; /* Reset margin center */
+    height: auto !important; /* Reset tinggi statis */
+    width: auto !important;
+    flex: 1 0 auto !important; /* Memastikan ruang teks tidak dikompresi */
     white-space: nowrap !important; /* STRICT: Larang teks untuk membuat baris baru */
     overflow: visible; /* Pastikan teks utuh */
 }
-#sidebar .sidebar-nav .submenu-items.active button i,
-#sidebar .sidebar-nav .submenu-items.active button svg {
+#sidebar .sidebar-nav .submenu-items button i,
+#sidebar .sidebar-nav .submenu-items button svg {
     width: 18px;
     height: 18px;
-    margin: 0; /* Reset margin center agar sejajar di kiri */
+    margin: 0 !important; /* Reset margin center agar sejajar di kiri */
+    margin-bottom: 0 !important; /* Pastikan margin bawah tidak mendorong teks */
+    flex-shrink: 0 !important; /* KUNCI: Pastikan ikon tidak mengecil saat teks menebal */
 }
 
-#sidebar .sidebar-nav .submenu-items.active button.active-tab {
-    background-color: color-mix(in srgb, var(--accent-color) 10%, transparent); /* Highlight modern khas Startup UI */
-    color: var(--accent-color);
-}
-#sidebar .sidebar-nav .submenu-items.active button.active-tab i,
-#sidebar .sidebar-nav .submenu-items.active button.active-tab svg {
-    transform: none; /* Mencegah ikon membesar yang bisa merusak tata letak sejajar */
+#sidebar .sidebar-nav .submenu-items button.active-tab {
+    background-color: color-mix(in srgb, var(--accent-color) 10%, transparent) !important;
+    color: var(--accent-color) !important;
+    font-weight: 700;
+    transform: none !important;
+    box-shadow: none !important;
 }
 #sidebar .sidebar-nav button .submenu-icon {
     display: none;
