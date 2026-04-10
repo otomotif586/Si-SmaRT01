@@ -19,6 +19,7 @@ window.switchInfoTab = function(tabId, btnElement) {
     else if (tabId === 'info-menu') loadCmsMenus();
     else if (tabId === 'info-blog') loadCmsBlogs();
     else if (tabId === 'info-transparansi') loadWebSettings();
+    else if (tabId === 'info-struktur') loadCmsPengurus();
 }
 
 window.closeInfoModal = function(id) {
@@ -258,5 +259,64 @@ window.deleteBlog = function(id) {
     if(confirm('Hapus artikel ini selamanya?')) {
         const fd = new FormData(); fd.append('id', id);
         fetch('api/cms_delete_blog.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadCmsBlogs(); });
+    }
+}
+
+// ==========================================
+// 4. CRUD STRUKTUR PENGURUS
+// ==========================================
+window.loadCmsPengurus = function() {
+    const tbody = document.getElementById('cms-pengurus-body');
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-5">Memuat data pengurus...</td></tr>';
+    
+    fetch('api/cms_get_pengurus.php')
+        .then(r => r.json())
+        .then(res => {
+            if (res.status === 'success' && res.data.length > 0) {
+                let html = '';
+                res.data.forEach(p => {
+                    const fotoHtml = p.foto ? `<img src="${p.foto}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">` : `<div style="width:32px;height:32px;border-radius:50%;background:var(--accent-color);color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:0.8rem;">${p.nama.charAt(0)}</div>`;
+                    html += `<tr>
+                        <td class="font-bold text-center"><span class="badge bg-emerald-light text-emerald" style="padding:4px 8px;">Lv. ${p.urutan}</span></td>
+                        <td class="text-center">${fotoHtml}</td>
+                        <td class="font-bold">${p.nama}</td>
+                        <td class="text-secondary">${p.jabatan}</td>
+                        <td class="text-right">
+                            <button class="button-secondary button-sm" onclick="editPengurus(${p.id}, '${encodeURIComponent(p.nama)}', '${encodeURIComponent(p.jabatan)}', ${p.urutan}, '${p.foto || ''}')"><i data-lucide="edit" style="width:14px; height:14px;"></i></button>
+                            <button class="button-secondary button-sm" style="color: #ef4444;" onclick="deletePengurus(${p.id})"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
+                        </td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+                if(typeof lucide !== 'undefined') lucide.createIcons();
+            } else { tbody.innerHTML = '<tr><td colspan="5" class="text-center py-5 text-secondary">Belum ada pengurus yang ditambahkan.</td></tr>'; }
+        }).catch(() => { tbody.innerHTML = '<tr><td colspan="5" class="text-center py-5 text-secondary">Siap digunakan. Silakan tambahkan anggota pertama.</td></tr>'; });
+}
+
+window.addPengurus = function() {
+    document.getElementById('cms-pengurus-id').value = '0'; document.getElementById('cms-pengurus-nama').value = '';
+    document.getElementById('cms-pengurus-jabatan').value = ''; document.getElementById('cms-pengurus-urutan').value = '1';
+    document.getElementById('cms-pengurus-foto').value = ''; document.getElementById('preview_pengurus_foto').innerHTML = '';
+    document.getElementById('modal-pengurus-title').innerText = 'Tambah Pengurus'; document.getElementById('modal-cms-pengurus').classList.remove('hidden');
+}
+
+window.editPengurus = function(id, namaEncoded, jabatanEncoded, urutan, foto) {
+    document.getElementById('cms-pengurus-id').value = id; document.getElementById('cms-pengurus-nama').value = decodeURIComponent(namaEncoded);
+    document.getElementById('cms-pengurus-jabatan').value = decodeURIComponent(jabatanEncoded); document.getElementById('cms-pengurus-urutan').value = urutan;
+    document.getElementById('cms-pengurus-foto').value = '';
+    document.getElementById('preview_pengurus_foto').innerHTML = foto ? `<a href="${foto}" target="_blank" class="badge bg-blue-light text-blue" style="font-size:0.6rem;">Lihat Foto</a>` : '';
+    document.getElementById('modal-pengurus-title').innerText = 'Edit Pengurus'; document.getElementById('modal-cms-pengurus').classList.remove('hidden');
+}
+
+window.saveCmsPengurus = function() {
+    const fd = new FormData(); fd.append('id', document.getElementById('cms-pengurus-id').value); fd.append('nama', document.getElementById('cms-pengurus-nama').value);
+    fd.append('jabatan', document.getElementById('cms-pengurus-jabatan').value); fd.append('urutan', document.getElementById('cms-pengurus-urutan').value);
+    const file = document.getElementById('cms-pengurus-foto').files[0]; if (file) fd.append('foto', file);
+    showLoading('Menyimpan...'); fetch('api/cms_save_pengurus.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') { showToast(res.message); closeInfoModal('modal-cms-pengurus'); loadCmsPengurus(); } else showToast(res.message, 'error'); });
+}
+
+window.deletePengurus = function(id) {
+    if(confirm('Hapus anggota pengurus ini?')) {
+        const fd = new FormData(); fd.append('id', id); fetch('api/cms_delete_pengurus.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{ if(res.status==='success') loadCmsPengurus(); });
     }
 }

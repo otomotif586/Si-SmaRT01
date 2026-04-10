@@ -15,6 +15,9 @@
         <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-transparansi', this)">
             <i data-lucide="pie-chart"></i> Laporan Keuangan
         </button>
+        <button class="sub-nav-tab" style="flex: 1 1 auto; justify-content: center; white-space: nowrap;" onclick="switchInfoTab('info-struktur', this)">
+            <i data-lucide="users"></i> Struktur Organisasi
+        </button>
     </div>
 
     <!-- Tab Content: Pengaturan Umum (Visi, Misi, Alamat) -->
@@ -200,6 +203,35 @@
         </div>
     </div>
 
+    <!-- Tab Content: Struktur Organisasi (Baru) -->
+    <div id="info-struktur" class="info-tab-content hidden">
+        <div class="glass-card card-section">
+            <div class="section-header">
+                <div>
+                    <h4 class="section-title">Struktur Organisasi / Pengurus</h4>
+                    <p class="text-secondary" style="font-size: 0.8rem;">Buat bagan susunan pengurus untuk ditampilkan di Landing Page publik. Angka tingkat yang sama akan sejajar.</p>
+                </div>
+                <button class="button-primary button-sm" onclick="addPengurus()"><i data-lucide="user-plus"></i> Tambah Pengurus</button>
+            </div>
+            <div class="table-responsive">
+                <table class="modern-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="width:80px;" class="text-center">Tingkat</th>
+                            <th style="width:60px;">Foto</th>
+                            <th>Nama Lengkap</th>
+                            <th>Jabatan</th>
+                            <th class="text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cms-pengurus-body">
+                        <!-- Diisi via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- MODAL MENU CMS -->
@@ -264,6 +296,37 @@
     </div>
 </div>
 
+<!-- MODAL PENGURUS STRUKTUR -->
+<div id="modal-cms-pengurus" class="modal-overlay hidden" style="z-index: 10020 !important;">
+    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative;">
+        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="closeInfoModal('modal-cms-pengurus')"><i data-lucide="x"></i></button>
+        <h2 id="modal-pengurus-title" class="section-title" style="margin-bottom: 8px;">Tambah Pengurus</h2>
+        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Atur posisi anggota dalam struktur organisasi.</p>
+        
+        <input type="hidden" id="cms-pengurus-id" value="0">
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label class="card-label">Nama Lengkap</label>
+            <input type="text" id="cms-pengurus-nama" class="input-field" style="margin-top: 8px;" placeholder="Cth: Budi Santoso">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label class="card-label">Jabatan</label>
+            <input type="text" id="cms-pengurus-jabatan" class="input-field" style="margin-top: 8px;" placeholder="Cth: Ketua RT 01">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label class="card-label" style="display:flex; justify-content:space-between;">Tingkat (Urutan) <span class="text-emerald" style="font-size:0.7rem;"><i data-lucide="info" style="display:inline;width:12px;height:12px;"></i> 1 = Paling Atas</span></label>
+            <input type="number" id="cms-pengurus-urutan" class="input-field" style="margin-top: 8px;" value="1" title="Pengurus dengan urutan angka yang sama akan disejajarkan dalam satu baris">
+        </div>
+        <div class="form-group" style="margin-bottom: 24px;">
+            <label class="card-label" style="display: flex; justify-content: space-between;">Foto Profil <span id="preview_pengurus_foto"></span></label>
+            <div class="upload-premium-container mt-2" style="border-radius: 12px; padding: 0;">
+                <input type="file" id="cms-pengurus-foto" accept="image/*" class="upload-premium-input">
+                <div class="upload-premium-label" style="padding: 12px;"><i data-lucide="upload" class="text-secondary" style="width: 20px; height: 20px;"></i><span class="text-color" style="font-size: 0.75rem;">Unggah Foto</span></div>
+            </div>
+        </div>
+        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="saveCmsPengurus()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Anggota</button>
+    </div>
+</div>
+
 <style>
 .info-tab-content {
     animation: fadeIn 0.4s ease;
@@ -306,6 +369,12 @@
     #cms-menu-body td:nth-child(2)::before { content: "Nama Menu"; }
     #cms-menu-body td:nth-child(3)::before { content: "URL / Link Target"; }
     #cms-menu-body td:nth-child(4)::before { content: "Status"; }
+
+    #cms-pengurus-body td::before { font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
+    #cms-pengurus-body td:nth-child(1)::before { content: "Tingkat"; }
+    #cms-pengurus-body td:nth-child(2)::before { content: "Foto"; }
+    #cms-pengurus-body td:nth-child(3)::before { content: "Nama Lengkap"; }
+    #cms-pengurus-body td:nth-child(4)::before { content: "Jabatan"; }
 
     /* Penyesuaian Modal (Popup) di Layar Kecil */
     #modal-cms-menu .glass-card, 

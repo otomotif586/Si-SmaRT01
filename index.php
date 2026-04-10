@@ -26,6 +26,21 @@ $menus = $stmtMenu->fetchAll(PDO::FETCH_ASSOC);
 // Ambil Data Artikel/Blog Publik
 $stmtBlog = $pdo->query("SELECT * FROM web_blogs WHERE status='Publish' ORDER BY created_at DESC LIMIT 3");
 $blogs = $stmtBlog->fetchAll(PDO::FETCH_ASSOC);
+
+// Ambil Data Struktur Organisasi
+try {
+    $stmtPengurus = $pdo->query("SELECT * FROM web_pengurus ORDER BY urutan ASC, id ASC");
+    $pengurus = $stmtPengurus->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $pengurus = [];
+    // Silently create table if visitor arrives before backend initializes it
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `web_pengurus` (`id` int(11) NOT NULL AUTO_INCREMENT,`nama` varchar(100) NOT NULL,`jabatan` varchar(100) NOT NULL,`foto` varchar(255) DEFAULT NULL,`urutan` int(11) DEFAULT 1,PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+}
+// Grouping per level/tingkat
+$struktur = [];
+foreach($pengurus as $p) {
+    $struktur[$p['urutan']][] = $p;
+}
 ?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
@@ -194,6 +209,46 @@ $blogs = $stmtBlog->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </section>
+
+    <!-- STRUKTUR ORGANISASI -->
+    <?php if(!empty($struktur)): ?>
+    <section id="struktur" class="py-24 relative bg-[#03100c]">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-20 reveal">
+                <div class="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
+                    <i class="fas fa-users"></i><span>Susunan Pengurus</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Struktur Organisasi</h2>
+                <p class="text-emerald-100/60 text-lg max-w-2xl mx-auto font-light">Jajaran pengurus yang melayani dan mengayomi warga dengan sepenuh hati demi lingkungan yang lebih baik.</p>
+            </div>
+            
+            <div class="flex flex-col items-center gap-12 relative">
+                <!-- Garis Vertikal Tengah (Tulang Punggung Tree) -->
+                <div class="absolute left-1/2 top-10 bottom-10 w-[2px] bg-gradient-to-b from-emerald-500/50 via-emerald-500/20 to-transparent -translate-x-1/2 z-0 hidden md:block"></div>
+                
+                <?php foreach($struktur as $tingkat => $anggota): ?>
+                <div class="flex flex-wrap justify-center gap-6 relative z-10 w-full reveal">
+                    <?php foreach($anggota as $a): ?>
+                    <div class="glass p-8 rounded-[2rem] card-glow flex flex-col items-center text-center w-full sm:w-[280px] bg-[#041a14]/90 backdrop-blur-xl border-emerald-500/20 hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-32 h-32 rounded-full overflow-hidden mb-6 border-4 border-emerald-500/30 p-1 bg-emerald-500/10 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                            <?php if($a['foto']): ?>
+                                <img src="<?= htmlspecialchars($a['foto']) ?>" alt="<?= htmlspecialchars($a['nama']) ?>" class="w-full h-full object-cover rounded-full">
+                            <?php else: ?>
+                                <div class="w-full h-full rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-4xl font-bold">
+                                    <?= strtoupper(substr($a['nama'], 0, 1)) ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <h4 class="text-xl font-bold mb-2 text-white"><?= htmlspecialchars($a['nama']) ?></h4>
+                        <p class="text-emerald-400 text-sm font-bold tracking-widest uppercase bg-emerald-500/10 px-4 py-1.5 rounded-full inline-block"><?= htmlspecialchars($a['jabatan']) ?></p>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
 
     <!-- FITUR BARU: TRANSPARANSI KEUANGAN PUBLIK -->
     <section id="transparansi" class="py-24 relative">
