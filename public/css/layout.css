@@ -228,6 +228,8 @@
         word-break: break-word !important;
         max-width: 100%;
         height: auto !important;
+        width: 100% !important; /* Paksa agar elemen mengisi penuh sisa layar */
+        box-sizing: border-box !important; /* Mencegah padding memicu pelebaran melebihi layar */
     }
     
     #keuangan-list-container * {
@@ -237,13 +239,20 @@
     }
 
     /* 2. Mengubah Tabel Buku Besar (Pembukuan) Menjadi Card View Spesifik Mobile */
+    #pb-tab-ledger table {
+        display: block !important; /* Paksa tabel menjadi div box biasa */
+        width: 100% !important;
+    }
     #pb-tab-ledger .table-responsive thead {
         display: none !important; /* Sembunyikan header tabel di mobile */
     }
     #pb-tab-ledger .table-responsive {
         border: none !important;
+        padding: 0 !important;
+        width: 100% !important;
+        overflow: hidden !important; /* Matikan scroll table karena sudah menjadi list ke bawah */
     }
-    #pb-ledger-body { display: block; width: 100%; }
+    #pb-ledger-body { display: block !important; width: 100% !important; }
     #pb-ledger-body tr {
         display: flex;
         flex-direction: column;
@@ -253,6 +262,8 @@
         padding: 16px;
         box-shadow: 0 4px 12px var(--shadow-color);
         border: 1px solid var(--card-border);
+        width: 100% !important; /* Paksa kartu penuh ke kanan */
+        box-sizing: border-box !important; /* Kunci batas margin aman */
     }
     #pb-ledger-body td {
         display: flex;
@@ -265,6 +276,8 @@
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
         gap: 12px;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
     #pb-ledger-body td:last-child { border-bottom: none; }
     
@@ -275,6 +288,27 @@
     #pb-ledger-body td:nth-child(4)::before { content: "Debit (Masuk)"; font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
     #pb-ledger-body td:nth-child(5)::before { content: "Kredit (Keluar)"; font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
     #pb-ledger-body td:nth-child(6)::before { content: "Saldo Berjalan"; font-weight: 600; color: var(--text-secondary-color); text-align: left; flex-shrink: 0; }
+    
+    /* 3. Menyempurnakan Filter & Header Transaksi agar bisa bertumpuk (Wrap) ke bawah */
+    .filter-container,
+    .header-actions {
+        display: flex;
+        flex-wrap: wrap !important;
+        gap: 8px;
+        width: 100%;
+    }
+    .filter-container > *,
+    .header-actions > * {
+        flex: 1 1 calc(50% - 8px); /* Membuat tombol/select berjajar 2-2 lalu turun ke bawah jika penuh */
+        min-width: 120px;
+        box-sizing: border-box;
+    }
+
+    /* 4. Memaksa kata tanpa spasi (seperti ID Jurnal/Nomor Resi) ditekuk ke bawah (Break) */
+    .glass-card h4, .glass-card p, .glass-card span, .transaction-title {
+        word-wrap: break-word !important;
+        word-break: break-word !important;
+    }
 }
 #sidebar .sidebar-nav button .submenu-icon {
     display: none;
