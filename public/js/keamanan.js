@@ -355,7 +355,12 @@ window.loadLaporanKeamanan = function() {
 window.addIncident = function() {
     document.getElementById('km-lap-id').value = '0';
     document.getElementById('km-lap-judul').value = '';
-    document.getElementById('km-lap-waktu').value = '';
+    
+    // Auto-fill form waktu kejadian dengan waktu saat ini sesuai zona waktu perangkat
+    const now = new Date();
+    const localISO = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+    document.getElementById('km-lap-waktu').value = localISO;
+    
     document.getElementById('km-lap-lokasi').value = '';
     document.getElementById('km-lap-deskripsi').value = '';
     document.getElementById('km-lap-status').value = 'Baru';
@@ -405,10 +410,18 @@ window.viewDetailLaporan = function(id, dataStr) {
 }
 
 window.saveLaporanKeamanan = function() {
+    const judul = document.getElementById('km-lap-judul').value.trim();
+    const waktu = document.getElementById('km-lap-waktu').value;
+    
+    if (!judul || !waktu) {
+        if(typeof showToast === 'function') showToast("Judul dan Waktu kejadian wajib diisi!", "warning");
+        return;
+    }
+
     const fd = new FormData();
     fd.append('id', document.getElementById('km-lap-id').value);
-    fd.append('judul', document.getElementById('km-lap-judul').value);
-    fd.append('waktu_kejadian', document.getElementById('km-lap-waktu').value.replace('T', ' '));
+    fd.append('judul', judul);
+    fd.append('waktu_kejadian', waktu.replace('T', ' '));
     fd.append('lokasi', document.getElementById('km-lap-lokasi').value);
     fd.append('deskripsi', document.getElementById('km-lap-deskripsi').value);
     fd.append('status', document.getElementById('km-lap-status').value);

@@ -49,6 +49,11 @@ body {
     --bezier: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Force SweetAlert (Toast) to be always on top of any deluxe modals */
+.swal2-container {
+    z-index: 10600 !important;
+}
+
 /* Apply theme variables to common elements */
 body {
     background-color: var(--primary-bg);
