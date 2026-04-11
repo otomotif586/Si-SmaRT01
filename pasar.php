@@ -309,9 +309,9 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
     <main class="container mx-auto px-4 pt-6 md:pt-8">
 
         <!-- Header Media Promosi Slider -->
-        <?php if(!empty($sliders)): ?>
         <div class="swiper promoSwiper mb-8 rounded-[1.5rem] overflow-hidden shadow-sm border border-slate-100">
             <div class="swiper-wrapper">
+                <?php if(!empty($sliders)): ?>
                 <?php foreach($sliders as $sl): ?>
                 <div class="swiper-slide relative aspect-[2/1] md:aspect-[4/1] bg-slate-200 group cursor-pointer">
                     <img src="<?= htmlspecialchars($sl['image']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
@@ -324,10 +324,44 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                     </div>
                 </div>
                 <?php endforeach; ?>
+                <?php else: ?>
+                <!-- Dummy Slide 1 -->
+                <div class="swiper-slide relative aspect-[2/1] md:aspect-[4/1] bg-slate-200 group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-950/90 to-transparent flex items-center p-6 md:p-16">
+                        <div class="text-white max-w-lg">
+                            <span class="px-3 py-1.5 bg-emerald-500 rounded-full text-[9px] font-bold uppercase tracking-widest mb-3 inline-block shadow-lg"><i class="fas fa-fire mr-1"></i> Promo Spesial</span>
+                            <h2 class="text-2xl md:text-4xl font-extrabold mb-2 leading-tight">Diskon UMKM Warga</h2>
+                            <p class="text-sm md:text-base opacity-80 font-medium">Dukung usaha tetangga, nikmati potongan harga khusus hari ini.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Dummy Slide 2 -->
+                <div class="swiper-slide relative aspect-[2/1] md:aspect-[4/1] bg-slate-200 group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=1200" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                    <div class="absolute inset-0 bg-gradient-to-r from-orange-950/90 to-transparent flex items-center p-6 md:p-16">
+                        <div class="text-white max-w-lg">
+                            <span class="px-3 py-1.5 bg-orange-500 rounded-full text-[9px] font-bold uppercase tracking-widest mb-3 inline-block shadow-lg"><i class="fas fa-store mr-1"></i> Buka Toko</span>
+                            <h2 class="text-2xl md:text-4xl font-extrabold mb-2 leading-tight">Jualan Makin Laris</h2>
+                            <p class="text-sm md:text-base opacity-80 font-medium">Daftarkan usaha atau jasa Anda melalui aplikasi SmaRT sekarang juga.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Dummy Slide 3 -->
+                <div class="swiper-slide relative aspect-[2/1] md:aspect-[4/1] bg-slate-200 group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-950/90 to-transparent flex items-center p-6 md:p-16">
+                        <div class="text-white max-w-lg">
+                            <span class="px-3 py-1.5 bg-blue-500 rounded-full text-[9px] font-bold uppercase tracking-widest mb-3 inline-block shadow-lg"><i class="fas fa-shopping-basket mr-1"></i> Belanja Mudah</span>
+                            <h2 class="text-2xl md:text-4xl font-extrabold mb-2 leading-tight">Penuhi Kebutuhan Harian</h2>
+                            <p class="text-sm md:text-base opacity-80 font-medium">Cari sayur, lauk, hingga jasa servis cukup dari rumah saja via Pasar Warga.</p>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
             </div>
             <div class="swiper-pagination"></div>
         </div>
-        <?php endif; ?>
 
         <?php if(empty($produk)): ?>
             <div class="text-center py-20 bg-white rounded-[2rem] border border-dashed border-slate-200 shadow-sm">
