@@ -1,14 +1,14 @@
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center pt-32 lg:pt-20 overflow-hidden">
+    <section class="relative min-h-[100svh] flex items-center pt-32 lg:pt-20 overflow-hidden border-b border-white/50 bg-transparent">
         <div class="container mx-auto px-6 md:px-12 relative z-10 text-left">
-            <div class="grid lg:grid-cols-2 items-center gap-16 lg:gap-24">
+            <div class="grid lg:grid-cols-2 items-center gap-12 lg:gap-24 pb-16 lg:pb-0">
                 <div class="space-y-10">
-                    <div class="inline-flex items-center space-x-3 px-5 py-3 rounded-full bg-emerald-600/5 border border-emerald-600/10 text-emerald-700 text-[10px] font-bold tracking-[0.2em] uppercase glass">
+                    <div class="inline-flex items-center space-x-3 px-5 py-3 mt-4 md:mt-0 rounded-full bg-emerald-600/5 border border-emerald-600/10 text-emerald-700 text-[10px] font-bold tracking-[0.2em] uppercase glass">
                         <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
                         <span>RT 001 Go-Digital</span>
                     </div>
                     
-                    <h1 class="text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1] tracking-tight">
+                    <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold leading-[1.1] tracking-tight">
                         <?php 
                         // Ambil judul bersih (hanya simpan <br> jika ada)
                         $raw_title = $settingsData['web_hero_title'] ?? "Kampung Impian <br> Kini Jadi Nyata.";

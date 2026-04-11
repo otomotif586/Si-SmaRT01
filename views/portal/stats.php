@@ -1,10 +1,10 @@
     <!-- Stats Section -->
-    <section id="kawasan" class="py-32 relative">
-        <div class="container mx-auto px-6 md:px-12 text-center mb-20">
-            <h2 class="text-4xl font-extrabold text-emerald-950 tracking-tight reveal">Kawasan Mandiri Terpadu</h2>
+    <section id="kawasan" class="py-16 md:py-24 lg:py-32 relative bg-white/30 backdrop-blur-sm border-y border-white/50">
+        <div class="container mx-auto px-6 md:px-12 text-center mb-12 md:mb-20">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-emerald-950 tracking-tight reveal">Kawasan Mandiri Terpadu</h2>
         </div>
         <div class="container mx-auto px-6 md:px-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                 <div class="glass p-12 rounded-[4rem] card-glow reveal">
                     <div class="w-20 h-20 bg-emerald-600/10 rounded-3xl flex items-center justify-center text-emerald-600 mb-8 text-4xl shadow-inner border border-emerald-100">
                         <i class="fas fa-mountain"></i>

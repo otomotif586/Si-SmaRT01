@@ -1,17 +1,17 @@
     <!-- SEKSI BERITA & WARTA -->
-    <section id="berita" class="py-32 relative overflow-hidden">
+    <section id="berita" class="py-16 md:py-24 lg:py-32 bg-white/40 backdrop-blur-sm border-b border-white/50 relative overflow-hidden">
         <div class="container mx-auto px-6 md:px-12">
-            <div class="flex justify-between items-end mb-16 reveal">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6 reveal">
                 <div>
-                    <h2 class="text-5xl font-extrabold text-emerald-950 tracking-tight leading-tight">Warta & <br><span class="text-emerald-600">Berita Warga.</span></h2>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-emerald-950 tracking-tight leading-tight">Warta & <br><span class="text-emerald-600">Berita Warga.</span></h2>
                     <p class="text-emerald-900/40 mt-4 font-medium italic">Informasi terkini seputar kegiatan dan pengumuman desa.</p>
                 </div>
-                <div class="hidden md:block">
+                <div class="block">
                     <button class="px-8 py-4 rounded-full bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200">Lihat Semua Berita</button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 reveal">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 reveal">
                 <?php if(!empty($blogs)): ?>
                     <?php foreach($blogs as $b): 
                         $thumb = $b['thumbnail'] ?: 'https://images.unsplash.com/photo-1516245834210-c4c142787335?q=80&w=800';

@@ -1,9 +1,9 @@
     <!-- Informasi Penting Section -->
-    <section id="info_penting" class="py-32 bg-emerald-600/5 relative">
+    <section id="info_penting" class="py-16 md:py-24 lg:py-32 bg-emerald-900/5 border-b border-emerald-900/10 relative">
         <div class="container mx-auto px-6 md:px-12">
-            <div class="text-center mb-20 reveal">
+            <div class="text-center mb-12 md:mb-20 reveal">
                 <h2 class="text-[10px] font-black tracking-[0.5em] text-emerald-600 uppercase mb-4">Layanan Cepat</h2>
-                <h3 class="text-5xl font-extrabold text-emerald-950 tracking-tight leading-tight">
+                <h3 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-emerald-950 tracking-tight leading-tight">
                     <?= htmlspecialchars($settingsData['web_info_penting_judul'] ?? 'Informasi Penting Warga') ?>
                 </h3>
                 <p class="text-emerald-900/50 mt-6 font-medium max-w-2xl mx-auto">
@@ -11,7 +11,7 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                 <?php for($i=1; $i<=4; $i++): 
                     $icon = $settingsData["web_info_item_{$i}_icon"] ?? 'fa-info-circle';
                     $title = $settingsData["web_info_item_{$i}_title"] ?? 'Informasi';

@@ -124,11 +124,20 @@ h6 {
     transform: translateY(0);
 }
 
-.card-glow:hover {
+.card-glow:hover,
+.card-glow:focus-within,
+.card-glow:active {
     box-shadow: 0 30px 60px -15px rgba(5, 150, 105, 0.15);
     border-color: rgba(5, 150, 105, 0.3);
     background: rgba(255, 255, 255, 0.8);
     transform: translateY(-8px);
+}
+
+/* Memastikan teks dan ikon di dalam card-glow menjadi gelap saat background menjadi putih terang */
+.card-glow:hover *,
+.card-glow:focus-within *,
+.card-glow:active * {
+    color: var(--text-main) !important;
 }
 
 #mobile-menu-overlay {
@@ -485,7 +494,7 @@ h6 {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 800;
-    color: #fff !important;
+    color: var(--title-color);
     line-height: 1.2;
     text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     line-clamp: 2;
@@ -494,6 +503,22 @@ h6 {
     -webkit-box-orient: vertical;
     overflow: hidden;
     transition: all 0.4s ease;
+}
+
+/* Ditambahkan focus-within & active untuk merespon klik/tap di Mobile */
+/* Sapu bersih: SEMUA teks & ikon (termasuk svg/i) di KESELURUHAN KARTU akan jadi hitam saat di-hover */
+.card:hover *,
+.card:focus-within *,
+.card:active * {
+    color: var(--title-color-hover) !important;
+    text-shadow: none !important;
+}
+
+/* Lindungi tombol agar teksnya tetap putih (tidak ikut jadi hitam) */
+.card:hover button, .card:hover button *,
+.card:focus-within button, .card:focus-within button *,
+.card:active button, .card:active button * {
+    color: #fff !important;
 }
 
 .card p {
@@ -562,35 +587,49 @@ h6 {
     rotate: 90deg;
 }
 
-.card:hover,
-.card:focus-within {
-    &::before {
-        translate: 0 100%;
-    }
+/* Un-nested CSS untuk kompatibilitas penuh di semua browser Mobile/Desktop */
+.card:hover::before,
+.card:focus-within::before,
+.card:active::before {
+    translate: 0 100%;
+}
 
-    .card-media-wrapper {
-        height: 60%;
-    }
+.card:hover .card-media-wrapper,
+.card:focus-within .card-media-wrapper,
+.card:active .card-media-wrapper {
+    height: 60%;
+}
 
-    >img,
-    >video {
-        aspect-ratio: 1 / 1;
-        object-position: 50% 10%;
-    }
+.card:hover > img,
+.card:focus-within > img,
+.card:active > img,
+.card:hover > video,
+.card:focus-within > video,
+.card:active > video {
+    aspect-ratio: 1 / 1;
+    object-position: 50% 10%;
+}
 
-    >section {
-        p {
-            translate: 0 0;
-            margin-block-end: 0.5rem;
-            opacity: 1;
-        }
+.card:hover > section p,
+.card:focus-within > section p,
+.card:active > section p {
+    translate: 0 0;
+    margin-block-end: 0.5rem;
+    opacity: 1;
+}
 
-        >div {
-            translate: 0 0;
-            opacity: 1;
-            transition: translate 0.25s 0.25s, opacity 0.5s 0.25s;
-        }
-    }
+.card:hover > section p, .card:hover > section p *,
+.card:focus-within > section p, .card:focus-within > section p *,
+.card:active > section p, .card:active > section p * {
+    color: var(--text-color) !important;
+}
+
+.card:hover > section > div,
+.card:focus-within > section > div,
+.card:active > section > div {
+    translate: 0 0;
+    opacity: 1;
+    transition: translate 0.25s 0.25s, opacity 0.5s 0.25s;
 }
 
 .card-media-wrapper {

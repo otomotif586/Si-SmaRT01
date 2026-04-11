@@ -76,6 +76,9 @@ $wisata = [
     ]
 ];
 ?>
+<?php
+$background_image_url = $settingsData['web_hero_image_1'] ?? 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600';
+?>
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
@@ -95,9 +98,25 @@ $wisata = [
     
     <!-- Custom Portal CSS -->
     <link rel="stylesheet" href="public/css/portal.css">
+    <style>
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('<?= htmlspecialchars($background_image_url) ?>');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            filter: grayscale(10%) blur(2px); /* Efek samar */
+            opacity: 0.1; /* Efek semi transparan */
+        }
+    </style>
 </head>
 <body class="selection:bg-emerald-100 selection:text-emerald-900">
-
+    <div class="background-overlay"></div>
     <?php 
     // Load Portal Sections
     include 'views/portal/navbar.php';

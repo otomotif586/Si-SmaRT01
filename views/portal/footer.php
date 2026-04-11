@@ -14,7 +14,7 @@
             <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-8 opacity-40 group">
                 <div class="flex items-center space-x-2 hover:opacity-100 transition-opacity cursor-default">
                     <i class="fas fa-leaf text-xs"></i>
-                    <span class="text-[8px] font-bold tracking-widest uppercase">Alam</span>
+                    <span class="text-[8px] font-bold tracking-widest uppercase">Pengurus RT</span>
                 </div>
                 <div class="flex items-center space-x-2 hover:opacity-100 transition-opacity cursor-default">
                     <i class="fas fa-people-group text-xs"></i>
