@@ -37,11 +37,16 @@ try {
         'web_wisata_2_description' => $_POST['web_wisata_2_description'] ?? '',
     ];
 
-    $uploadDir = '../public/uploads/cms/';
+    $uploadDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'cms' . DIRECTORY_SEPARATOR;
     if (!is_dir($uploadDir)) {
         if (!@mkdir($uploadDir, 0777, true)) {
-            throw new Exception("Gagal membuat direktori upload: public/uploads/cms/. Silakan periksa izin folder.");
+            throw new Exception("Gagal membuat direktori upload: " . $uploadDir);
         }
+    }
+
+    // Pastikan folder dapat ditulis
+    if (!is_writable($uploadDir)) {
+        throw new Exception("Folder penyimpanan tidak memiliki izin tulis (Permission Denied). Silakan hubungi admin server.");
     }
 
     function handleUpload($fileArray, $prefix, $uploadDir) {
