@@ -45,11 +45,26 @@ try {
     }
 
     function handleUpload($fileArray, $prefix, $uploadDir) {
-        if (isset($fileArray) && $fileArray['error'] === UPLOAD_ERR_OK) {
-            $ext = pathinfo($fileArray['name'], PATHINFO_EXTENSION);
-            $filename = $prefix . '_' . time() . '.' . $ext;
-            if (@move_uploaded_file($fileArray['tmp_name'], $uploadDir . $filename)) {
-                return 'public/uploads/cms/' . $filename;
+        if (isset($fileArray) && $fileArray['name'] !== '') {
+            if ($fileArray['error'] === UPLOAD_ERR_OK) {
+                $ext = pathinfo($fileArray['name'], PATHINFO_EXTENSION);
+                $filename = $prefix . '_' . time() . '.' . $ext;
+                if (@move_uploaded_file($fileArray['tmp_name'], $uploadDir . $filename)) {
+                    return 'public/uploads/cms/' . $filename;
+                } else {
+                    throw new Exception("Gagal memindahkan file yang diunggah ($prefix). Cek izin folder.");
+                }
+            } elseif ($fileArray['error'] !== UPLOAD_ERR_NO_FILE) {
+                $errMap = [
+                    1 => 'File terlalu besar (PHP Limit)',
+                    2 => 'File terlalu besar (HTML Limit)',
+                    3 => 'File hanya terunggah sebagian',
+                    6 => 'Folder sementara hilang',
+                    7 => 'Gagal menulis ke disk',
+                    8 => 'Ekstensi diblokir'
+                ];
+                $msg = $errMap[$fileArray['error']] ?? 'Error ' . $fileArray['error'];
+                throw new Exception("Upload $prefix gagal: $msg");
             }
         }
         return null;
