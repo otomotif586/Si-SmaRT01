@@ -1,7 +1,13 @@
 <?php
+error_reporting(0); // Matikan error HTML agar tidak memecah JSON
 require_once '../config/database.php';
 header('Content-Type: application/json');
 try {
+    // Pastikan PDO terhubung
+    if (!isset($pdo)) {
+        throw new Exception("Koneksi database tidak tersedia.");
+    }
+
     $settings = [
         'web_nama' => $_POST['web_nama'] ?? '',
         'web_email' => $_POST['web_email'] ?? '',
@@ -32,13 +38,17 @@ try {
     ];
 
     $uploadDir = '../public/uploads/cms/';
-    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+    if (!is_dir($uploadDir)) {
+        if (!@mkdir($uploadDir, 0777, true)) {
+            throw new Exception("Gagal membuat direktori upload: public/uploads/cms/. Silakan periksa izin folder.");
+        }
+    }
 
     function handleUpload($fileArray, $prefix, $uploadDir) {
         if (isset($fileArray) && $fileArray['error'] === UPLOAD_ERR_OK) {
             $ext = pathinfo($fileArray['name'], PATHINFO_EXTENSION);
             $filename = $prefix . '_' . time() . '.' . $ext;
-            if (move_uploaded_file($fileArray['tmp_name'], $uploadDir . $filename)) {
+            if (@move_uploaded_file($fileArray['tmp_name'], $uploadDir . $filename)) {
                 return 'public/uploads/cms/' . $filename;
             }
         }
