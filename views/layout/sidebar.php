@@ -93,7 +93,7 @@
             </button>
             <button onclick="showPage('pasar')" id="nav-pasar" title="Kelola Produk & Toko">
                 <i data-lucide="shopping-bag"></i>
-                <span>Kelola Produk</span>
+                <span>UMKM</span>
             </button>
         </div>
     </nav>

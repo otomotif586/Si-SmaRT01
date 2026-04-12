@@ -651,3 +651,25 @@ h6 {
     z-index: 20;
     transition: all 0.4s ease;
 }
+
+/* --- Hero Section Mobile Fixes --- */
+@media (max-width: 768px) {
+    /* Memastikan tombol di Hero section menjadi responsif dan rapi (Tidak wrap/patah) */
+    .hero-btn-group {
+        flex-direction: column !important;
+        width: 100%;
+        gap: 12px !important;
+    }
+    .hero-btn-group > a, .hero-btn-group > button {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+    
+    /* Mencegah tulisan Scroll Down menumpuk dengan tombol Tur Kawasan di mobile */
+    .scroll-indicator {
+        position: relative !important;
+        bottom: auto !important;
+        margin-top: 3rem !important;
+    }
+}

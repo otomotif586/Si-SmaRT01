@@ -167,18 +167,18 @@ $clean_title = strip_tags($raw_title, '<br>');
             <?= nl2br(htmlspecialchars($web_visi)) ?>
         </p>
         
-        <div class="flex flex-wrap justify-center gap-6 pt-12 opacity-0 translate-y-10 animate-[textReveal_1s_ease_0.6s_forwards]">
-            <a href="pasar.php" class="group relative px-10 py-5 bg-emerald-600 text-white font-bold rounded-2xl flex items-center space-x-4 hover:bg-emerald-500 transition-all shadow-xl shadow-emerald-900/20">
+        <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 w-full max-w-xs sm:max-w-none mx-auto pt-12 opacity-0 translate-y-10 animate-[textReveal_1s_ease_0.6s_forwards] hero-btn-group">
+            <a href="pasar.php" class="group relative px-6 sm:px-10 py-4 sm:py-5 bg-emerald-600 text-white font-bold rounded-2xl flex items-center justify-center space-x-3 hover:bg-emerald-500 transition-all shadow-xl shadow-emerald-900/20 w-full sm:w-auto">
                 <i class="fa-solid fa-shop text-xl"></i>
-                <span class="tracking-tight uppercase">Pasar Warga</span>
+                <span class="tracking-tight uppercase whitespace-nowrap">Pasar Warga</span>
             </a>
-            <a href="https://www.google.com/maps/place/Bimbel+Become/@-6.4617173,106.9727219,3a,73.9y,173.83h,88.65t/data=!3m7!1e1!3m5!1s0-jsU8IuF6zRD2dAo4a4pQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D1.3543519995511133%26panoid%3D0-jsU8IuF6zRD2dAo4a4pQ%26yaw%3D173.82917027237332!7i16384!8i8192!4m6!3m5!1s0x2e69bf52d8d30d3b:0x94ee6f0e357a0db5!8m2!3d-6.4600501!4d106.9744559!16s%2Fg%2F11y2dtt465?entry=ttu&g_ep=EgoyMDI2MDQwNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="px-10 py-5 bg-white border border-emerald-100 text-emerald-900 font-bold rounded-2xl hover:bg-emerald-50 transition-all flex items-center space-x-4 shadow-sm">
+            <a href="https://www.google.com/maps/place/Bimbel+Become/@-6.4617173,106.9727219,3a,73.9y,173.83h,88.65t/data=!3m7!1e1!3m5!1s0-jsU8IuF6zRD2dAo4a4pQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D1.3543519995511133%26panoid%3D0-jsU8IuF6zRD2dAo4a4pQ%26yaw%3D173.82917027237332!7i16384!8i8192!4m6!3m5!1s0x2e69bf52d8d30d3b:0x94ee6f0e357a0db5!8m2!3d-6.4600501!4d106.9744559!16s%2Fg%2F11y2dtt465?entry=ttu&g_ep=EgoyMDI2MDQwNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="px-6 sm:px-10 py-4 sm:py-5 bg-white border border-emerald-100 text-emerald-900 font-bold rounded-2xl hover:bg-emerald-50 transition-all flex items-center justify-center space-x-3 shadow-sm w-full sm:w-auto">
                 <i class="fas fa-play-circle text-emerald-500 text-xl"></i>
-                <span>TUR KAWASAN</span>
+                <span class="whitespace-nowrap">TUR KAWASAN</span>
             </a>
         </div>
 
-        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 text-emerald-900">
+        <div class="relative mt-12 sm:absolute sm:bottom-12 sm:mt-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 text-emerald-900 scroll-indicator">
             <span class="text-[10px] uppercase tracking-[0.3em] font-bold">Scroll Down</span>
             <div class="w-px h-12 bg-gradient-to-b from-emerald-500 to-transparent"></div>
         </div>

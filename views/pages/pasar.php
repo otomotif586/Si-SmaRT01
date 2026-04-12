@@ -267,6 +267,7 @@
                         <select id="pasar-penjual-status" class="w-full bg-slate-50 border border-slate-100 text-slate-800 rounded-[1.5rem] py-4 px-5 font-semibold focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all text-sm shadow-inner appearance-none cursor-pointer">
                             <option value="Aktif">Aktif Buka</option>
                             <option value="Nonaktif">Tutup Sementara (Nonaktif)</option>
+                            <option value="Pending">Menunggu Approval (Pending)</option>
                         </select>
                     </div>
                 </div>
@@ -475,9 +476,11 @@
             if(res.status === 'success') {
                 let html = '';
                 res.data.forEach(p => {
-                    const badge = p.status === 'Aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700';
+                    const badge = p.status === 'Aktif' ? 'bg-emerald-100 text-emerald-700' : 
+                                  (p.status === 'Pending' ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700');
                     const initialName = encodeURIComponent(p.nama_toko);
                     const logoSrc = p.logo ? p.logo : `https://ui-avatars.com/api/?name=${initialName}&background=10b981&color=fff`;
+                    let approveBtn = p.status === 'Pending' ? `<button onclick="approvePasarPenjual(${p.id})" class="p-3 text-emerald-600 hover:bg-emerald-50 rounded-2xl transition-all mr-2" title="Setujui Akun UMKM"><i data-lucide="check-circle" class="w-5 h-5"></i></button>` : '';
                     html += `
                         <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
                             <td class="py-4 px-6">
@@ -493,6 +496,7 @@
                             <td class="py-4 px-6 text-slate-600 font-medium">@${p.username}</td>
                             <td class="py-4 px-6"><span class="px-2 py-1 rounded-md text-[10px] font-black uppercase ${badge}">${p.status}</span></td>
                             <td class="py-4 px-6 text-right whitespace-nowrap">
+                                ${approveBtn}
                                 <button onclick='editPasarPenjual(${JSON.stringify(p).replace(/'/g, "&#39;")})' class="p-3 text-blue-600 hover:bg-blue-50 rounded-2xl transition-all mr-2" title="Edit Akun"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
                                 <button onclick="deletePasarPenjual(${p.id})" class="p-3 text-red-600 hover:bg-red-50 rounded-2xl transition-all" title="Hapus Akun"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                             </td>
@@ -573,6 +577,16 @@
                 const fd = new FormData(); fd.append('id', id);
                 fetch('views/pages/delete_penjual.php', {method:'POST', body:fd}).then(r=>r.json()).then(res => {
                     if(res.status === 'success'){ showToast('Terhapus'); loadPasarPenjual(); }
+                });
+            }});
+    }
+
+    function approvePasarPenjual(id) {
+        Swal.fire({ title: 'Setujui Toko?', text: 'Akun akan aktif dan warga bisa mulai berjualan.', icon: 'question', showCancelButton: true, confirmButtonText: 'Ya, Setujui', confirmButtonColor: '#10b981' })
+            .then(res => { if(res.isConfirmed) {
+                const fd = new FormData(); fd.append('id', id);
+                fetch('views/pages/approve_penjual.php', {method:'POST', body:fd}).then(r=>r.json()).then(res => {
+                    if(res.status === 'success'){ showToast('Toko Disetujui'); loadPasarPenjual(); }
                 });
             }});
     }
