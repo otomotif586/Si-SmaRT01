@@ -27,6 +27,7 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="public/css/mobile-ux.css">
     <style>
         /* Mencegah FOUC */
         html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
@@ -37,6 +38,118 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .animate-float { animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        .product-thumb-shell {
+            position: relative;
+            overflow: hidden;
+            background: #e2e8f0;
+        }
+
+        .product-thumb-shell::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            transform: translateX(-100%);
+            background: linear-gradient(90deg, rgba(226, 232, 240, 0), rgba(255, 255, 255, 0.85), rgba(226, 232, 240, 0));
+            animation: productThumbShimmer 1.2s infinite;
+        }
+
+        .product-thumb-shell.loaded::after {
+            display: none;
+        }
+
+        .product-text-shell {
+            position: relative;
+            min-height: 64px;
+        }
+
+        .product-text-skeleton {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            justify-content: center;
+            transition: opacity 0.25s ease;
+        }
+
+        .product-text-skeleton .line {
+            height: 9px;
+            border-radius: 999px;
+        }
+
+        .product-text-shell.loaded .product-text-skeleton {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .search-pending {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            color: #059669;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.22);
+            border-radius: 999px;
+            padding: 3px 8px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .search-pending.active {
+            opacity: 1;
+        }
+
+        @keyframes productThumbShimmer {
+            100% { transform: translateX(100%); }
+        }
+
+        @media (max-width: 768px) {
+            body { padding-bottom: 96px; }
+            .container { padding-left: 14px !important; padding-right: 14px !important; }
+            #productModal > div,
+            #profileModal > div {
+                max-height: 96vh !important;
+                border-radius: 1.5rem !important;
+            }
+            #productModal .p-8,
+            #profileModal .p-8 {
+                padding: 1rem !important;
+            }
+            #productForm input,
+            #productForm select,
+            #productForm textarea,
+            #profileForm input {
+                min-height: 48px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .container { padding-left: 10px !important; padding-right: 10px !important; }
+            main.container { padding-top: 14px !important; }
+            .mb-8.p-6 { padding: 1rem !important; border-radius: 1.5rem !important; }
+            .mb-8.p-6 h2 { font-size: 1.1rem !important; }
+            .bg-white.p-4.rounded-3xl { padding: 0.7rem !important; border-radius: 1rem !important; gap: 0.55rem !important; }
+            #searchInput { min-height: 42px; font-size: 0.82rem; padding-top: 0.6rem !important; padding-bottom: 0.6rem !important; }
+            #productContainer { gap: 0.55rem !important; }
+            #productContainer > div { border-radius: 1.1rem !important; padding: 0.6rem !important; gap: 0.6rem !important; }
+            #productContainer .w-20.h-20 { width: 4rem !important; height: 4rem !important; border-radius: 0.8rem !important; }
+            #productContainer h4 { font-size: 0.77rem !important; }
+            #productContainer p { margin-bottom: 0.3rem !important; }
+            #productContainer .text-xs { font-size: 0.65rem !important; }
+            #productContainer button.w-9.h-9 { width: 2rem !important; height: 2rem !important; border-radius: 0.7rem !important; }
+            .search-pending { padding: 2px 6px; font-size: 9px; }
+            .search-pending span { display: none; }
+        }
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
@@ -44,6 +157,14 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
     </script>
 </head>
 <body class="bg-slate-50 min-h-screen pb-24">
+    <div id="smartLoadingOverlay" class="smart-loading-overlay">
+        <div class="smart-loading-card">
+            <h3 class="smart-loading-title" id="smartLoadingTitle">Memuat data...</h3>
+            <p class="smart-loading-subtitle">Mohon tunggu sebentar</p>
+            <div class="smart-loading-track"><div class="smart-loading-fill" id="smartLoadingFill"></div></div>
+            <div class="smart-loading-meta"><span id="smartLoadingPct">8</span>%</div>
+        </div>
+    </div>
     
     <!-- Top Nav -->
     <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
@@ -95,7 +216,11 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
         <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 mb-8 flex items-center gap-4">
             <div class="relative flex-1">
                 <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Cari dagangan..." class="w-full pl-11 pr-4 py-3 bg-slate-50 border-none rounded-2xl text-sm focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none">
+                <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Cari dagangan..." class="w-full pl-11 pr-24 py-3 bg-slate-50 border-none rounded-2xl text-sm focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none">
+                <div id="searchPending" class="search-pending" aria-live="polite" aria-hidden="true">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Mencari...</span>
+                </div>
             </div>
             <button onclick="openModal()" class="w-12 h-12 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all shrink-0">
                 <i class="fas fa-plus"></i>
@@ -249,6 +374,67 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
         let storeProfile = <?= json_encode($penjualData) ?>;
         let selectedPhotos = []; // Array of Blobs/Files
         let existingPhotos = []; // Array of URLs
+        let pageLoadingTick;
+        let filterTick;
+        let lastFilterAt = 0;
+        let lastFilterQuery = '';
+
+        function getAdaptiveFilterDelay(query) {
+            const now = Date.now();
+            const gap = now - lastFilterAt;
+            lastFilterAt = now;
+
+            // Delay lebih panjang saat user mengetik cepat agar render tidak terlalu sering.
+            let delay = gap < 110 ? 250 : (gap < 220 ? 180 : 110);
+
+            const isLowEnd = ((navigator.hardwareConcurrency || 4) <= 4) || ((navigator.deviceMemory || 4) <= 4);
+            if (isLowEnd) delay += 70;
+
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) delay += 40;
+            if (query.length <= 2) delay += 20;
+
+            return Math.max(90, Math.min(360, delay));
+        }
+
+        function showPageLoading(title = 'Memuat data...') {
+            const overlay = document.getElementById('smartLoadingOverlay');
+            const fill = document.getElementById('smartLoadingFill');
+            const pct = document.getElementById('smartLoadingPct');
+            const heading = document.getElementById('smartLoadingTitle');
+            if (!overlay || !fill || !pct) return;
+            if (heading) heading.textContent = title;
+            let value = 8;
+            fill.style.width = value + '%';
+            pct.textContent = String(value);
+            overlay.classList.add('active');
+            clearInterval(pageLoadingTick);
+            pageLoadingTick = setInterval(() => {
+                value = Math.min(92, value + Math.max(1, Math.round((100 - value) / 10)));
+                fill.style.width = value + '%';
+                pct.textContent = String(value);
+            }, 140);
+        }
+
+        function hidePageLoading() {
+            clearInterval(pageLoadingTick);
+            const overlay = document.getElementById('smartLoadingOverlay');
+            if (overlay) overlay.classList.remove('active');
+        }
+
+        function showPageToast(title, icon = 'success') {
+            if (typeof Swal === 'undefined') return;
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            Swal.fire({
+                toast: true,
+                position: isMobile ? 'bottom' : 'top',
+                icon,
+                title,
+                showConfirmButton: false,
+                timer: 2200,
+                timerProgressBar: true,
+                customClass: { popup: 'smart-toast' }
+            });
+        }
 
         function previewProfileLogo(e) {
             const file = e.target.files[0];
@@ -275,6 +461,8 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
         async function loadProducts(page = 1) {
             currentPage = page;
             const offset = (page - 1) * itemsPerPage;
+            renderSkeletonCards(6);
+            showPageLoading('Memuat dagangan...');
             try {
                 const resp = await fetch(`api/get_produk_pasar.php?limit=${itemsPerPage}&offset=${offset}&penjual_nama=${encodeURIComponent(storeProfile.nama_toko)}`);
                 const res = await resp.json();
@@ -284,7 +472,75 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
                     updateStats(res.total, allProducts);
                     renderPagination(res.total);
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                console.error(e);
+                showPageToast('Gagal memuat data dagangan.', 'error');
+            } finally {
+                hidePageLoading();
+            }
+        }
+
+        function renderSkeletonCards(count = 6) {
+            const container = document.getElementById('productContainer');
+            if (!container) return;
+            container.innerHTML = Array.from({ length: count }).map(() => `
+                <div class="bg-white p-4 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 animate-pulse">
+                    <div class="w-20 h-20 rounded-2xl smart-skeleton"></div>
+                    <div class="flex-1 min-w-0 space-y-2">
+                        <div class="h-3 w-2/3 rounded-lg smart-skeleton"></div>
+                        <div class="h-2.5 w-1/3 rounded-lg smart-skeleton"></div>
+                        <div class="h-2.5 w-1/2 rounded-lg smart-skeleton"></div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <div class="w-9 h-9 rounded-xl smart-skeleton"></div>
+                        <div class="w-9 h-9 rounded-xl smart-skeleton"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderEmptyFilterState(query = '') {
+            const container = document.getElementById('productContainer');
+            if (!container) return;
+            const safeQuery = (query || '').replace(/[<>]/g, '');
+            container.innerHTML = `
+                <div class="col-span-full text-center py-16 text-slate-400 font-medium bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-3">
+                    <div class="w-24 h-24 rounded-full smart-skeleton flex items-center justify-center">
+                        <i class="fas fa-search text-2xl text-slate-300"></i>
+                    </div>
+                    <p class="text-sm text-slate-600 font-extrabold">Tidak ada hasil untuk \"${safeQuery}\"</p>
+                    <p class="text-xs text-slate-400 font-semibold">Coba kata kunci lain, nama produk, atau kategori.</p>
+                </div>
+            `;
+        }
+
+        function setSearchPending(isPending) {
+            const el = document.getElementById('searchPending');
+            if (!el) return;
+            el.classList.toggle('active', !!isPending);
+            el.setAttribute('aria-hidden', isPending ? 'false' : 'true');
+        }
+
+        function bindProductImageSkeletons() {
+            document.querySelectorAll('.js-product-photo').forEach((img) => {
+                const shell = img.closest('.product-thumb-shell');
+                const card = img.closest('.group');
+                const textShell = card ? card.querySelector('.js-product-text-shell') : null;
+                if (!shell) return;
+                if (img.complete) {
+                    shell.classList.add('loaded');
+                    if (textShell) textShell.classList.add('loaded');
+                    return;
+                }
+                img.addEventListener('load', () => {
+                    shell.classList.add('loaded');
+                    if (textShell) textShell.classList.add('loaded');
+                }, { once: true });
+                img.addEventListener('error', () => {
+                    shell.classList.add('loaded');
+                    if (textShell) textShell.classList.add('loaded');
+                }, { once: true });
+            });
         }
 
         function renderPagination(total) {
@@ -330,10 +586,15 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
 
                 return `
                 <div class="bg-white p-4 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 group hover:shadow-xl hover:shadow-emerald-500/5 transition-all">
-                    <div class="w-20 h-20 rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 shrink-0">
-                        <img src="${mainPhoto}" class="w-full h-full object-cover object-center">
+                    <div class="w-20 h-20 rounded-2xl overflow-hidden border border-slate-100 shrink-0 product-thumb-shell">
+                        <img src="${mainPhoto}" class="w-full h-full object-cover object-center js-product-photo" loading="lazy" decoding="async">
                     </div>
-                    <div class="flex-1 min-w-0">
+                    <div class="flex-1 min-w-0 product-text-shell js-product-text-shell">
+                        <div class="product-text-skeleton">
+                            <div class="line smart-skeleton" style="width: 72%;"></div>
+                            <div class="line smart-skeleton" style="width: 38%;"></div>
+                            <div class="line smart-skeleton" style="width: 56%;"></div>
+                        </div>
                         <h4 class="font-extrabold text-slate-800 text-sm mb-0.5 truncate">${p.nama_produk}</h4>
                         <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">${p.kategori}</p>
                         <div class="flex items-center gap-3">
@@ -351,6 +612,8 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
                     </div>
                 </div>`;
             }).join('');
+
+            bindProductImageSkeletons();
         }
 
         function updateStats(total, currentData) {
@@ -362,8 +625,30 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
 
         function filterProducts() {
             const q = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allProducts.filter(p => p.nama_produk.toLowerCase().includes(q) || p.kategori.toLowerCase().includes(q));
-            renderCards(filtered);
+            clearTimeout(filterTick);
+
+            if (q === lastFilterQuery) return;
+            lastFilterQuery = q;
+
+            if (!q.trim()) {
+                setSearchPending(false);
+                renderCards(allProducts);
+                return;
+            }
+
+            const delay = getAdaptiveFilterDelay(q);
+            setSearchPending(true);
+            if (delay >= 130) renderSkeletonCards(3);
+
+            filterTick = setTimeout(() => {
+                const filtered = allProducts.filter(p => p.nama_produk.toLowerCase().includes(q) || p.kategori.toLowerCase().includes(q));
+                if (filtered.length === 0) {
+                    renderEmptyFilterState(q);
+                } else {
+                    renderCards(filtered);
+                }
+                setSearchPending(false);
+            }, delay);
         }
 
         function handlePhotoSelect(e) {
@@ -455,6 +740,7 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
             const btn = document.getElementById('btnSave');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Menyimpan...</span>';
             btn.disabled = true;
+            showPageLoading('Menyimpan dagangan...');
 
             try {
                 // 1. Upload new photos if any
@@ -478,14 +764,15 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
                 const saveRes = await saveResp.json();
 
                 if(saveRes.status === 'success') {
-                    Swal.fire({ icon: 'success', title: 'Berhasil!', text: saveRes.message, timer: 1500, showConfirmButton: false, borderRadius: '2rem' });
+                    showPageToast(saveRes.message || 'Dagangan berhasil disimpan.');
                     closeModal();
                     loadProducts(currentPage);
-                } else { Swal.fire('Error', saveRes.message, 'error'); }
+                } else { showPageToast(saveRes.message || 'Gagal menyimpan data.', 'error'); }
             } catch (e) { 
                 console.error(e);
-                Swal.fire('Error', 'Terjadi kesalahan sistem', 'error'); 
+                showPageToast('Terjadi kesalahan sistem.', 'error');
             } finally {
+                hidePageLoading();
                 btn.innerHTML = '<i class="fas fa-check"></i> <span>Simpan</span>';
                 btn.disabled = false;
             }
@@ -501,33 +788,41 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
                 cancelButtonColor: '#64748b',
                 confirmButtonText: 'Ya, Hapus',
                 cancelButtonText: 'Batal',
-                borderRadius: '2rem'
+                borderRadius: '2rem',
+                customClass: { popup: 'smart-modal' }
             });
             if (result.isConfirmed) {
                 const fd = new FormData();
                 fd.append('id', id);
+                showPageLoading('Menghapus dagangan...');
                 try {
                     const resp = await fetch('views/pages/delete_produk.php', { method: 'POST', body: fd });
                     const res = await resp.json();
                     if(res.status === 'success') {
                         loadProducts(currentPage);
-                        Swal.fire('Terhapus!', 'Dagangan telah dihapus.', 'success');
+                        showPageToast('Dagangan berhasil dihapus.');
                     }
-                } catch (e) { Swal.fire('Error', 'Gagal menghapus data', 'error'); }
+                } catch (e) { showPageToast('Gagal menghapus data.', 'error'); }
+                finally { hidePageLoading(); }
             }
         }
 
         async function saveProfile() {
             const fd = new FormData(document.getElementById('profileForm'));
+            showPageLoading('Menyimpan profil toko...');
             try {
                 const resp = await fetch('views/pages/update_toko.php', { method: 'POST', body: fd });
                 const res = await resp.json();
                 if(res.status === 'success') {
-                    Swal.fire({ icon: 'success', title: 'Berhasil!', text: res.message, timer: 1500, showConfirmButton: false, borderRadius: '2rem' });
+                    showPageToast(res.message || 'Profil berhasil disimpan.');
                     closeProfileModal();
                     window.location.reload();
                 }
-            } catch (e) { /* error silent */ }
+            } catch (e) {
+                showPageToast('Gagal menyimpan profil.', 'error');
+            } finally {
+                hidePageLoading();
+            }
         }
 
         function openProfileModal() { document.getElementById('profileModal').classList.replace('hidden', 'flex'); }

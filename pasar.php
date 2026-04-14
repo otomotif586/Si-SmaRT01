@@ -87,6 +87,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="public/css/mobile-ux.css">
     <!-- Swiper CSS untuk Slider Promosi -->
     <style>
         /* Mencegah FOUC (Flash of Unstyled Content) */
@@ -132,6 +133,17 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
             .card-baru > section h2 { font-size: 1rem !important; }
             .card-baru > section > div button { padding: 0.6rem 1rem 0.6rem 2rem !important; font-size: 0.8rem !important; width: auto !important; }
         }
+        @media (max-width: 390px) {
+            .card-baru { height: 260px; border-radius: 1.1rem; padding: 0.4rem; }
+            .card-baru > .img-container { border-radius: 0.9rem; }
+            .card-baru > section { margin: 0.65rem; }
+            .card-baru > section h2 { font-size: 0.9rem !important; margin-block-end: 0.5rem; }
+            .card-baru > section p { font-size: 0.72rem; }
+            .card-baru > section > div .tag { font-size: 0.85rem; }
+            .btn-beli-modern { font-size: 0.72rem; padding: 0.45rem 0.85rem; gap: 6px; }
+            main.container { padding-left: 10px !important; padding-right: 10px !important; }
+            .card-text-skeleton { left: 0.65rem; right: 0.65rem; bottom: 0.65rem; }
+        }
         .card-baru::before {
             content: ""; position: absolute; width: calc(100% - 1rem); height: 40%;
             bottom: 0.5rem; left: 0.5rem;
@@ -142,6 +154,55 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
         .card-baru > .img-container {
             max-width: 100%; aspect-ratio: 4 / 5; border-radius: 1.5rem; display: block;
             transition: aspect-ratio 0.3s ease; width: 100%; height: auto; overflow: hidden; position: relative;
+        }
+
+        .card-baru .img-container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .card-baru .img-container::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            transform: translateX(-100%);
+            background: linear-gradient(90deg, rgba(226, 232, 240, 0), rgba(255, 255, 255, 0.8), rgba(226, 232, 240, 0));
+            animation: pasarImgShimmer 1.2s infinite;
+        }
+
+        .card-baru .img-container.images-ready::before,
+        .card-baru .img-container.images-ready::after {
+            display: none;
+        }
+
+        .card-text-skeleton {
+            position: absolute;
+            left: 1rem;
+            right: 1rem;
+            bottom: 1rem;
+            z-index: 12;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+        }
+
+        .card-text-skeleton .line {
+            height: 9px;
+            border-radius: 999px;
+        }
+
+        .card-baru.card-ready .card-text-skeleton {
+            opacity: 0;
+        }
+
+        @keyframes pasarImgShimmer {
+            100% { transform: translateX(100%); }
         }
         .card-baru > section {
             margin: 1rem; height: calc(40% - 1rem); display: flex; flex-direction: column;
@@ -156,7 +217,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
         .card-baru > section p {
             font-size: 0.85rem; line-height: 1.3; color: var(--text-color); opacity: 0; margin: 0;
             translate: 0 100%; transition: margin-block-end 0.3s ease, opacity 0.8s ease 0.1s, translate 0.3s ease 0.1s;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
         .card-baru > section > div {
             flex: 1; align-items: flex-end; display: flex; justify-content: space-between; opacity: 0;
@@ -271,6 +332,15 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
     </script>
 </head>
 <body class="pb-24 selection:bg-emerald-200">
+    <div id="smartLoadingOverlay" class="smart-loading-overlay">
+        <div class="smart-loading-card">
+            <h3 class="smart-loading-title" id="smartLoadingTitle">Menyiapkan halaman...</h3>
+            <p class="smart-loading-subtitle">Mengambil produk terbaru warga</p>
+            <div class="smart-loading-track"><div class="smart-loading-fill" id="smartLoadingFill"></div></div>
+            <div class="smart-loading-meta"><span id="smartLoadingPct">8</span>%</div>
+        </div>
+    </div>
+
     <div class="background-overlay"></div>
     
     <!-- Sticky Top Navigation & Filter -->
@@ -383,6 +453,11 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                 </div>
                 <h3 class="text-lg font-bold text-slate-800">Belum ada produk</h3>
                 <p class="text-slate-500 text-sm mt-2 font-medium">Coba cari kata kunci lain atau cek kembali nanti.</p>
+                <div class="mt-8 max-w-md mx-auto space-y-3 px-6" aria-hidden="true">
+                    <div class="h-3 rounded-full smart-skeleton"></div>
+                    <div class="h-3 rounded-full smart-skeleton" style="width: 80%; margin-left: auto; margin-right: auto;"></div>
+                    <div class="h-3 rounded-full smart-skeleton" style="width: 65%; margin-left: auto; margin-right: auto;"></div>
+                </div>
             </div>
         <?php else: ?>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
@@ -404,10 +479,10 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                         <div class="swiper productSwiper">
                             <div class="swiper-wrapper">
                                 <?php if(empty($photos)): ?>
-                                    <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&q=80"></div>
+                                    <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&q=80" class="js-card-photo" loading="lazy" decoding="async"></div>
                                 <?php else: ?>
                                     <?php foreach($photos as $ft): ?>
-                                        <div class="swiper-slide"><img src="<?= htmlspecialchars($ft) ?>"></div>
+                                        <div class="swiper-slide"><img src="<?= htmlspecialchars($ft) ?>" class="js-card-photo" loading="lazy" decoding="async"></div>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </div>
@@ -440,6 +515,11 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                             <h2 class="text-lg md:text-xl font-black text-white leading-tight mb-1 drop-shadow-md line-clamp-2"><?= htmlspecialchars($p['nama_produk']) ?></h2>
                             <span class="text-emerald-400 font-black text-lg drop-shadow-md">Rp <?= number_format($p['harga'],0,',','.') ?></span>
                         </div>
+                    </div>
+
+                    <div class="card-text-skeleton" aria-hidden="true">
+                        <div class="line smart-skeleton" style="width: 74%;"></div>
+                        <div class="line smart-skeleton" style="width: 48%;"></div>
                     </div>
 
                     <!-- Bagian Detail yang Menggeser dari Bawah Saat Hover -->
@@ -495,6 +575,65 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        let pageLoadingTick;
+        function showPageLoading(title = 'Memuat...') {
+            const overlay = document.getElementById('smartLoadingOverlay');
+            const fill = document.getElementById('smartLoadingFill');
+            const pct = document.getElementById('smartLoadingPct');
+            const heading = document.getElementById('smartLoadingTitle');
+            if (!overlay || !fill || !pct) return;
+            if (heading) heading.textContent = title;
+            let value = 8;
+            fill.style.width = value + '%';
+            pct.textContent = String(value);
+            overlay.classList.add('active');
+            clearInterval(pageLoadingTick);
+            pageLoadingTick = setInterval(() => {
+                value = Math.min(90, value + Math.max(1, Math.round((100 - value) / 12)));
+                fill.style.width = value + '%';
+                pct.textContent = String(value);
+            }, 150);
+        }
+
+        function hidePageLoading() {
+            clearInterval(pageLoadingTick);
+            const overlay = document.getElementById('smartLoadingOverlay');
+            if (overlay) overlay.classList.remove('active');
+        }
+
+        function initCardImageSkeletons() {
+            document.querySelectorAll('.card-baru .img-container').forEach((container) => {
+                const images = container.querySelectorAll('img.js-card-photo');
+                if (!images.length) {
+                    container.classList.add('images-ready');
+                    return;
+                }
+
+                let loaded = 0;
+                const markLoaded = () => {
+                    loaded += 1;
+                    if (loaded >= images.length) {
+                        container.classList.add('images-ready');
+                        const card = container.closest('.card-baru');
+                        if (card) card.classList.add('card-ready');
+                    }
+                };
+
+                images.forEach((img) => {
+                    if (img.complete) {
+                        markLoaded();
+                    } else {
+                        img.addEventListener('load', markLoaded, { once: true });
+                        img.addEventListener('error', markLoaded, { once: true });
+                    }
+                });
+            });
+        }
+
+        // Show first-load progress for better perceived performance on mobile.
+        showPageLoading('Memuat Pasar Warga...');
+        window.addEventListener('load', () => setTimeout(hidePageLoading, 350));
+
         // Inisialisasi Slider Promo
         const swiper = new Swiper('.promoSwiper', {
             loop: true,
@@ -510,6 +649,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                 type: 'fraction',
             },
         });
+        initCardImageSkeletons();
 
         // Stacking Cards Scroll Listener for Pasar
         const passedCards = document.querySelectorAll('.js-passed-card');
@@ -548,6 +688,15 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
         function trackAlgoritmaBeli(id) {
             const fd = new FormData(); fd.append('id', id);
             fetch('views/pages/track_beli.php', { method: 'POST', body: fd }).catch(e => console.log('Tracking failed', e));
+        }
+
+        // Display loading when navigating via filter/category/search/pagination on the same page.
+        document.querySelectorAll('a[href^="pasar.php"]').forEach(link => {
+            link.addEventListener('click', () => showPageLoading('Memperbarui daftar produk...'));
+        });
+        const searchForm = document.querySelector('form[action="pasar.php"]');
+        if (searchForm) {
+            searchForm.addEventListener('submit', () => showPageLoading('Mencari produk...'));
         }
     </script>
 </body>

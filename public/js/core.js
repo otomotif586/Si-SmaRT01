@@ -303,9 +303,10 @@ document.addEventListener('click', function (e) {
 
 window.showToast = function (title, icon = 'success') {
     if (typeof Swal !== 'undefined') {
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
         Swal.fire({
             toast: true,
-            position: 'top',
+            position: isMobile ? 'bottom' : 'top',
             icon: icon,
             title: title,
             showConfirmButton: false,
@@ -314,6 +315,9 @@ window.showToast = function (title, icon = 'success') {
             background: 'var(--secondary-bg)',
             color: 'var(--text-color)',
             iconColor: icon === 'success' ? '#10b981' : undefined,
+            customClass: {
+                popup: 'smart-toast'
+            },
             didOpen: (toast) => {
                 toast.onmouseenter = Swal.stopTimer;
                 toast.onmouseleave = Swal.resumeTimer;
@@ -324,17 +328,49 @@ window.showToast = function (title, icon = 'success') {
     }
 };
 
+let loadingProgressTimer;
+
 window.showLoading = function (title = 'Memuat...') {
     if (typeof Swal !== 'undefined') {
+        let progress = 8;
         return Swal.fire({
             title: title,
+            html: `
+                <div style="margin-top: 10px; text-align: left;">
+                    <p style="margin:0 0 8px; color: var(--text-secondary-color); font-size: 12px; font-weight: 600;">Mohon tunggu, data sedang diproses</p>
+                    <div style="width:100%;height:8px;background:color-mix(in srgb, var(--border-color) 85%, transparent);border-radius:999px;overflow:hidden;">
+                        <div id="smart-loading-fill" style="height:100%;width:${progress}%;background:linear-gradient(90deg,#10b981,#059669);border-radius:999px;transition:width .25s ease;"></div>
+                    </div>
+                    <div style="margin-top:6px; text-align:right; font-size:11px; color: var(--text-secondary-color); font-weight:700;"><span id="smart-loading-pct">${progress}</span>%</div>
+                </div>
+            `,
             allowOutsideClick: false,
             showConfirmButton: false,
             background: 'var(--secondary-bg)',
             color: 'var(--text-color)',
+            customClass: {
+                popup: 'smart-modal'
+            },
             didOpen: () => {
-                Swal.showLoading();
+                const fill = document.getElementById('smart-loading-fill');
+                const pct = document.getElementById('smart-loading-pct');
+                clearInterval(loadingProgressTimer);
+                loadingProgressTimer = setInterval(() => {
+                    progress = Math.min(92, progress + Math.max(1, Math.round((100 - progress) / 11)));
+                    if (fill) fill.style.width = `${progress}%`;
+                    if (pct) pct.textContent = String(progress);
+                }, 160);
+            },
+            willClose: () => {
+                clearInterval(loadingProgressTimer);
             }
         });
+    }
+};
+
+window.hideLoading = function () {
+    if (typeof Swal !== 'undefined') {
+        clearInterval(loadingProgressTimer);
+        Swal.close();
     }
 };

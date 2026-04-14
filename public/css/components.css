@@ -316,6 +316,35 @@
     margin-top: 24px;
 }
 
+@media (max-width: 768px) {
+    .input-field {
+        min-height: 48px;
+        font-size: 16px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        border-radius: 14px;
+    }
+
+    .button-primary,
+    .button-secondary {
+        min-height: 48px;
+        font-size: 0.85rem;
+        border-radius: 14px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .card-section {
+        padding: 18px;
+    }
+
+    .section-header {
+        align-items: flex-start;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+}
+
 /* List Container */
 .grid-container {
     display: grid;

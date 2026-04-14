@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="public/css/mobile-ux.css">
     <style>
         /* Mencegah FOUC */
         html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
@@ -53,7 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         body {
             font-family: 'Plus+Jakarta+Sans', sans-serif;
             background: #f8fafc;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
         .font-space { font-family: 'Space Grotesk', sans-serif; }
         
@@ -85,6 +87,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.2);
         }
+
+        @media (max-width: 390px) {
+            body { padding: 10px; align-items: flex-start; }
+            .w-full.max-w-\[450px\] { margin-top: 10px; }
+            .text-center.mb-10 { margin-bottom: 1.1rem; }
+            .glass-container { border-radius: 1.3rem !important; }
+            .glass-container.rounded-\[2\.5rem\].p-8 { padding: 1rem !important; }
+            .glass-container h2 { font-size: 1rem; margin-bottom: 1rem !important; }
+            .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.8rem !important; }
+            #loginSubmitBtn { min-height: 44px; padding-top: 0.85rem !important; padding-bottom: 0.85rem !important; font-size: 0.78rem; }
+        }
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
@@ -92,6 +105,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
 </head>
 <body class="min-h-screen flex items-center justify-center p-6">
+
+    <div id="smartLoadingOverlay" class="smart-loading-overlay">
+        <div class="smart-loading-card">
+            <h3 class="smart-loading-title" id="smartLoadingTitle">Memproses...</h3>
+            <p class="smart-loading-subtitle">Mohon tunggu sebentar</p>
+            <div class="smart-loading-track"><div class="smart-loading-fill" id="smartLoadingFill"></div></div>
+            <div class="smart-loading-meta"><span id="smartLoadingPct">8</span>%</div>
+        </div>
+    </div>
 
     <!-- Background Decoration -->
     <div class="floating-bg w-96 h-96 bg-emerald-300 top-0 left-0"></div>
@@ -119,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <?php endif; ?>
 
-                <form action="login.php" method="POST" class="space-y-6">
+                <form action="login.php" method="POST" class="space-y-6" id="loginFormMain">
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1">Username</label>
                         <div class="relative">
@@ -148,9 +170,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <a href="#" class="text-emerald-600 font-bold hover:underline">Lupa Password?</a>
                     </div>
 
-                    <button type="submit" 
+                    <button type="submit" id="loginSubmitBtn"
                         class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-5 rounded-2xl shadow-xl shadow-emerald-200 transition-all active:scale-95 flex items-center justify-center gap-3">
-                        MASUK SEKARANG
+                        <span id="loginSubmitText">MASUK SEKARANG</span>
                         <i class="fas fa-arrow-right-long"></i>
                     </button>
                 </form>
@@ -169,6 +191,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             &copy; 2026 Si-SmaRT Digital System. All Rights Reserved.
         </p>
     </div>
+    <script>
+        let loadingTick;
+        function showPageLoading(title) {
+            const overlay = document.getElementById('smartLoadingOverlay');
+            const fill = document.getElementById('smartLoadingFill');
+            const pct = document.getElementById('smartLoadingPct');
+            const label = document.getElementById('smartLoadingTitle');
+            if (!overlay || !fill || !pct) return;
+            if (label && title) label.textContent = title;
+            let value = 8;
+            fill.style.width = value + '%';
+            pct.textContent = String(value);
+            overlay.classList.add('active');
+            clearInterval(loadingTick);
+            loadingTick = setInterval(() => {
+                value = Math.min(92, value + Math.max(1, Math.round((100 - value) / 12)));
+                fill.style.width = value + '%';
+                pct.textContent = String(value);
+            }, 160);
+        }
 
+        document.getElementById('loginFormMain')?.addEventListener('submit', function () {
+            const btn = document.getElementById('loginSubmitBtn');
+            const text = document.getElementById('loginSubmitText');
+            if (btn) btn.disabled = true;
+            if (text) text.textContent = 'MEMPROSES...';
+            showPageLoading('Memverifikasi akun...');
+        });
+    </script>
 </body>
 </html>

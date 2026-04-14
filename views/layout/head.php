@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="public/css/agenda.css?v=<?= $v ?>">
     <link rel="stylesheet" href="public/css/gallery.css?v=<?= $v ?>">
     <link rel="stylesheet" href="public/css/rekonsiliasi.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="public/css/mobile-ux.css?v=<?= $v ?>">
 
     <!-- FOUC Prevention untuk Tailwind CDN -->
     <style>

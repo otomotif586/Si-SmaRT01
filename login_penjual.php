@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Portal UMKM Warga</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="public/css/mobile-ux.css">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,600,700&display=swap');
 
@@ -227,10 +228,67 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             form { padding: 0 30px; }
             .mobile-switch { display: block; margin-top: 15px; font-size: 13px; color: #10b981; font-weight: bold; cursor: pointer; text-decoration: underline; }
         }
+
+        @media (max-width: 390px) {
+            body {
+                height: auto;
+                min-height: 100dvh;
+                overflow-y: auto;
+                justify-content: flex-start;
+                padding: 10px 0;
+            }
+            .close-btn {
+                top: 10px;
+                right: 10px;
+                width: 34px;
+                height: 34px;
+                font-size: 12px;
+            }
+            .container {
+                width: calc(100% - 12px);
+                max-width: none;
+                min-height: 620px;
+                border-radius: 14px;
+                margin-top: 40px;
+                margin-bottom: 10px;
+            }
+            form {
+                padding: 0 16px;
+            }
+            h1 {
+                font-size: 1.15rem;
+            }
+            span {
+                font-size: 11px;
+            }
+            input {
+                margin: 6px 0;
+                padding: 10px 10px;
+                font-size: 13px;
+            }
+            button {
+                width: 100%;
+                padding: 11px 14px;
+                font-size: 11px;
+                letter-spacing: 0.5px;
+            }
+            .mobile-switch {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
     <canvas id="canvas1"></canvas>
+
+    <div id="smartLoadingOverlay" class="smart-loading-overlay">
+        <div class="smart-loading-card">
+            <h3 class="smart-loading-title" id="smartLoadingTitle">Memproses...</h3>
+            <p class="smart-loading-subtitle">Menyiapkan akun Anda</p>
+            <div class="smart-loading-track"><div class="smart-loading-fill" id="smartLoadingFill"></div></div>
+            <div class="smart-loading-meta"><span id="smartLoadingPct">8</span>%</div>
+        </div>
+    </div>
     
     <a href="pasar.php" class="close-btn" title="Kembali ke Pasar"><i class="fas fa-times"></i></a>
 
@@ -238,7 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         <!-- SIGN UP FORM -->
         <div class="form-container sign-up-container">
-            <form action="login_penjual.php" method="POST">
+            <form action="login_penjual.php" method="POST" id="registerFormPenjual">
                 <input type="hidden" name="action" value="register">
                 <h1 style="font-size: 1.5rem; margin-bottom: 5px;">Buka Toko Baru</h1>
                 <span style="margin-bottom: 10px;">Daftarkan UMKM ke Pengurus RT</span>
@@ -252,14 +310,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="password" name="password" placeholder="Password" required style="padding: 10px 15px; margin: 0; font-size: 13px; flex: 1;" />
                     </div>
                 </div>
-                <button type="submit" style="margin-top: 15px;">Daftar Sekarang</button>
+                <button type="submit" style="margin-top: 15px;" id="btnSubmitRegister">Daftar Sekarang</button>
                 <span class="mobile-switch" id="mobileSignIn">Sudah Punya Akun? Login</span>
             </form>
         </div>
 
         <!-- SIGN IN FORM -->
         <div class="form-container sign-in-container">
-            <form action="login_penjual.php" method="POST">
+            <form action="login_penjual.php" method="POST" id="loginFormPenjual">
                 <input type="hidden" name="action" value="login">
                 <div style="font-size: 40px; color: #10b981; margin-bottom: 10px;"><i class="fas fa-store"></i></div>
                 <h1>Login UMKM</h1>
@@ -267,7 +325,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" name="username" placeholder="Username Toko" required />
                 <input type="password" name="password" placeholder="Password" required />
                 <a href="#">Lupa Password? Hubungi RT</a>
-                <button type="submit">Masuk Ruang Penjual</button>
+                <button type="submit" id="btnSubmitLogin">Masuk Ruang Penjual</button>
                 <span class="mobile-switch" id="mobileSignUp">Buka Toko Baru? Daftar</span>
             </form>
         </div>
@@ -303,6 +361,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if(mSignUp) mSignUp.addEventListener('click', () => { mainContainer.classList.add("right-panel-active"); });
         if(mSignIn) mSignIn.addEventListener('click', () => { mainContainer.classList.remove("right-panel-active"); });
 
+        let loadingTick;
+        function showPageLoading(title) {
+            const overlay = document.getElementById('smartLoadingOverlay');
+            const fill = document.getElementById('smartLoadingFill');
+            const pct = document.getElementById('smartLoadingPct');
+            const label = document.getElementById('smartLoadingTitle');
+            if (!overlay || !fill || !pct) return;
+            if (label && title) label.textContent = title;
+            let value = 8;
+            fill.style.width = value + '%';
+            pct.textContent = String(value);
+            overlay.classList.add('active');
+            clearInterval(loadingTick);
+            loadingTick = setInterval(() => {
+                value = Math.min(92, value + Math.max(1, Math.round((100 - value) / 11)));
+                fill.style.width = value + '%';
+                pct.textContent = String(value);
+            }, 160);
+        }
+
+        document.getElementById('loginFormPenjual')?.addEventListener('submit', () => {
+            const btn = document.getElementById('btnSubmitLogin');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Memproses...';
+            }
+            showPageLoading('Memverifikasi akun toko...');
+        });
+
+        document.getElementById('registerFormPenjual')?.addEventListener('submit', () => {
+            const btn = document.getElementById('btnSubmitRegister');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Mengirim...';
+            }
+            showPageLoading('Mengirim registrasi toko...');
+        });
+
         // --- Alert Logic dari PHP ---
         <?php if($alertMessage): ?>
             Swal.fire({
@@ -310,7 +406,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 title: '<?= $alertType == "success" ? "Berhasil!" : "Pemberitahuan" ?>',
                 text: '<?= $alertMessage ?>',
                 confirmButtonColor: '#10b981',
-                borderRadius: '1.5rem'
+                borderRadius: '1.5rem',
+                customClass: { popup: 'smart-modal' }
             });
         <?php endif; ?>
 
