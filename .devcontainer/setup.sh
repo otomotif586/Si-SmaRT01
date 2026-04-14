@@ -1,36 +1,29 @@
 #!/bin/bash
 set -e
 
-echo "=== Installing phpMyAdmin ==="
-
-# Install phpMyAdmin
+echo "=== Installing MySQL ==="
 sudo apt-get update -q
-sudo apt-get install -y phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+  mysql-server \
+  phpmyadmin \
+  php-mbstring \
+  php-zip \
+  php-gd \
+  php-json \
+  php-curl
 
-# Konfigurasi phpMyAdmin agar bisa diakses tanpa password root
-sudo bash -c 'cat > /etc/phpmyadmin/config-db.php <<EOF
-<?php
-\$dbuser="phpmyadmin";
-\$dbpass="";
-\$basepath="";
-\$dbname="phpmyadmin";
-\$dbserver="localhost";
-\$dbport="3306";
-\$dbtype="mysql";
-EOF'
+echo "=== Configuring MySQL ==="
+sudo service mysql start
 
-# Buat symlink agar phpMyAdmin bisa diakses via Apache
-sudo ln -sf /usr/share/phpmyadmin /var/www/html/phpmyadmin
+# Set root tanpa password
+sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY ''; FLUSH PRIVILEGES;" 2>/dev/null || true
 
-# Aktifkan modul Apache yang diperlukan
-sudo a2enmod mbstring rewrite
-sudo service apache2 restart
-
-# Atur Apache listen di port 8080
+echo "=== Configuring Apache ports ==="
+# Port 8080 untuk app utama
 sudo sed -i 's/Listen 80$/Listen 8080/' /etc/apache2/ports.conf
 sudo sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:8080>/' /etc/apache2/sites-enabled/000-default.conf
 
-# Buat virtual host phpMyAdmin di port 8081
+# Port 8081 untuk phpMyAdmin
 sudo bash -c 'cat > /etc/apache2/sites-available/phpmyadmin.conf <<EOF
 Listen 8081
 <VirtualHost *:8081>
@@ -44,13 +37,7 @@ Listen 8081
 EOF'
 
 sudo a2ensite phpmyadmin.conf
+sudo ln -sf /usr/share/phpmyadmin /var/www/html/phpmyadmin
 sudo service apache2 restart
 
-# Start MySQL
-sudo service mysql start
-
-# Set MySQL root tanpa password (untuk dev)
-sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY ''; FLUSH PRIVILEGES;" 2>/dev/null || true
-
-echo "=== Setup selesai! ==="
-echo "phpMyAdmin tersedia di port 8081"
+echo "=== Done! phpMyAdmin running on port 8081 ==="
