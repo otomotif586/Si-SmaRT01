@@ -1,0 +1,16 @@
+{
+  "name": "PHP + MySQL + phpMyAdmin",
+  "image": "mcr.microsoft.com/devcontainers/php:8.2",
+  "features": {
+    "ghcr.io/devcontainers/features/mysql:1": {
+      "version": "latest"
+    }
+  },
+  "forwardPorts": [8080, 8081],
+  "portsAttributes": {
+    "8080": { "label": "Apache/PHP", "onAutoForward": "notify" },
+    "8081": { "label": "phpMyAdmin", "onAutoForward": "notify" }
+  },
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "remoteUser": "vscode"
+}
