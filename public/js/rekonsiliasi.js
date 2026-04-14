@@ -107,5 +107,5 @@ function filterRekonsiliasi() {
 
 function exportRekonsiliasiCSV() {
     const tahun = document.getElementById('filter-tahun-rekonsiliasi').value;
-    window.location.href = `api/export_rekonsiliasi.php?tahun=${tahun}`;
+    window.location.href = `api/export_rekonsiliasi.php?tahun=${encodeURIComponent(tahun)}`;
 }

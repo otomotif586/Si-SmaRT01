@@ -276,7 +276,7 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
             currentPage = page;
             const offset = (page - 1) * itemsPerPage;
             try {
-                const resp = await fetch(`views/pages/get_produk.php?limit=${itemsPerPage}&offset=${offset}&penjual_nama=${encodeURIComponent(storeProfile.nama_toko)}`);
+                const resp = await fetch(`api/get_produk_pasar.php?limit=${itemsPerPage}&offset=${offset}&penjual_nama=${encodeURIComponent(storeProfile.nama_toko)}`);
                 const res = await resp.json();
                 if(res.status === 'success') {
                     allProducts = res.data;

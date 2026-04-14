@@ -303,7 +303,7 @@
     function loadPasarProduk() {
         const tbody = document.getElementById('pasar-produk-body');
         if(!tbody) return;
-        fetch('views/pages/get_produk.php').then(r=>r.json()).then(res => {
+        fetch('api/get_produk_pasar.php').then(r=>r.json()).then(res => {
             if(res.status === 'success') {
                 let html = '';
                 res.data.forEach(p => {
