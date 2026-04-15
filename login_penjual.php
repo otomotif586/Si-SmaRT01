@@ -18,12 +18,14 @@ try {
       `alamat` text,
       `username` varchar(100) NOT NULL,
       `password` varchar(255) NOT NULL,
+            `nik` varchar(16) DEFAULT NULL,
       `status` varchar(20) DEFAULT 'Aktif',
       `logo` varchar(255) DEFAULT NULL,
       `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
       `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       PRIMARY KEY (`id`),
-      UNIQUE KEY `uniq_pasar_penjual_username` (`username`)
+            UNIQUE KEY `uniq_pasar_penjual_username` (`username`),
+            UNIQUE KEY `uniq_pasar_penjual_nik` (`nik`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 } catch (Exception $e) {}
 
@@ -38,6 +40,15 @@ try {
 } catch (Exception $e) {
     try {
         $pdo->exec("ALTER TABLE pasar_penjual ADD COLUMN logo VARCHAR(255) NULL");
+    } catch (Exception $ignored) {}
+}
+
+// Auto-patch kolom NIK untuk login cepat tanpa password.
+try {
+    $pdo->query("SELECT nik FROM pasar_penjual LIMIT 1");
+} catch (Exception $e) {
+    try {
+        $pdo->exec("ALTER TABLE pasar_penjual ADD COLUMN nik VARCHAR(16) NULL");
     } catch (Exception $ignored) {}
 }
 
@@ -78,6 +89,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $alertMessage = "Mohon isi semua bidang.";
             $alertType = "error";
+        }
+
+    } elseif ($action === 'login_nik') {
+        $nik = preg_replace('/\D+/', '', ($_POST['nik'] ?? ''));
+
+        if (!preg_match('/^\d{16}$/', $nik)) {
+            $alertMessage = "NIK wajib 16 digit angka.";
+            $alertType = "error";
+        } else {
+            $stmtN = $pdo->prepare("SELECT * FROM pasar_penjual WHERE nik = ? LIMIT 1");
+            $stmtN->execute([$nik]);
+            $row = $stmtN->fetch(PDO::FETCH_ASSOC);
+
+            if (!$row) {
+                $alertMessage = "NIK belum terhubung ke akun penjual. Silakan daftar lewat Ruang Warga.";
+                $alertType = "warning";
+            } elseif ($row['status'] == 'Nonaktif') {
+                $alertMessage = "Akun toko Anda sedang dinonaktifkan oleh Admin.";
+                $alertType = "error";
+            } else {
+                $_SESSION['penjual_id'] = $row['id'];
+                $_SESSION['penjual_nama_toko'] = $row['nama_toko'];
+                header("Location: ruang_penjual.php");
+                exit();
+            }
         }
         
     } elseif ($action === 'register') {
@@ -356,6 +392,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <button type="submit" id="btnSubmitLogin">Masuk Ruang Penjual</button>
                 <span class="mobile-switch" id="mobileSignUp">Buka Toko Baru? Daftar</span>
             </form>
+
+            <form action="login_penjual.php" method="POST" id="nikLoginFormPenjual" style="padding: 0 50px; background: transparent; height: auto; position: absolute; left: 0; width: 100%; bottom: 34px; text-align: center;">
+                <input type="hidden" name="action" value="login_nik">
+                <div style="width:100%; border-top:1px dashed #d1d5db; padding-top:12px;">
+                    <input type="text" name="nik" placeholder="Masuk Cepat dengan NIK (16 digit)" maxlength="16" inputmode="numeric" pattern="[0-9]{16}" required style="margin: 0 0 8px 0;" />
+                    <button type="submit" id="btnSubmitNikLogin" style="width:100%;">Masuk Tanpa Password</button>
+                </div>
+            </form>
         </div>
 
         <!-- OVERLAY PANELS -->
@@ -425,6 +469,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 btn.textContent = 'Mengirim...';
             }
             showPageLoading('Mengirim registrasi toko...');
+        });
+
+        document.getElementById('nikLoginFormPenjual')?.addEventListener('submit', () => {
+            const btn = document.getElementById('btnSubmitNikLogin');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Memproses...';
+            }
+            showPageLoading('Memverifikasi NIK penjual...');
         });
 
         // --- Alert Logic dari PHP ---

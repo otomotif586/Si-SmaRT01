@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="public/css/components.css?v=<?= $v ?>">
     <link rel="stylesheet" href="public/css/workspace.css?v=<?= $v ?>">
     <link rel="stylesheet" href="public/css/warga.css?v=<?= $v ?>">
+    <link rel="stylesheet" href="public/css/ruang-warga.css?v=<?= $v ?>">
     <link rel="stylesheet" href="public/css/agenda.css?v=<?= $v ?>">
     <link rel="stylesheet" href="public/css/gallery.css?v=<?= $v ?>">
     <link rel="stylesheet" href="public/css/rekonsiliasi.css?v=<?= $v ?>">

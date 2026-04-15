@@ -35,7 +35,8 @@
 
             <div class="mobile-menu-actions">
                 <a href="pasar.php" class="startup-ghost-btn w-full text-center">Pasar Warga</a>
-                <a href="app.php" class="startup-primary-btn w-full text-center">Masuk Dashboard</a>
+                <a href="ruang_warga.php" class="startup-ghost-btn w-full text-center">Ruang Warga</a>
+                <a href="app.php" class="startup-primary-btn w-full text-center">Si-Smart</a>
             </div>
         </div>
     </div>

@@ -21,6 +21,10 @@
             <i data-lucide="layout-grid"></i>
             <span>Workspace</span>
         </button>
+        <button onclick="showPage('ruang-warga')" id="nav-ruang-warga" title="Ruang Warga">
+            <i data-lucide="user-round"></i>
+            <span>Ruang Warga</span>
+        </button>
         
         <!-- Grup Warga & Laporan Warga -->
         <button onclick="toggleSubmenu('submenu-warga')" id="nav-group-warga" class="nav-group-toggle" title="Menu Warga">

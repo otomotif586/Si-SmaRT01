@@ -34,11 +34,12 @@
 
                 <div class="hidden lg:flex items-center gap-2">
                     <a href="pasar.php" class="startup-ghost-btn">Pasar Warga</a>
-                    <a href="app.php" class="startup-primary-btn">Masuk Dashboard</a>
+                    <a href="ruang_warga.php" class="startup-ghost-btn">Ruang Warga</a>
+                    <a href="app.php" class="startup-primary-btn">Si-Smart</a>
                 </div>
 
                 <div class="lg:hidden flex items-center gap-2">
-                    <a href="app.php" class="startup-mobile-quick">Masuk</a>
+                    <a href="ruang_warga.php" class="startup-mobile-quick">Warga</a>
                     <button id="menu-btn" class="startup-menu-btn" aria-label="Buka menu navigasi">
                         <i class="fas fa-bars-staggered"></i>
                     </button>

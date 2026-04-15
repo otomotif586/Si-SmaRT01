@@ -146,7 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Mengembalikan pengguna ke halaman terakhir setelah reload
-    const activePage = localStorage.getItem('activePage') || 'dashboard';
+    const preferredDefaultPage = (window.currentUserRole === 'warga') ? 'ruang-warga' : 'dashboard';
+    const activePage = localStorage.getItem('activePage') || preferredDefaultPage;
     setTimeout(() => showPage(activePage), 50); // Sedikit delay agar DOM siap
     if (typeof loadAllBloks === 'function') loadAllBloks();
 });
@@ -215,6 +216,7 @@ function showPage(pageId) {
     const titles = {
         'dashboard': ['Beranda', 'Ringkasan data warga'],
         'global-warga': ['Data Warga', 'Direktori seluruh warga'],
+        'ruang-warga': ['Ruang Warga', 'Profil, iuran, pengaduan, dan update informasi'],
         'laporan-iuran-blok': ['Iuran Blok', 'Laporan iuran per blok'],
         'warga': ['Workspace', 'Kelola data & workspace'],
         'keuangan': ['Buku Kas', 'Transparansi kas RT'],
@@ -239,6 +241,8 @@ function showPage(pageId) {
 
     if (pageId === 'global-warga') {
         if (typeof loadGlobalWarga === 'function') loadGlobalWarga();
+    } else if (pageId === 'ruang-warga') {
+        if (typeof initRuangWarga === 'function') initRuangWarga();
     } else if (pageId === 'laporan-iuran-blok') {
         initLaporanIuranBlok();
     } else if (pageId === 'rekonsiliasi') {

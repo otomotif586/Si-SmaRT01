@@ -3,6 +3,7 @@
 <script src="public/js/dashboard.js?v=<?= time() ?>"></script>
 <script src="public/js/workspace.js?v=<?= time() ?>"></script>
 <script src="public/js/warga.js?v=<?= time() ?>"></script>
+<script src="public/js/ruang-warga.js?v=<?= time() ?>"></script>
 <script src="public/js/global-warga.js?v=<?= time() ?>"></script>
 <script src="public/js/keuangan.js?v=<?= time() ?>"></script>
 <script src="public/js/agenda.js?v=<?= time() ?>"></script>
