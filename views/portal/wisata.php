@@ -4,9 +4,9 @@
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-emerald-950 tracking-tight">Destinasi Wisata Alam Sekitar</h2>
             <p class="text-emerald-900/40 mt-4 font-medium italic underline decoration-emerald-200 decoration-4 underline-offset-4 tracking-tight">Rekreasi alam yang menyejukkan jiwa.</p>
         </div>
-        <div class="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        <div id="wisata-grid" class="container mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             <?php for($i=1; $i<=2; $i++): ?>
-            <div class="group relative h-[400px] md:h-[500px] overflow-hidden rounded-[3rem] md:rounded-[4rem] reveal shadow-2xl">
+            <div class="group relative h-[400px] md:h-[500px] overflow-hidden rounded-[3rem] md:rounded-[4rem] reveal shadow-2xl wisata-item paginate-item">
                 <img src="<?= $wisata[$i]['image'] ?>" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-1000 opacity-60" alt="<?= htmlspecialchars($wisata[$i]['title']) ?>" loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-emerald-950/10 to-transparent"></div>
                 <div class="absolute bottom-12 left-12 text-white text-left">
@@ -17,4 +17,5 @@
             </div>
             <?php endfor; ?>
         </div>
+        <div id="wisata-pagination" class="portal-pagination hidden reveal" aria-label="Pagination Destinasi Wisata"></div>
     </section>

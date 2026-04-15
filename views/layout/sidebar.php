@@ -97,4 +97,11 @@
             </button>
         </div>
     </nav>
+
+    <div class="sidebar-footer-link" style="margin-top:auto; padding: 12px 14px 16px;">
+        <a href="index.php" title="Buka Portal Warga" style="display:flex; align-items:center; gap:10px; width:100%; padding:12px 14px; border-radius:12px; background:rgba(16,185,129,0.1); color:#065f46; font-weight:700; text-decoration:none; border:1px solid rgba(16,185,129,0.2);">
+            <i data-lucide="globe"></i>
+            <span>Buka Portal</span>
+        </a>
+    </div>
 </aside>

@@ -20,19 +20,29 @@ if (menuBtn && closeBtn && overlay) {
     menuBtn.addEventListener('click', () => {
         overlay.classList.remove('hidden');
         setTimeout(() => overlay.classList.add('open'), 10);
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('mobile-menu-open');
     });
 
     const closeMenu = () => {
         overlay.classList.remove('open');
         setTimeout(() => {
             overlay.classList.add('hidden');
-            document.body.style.overflow = 'auto';
+            document.body.classList.remove('mobile-menu-open');
         }, 600);
     };
 
     closeBtn.addEventListener('click', closeMenu);
     links.forEach(link => link.addEventListener('click', closeMenu));
+
+    overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) closeMenu();
+    });
+
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && overlay.classList.contains('open')) {
+            closeMenu();
+        }
+    });
 }
 
 // Smooth Reveal Intersection Observer
@@ -45,6 +55,129 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Portal Section Pagination (responsive: desktop/tablet/mobile)
+function initSectionPagination(config) {
+    const section = document.querySelector(config.sectionSelector);
+    if (!section) return;
+
+    const grid = section.querySelector(config.gridSelector);
+    const controls = section.querySelector(config.controlsSelector);
+    const items = Array.from(section.querySelectorAll(config.itemSelector));
+
+    if (!grid || !controls || items.length === 0) return;
+
+    let currentPage = 1;
+
+    const getPerPage = () => {
+        if (window.innerWidth <= 640) return config.perPageMobile ?? config.perPageDesktop;
+        if (window.innerWidth <= 1024) return config.perPageTablet ?? config.perPageDesktop;
+        return config.perPageDesktop;
+    };
+
+    const buildPageRange = (totalPages, activePage) => {
+        if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
+        let start = Math.max(1, activePage - 2);
+        const end = Math.min(totalPages, start + 4);
+        start = Math.max(1, end - 4);
+        return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    };
+
+    const renderControls = (totalPages) => {
+        const pages = buildPageRange(totalPages, currentPage);
+        let html = `<button type="button" class="portal-page-btn portal-page-nav" data-action="prev" ${currentPage === 1 ? 'disabled' : ''} aria-label="Halaman sebelumnya">Prev</button>`;
+
+        pages.forEach((pageNumber) => {
+            html += `<button type="button" class="portal-page-btn ${pageNumber === currentPage ? 'is-active' : ''}" data-page="${pageNumber}" aria-label="Halaman ${pageNumber}">${pageNumber}</button>`;
+        });
+
+        html += `<button type="button" class="portal-page-btn portal-page-nav" data-action="next" ${currentPage === totalPages ? 'disabled' : ''} aria-label="Halaman berikutnya">Next</button>`;
+        html += `<span class="portal-page-status">Halaman ${currentPage}/${totalPages}</span>`;
+
+        controls.innerHTML = html;
+    };
+
+    const render = () => {
+        const perPage = Math.max(1, getPerPage());
+        const totalPages = Math.max(1, Math.ceil(items.length / perPage));
+
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const start = (currentPage - 1) * perPage;
+        const end = start + perPage;
+
+        items.forEach((item, idx) => {
+            item.style.display = idx >= start && idx < end ? '' : 'none';
+        });
+
+        if (totalPages <= 1) {
+            controls.classList.add('hidden');
+            controls.innerHTML = '';
+            return;
+        }
+
+        controls.classList.remove('hidden');
+        renderControls(totalPages);
+    };
+
+    controls.addEventListener('click', (event) => {
+        const button = event.target.closest('button');
+        if (!button) return;
+
+        const page = Number(button.dataset.page || 0);
+        const action = button.dataset.action;
+        const perPage = Math.max(1, getPerPage());
+        const totalPages = Math.max(1, Math.ceil(items.length / perPage));
+
+        if (page > 0) {
+            currentPage = page;
+        } else if (action === 'prev') {
+            currentPage = Math.max(1, currentPage - 1);
+        } else if (action === 'next') {
+            currentPage = Math.min(totalPages, currentPage + 1);
+        }
+
+        render();
+    });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(render, 140);
+    });
+
+    render();
+}
+
+initSectionPagination({
+    sectionSelector: '#berita',
+    gridSelector: '#berita-grid',
+    controlsSelector: '#berita-pagination',
+    itemSelector: '.berita-item',
+    perPageDesktop: 6,
+    perPageTablet: 4,
+    perPageMobile: 3
+});
+
+initSectionPagination({
+    sectionSelector: '#info_penting',
+    gridSelector: '#info-grid',
+    controlsSelector: '#info-pagination',
+    itemSelector: '.info-item',
+    perPageDesktop: 4,
+    perPageTablet: 4,
+    perPageMobile: 2
+});
+
+initSectionPagination({
+    sectionSelector: '#wisata',
+    gridSelector: '#wisata-grid',
+    controlsSelector: '#wisata-pagination',
+    itemSelector: '.wisata-item',
+    perPageDesktop: 2,
+    perPageTablet: 2,
+    perPageMobile: 1
+});
 
 // --- PARALLAX SLIDER JS ---
 (function () {

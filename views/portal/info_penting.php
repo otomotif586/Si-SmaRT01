@@ -11,13 +11,13 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <div id="info-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                 <?php for($i=1; $i<=4; $i++): 
                     $icon = $settingsData["web_info_item_{$i}_icon"] ?? 'fa-info-circle';
                     $title = $settingsData["web_info_item_{$i}_title"] ?? 'Informasi';
                     $desc = $settingsData["web_info_item_{$i}_desc"] ?? 'Deskripsi informasi penting.';
                 ?>
-                <div class="glass p-10 rounded-[3.5rem] card-glow reveal flex flex-col items-center text-center group transition-all duration-500 hover:-translate-y-2">
+                <div class="glass p-10 rounded-[3.5rem] card-glow reveal flex flex-col items-center text-center group transition-all duration-500 hover:-translate-y-2 info-item paginate-item">
                     <div class="w-20 h-20 rounded-3xl bg-white shadow-xl flex items-center justify-center text-emerald-600 mb-8 text-3xl transition-transform group-hover:scale-110">
                         <i class="fas <?= htmlspecialchars($icon) ?>"></i>
                     </div>
@@ -26,5 +26,6 @@
                 </div>
                 <?php endfor; ?>
             </div>
+            <div id="info-pagination" class="portal-pagination hidden reveal" aria-label="Pagination Pantau Informasi"></div>
         </div>
     </section>

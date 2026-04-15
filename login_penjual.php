@@ -8,10 +8,38 @@ if (isset($_SESSION['penjual_id'])) {
     exit();
 }
 
+// Auto-init tabel penjual agar halaman login/register tidak gagal di DB baru.
+try {
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `pasar_penjual` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `nama_toko` varchar(255) NOT NULL,
+      `nama_pemilik` varchar(255) DEFAULT NULL,
+      `no_wa` varchar(20) DEFAULT NULL,
+      `alamat` text,
+      `username` varchar(100) NOT NULL,
+      `password` varchar(255) NOT NULL,
+      `status` varchar(20) DEFAULT 'Aktif',
+      `logo` varchar(255) DEFAULT NULL,
+      `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+      `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `uniq_pasar_penjual_username` (`username`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+} catch (Exception $e) {}
+
 // Auto-patch kolom status agar bisa menampung nilai 'Pending' (jika sebelumnya ENUM)
 try {
     $pdo->exec("ALTER TABLE pasar_penjual MODIFY COLUMN status VARCHAR(20) DEFAULT 'Aktif'");
 } catch (Exception $e) {}
+
+// Auto-patch kolom logo untuk kompatibilitas API lama.
+try {
+    $pdo->query("SELECT logo FROM pasar_penjual LIMIT 1");
+} catch (Exception $e) {
+    try {
+        $pdo->exec("ALTER TABLE pasar_penjual ADD COLUMN logo VARCHAR(255) NULL");
+    } catch (Exception $ignored) {}
+}
 
 $alertMessage = "";
 $alertType = "";

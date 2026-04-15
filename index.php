@@ -19,7 +19,7 @@ $web_transparansi_deskripsi = $settingsData['web_transparansi_deskripsi'] ?? 'La
 $web_transparansi_file = $settingsData['web_transparansi_file'] ?? '';
 
 // Ambil data blog
-$query_blogs = "SELECT * FROM web_blogs ORDER BY created_at DESC LIMIT 6";
+$query_blogs = "SELECT * FROM web_blogs ORDER BY created_at DESC LIMIT 18";
 $blogs = mysqli_query($conn, $query_blogs);
 
 // Ambil data Laporan Keamanan / Terbaru (Fallback jika tabel belum sesuai)
@@ -104,7 +104,7 @@ $background_image_url = $settingsData['web_hero_image_1'] ?? 'https://images.uns
     <?php if($web_favicon): ?><link rel="icon" href="<?= $web_favicon ?>"><?php endif; ?>
 
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Tailwind CSS -->

@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Si-SmaRT | Modern Portal Warga</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="public/css/mobile-ux.css">
     <style>
@@ -52,12 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         html.js-loaded { visibility: visible; opacity: 1; }
 
         body {
-            font-family: 'Plus+Jakarta+Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background: #f8fafc;
             overflow-x: hidden;
             overflow-y: auto;
         }
-        .font-space { font-family: 'Space Grotesk', sans-serif; }
+        .font-space { font-family: 'Plus Jakarta Sans', sans-serif; }
         
         .glass-container {
             background: rgba(255, 255, 255, 0.7);
@@ -88,15 +88,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.2);
         }
 
-        @media (max-width: 390px) {
-            body { padding: 10px; align-items: flex-start; }
-            .w-full.max-w-\[450px\] { margin-top: 10px; }
-            .text-center.mb-10 { margin-bottom: 1.1rem; }
-            .glass-container { border-radius: 1.3rem !important; }
-            .glass-container.rounded-\[2\.5rem\].p-8 { padding: 1rem !important; }
+        @media (max-width: 768px) {
+            body { padding: 14px; align-items: flex-start; }
+            .w-full.max-w-\[450px\] { max-width: 380px; margin-top: 6px; }
+            .text-center.mb-10 { margin-bottom: 1rem; }
+            .text-center.mb-10 .w-20.h-20 { width: 62px !important; height: 62px !important; border-radius: 1rem !important; margin-bottom: 0.9rem !important; }
+            .text-center.mb-10 h1 { font-size: 1.65rem !important; }
+            .text-center.mb-10 p { font-size: 0.8rem !important; margin-top: 0.3rem !important; }
+            .glass-container.rounded-\[2\.5rem\].p-8 { border-radius: 1.4rem !important; padding: 1rem !important; }
             .glass-container h2 { font-size: 1rem; margin-bottom: 1rem !important; }
-            .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.8rem !important; }
-            #loginSubmitBtn { min-height: 44px; padding-top: 0.85rem !important; padding-bottom: 0.85rem !important; font-size: 0.78rem; }
+            .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem !important; }
+            #loginFormMain label { margin-bottom: 0.45rem !important; font-size: 0.63rem !important; }
+            #loginFormMain input[type='text'],
+            #loginFormMain input[type='password'] { min-height: 42px; padding-top: 0.7rem !important; padding-bottom: 0.7rem !important; font-size: 0.9rem; border-radius: 0.9rem !important; }
+            #loginFormMain .text-sm { font-size: 0.72rem !important; }
+            #loginSubmitBtn { min-height: 42px; padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; font-size: 0.75rem !important; border-radius: 0.9rem !important; }
+            .mt-10.text-center { margin-top: 1rem !important; }
+            .mt-10.text-center p { font-size: 0.76rem !important; }
+            .text-center.text-slate-400.text-\[10px\].mt-12 { margin-top: 1rem !important; font-size: 0.58rem !important; letter-spacing: 0.16em !important; }
+        }
+
+        @media (max-width: 390px) {
+            body { padding: 10px; }
+            .w-full.max-w-\[450px\] { max-width: 350px; }
+            .glass-container { border-radius: 1.3rem !important; }
+            .text-center.mb-10 .w-20.h-20 { width: 56px !important; height: 56px !important; }
+            .text-center.mb-10 h1 { font-size: 1.5rem !important; }
         }
     </style>
     <script>
@@ -169,6 +186,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </label>
                         <a href="#" class="text-emerald-600 font-bold hover:underline">Lupa Password?</a>
                     </div>
+
+                    <a href="index.php" class="w-full block text-center border border-emerald-200 text-emerald-700 font-semibold py-3 rounded-2xl hover:bg-emerald-50 transition-all text-sm">
+                        Lihat Portal Warga
+                    </a>
 
                     <button type="submit" id="loginSubmitBtn"
                         class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-5 rounded-2xl shadow-xl shadow-emerald-200 transition-all active:scale-95 flex items-center justify-center gap-3">

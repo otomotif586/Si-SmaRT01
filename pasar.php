@@ -26,6 +26,36 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS `pasar_profil` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 
+$pdo->exec("CREATE TABLE IF NOT EXISTS `pasar_slider` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `title` varchar(255) DEFAULT NULL,
+    `subtitle` text,
+    `badge_text` varchar(100) DEFAULT 'Promo',
+    `badge_icon` varchar(50) DEFAULT 'fa-fire',
+    `theme_color` varchar(50) DEFAULT 'emerald',
+    `urutan` int(11) NOT NULL DEFAULT 1,
+    `image` text,
+    `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+$ensureColumn = function (string $table, string $column, string $definition) use ($pdo): void {
+        $stmt = $pdo->prepare("SHOW COLUMNS FROM `$table` LIKE ?");
+        $stmt->execute([$column]);
+        if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                $pdo->exec("ALTER TABLE `$table` ADD COLUMN `$column` $definition");
+        }
+};
+
+// Sinkronkan kolom inti agar query CMS slider tidak gagal walau skema lama.
+$ensureColumn('pasar_slider', 'title', "varchar(255) DEFAULT NULL");
+$ensureColumn('pasar_slider', 'subtitle', "text");
+$ensureColumn('pasar_slider', 'badge_text', "varchar(100) DEFAULT 'Promo'");
+$ensureColumn('pasar_slider', 'badge_icon', "varchar(50) DEFAULT 'fa-fire'");
+$ensureColumn('pasar_slider', 'theme_color', "varchar(50) DEFAULT 'emerald'");
+$ensureColumn('pasar_slider', 'urutan', "int(11) NOT NULL DEFAULT 1");
+$ensureColumn('pasar_slider', 'image', "text");
+
 // Ambil data produk
 $search = $_GET['q'] ?? '';
 $kategori = $_GET['kategori'] ?? '';
@@ -68,8 +98,14 @@ $stmt->execute($params);
 $produk = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Ambil data Slider Promosi dari Database
-$stmtSlider = $pdo->query("SELECT * FROM pasar_slider ORDER BY urutan ASC");
-$sliders = $stmtSlider->fetchAll(PDO::FETCH_ASSOC);
+$sliders = [];
+try {
+    $stmtSlider = $pdo->query("SELECT * FROM pasar_slider ORDER BY urutan ASC");
+    $sliders = $stmtSlider->fetchAll(PDO::FETCH_ASSOC);
+} catch (Throwable $e) {
+    // Fallback agar halaman pasar tetap berjalan walaupun skema slider belum sinkron.
+    $sliders = [];
+}
 
 // Ambil setting untuk info RT
 $stmtSet = $pdo->query("SELECT setting_key, setting_value FROM web_settings");

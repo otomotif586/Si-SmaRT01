@@ -1,7 +1,7 @@
 <?php
 // Konfigurasi Database
 $host = 'localhost';
-$dbname = 'smart_b';
+$dbname = 'smart_c';
 $username = 'root'; // Default XAMPP username
 $password = '';     // Default XAMPP password (kosong)
 
@@ -25,18 +25,12 @@ try {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )");
 
-    // Create or Reset default admin
-    $defaultPassword = password_hash('admin', PASSWORD_DEFAULT);
-    $stmt = $pdo->prepare("SELECT id FROM web_users WHERE username = 'admin'");
-    $stmt->execute();
-    $admin = $stmt->fetch();
-
-    if (!$admin) {
+    // Seed default admin hanya sekali saat tabel user masih kosong.
+    // Jangan reset otomatis agar perubahan Master User (username/password) tetap tersimpan.
+    $totalUsers = (int) $pdo->query("SELECT COUNT(*) FROM web_users")->fetchColumn();
+    if ($totalUsers === 0) {
+        $defaultPassword = password_hash('admin', PASSWORD_DEFAULT);
         $stmt = $pdo->prepare("INSERT INTO web_users (username, password, nama_lengkap, role) VALUES ('admin', ?, 'Administrator', 'admin')");
-        $stmt->execute([$defaultPassword]);
-    } else {
-        // Force reset password to 'admin' just in case the manual SQL used a dummy hash
-        $stmt = $pdo->prepare("UPDATE web_users SET password = ? WHERE username = 'admin'");
         $stmt->execute([$defaultPassword]);
     }
 
