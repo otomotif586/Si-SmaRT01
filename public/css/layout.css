@@ -167,6 +167,25 @@
     /* Teks menu aktif lebih tebal */
 }
 
+.sidebar-footer-link {
+    display: block;
+}
+
+.sidebar-footer-link a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(16,185,129,0.1);
+    color: #065f46;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid rgba(16,185,129,0.2);
+    box-shadow: 0 14px 30px -24px rgba(16, 185, 129, 0.6);
+}
+
 /* Submenu Styles for Mobile (Bottom Nav) */
 #sidebar .sidebar-nav .submenu-items {
     display: none;
@@ -623,6 +642,27 @@
 
     #sidebar.collapsed .sidebar-nav .submenu-items.active {
         padding-left: 0;
+    }
+
+    .sidebar-footer-link {
+        position: fixed;
+        left: 50%;
+        bottom: calc(65px + env(safe-area-inset-bottom) + 10px);
+        transform: translateX(-50%);
+        z-index: 1055;
+        width: min(220px, calc(100vw - 24px));
+        padding: 0 !important;
+        margin-top: 0 !important;
+        pointer-events: auto;
+    }
+
+    .sidebar-footer-link a {
+        justify-content: center;
+        padding: 11px 14px;
+        border-radius: 14px;
+        font-size: 0.78rem;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
     }
 
     #main-content {

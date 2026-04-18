@@ -1,5 +1,5 @@
     <!-- SEKSI BERITA & WARTA -->
-    <section id="berita" class="py-16 md:py-24 lg:py-32 bg-white/40 backdrop-blur-sm border-b border-white/50 relative overflow-hidden">
+    <section id="berita" class="py-16 md:py-24 lg:py-32 bg-white/40 backdrop-blur-sm border-b border-white/50 relative overflow-hidden" data-parallax-section data-parallax-speed="0.035">
         <div class="container mx-auto px-6 md:px-12">
             <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6 reveal">
                 <div>
@@ -25,11 +25,11 @@
                     ?>
                     <div class="flex justify-center berita-item paginate-item">
                         <div class="card <?= $is_dark ? 'dark' : '' ?>">
-                            <div class="card-media-wrapper">
+                            <div class="card-media-wrapper parallax-media-shell" data-parallax-media-speed="0.12">
                                 <?php if($video_url): ?>
-                                    <video src="<?= htmlspecialchars($video_url) ?>" autoplay muted loop class="absolute inset-0 w-full h-full object-cover"></video>
+                                    <video src="<?= htmlspecialchars($video_url) ?>" autoplay muted loop class="absolute inset-0 w-full h-full object-cover" data-parallax-media-speed="0.1"></video>
                                 <?php else: ?>
-                                    <img src="<?= htmlspecialchars($thumb) ?>" alt="<?= htmlspecialchars($judul) ?>" class="w-full h-full object-cover">
+                                    <img src="<?= htmlspecialchars($thumb) ?>" alt="<?= htmlspecialchars($judul) ?>" class="w-full h-full object-cover" data-parallax-media-speed="0.14">
                                 <?php endif; ?>
                                 
                                 <div class="card-title-overlay">
@@ -43,9 +43,18 @@
 
                             <section>
                                 <p class="line-clamp-3"><?= strip_tags($konten) ?></p>
-                                <div>
+                                <div class="mt-4 flex items-center justify-between gap-4 pr-2 sm:pr-3">
                                     <span class="tag"><?= htmlspecialchars($tanggal_label) ?></span>
-                                    <button onclick="openBlogModal('<?= htmlspecialchars(addslashes($judul)) ?>', '<?= htmlspecialchars(addslashes(str_replace(["\r", "\n"], '', $konten))) ?>', '<?= htmlspecialchars(addslashes($tanggal_label)) ?>', '<?= htmlspecialchars(addslashes($thumb)) ?>', '<?= htmlspecialchars(addslashes($video_url)) ?>', '<?= htmlspecialchars(addslashes($youtube_url)) ?>')">Baca</button>
+                                    <button
+                                        type="button"
+                                        class="shrink-0 js-open-blog-modal"
+                                        data-title="<?= htmlspecialchars($judul, ENT_QUOTES) ?>"
+                                        data-content="<?= htmlspecialchars(str_replace(["\r", "\n"], '', $konten), ENT_QUOTES) ?>"
+                                        data-date="<?= htmlspecialchars($tanggal_label, ENT_QUOTES) ?>"
+                                        data-thumb="<?= htmlspecialchars($thumb, ENT_QUOTES) ?>"
+                                        data-video="<?= htmlspecialchars($video_url, ENT_QUOTES) ?>"
+                                        data-youtube="<?= htmlspecialchars($youtube_url, ENT_QUOTES) ?>"
+                                    >Baca</button>
                                 </div>
                             </section>
                         </div>

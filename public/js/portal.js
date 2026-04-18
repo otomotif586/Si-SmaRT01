@@ -1,6 +1,8 @@
 // Navbar Scroll Logic
 window.addEventListener('scroll', function () {
     const nav = document.getElementById('navbar');
+    if (!nav) return;
+
     if (window.scrollY > 80) {
         nav.classList.add('glass-nav', 'py-4', 'shadow-2xl');
         nav.classList.remove('py-8');
@@ -46,15 +48,19 @@ if (menuBtn && closeBtn && overlay) {
 }
 
 // Smooth Reveal Intersection Observer
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-        }
-    });
-}, { threshold: 0.15 });
+if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.15 });
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+} else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+}
 
 // Portal Section Pagination (responsive: desktop/tablet/mobile)
 function initSectionPagination(config) {
@@ -179,7 +185,45 @@ initSectionPagination({
     perPageMobile: 1
 });
 
+function initPortalParallax() {
+    const lightweightParallax = Array.from(document.querySelectorAll('[data-parallax-speed][data-parallax-mode="scroll"]'));
+    const network = document.getElementById('portal-image-network');
+
+    if (network) network.remove();
+
+    if (!lightweightParallax.length) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth <= 1024) return;
+
+    let rafId = 0;
+    let lastY = -1;
+
+    const update = () => {
+        rafId = 0;
+        const y = window.scrollY || 0;
+        if (Math.abs(y - lastY) < 2) return;
+        lastY = y;
+
+        for (const element of lightweightParallax) {
+            const speed = Number(element.dataset.parallaxSpeed || 0);
+            element.style.setProperty('--parallax-y', `${(y * speed).toFixed(2)}px`);
+            element.style.setProperty('--parallax-scale', '1');
+        }
+    };
+
+    const schedule = () => {
+        if (rafId) return;
+        rafId = window.requestAnimationFrame(update);
+    };
+
+    schedule();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+}
+
+initPortalParallax();
+
 // --- PARALLAX SLIDER JS ---
+try {
 (function () {
     const wrap = (n, max) => (n + max) % max;
     const lerp = (a, b, t) => a + (b - a) * t;
@@ -363,51 +407,164 @@ initSectionPagination({
 
     initSlider();
 })();
+} catch (e) {
+    // Prevent slider failures from breaking the Blog modal.
+}
 
 // --- BLOG MODAL JS ---
+const blogModalState = {
+    closeTimer: null
+};
+
+function getYoutubeId(url) {
+    if (!url) return '';
+
+    try {
+        const parsed = new URL(url, window.location.href);
+        const host = parsed.hostname.replace(/^www\./, '');
+
+        if (host.includes('youtu.be')) {
+            return parsed.pathname.split('/').filter(Boolean)[0] || '';
+        }
+
+        if (host.includes('youtube.com')) {
+            return parsed.searchParams.get('v') || parsed.pathname.split('/').pop() || '';
+        }
+    } catch (error) {
+        const directMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|shorts\/|watch\?v=))([A-Za-z0-9_-]{6,})/);
+        if (directMatch) return directMatch[1];
+
+        const queryMatch = url.match(/[?&]v=([A-Za-z0-9_-]{6,})/);
+        if (queryMatch) return queryMatch[1];
+    }
+
+    return '';
+}
+
+function resetBlogModalContent(modal) {
+    const media = modal.querySelector('#blog-modal-media');
+    if (media) media.innerHTML = '';
+
+    const content = modal.querySelector('#blog-modal-content');
+    if (content) content.innerHTML = '';
+}
+
+function buildBlogModalMedia(modal, thumb, video, youtube) {
+    const media = modal.querySelector('#blog-modal-media');
+    if (!media) return;
+
+    let mediaMarkup = '';
+
+    const youtubeId = getYoutubeId(youtube);
+    if (youtubeId) {
+        mediaMarkup = `
+            <div class="blog-modal__frame">
+                <iframe src="https://www.youtube.com/embed/${youtubeId}" title="Video berita" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+        `;
+    } else if (video) {
+        mediaMarkup = `
+            <div class="blog-modal__frame">
+                <video src="${video}" controls playsinline preload="metadata"></video>
+            </div>
+        `;
+    } else if (thumb) {
+        mediaMarkup = `
+            <div class="blog-modal__frame">
+                <img src="${thumb}" alt="Gambar berita">
+            </div>
+        `;
+    }
+
+    media.innerHTML = mediaMarkup;
+}
+
 function openBlogModal(title, content, date, thumb, video, youtube) {
     const modal = document.getElementById('blog-modal');
     if (!modal) return;
-    const body = modal.querySelector('.modal-body');
 
-    let mediaHtml = '';
-    if (youtube) {
-        const vidId = youtube.split('v=')[1]?.split('&')[0] || youtube.split('/').pop();
-        mediaHtml = `<div class="aspect-video w-full rounded-[2rem] overflow-hidden mb-8 shadow-2xl">
-            <iframe class="w-full h-full" src="https://www.youtube.com/embed/${vidId}" frameborder="0" allowfullscreen></iframe>
-        </div>`;
-    } else if (video) {
-        mediaHtml = `<video src="${video}" controls class="w-full rounded-[2rem] mb-8 shadow-2xl"></video>`;
-    } else {
-        mediaHtml = `<img src="${thumb}" class="w-full h-auto rounded-[2rem] mb-8 shadow-2xl object-cover max-h-[500px]">`;
+    const titleElement = modal.querySelector('#blog-modal-title');
+    const dateElement = modal.querySelector('#blog-modal-date');
+    const contentElement = modal.querySelector('#blog-modal-content');
+    const scrollBody = modal.querySelector('.modal-scroll');
+
+    if (!titleElement || !dateElement || !contentElement || !scrollBody) return;
+
+    if (blogModalState.closeTimer) {
+        clearTimeout(blogModalState.closeTimer);
+        blogModalState.closeTimer = null;
     }
 
-    body.innerHTML = `
-        <div class="px-6 py-12 md:px-16 md:py-20">
-            <div class="flex items-center space-x-4 mb-4">
-                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600 px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100">Warta Warga</span>
-                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">${date}</span>
-            </div>
-            <h1 class="text-3xl md:text-5xl font-extrabold text-emerald-950 mb-10 leading-tight">${title}</h1>
-            ${mediaHtml}
-            <div class="blog-content-area text-gray-600 text-lg leading-relaxed space-y-6 prose prose-emerald max-w-none">
-                ${content}
-            </div>
-        </div>
-    `;
+    resetBlogModalContent(modal);
 
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
+    titleElement.textContent = title || 'Berita Warga';
+    dateElement.textContent = date || '-';
+    buildBlogModalMedia(modal, thumb, video, youtube);
+    contentElement.innerHTML = content || '<p>Konten berita belum tersedia.</p>';
+
+    modal.dataset.state = 'open';
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('blog-modal-open');
+    scrollBody.scrollTop = 0;
+
+    const closeButton = modal.querySelector('.blog-modal__close');
+    if (closeButton && typeof closeButton.focus === 'function') {
+        window.setTimeout(() => {
+            closeButton.focus({ preventScroll: true });
+        }, 0);
+    }
 }
 
 function closeBlogModal() {
     const modal = document.getElementById('blog-modal');
     if (!modal) return;
-    modal.classList.add('hidden');
-    document.body.style.overflow = 'auto';
-    // Clear content to stop video
-    setTimeout(() => { modal.querySelector('.modal-body').innerHTML = ''; }, 400);
+
+    modal.dataset.state = 'closed';
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('blog-modal-open');
+
+    if (blogModalState.closeTimer) {
+        clearTimeout(blogModalState.closeTimer);
+    }
+
+    blogModalState.closeTimer = window.setTimeout(() => {
+        resetBlogModalContent(modal);
+        blogModalState.closeTimer = null;
+    }, 250);
 }
 
 // Close on ESC
-window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBlogModal(); });
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeBlogModal();
+});
+
+function openBlogModalFromTrigger(trigger) {
+    if (!trigger) return;
+    openBlogModal(
+        trigger.dataset.title || 'Berita Warga',
+        trigger.dataset.content || '',
+        trigger.dataset.date || '-',
+        trigger.dataset.thumb || '',
+        trigger.dataset.video || '',
+        trigger.dataset.youtube || ''
+    );
+}
+
+// Ensure compatibility with inline handlers and cached DOM.
+window.openBlogModal = openBlogModal;
+window.closeBlogModal = closeBlogModal;
+window.openBlogModalFromTrigger = openBlogModalFromTrigger;
+
+// Blog card click handling
+document.addEventListener('click', (event) => {
+    const trigger = event.target.closest('.js-open-blog-modal');
+    if (!trigger) return;
+    event.preventDefault();
+    openBlogModalFromTrigger(trigger);
+});
+
+document.addEventListener('click', (event) => {
+    const closeTrigger = event.target.closest('[data-blog-close]');
+    if (!closeTrigger) return;
+    closeBlogModal();
+});

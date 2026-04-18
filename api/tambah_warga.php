@@ -14,6 +14,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    $stmtBlokNama = $pdo->prepare("SELECT nama_blok FROM blok WHERE id = ? LIMIT 1");
+    $stmtBlokNama->execute([$blok_id]);
+    $blokNama = trim((string)($stmtBlokNama->fetchColumn() ?: ''));
+    if ($blokNama === '') {
+        echo json_encode(['status' => 'error', 'message' => 'Blok tidak valid.']);
+        exit;
+    }
+
+    $rawNoRumah = (string)($_POST['nomor_rumah'] ?? '');
+    $noRumahDigits = preg_replace('/\D+/', '', $rawNoRumah);
+    if ($noRumahDigits === '') {
+        echo json_encode(['status' => 'error', 'message' => 'Nomor rumah wajib 2 digit.']);
+        exit;
+    }
+    if (strlen($noRumahDigits) > 2) {
+        $noRumahDigits = substr($noRumahDigits, -2);
+    }
+    $nomorRumahFormatted = $blokNama . '-' . str_pad($noRumahDigits, 2, '0', STR_PAD_LEFT);
+
     // Validasi angka
     if ((!empty($nik) && !preg_match('/^[0-9]+$/', $nik)) || (!empty($nik_kepala) && !preg_match('/^[0-9]+$/', $nik_kepala)) || (!empty($no_wa) && !preg_match('/^[0-9]+$/', $no_wa))) {
         echo json_encode(['status' => 'error', 'message' => 'No KK, NIK Kepala, dan No WhatsApp harus murni angka!']);
@@ -25,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             INSERT INTO warga (blok_id, nik, nik_kepala, nama_lengkap, nomor_rumah, no_wa, tempat_lahir, tanggal_lahir, status_pernikahan, status_kependudukan)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
-        $stmt->execute([$blok_id, $nik, $nik_kepala, $nama_lengkap, $_POST['nomor_rumah'], $no_wa, $_POST['tempat_lahir'], empty($_POST['tanggal_lahir']) ? null : $_POST['tanggal_lahir'], $_POST['status_pernikahan'], $_POST['status_kependudukan']]);
+        $stmt->execute([$blok_id, $nik, $nik_kepala, $nama_lengkap, $nomorRumahFormatted, $no_wa, $_POST['tempat_lahir'], empty($_POST['tanggal_lahir']) ? null : $_POST['tanggal_lahir'], $_POST['status_pernikahan'], $_POST['status_kependudukan']]);
         
         $warga_id = $pdo->lastInsertId();
 

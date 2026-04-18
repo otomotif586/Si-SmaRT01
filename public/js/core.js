@@ -223,7 +223,7 @@ function showPage(pageId) {
         'detail-keuangan': ['Detail', 'Rincian pendapatan'],
         'pos-keuangan': ['Pos Anggaran', 'Kelola pengeluaran'],
         'pembukuan': ['Pembukuan', 'Neraca & trial balance'],
-        'keamanan': ['Keamanan', 'Manajemen pengawasan'],
+        'keamanan': ['Info', 'Manajemen aduan dan informasi pengurus'],
         'info': ['CMS Website', 'Kelola konten website publik'],
         'pasar': ['Menu Penjual', 'Kelola produk & etalase toko warga'],
         'rekonsiliasi': ['Rekonsiliasi', 'Audit iuran tahunan'],

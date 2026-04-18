@@ -41,87 +41,350 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Si-SmaRT | Modern Portal Warga</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Login Si-SmaRT | Portal Warga</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="public/css/mobile-ux.css">
     <style>
-        /* Mencegah FOUC */
+        :root {
+            --bg-night: #071025;
+            --bg-ink: #0d1b38;
+            --card: rgba(255, 255, 255, 0.92);
+            --line: rgba(15, 23, 42, 0.12);
+            --text: #0f172a;
+            --muted: #5b6476;
+            --brand: #0f766e;
+            --brand-2: #14b8a6;
+            --danger-bg: #fff1f2;
+            --danger-text: #be123c;
+        }
+        * { box-sizing: border-box; }
         html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
         html.js-loaded { visibility: visible; opacity: 1; }
-
+        html, body { min-height: 100%; }
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #f8fafc;
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(1000px 520px at -12% -15%, rgba(20, 184, 166, 0.45), transparent 70%),
+                radial-gradient(820px 500px at 108% 115%, rgba(59, 130, 246, 0.42), transparent 68%),
+                linear-gradient(140deg, var(--bg-night), var(--bg-ink));
             overflow-x: hidden;
-            overflow-y: auto;
-        }
-        .font-space { font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        .glass-container {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
         }
 
-        .floating-bg {
+        .login-screen {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 26px 16px;
+        }
+
+        .pulse-shape {
             position: fixed;
             z-index: -1;
-            filter: blur(100px);
-            opacity: 0.5;
-            border-radius: 50%;
-            animation: move 20s infinite alternate;
+            border-radius: 999px;
+            filter: blur(90px);
+            opacity: 0.42;
+            animation: floatPulse 10s ease-in-out infinite alternate;
+        }
+        .pulse-shape.a { width: 380px; height: 380px; background: #2dd4bf; top: -120px; left: -140px; }
+        .pulse-shape.b { width: 360px; height: 360px; background: #60a5fa; bottom: -120px; right: -120px; animation-delay: -2s; }
+
+        @keyframes floatPulse {
+            from { transform: translateY(-14px) scale(1); }
+            to { transform: translateY(18px) scale(1.06); }
         }
 
-        @keyframes move {
-            from { transform: translate(0, 0); }
-            to { transform: translate(100px, 100px); }
+        .auth-shell {
+            width: min(1020px, 100%);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(20px);
+            border-radius: 34px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 450px);
+            gap: 12px;
+            box-shadow: 0 36px 90px -45px rgba(2, 6, 23, 0.9);
         }
 
-        .input-focus {
-            transition: all 0.3s ease;
+        .brand-panel {
+            border-radius: 28px;
+            padding: 30px;
+            color: #fff;
+            background:
+                radial-gradient(420px 220px at 15% 0%, rgba(45, 212, 191, 0.32), transparent 60%),
+                radial-gradient(400px 240px at 100% 100%, rgba(59, 130, 246, 0.3), transparent 65%),
+                linear-gradient(155deg, rgba(8, 47, 73, 0.84), rgba(15, 23, 42, 0.82));
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 560px;
         }
-        .input-focus:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.2);
+
+        .brand-badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+        }
+
+        .brand-panel h1 {
+            margin: 20px 0 10px;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            letter-spacing: -0.02em;
+            line-height: 1.08;
+        }
+        .brand-panel p { margin: 0; color: rgba(255, 255, 255, 0.84); font-size: 0.95rem; }
+
+        .brand-pills {
+            margin-top: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .brand-pill {
+            padding: 7px 11px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .brand-foot {
+            margin-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.72);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .auth-card {
+            border-radius: 28px;
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.86);
+            box-shadow: 0 30px 75px -50px rgba(15, 23, 42, 0.8);
+            padding: 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 560px;
+        }
+
+        .auth-top small {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #0f766e;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+        .auth-top h2 {
+            margin: 10px 0 6px;
+            font-size: 1.9rem;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+        }
+        .auth-top p { margin: 0 0 18px; color: var(--muted); font-size: 0.92rem; }
+
+        .error-box {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border: 1px solid #fecdd3;
+            border-radius: 16px;
+            padding: 12px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 11px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 10px;
+            font-weight: 800;
+            color: #536177;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+        }
+
+        .field {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--line);
+            background: #fff;
+            border-radius: 16px;
+            padding: 0 12px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .field:focus-within {
+            border-color: #14b8a6;
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.14);
+            transform: translateY(-1px);
+        }
+        .field i { color: #94a3b8; font-size: 14px; margin-right: 8px; }
+        .field input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            padding: 14px 0;
+            font-size: 14px;
+            font-family: inherit;
+            font-weight: 600;
+            color: var(--text);
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-image: none;
+        }
+        .field input::placeholder { color: #94a3b8; }
+
+        .field input:-webkit-autofill,
+        .field input:-webkit-autofill:hover,
+        .field input:-webkit-autofill:focus {
+            -webkit-text-fill-color: var(--text);
+            -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+            box-shadow: 0 0 0 1000px #ffffff inset;
+            transition: background-color 9999s ease-in-out 0s;
+        }
+
+        .utility-row {
+            margin: 4px 0 12px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+        .remember {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #4b5563;
+            font-weight: 600;
+        }
+        .remember input { accent-color: #0f766e; }
+        .utility-row a { color: #0f766e; font-weight: 700; text-decoration: none; }
+
+        .alt-link {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            border-radius: 14px;
+            padding: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 14px;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+        }
+        .alt-link:hover { background: #f8fafc; border-color: #94a3b8; }
+
+        .submit-btn {
+            width: 100%;
+            border: none;
+            border-radius: 14px;
+            padding: 14px 16px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            box-shadow: 0 20px 36px -22px rgba(15, 118, 110, 0.75);
+            cursor: pointer;
+            transition: transform 0.16s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+        .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 24px 42px -24px rgba(15, 118, 110, 0.86); }
+        .submit-btn:active { transform: translateY(0); }
+        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        .auth-foot {
+            margin-top: 14px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .auth-foot a { color: #0f766e; font-weight: 800; text-decoration: none; }
+
+        .submit-btn { order: 2; }
+        .alt-link { order: 1; }
+
+        .legal {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.72);
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
         }
 
         @media (max-width: 768px) {
-            body { padding: 14px; align-items: flex-start; }
-            .w-full.max-w-\[450px\] { max-width: 380px; margin-top: 6px; }
-            .text-center.mb-10 { margin-bottom: 1rem; }
-            .text-center.mb-10 .w-20.h-20 { width: 62px !important; height: 62px !important; border-radius: 1rem !important; margin-bottom: 0.9rem !important; }
-            .text-center.mb-10 h1 { font-size: 1.65rem !important; }
-            .text-center.mb-10 p { font-size: 0.8rem !important; margin-top: 0.3rem !important; }
-            .glass-container.rounded-\[2\.5rem\].p-8 { border-radius: 1.4rem !important; padding: 1rem !important; }
-            .glass-container h2 { font-size: 1rem; margin-bottom: 1rem !important; }
-            .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem !important; }
-            #loginFormMain label { margin-bottom: 0.45rem !important; font-size: 0.63rem !important; }
-            #loginFormMain input[type='text'],
-            #loginFormMain input[type='password'] { min-height: 42px; padding-top: 0.7rem !important; padding-bottom: 0.7rem !important; font-size: 0.9rem; border-radius: 0.9rem !important; }
-            #loginFormMain .text-sm { font-size: 0.72rem !important; }
-            #loginSubmitBtn { min-height: 42px; padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; font-size: 0.75rem !important; border-radius: 0.9rem !important; }
-            .mt-10.text-center { margin-top: 1rem !important; }
-            .mt-10.text-center p { font-size: 0.76rem !important; }
-            .text-center.text-slate-400.text-\[10px\].mt-12 { margin-top: 1rem !important; font-size: 0.58rem !important; letter-spacing: 0.16em !important; }
+            .login-screen { padding: 10px; }
+            .auth-shell {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                border-radius: 24px;
+                padding: 9px;
+            }
+            .brand-panel {
+                min-height: auto;
+                padding: 18px;
+                border-radius: 18px;
+            }
+            .brand-panel h1 { font-size: 1.45rem; }
+            .brand-foot { display: none; }
+            .auth-card {
+                min-height: auto;
+                border-radius: 18px;
+                padding: 16px;
+            }
+            .auth-top h2 { font-size: 1.45rem; }
+            .field input { padding: 13px 0; }
+            .submit-btn { padding: 12px 14px; }
+            .alt-link { margin-top: 10px; margin-bottom: 8px; }
+            .legal { margin-top: 8px; letter-spacing: 0.1em; }
         }
 
         @media (max-width: 390px) {
-            body { padding: 10px; }
-            .w-full.max-w-\[450px\] { max-width: 350px; }
-            .glass-container { border-radius: 1.3rem !important; }
-            .text-center.mb-10 .w-20.h-20 { width: 56px !important; height: 56px !important; }
-            .text-center.mb-10 h1 { font-size: 1.5rem !important; }
+            .auth-card { padding: 16px 14px; }
+            .brand-panel { padding: 16px 14px; }
+            .auth-top p { font-size: 0.85rem; }
+            .utility-row { font-size: 11px; }
         }
     </style>
+    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000);
     </script>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6">
+<body>
 
     <div id="smartLoadingOverlay" class="smart-loading-overlay">
         <div class="smart-loading-card">
@@ -132,86 +395,80 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-    <!-- Background Decoration -->
-    <div class="floating-bg w-96 h-96 bg-emerald-300 top-0 left-0"></div>
-    <div class="floating-bg w-[500px] h-[500px] bg-blue-200 bottom-0 right-0" style="animation-delay: -5s;"></div>
+    <div class="pulse-shape a"></div>
+    <div class="pulse-shape b"></div>
 
-    <div class="w-full max-w-[450px] relative">
-        <!-- Logo / Brand -->
-        <div class="text-center mb-10">
-            <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-600 rounded-[2rem] shadow-2xl shadow-emerald-200 mb-6 group hover:rotate-6 transition-transform">
-                <i class="fas fa-users-rectangle text-white text-3xl"></i>
-            </div>
-            <h1 class="text-3xl font-black text-slate-900 tracking-tight font-space">Si-SmaRT</h1>
-            <p class="text-slate-500 font-medium mt-2">Sistem Informasi Kawasan Mandiri</p>
-        </div>
+    <main class="login-screen">
+        <div class="auth-shell">
+            <section class="brand-panel">
+                <div>
+                    <div class="brand-badge"><i class="fas fa-users-rectangle"></i></div>
+                    <h1>Selamat Datang di Si-SmaRT</h1>
+                    <p>Portal digital kawasan yang ringan, cepat, dan terasa seperti aplikasi mobile modern.</p>
+                    <div class="brand-pills">
+                        <span class="brand-pill">Smart Dashboard</span>
+                        <span class="brand-pill">Mobile Native Feel</span>
+                        <span class="brand-pill">Realtime Data</span>
+                    </div>
+                </div>
+                <div class="brand-foot">
+                    <span>RT DIGITAL EXPERIENCE</span>
+                    <span>2026</span>
+                </div>
+            </section>
 
-        <!-- Login Form Card -->
-        <div class="glass-container rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden">
-            <div class="relative z-10">
-                <h2 class="text-xl font-bold text-slate-800 mb-8">Selamat Datang Kembali!</h2>
+            <section class="auth-card">
+                <div class="auth-top">
+                    <small><i class="fas fa-lock"></i> Akses Internal</small>
+                    <h2>Masuk ke Dashboard</h2>
+                    <p>Gunakan akun petugas untuk masuk dan kelola seluruh data warga.</p>
+                </div>
 
                 <?php if($error): ?>
-                <div class="bg-red-50 text-red-600 p-4 rounded-2xl mb-6 text-sm font-bold flex items-center gap-3 animate-pulse">
+                <div class="error-box">
                     <i class="fas fa-circle-exclamation"></i>
                     <?= $error ?>
                 </div>
                 <?php endif; ?>
 
-                <form action="login.php" method="POST" class="space-y-6" id="loginFormMain">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1">Username</label>
-                        <div class="relative">
-                            <i class="fas fa-user absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                            <input type="text" name="username" required 
-                                class="w-full bg-white/50 border border-slate-200 rounded-2xl py-4 pl-12 pr-6 text-slate-800 font-bold focus:outline-none focus:border-emerald-500 input-focus placeholder-slate-300"
-                                placeholder="admin">
+                <form action="login.php" method="POST" id="loginFormMain">
+                    <div class="input-group">
+                        <label>Username</label>
+                        <div class="field">
+                            <i class="fas fa-user"></i>
+                            <input type="text" name="username" required placeholder="Masukkan username admin">
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 ml-1">Password</label>
-                        <div class="relative">
-                            <i class="fas fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                            <input type="password" name="password" required 
-                                class="w-full bg-white/50 border border-slate-200 rounded-2xl py-4 pl-12 pr-6 text-slate-800 font-bold focus:outline-none focus:border-emerald-500 input-focus placeholder-slate-300"
-                                placeholder="••••••••">
+                    <div class="input-group">
+                        <label>Password</label>
+                        <div class="field">
+                            <i class="fas fa-key"></i>
+                            <input type="password" name="password" required placeholder="Masukkan password">
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-between text-sm px-1">
-                        <label class="flex items-center gap-2 cursor-pointer text-slate-500 font-medium">
-                            <input type="checkbox" class="w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                    <div class="utility-row">
+                        <label class="remember">
+                            <input type="checkbox">
                             Ingat Saya
                         </label>
-                        <a href="#" class="text-emerald-600 font-bold hover:underline">Lupa Password?</a>
                     </div>
-
-                    <a href="index.php" class="w-full block text-center border border-emerald-200 text-emerald-700 font-semibold py-3 rounded-2xl hover:bg-emerald-50 transition-all text-sm">
+                    <button type="submit" id="loginSubmitBtn" class="submit-btn">
+                        <span id="loginSubmitText">Masuk Sekarang</span>
+                    </button>
+                    <a href="index.php" class="alt-link">
                         Lihat Portal Warga
                     </a>
-
-                    <button type="submit" id="loginSubmitBtn"
-                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-5 rounded-2xl shadow-xl shadow-emerald-200 transition-all active:scale-95 flex items-center justify-center gap-3">
-                        <span id="loginSubmitText">MASUK SEKARANG</span>
-                        <i class="fas fa-arrow-right-long"></i>
-                    </button>
                 </form>
 
-                <div class="mt-10 text-center">
-                    <p class="text-slate-400 text-sm font-medium">Belum punya akun? <a href="#" class="text-emerald-600 font-bold">Hubungi Admin RT</a></p>
+                <div class="auth-foot">
+                    Belum punya akun? <a href="#">Hubungi Admin RT</a>
                 </div>
-            </div>
-            
-            <!-- Decorative circle -->
-            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-emerald-500/5 rounded-full z-0"></div>
+            </section>
         </div>
-
-        <!-- Footer Info -->
-        <p class="text-center text-slate-400 text-[10px] mt-12 font-bold uppercase tracking-[0.2em]">
-            &copy; 2026 Si-SmaRT Digital System. All Rights Reserved.
-        </p>
-    </div>
+        <p class="legal">&copy; 2026 Si-SmaRT Digital System. All Rights Reserved.</p>
+    </main>
     <script>
         let loadingTick;
         function showPageLoading(title) {

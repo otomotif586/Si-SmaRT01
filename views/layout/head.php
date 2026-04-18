@@ -29,6 +29,7 @@
         html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
         html.js-loaded { visibility: visible; opacity: 1; }
     </style>
+    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000); // Fallback

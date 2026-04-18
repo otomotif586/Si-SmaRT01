@@ -86,6 +86,7 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
             z-index: 20;
         }
     </style>
+    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000);

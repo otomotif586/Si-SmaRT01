@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="public/css/ruang-warga-standalone.css">
+    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
 </head>
 <body>
 <div id="rwBootLoader" class="rw-boot-loader" aria-hidden="true">
@@ -38,32 +39,54 @@
     </div>
 
     <?php if (!$isLoggedIn): ?>
-        <div class="grid2">
-            <div class="card section">
-                <h2>Login Ruang Warga</h2>
-                <p class="muted">Masuk cukup dengan NIK 16 digit, tanpa password.</p>
-                <form method="POST" class="form-grid">
-                    <input type="hidden" name="action" value="login">
-                    <div class="form-group full">
-                        <label>NIK</label>
-                        <input name="nik" maxlength="16" inputmode="numeric" pattern="[0-9]{16}" required>
-                    </div>
-                    <div class="form-group full">
-                        <button type="submit" class="btn primary">Masuk</button>
-                    </div>
-                </form>
+        <div class="rw-auth-shell">
+            <div class="rw-auth-hero card">
+                <p class="rw-auth-kicker"><i class="fas fa-house-user"></i> Ruang Warga</p>
+                <h2>Akses Cepat ala Mobile App</h2>
+                <p>Masuk cukup pakai NIK 16 digit. Registrasi warga baru juga bisa langsung dari halaman ini.</p>
+                <div class="rw-auth-tags">
+                    <span>Tanpa Password</span>
+                    <span>Mobile Friendly</span>
+                    <span>Realtime Sinkron</span>
+                </div>
             </div>
-            <div class="card section">
-                <h2>Pendaftaran Warga</h2>
-                <p class="muted">Jika NIK sudah pernah terdaftar, sistem akan menolak dan menampilkan notifikasi.</p>
-                <form method="POST" class="form-grid">
-                    <input type="hidden" name="action" value="register">
-                    <div class="form-group"><label>NIK</label><input name="nik" maxlength="16" inputmode="numeric" pattern="[0-9]{16}" required></div>
-                    <div class="form-group"><label>Nama</label><input name="nama" required></div>
-                    <div class="form-group"><label>No Rumah</label><input name="no_rumah" required></div>
-                    <div class="form-group"><label>No WA</label><input name="no_wa" inputmode="tel" required></div>
-                    <div class="form-group full"><button type="submit" class="btn primary">Daftar & Masuk</button></div>
-                </form>
+
+            <div class="grid2 rw-auth-grid">
+                <div class="card section rw-auth-card">
+                    <h2>Login Ruang Warga</h2>
+                    <p class="muted">Masukkan NIK 16 digit untuk langsung masuk.</p>
+                    <form method="POST" class="form-grid rw-auth-form">
+                        <input type="hidden" name="action" value="login">
+                        <div class="form-group full">
+                            <label>NIK</label>
+                            <input name="nik" maxlength="16" inputmode="numeric" pattern="[0-9]{16}" placeholder="Contoh: 3276xxxxxxxxxxxx" required>
+                        </div>
+                        <div class="form-group full">
+                            <button type="submit" class="btn primary rw-auth-btn">Masuk</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card section rw-auth-card rw-auth-card-register">
+                    <h2>Pendaftaran Warga</h2>
+                    <p class="muted">Jika NIK sudah terdaftar, sistem akan menolak otomatis.</p>
+                    <form method="POST" class="form-grid rw-auth-form">
+                        <input type="hidden" name="action" value="register">
+                        <div class="form-group"><label>NIK</label><input name="nik" maxlength="16" inputmode="numeric" pattern="[0-9]{16}" placeholder="16 digit NIK" required></div>
+                        <div class="form-group"><label>Nama</label><input name="nama" placeholder="Nama lengkap" required></div>
+                        <div class="form-group"><label>Blok</label>
+                            <select name="blok_id" required>
+                                <option value="">Pilih Blok</option>
+                                <?php foreach ($blokOptions as $bo): ?>
+                                    <option value="<?= (int)($bo['id'] ?? 0) ?>"><?= htmlspecialchars((string)($bo['nama_blok'] ?? '-')) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>No Rumah (2 Digit)</label><input name="no_rumah" maxlength="2" inputmode="numeric" pattern="[0-9]{2}" placeholder="Contoh: 01" required></div>
+                        <div class="form-group"><label>No WA</label><input name="no_wa" inputmode="tel" placeholder="08xxxxxxxxxx" required></div>
+                        <div class="form-group full"><button type="submit" class="btn primary rw-auth-btn">Daftar dan Masuk</button></div>
+                    </form>
+                </div>
             </div>
         </div>
     <?php else: ?>
@@ -133,7 +156,7 @@
             <div class="hero-main">
                 <p class="hero-kicker"><i class="fas fa-sparkles"></i> Warga Experience</p>
                 <h1>Ruang Warga</h1>
-                <p>Kelola data diri, histori iuran, dan laporan dalam satu dashboard yang nyaman seperti aplikasi mobile.</p>
+                <p>Kelola data diri, histori iuran, dan aduan dalam satu dashboard yang nyaman seperti aplikasi mobile.</p>
                 <div class="hero-metrics">
                     <div class="hero-pill"><i class="fas fa-shield-check"></i> Aman</div>
                     <div class="hero-pill"><i class="fas fa-mobile-screen-button"></i> Mobile First</div>
@@ -190,7 +213,7 @@
             <button class="tab-btn active" data-tab="ringkasan"><i class="fas fa-house"></i> Ringkasan</button>
             <button class="tab-btn" data-tab="profil-lengkap"><i class="fas fa-id-card"></i> Data Diri Lengkap</button>
             <button class="tab-btn" data-tab="history"><i class="fas fa-clock-rotate-left"></i> History Iuran</button>
-            <button class="tab-btn" data-tab="laporan"><i class="fas fa-paper-plane"></i> Laporan</button>
+            <button class="tab-btn" data-tab="aduan"><i class="fas fa-paper-plane"></i> Aduan</button>
         </div>
 
         <div class="tab-panel active" data-panel="ringkasan">
@@ -264,7 +287,7 @@
                         </p>
                         <div class="reminder-actions">
                             <a href="#" class="btn primary" data-go-tab="history"><i class="fas fa-clock-rotate-left"></i> Lihat Rincian Tunggakan</a>
-                            <a href="#" class="btn" data-go-tab="laporan"><i class="fas fa-paper-plane"></i> Butuh Bantuan Pengurus</a>
+                            <a href="#" class="btn" data-go-tab="aduan"><i class="fas fa-paper-plane"></i> Butuh Bantuan Pengurus</a>
                         </div>
                     <?php else: ?>
                         <p class="muted">Tidak ada tunggakan aktif. Pertahankan pembayaran iuran tepat waktu.</p>
@@ -340,7 +363,15 @@
                         <div class="form-group"><label>Nama Lengkap</label><input name="nama_lengkap" value="<?= htmlspecialchars((string)$linkedWarga['nama_lengkap']) ?>" required></div>
                         <div class="form-group"><label>NIK</label><input name="nik" maxlength="16" inputmode="numeric" value="<?= htmlspecialchars((string)$linkedWarga['nik']) ?>"></div>
                         <div class="form-group"><label>NIK Kepala</label><input name="nik_kepala" maxlength="16" inputmode="numeric" value="<?= htmlspecialchars((string)$linkedWarga['nik_kepala']) ?>"></div>
-                        <div class="form-group"><label>No Rumah</label><input name="nomor_rumah" value="<?= htmlspecialchars((string)$linkedWarga['nomor_rumah']) ?>"></div>
+                        <div class="form-group"><label>Blok</label>
+                            <select name="blok_id" required>
+                                <option value="">Pilih Blok</option>
+                                <?php foreach ($blokOptions as $bo): ?>
+                                    <option value="<?= (int)($bo['id'] ?? 0) ?>" <?= ((int)($linkedWarga['blok_id'] ?? 0) === (int)($bo['id'] ?? 0)) ? 'selected' : '' ?>><?= htmlspecialchars((string)($bo['nama_blok'] ?? '-')) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>No Rumah (2 Digit)</label><input name="nomor_rumah" maxlength="2" inputmode="numeric" pattern="[0-9]{2}" value="<?= htmlspecialchars((string)substr(preg_replace('/\D+/', '', (string)($linkedWarga['nomor_rumah'] ?? '')), -2)) ?>"></div>
                         <div class="form-group"><label>No WA</label><input name="no_wa" inputmode="tel" value="<?= htmlspecialchars((string)$linkedWarga['no_wa']) ?>"></div>
                         <div class="form-group"><label>Tempat Lahir</label><input name="tempat_lahir" value="<?= htmlspecialchars((string)$linkedWarga['tempat_lahir']) ?>"></div>
                         <div class="form-group"><label>Tanggal Lahir</label><input type="date" name="tanggal_lahir" value="<?= htmlspecialchars((string)$linkedWarga['tanggal_lahir']) ?>"></div>
@@ -475,39 +506,60 @@
             </div>
         </div>
 
-        <div class="tab-panel" data-panel="laporan">
+        <div class="tab-panel" data-panel="aduan">
             <div class="grid2">
                 <div class="card section">
-                    <h2>Kirim Laporan ke Si-SmaRT</h2>
-                    <p class="muted">Laporan akan masuk ke modul laporan Si-SmaRT agar ditindaklanjuti pengurus.</p>
+                    <h2>Kirim Aduan ke Si-SmaRT</h2>
+                    <p class="muted">Aduan masuk ke menu Keamanan > Laporan, lalu harus disetujui pengurus sebelum tampil di portal.</p>
                     <?php if (!$linkedWarga): ?>
-                        <div class="empty">Data warga belum terhubung. Tidak dapat kirim laporan.</div>
+                        <div class="empty">Data warga belum terhubung. Tidak dapat kirim aduan.</div>
                     <?php else: ?>
-                        <form method="POST" class="form-grid">
-                            <input type="hidden" name="action" value="submit_laporan_smart">
-                            <div class="form-group full"><label>Judul Laporan</label><input name="lap_judul" required></div>
-                            <div class="form-group full"><label>Keterangan</label><textarea name="lap_keterangan" rows="5"></textarea></div>
-                            <div class="form-group full"><button type="submit" class="btn primary">Kirim ke Si-SmaRT</button></div>
+                        <form method="POST" class="form-grid" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="submit_aduan_smart">
+                            <div class="form-group full"><label>Judul Aduan</label><input name="adu_judul" required></div>
+                            <div class="form-group full"><label>Keterangan</label><textarea name="adu_keterangan" rows="5"></textarea></div>
+                            <div class="form-group full">
+                                <label>Lampiran (Kamera / Upload)</label>
+                                <input type="file" name="adu_lampiran" accept="image/*,video/*,.pdf" capture="environment">
+                                <small class="muted">Bisa ambil langsung dari kamera HP atau upload file (jpg, png, webp, mp4, mov, pdf).</small>
+                            </div>
+                            <div class="form-group full"><button type="submit" class="btn primary">Kirim Aduan</button></div>
                         </form>
                     <?php endif; ?>
                 </div>
                 <div class="card section">
-                    <h2>Riwayat Laporan Saya</h2>
+                    <h2>Riwayat Aduan Saya</h2>
                     <?php if (empty($laporanRows)): ?>
-                        <div class="empty">Belum ada laporan dikirim.</div>
+                        <div class="empty">Belum ada aduan dikirim.</div>
                     <?php else: ?>
                         <div class="list-box">
                             <?php foreach ($laporanRows as $l): ?>
                                 <div class="list-item">
-                                    <h4><?= htmlspecialchars((string)$l['judul_laporan']) ?></h4>
-                                    <p><?= nl2br(htmlspecialchars((string)$l['keterangan'])) ?></p>
+                                    <h4><?= htmlspecialchars((string)($l['judul'] ?? 'Aduan')) ?></h4>
+                                    <p><?= nl2br(htmlspecialchars((string)($l['deskripsi'] ?? ''))) ?></p>
                                     <p style="margin-top:6px;">
-                                        <span class="status <?= htmlspecialchars((string)$l['status']) ?>"><?= htmlspecialchars((string)$l['status']) ?></span>
-                                        <span style="color:var(--muted); margin-left:8px;"><?= htmlspecialchars((string)$l['tanggal_laporan']) ?></span>
+                                        <span class="status <?= htmlspecialchars((string)($l['status'] ?? 'Baru')) ?>"><?= htmlspecialchars((string)($l['status'] ?? 'Baru')) ?></span>
+                                        <span style="color:var(--muted); margin-left:8px;"><?= htmlspecialchars((string)($l['waktu_kejadian'] ?? '-')) ?></span>
+                                        <span style="color:var(--muted); margin-left:8px;">Portal: <?= ((int)($l['approved_portal'] ?? 0) === 1) ? 'Disetujui' : 'Menunggu Approval' ?></span>
                                     </p>
+                                    <?php if (!empty($l['lampiran_path'])): ?>
+                                        <p style="margin-top:8px;"><a href="<?= htmlspecialchars((string)$l['lampiran_path']) ?>" target="_blank" rel="noopener">Lihat Lampiran: <?= htmlspecialchars((string)($l['lampiran_name'] ?? 'File')) ?></a></p>
+                                    <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
                         </div>
+
+                        <?php if (($aduanTotalPages ?? 1) > 1): ?>
+                            <div class="rw-aduan-pagination" style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; border-top:1px dashed var(--border-color); padding-top:10px; flex-wrap:wrap;">
+                                <span class="muted" style="font-size:0.82rem;">Halaman <?= (int)$aduanPage ?> dari <?= (int)$aduanTotalPages ?> (<?= (int)$aduanTotalRows ?> data)</span>
+                                <div style="display:flex; gap:8px;">
+                                    <?php $prevAduan = max(1, (int)$aduanPage - 1); ?>
+                                    <?php $nextAduan = min((int)$aduanTotalPages, (int)$aduanPage + 1); ?>
+                                    <a class="btn" href="ruang_warga.php?tab=aduan&aduan_page=<?= $prevAduan ?>" <?= ((int)$aduanPage <= 1) ? 'style="pointer-events:none;opacity:.5;"' : '' ?>>Sebelumnya</a>
+                                    <a class="btn" href="ruang_warga.php?tab=aduan&aduan_page=<?= $nextAduan ?>" <?= ((int)$aduanPage >= (int)$aduanTotalPages) ? 'style="pointer-events:none;opacity:.5;"' : '' ?>>Berikutnya</a>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div>
             </div>
@@ -520,7 +572,7 @@
     <button class="tab-dock-btn active" data-tab="ringkasan"><i class="fas fa-house"></i><span>Ringkasan</span></button>
     <button class="tab-dock-btn" data-tab="profil-lengkap"><i class="fas fa-id-card"></i><span>Data</span></button>
     <button class="tab-dock-btn" data-tab="history"><i class="fas fa-clock-rotate-left"></i><span>Iuran</span></button>
-    <button class="tab-dock-btn" data-tab="laporan"><i class="fas fa-paper-plane"></i><span>Laporan</span></button>
+    <button class="tab-dock-btn" data-tab="aduan"><i class="fas fa-paper-plane"></i><span>Aduan</span></button>
 </div>
 <?php endif; ?>
 

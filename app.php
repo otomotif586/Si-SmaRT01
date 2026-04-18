@@ -37,7 +37,6 @@ include 'views/layout/head.php';
         include 'views/pages/laporan_iuran_warga.php';
         include 'views/pages/rekonsiliasi.php';
         include 'views/pages/warga.php';
-        include 'views/pages/ruang_warga.php';
         include 'views/pages/keuangan.php';
         include 'views/pages/detail_keuangan.php';
         include 'views/pages/pos_keuangan.php';

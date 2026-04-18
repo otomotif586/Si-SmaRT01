@@ -38,6 +38,7 @@ try {
         .blog-content h1, .blog-content h2, .blog-content h3 { font-weight: 800; color: #0f172a; margin: 2.5rem 0 1rem; }
         .glossy { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
     </style>
+    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
 </head>
 <body class="bg-slate-50">
     <nav class="fixed top-0 w-full z-50 p-6">

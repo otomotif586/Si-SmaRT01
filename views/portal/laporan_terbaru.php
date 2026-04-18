@@ -1,5 +1,5 @@
     <!-- LAPORAN TERBARU SECTION -->
-    <section id="laporan_terbaru" class="py-16 md:py-24 lg:py-32 bg-emerald-50/30 backdrop-blur-sm border-b border-emerald-100/50 relative overflow-hidden">
+    <section id="laporan_terbaru" class="py-16 md:py-24 lg:py-32 bg-emerald-50/30 backdrop-blur-sm border-b border-emerald-100/50 relative overflow-hidden" data-parallax-section data-parallax-speed="0.02">
         <!-- Dekorasi Background Ambient -->
         <div class="absolute -left-20 top-20 w-72 h-72 bg-emerald-400/10 rounded-full blur-[80px] pointer-events-none"></div>
         <div class="absolute right-0 bottom-0 w-96 h-96 bg-teal-400/5 rounded-full blur-[100px] pointer-events-none"></div>
@@ -38,6 +38,12 @@
                     $desc = $lap['deskripsi'] ?? $lap['keterangan'] ?? 'Tidak ada deskripsi mendetail.';
                     $tanggal = isset($lap['waktu_kejadian']) ? date('d M Y, H:i', strtotime($lap['waktu_kejadian'])) : date('d M Y');
                     $pelapor = $lap['pelapor'] ?? $lap['nama_pelapor'] ?? 'Petugas / Warga';
+                    $lampiranPath = trim((string)($lap['lampiran_path'] ?? ''));
+                    $lampiranName = trim((string)($lap['lampiran_name'] ?? ''));
+                    $lampiranExt = strtolower(pathinfo($lampiranPath !== '' ? $lampiranPath : $lampiranName, PATHINFO_EXTENSION));
+                    $isImageLampiran = in_array($lampiranExt, ['jpg', 'jpeg', 'png', 'webp', 'gif'], true);
+                    $isVideoLampiran = in_array($lampiranExt, ['mp4', 'webm', 'ogg', 'mov'], true);
+                    $displayLampiranName = $lampiranName !== '' ? $lampiranName : basename($lampiranPath);
                     
                     // Kecerdasan Buatan Sederhana untuk Mewarnai Status Otomatis
                     if(strpos($status, 'proses') !== false || strpos($status, 'tindak') !== false) {
@@ -74,6 +80,30 @@
                         <p class="text-[0.9rem] font-medium text-emerald-900/60 leading-relaxed line-clamp-3">
                             <?= htmlspecialchars($desc) ?>
                         </p>
+
+                        <?php if ($lampiranPath !== ''): ?>
+                            <div class="mt-5 rounded-2xl border border-emerald-100 bg-white/80 p-3 backdrop-blur-sm">
+                                <?php if ($isImageLampiran): ?>
+                                    <a href="<?= htmlspecialchars($lampiranPath) ?>" target="_blank" rel="noopener" class="block">
+                                        <img src="<?= htmlspecialchars($lampiranPath) ?>" alt="Lampiran Aduan" class="w-full h-40 object-cover rounded-xl border border-emerald-100">
+                                    </a>
+                                <?php elseif ($isVideoLampiran): ?>
+                                    <video controls preload="metadata" class="w-full h-44 rounded-xl border border-emerald-100 bg-black/10" playsinline>
+                                        <source src="<?= htmlspecialchars($lampiranPath) ?>">
+                                        Browser tidak mendukung pemutaran video.
+                                    </video>
+                                <?php else: ?>
+                                    <div class="rounded-xl border border-dashed border-emerald-200 bg-emerald-50/60 px-3 py-3 text-sm font-semibold text-emerald-800">
+                                        <i class="fas fa-file-arrow-down mr-2"></i><?= htmlspecialchars($displayLampiranName !== '' ? $displayLampiranName : 'Lampiran Aduan') ?>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="mt-3 flex items-center justify-end gap-2">
+                                    <a href="<?= htmlspecialchars($lampiranPath) ?>" download class="px-3 py-1.5 rounded-lg border border-emerald-200 bg-white text-emerald-700 text-xs font-bold tracking-wide hover:bg-emerald-50 transition-colors">
+                                        Download File
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     
                     <!-- Footer Pengirim & Kategori -->

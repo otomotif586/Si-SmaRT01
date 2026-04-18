@@ -1,5 +1,5 @@
     <!-- Stats Section -->
-    <section id="kawasan" class="py-16 md:py-24 lg:py-32 relative bg-white/30 backdrop-blur-sm border-y border-white/50">
+    <section id="kawasan" class="py-16 md:py-24 lg:py-32 relative bg-white/30 backdrop-blur-sm border-y border-white/50" data-parallax-section data-parallax-speed="0.02">
         <div class="container mx-auto px-6 md:px-12 text-center mb-12 md:mb-20">
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-emerald-950 tracking-tight reveal">Kawasan Mandiri Terpadu</h2>
         </div>
@@ -12,8 +12,8 @@
                     <h3 class="text-2xl font-bold mb-4 text-emerald-950">Bukit & Sawah</h3>
                     <p class="text-emerald-900/50 text-sm leading-relaxed font-medium">Pemandangan alam murni di kanan-kiri yang menyejukkan mata setiap hari.</p>
                 </div>
-                <div class="glass p-12 rounded-[4rem] card-glow reveal bg-emerald-600 shadow-2xl shadow-emerald-200">
-                    <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center text-white mb-8 text-4xl border border-white/10 shadow-inner">
+                <div class="glass p-12 rounded-[4rem] card-glow reveal bg-emerald-600 shadow-2xl shadow-emerald-200 kawasan-ekonomi-card">
+                    <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center text-white mb-8 text-4xl border border-white/10 shadow-inner kawasan-ekonomi-icon">
                         <i class="fas fa-hand-holding-dollar"></i>
                     </div>
                     <h3 class="text-2xl font-bold mb-4 text-white">Ekonomi Warga</h3>

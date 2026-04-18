@@ -21,11 +21,6 @@
             <i data-lucide="layout-grid"></i>
             <span>Workspace</span>
         </button>
-        <button onclick="showPage('ruang-warga')" id="nav-ruang-warga" title="Ruang Warga">
-            <i data-lucide="user-round"></i>
-            <span>Ruang Warga</span>
-        </button>
-        
         <!-- Grup Warga & Laporan Warga -->
         <button onclick="toggleSubmenu('submenu-warga')" id="nav-group-warga" class="nav-group-toggle" title="Menu Warga">
             <i data-lucide="users"></i>
@@ -83,9 +78,9 @@
             <i data-lucide="chevron-down" class="submenu-icon"></i>
         </button>
         <div id="submenu-info" class="submenu-items hidden">
-            <button onclick="showPage('keamanan')" id="nav-keamanan" title="Keamanan Lingkungan">
+            <button onclick="showPage('keamanan')" id="nav-keamanan" title="Info Warga & Pengurus">
                 <i data-lucide="shield-check"></i>
-                <span>Keamanan</span>
+                <span>Info</span>
             </button>
             <button onclick="showPage('info')" id="nav-info" title="Pengaturan CMS">
                 <i data-lucide="megaphone"></i>

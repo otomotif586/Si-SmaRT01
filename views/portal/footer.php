@@ -1,5 +1,5 @@
     <!-- Footer -->
-    <footer class="py-12 bg-emerald-950 text-white rounded-t-[3rem] mt-20 relative overflow-hidden">
+    <footer class="py-12 bg-emerald-950 text-white rounded-t-[3rem] mt-20 relative overflow-hidden" data-parallax-section data-parallax-speed="0.012">
         <div class="container mx-auto px-6 text-center relative z-10">
             <div class="flex flex-col items-center space-y-4 mb-8">
                 <div class="flex items-center space-x-2 text-[10px] font-bold tracking-[0.3em] uppercase text-emerald-400 opacity-80">
@@ -29,7 +29,7 @@
             <div class="w-full h-px bg-white/5 mb-8"></div>
             
             <p class="text-white/20 text-[8px] tracking-[0.4em] font-bold uppercase transition-all hover:text-white/30">
-                &copy; 2026 Portal Warga RT 001 • Pesona Kahuripan 1 
+                &copy; 2026 Developed By <a href="https://be-tech.web.id" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:text-emerald-300 transition-colors">BE-Tech</a> 
             </p>
         </div>
     </footer>

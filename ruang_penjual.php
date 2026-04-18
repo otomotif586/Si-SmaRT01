@@ -29,12 +29,13 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="public/css/mobile-ux.css">
     <link rel="stylesheet" href="public/css/ruang-penjual.css">
+    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000);
     </script>
 </head>
-<body class="bg-slate-50 min-h-screen pb-24">
+<body class="bg-slate-50 min-h-screen pb-24 text-slate-800 selection:bg-emerald-200 selection:text-emerald-900">
     <div id="smartLoadingOverlay" class="smart-loading-overlay">
         <div class="smart-loading-card">
             <h3 class="smart-loading-title" id="smartLoadingTitle">Memuat data...</h3>
@@ -45,7 +46,7 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
     </div>
     
     <!-- Top Nav -->
-    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-2xl border-b border-white/70 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.45)]">
         <div class="container mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <a href="pasar.php" class="w-10 h-10 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 hover:bg-emerald-50 hover:text-emerald-500 transition-all border border-slate-100">
@@ -72,11 +73,11 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
 
     <main class="container mx-auto px-4 py-8">
         <!-- Welcoming Section -->
-        <div class="mb-8 p-6 bg-gradient-to-br from-emerald-600 to-teal-700 rounded-[2.5rem] text-white shadow-2xl shadow-emerald-200 relative overflow-hidden">
+        <div class="mb-8 p-5 sm:p-6 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 rounded-[2rem] sm:rounded-[2.5rem] text-white shadow-2xl shadow-emerald-200 relative overflow-hidden">
             <div class="relative z-10">
                 <h2 class="text-2xl font-black mb-1">Halo, <?= htmlspecialchars($penjualData['nama_pemilik'] ?? 'Penjual') ?>! 👋</h2>
                 <p class="text-emerald-100 text-sm font-medium opacity-90">Kelola dagangan Anda dengan mudah dari genggaman.</p>
-                <div class="mt-6 flex gap-4">
+                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10 flex-1">
                         <p class="text-[9px] uppercase font-bold tracking-widest text-emerald-200 mb-1">Total Produk</p>
                         <h3 id="stat-total" class="text-xl font-black">0</h3>
@@ -91,7 +92,7 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
         </div>
 
         <!-- Action Bar -->
-        <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 mb-8 flex items-center gap-4">
+        <div class="bg-white p-4 sm:p-5 rounded-[2rem] shadow-sm border border-slate-100 mb-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
             <div class="relative flex-1">
                 <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
                 <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Cari dagangan..." class="w-full pl-11 pr-24 py-3 bg-slate-50 border-none rounded-2xl text-sm focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none">
@@ -100,13 +101,13 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
                     <span>Mencari...</span>
                 </div>
             </div>
-            <button onclick="openModal()" class="w-12 h-12 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all shrink-0">
+            <button onclick="openModal()" class="w-full sm:w-12 h-12 bg-emerald-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all shrink-0">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
 
         <!-- Product Table Responsive -->
-        <div id="productContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div id="productContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
             <!-- Data will be loaded here -->
         </div>
 
@@ -116,7 +117,7 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
 
     <!-- Modal Form -->
     <div id="productModal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 sm:p-6 bg-slate-900/40 backdrop-blur-md transition-all duration-300 overflow-hidden">
-        <div class="bg-white w-full max-w-lg m-auto rounded-[3rem] shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh] animate-in slide-in-from-bottom duration-500">
+        <div class="bg-white w-full max-w-lg m-auto rounded-[3rem] shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh] animate-in slide-in-from-bottom duration-500 overflow-hidden">
             <div class="p-8 border-b border-slate-50 flex items-center justify-between">
                 <div>
                     <h3 id="modalTitle" class="text-xl font-black text-slate-800">Tambah Dagangan</h3>
@@ -198,8 +199,8 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
                 </form>
             </div>
 
-            <div class="p-8 bg-slate-50/50 flex gap-4">
-                <button onclick="closeModal()" class="flex-1 px-6 py-4 bg-white border border-slate-200 text-slate-500 font-bold rounded-[1.5rem] hover:bg-slate-100 transition-all outline-none">Batal</button>
+            <div class="p-5 sm:p-8 bg-gradient-to-b from-white to-slate-50/90 border-t border-slate-100 flex gap-4 rounded-b-[3rem] shadow-[0_-12px_30px_-26px_rgba(15,23,42,0.35)]">
+                <button onclick="closeModal()" class="flex-1 px-6 py-4 bg-white border border-slate-200 text-slate-500 font-bold rounded-[1.5rem] hover:bg-slate-100 transition-all outline-none shadow-sm">Batal</button>
                 <button onclick="saveProduct()" id="btnSave" class="flex-[2] px-6 py-4 bg-emerald-600 text-white font-bold rounded-[1.5rem] hover:bg-emerald-700 shadow-xl shadow-emerald-200 transition-all outline-none flex items-center justify-center gap-2">
                     <i class="fas fa-check"></i> <span>Simpan</span>
                 </button>

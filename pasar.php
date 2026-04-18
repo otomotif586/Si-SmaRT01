@@ -130,7 +130,10 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
         html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
         html.js-loaded { visibility: visible; opacity: 1; }
         
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: rgba(248, 250, 252, 0.85); }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(180deg, rgba(248, 250, 252, 0.96) 0%, rgba(241, 245, 249, 0.88) 100%);
+        }
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
         
@@ -139,7 +142,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
             background-image: url('<?= htmlspecialchars($bg_overlay) ?>');
             background-size: cover; background-position: center center; background-repeat: no-repeat;
-            filter: grayscale(20%) blur(3px); opacity: 0.15;
+            filter: grayscale(18%) blur(4px); opacity: 0.11;
         }
 
         /* Custom Swiper Pagination */
@@ -149,29 +152,35 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
         .card-baru {
             --bg: #fff;
             --title-color: #fff;
-            --title-color-hover: #1e293b;
+            --title-color-hover: #0f172a;
             --text-color: #64748b;
             --button-color: #10b981;
             --button-color-hover: #059669;
-            background: var(--bg);
-            border-radius: 2rem;
-            padding: 0.5rem;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.96));
+            border-radius: 1.9rem;
+            padding: 0.55rem;
             width: 100%;
-            height: 380px;
+            height: 384px;
             overflow: clip;
             position: relative;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border: 1px solid #f1f5f9;
+            box-shadow: 0 16px 32px -26px rgba(15, 23, 42, 0.28);
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .card-baru:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 40px -24px rgba(16, 185, 129, 0.25);
+            border-color: rgba(16, 185, 129, 0.18);
         }
         @media (max-width: 640px) {
-            .card-baru { height: 290px; border-radius: 1.5rem; }
+            .card-baru { height: 310px; border-radius: 1.45rem; }
             .card-baru > section h2 { font-size: 1rem !important; }
             .card-baru > section > div button { padding: 0.6rem 1rem 0.6rem 2rem !important; font-size: 0.8rem !important; width: auto !important; }
         }
         @media (max-width: 390px) {
-            .card-baru { height: 260px; border-radius: 1.1rem; padding: 0.4rem; }
-            .card-baru > .img-container { border-radius: 0.9rem; }
+            .card-baru { height: 296px; border-radius: 1.15rem; padding: 0.42rem; }
+            .card-baru > .img-container { border-radius: 0.95rem; }
             .card-baru > section { margin: 0.65rem; }
             .card-baru > section h2 { font-size: 0.9rem !important; margin-block-end: 0.5rem; }
             .card-baru > section p { font-size: 0.72rem; }
@@ -188,8 +197,8 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
             border-radius: 0 0 1.5rem 1.5rem; translate: 0 0; transition: translate 0.3s ease; z-index: 1;
         }
         .card-baru > .img-container {
-            max-width: 100%; aspect-ratio: 4 / 5; border-radius: 1.5rem; display: block;
-            transition: aspect-ratio 0.3s ease; width: 100%; height: auto; overflow: hidden; position: relative;
+            max-width: 100%; aspect-ratio: 4 / 5; border-radius: 1.45rem; display: block;
+            transition: aspect-ratio 0.3s ease, transform 0.3s ease; width: 100%; height: auto; overflow: hidden; position: relative;
         }
 
         .card-baru .img-container::before {
@@ -241,11 +250,11 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
             100% { transform: translateX(100%); }
         }
         .card-baru > section {
-            margin: 1rem; height: calc(40% - 1rem); display: flex; flex-direction: column;
+            margin: 0.95rem; height: calc(40% - 1rem); display: flex; flex-direction: column;
             position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
         }
         .card-baru > section h2 {
-            margin: 0; margin-block-end: 1rem; font-size: 1.25rem; font-weight: 800; opacity: 0;
+            margin: 0; margin-block-end: 0.9rem; font-size: 1.2rem; font-weight: 800; opacity: 0;
             translate: 0 -200%; color: var(--title-color);
             transition: color 0.5s ease, margin-block-end 0.3s ease, opacity 0.8s ease, translate 0.3s ease;
             text-shadow: 0 2px 4px rgba(0,0,0,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -259,12 +268,12 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
             flex: 1; align-items: flex-end; display: flex; justify-content: space-between; opacity: 0;
             transition: translate 0.3s ease 0.2s, opacity 0.8s ease 0.2s;
         }
-        .card-baru > section > div .tag { color: var(--title-color-hover); font-weight: 900; font-size: 1.1rem; }
+        .card-baru > section > div .tag { color: var(--title-color-hover); font-weight: 900; font-size: 1.05rem; }
         
         /* Modern Elegant Buy Button */
         .btn-beli-modern {
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 0.62rem 1.15rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: #fff !important; font-size: 0.85rem; font-weight: 800; border-radius: 99px;
             text-decoration: none; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -309,59 +318,64 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
         }
 
         .card-stack-pasar {
-            height: 300px;
+            min-height: 290px;
             position: sticky;
             top: 15vh;
-            background: #111;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(240,253,244,0.92));
+            border: 1px solid rgba(16, 185, 129, 0.12);
             border-radius: 30px;
-            padding: 30px;
-            margin-bottom: 8vh;
+            padding: 24px;
+            margin-bottom: 6.5vh;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 1.25rem;
             overflow: hidden;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 16px 40px -28px rgba(15, 23, 42, 0.24);
             transform-origin: center top;
             transition: transform 0.3s ease-out, filter 0.3s ease-out;
             will-change: transform;
             z-index: 5;
         }
 
-        .card-stack-pasar:nth-child(1) { background: linear-gradient(145deg, #111, #000); }
-        .card-stack-pasar:nth-child(2) { background: linear-gradient(145deg, #1a1a1a, #080808); }
-        .card-stack-pasar:nth-child(3) { background: linear-gradient(145deg, #222, #111); }
+        .card-stack-pasar:nth-child(1) { background: linear-gradient(145deg, rgba(236, 253, 245, 0.95), rgba(255, 255, 255, 0.95)); }
+        .card-stack-pasar:nth-child(2) { background: linear-gradient(145deg, rgba(236, 254, 255, 0.95), rgba(255, 255, 255, 0.95)); }
+        .card-stack-pasar:nth-child(3) { background: linear-gradient(145deg, rgba(255, 251, 235, 0.95), rgba(255, 255, 255, 0.95)); }
 
         .card-stack-pasar h2 {
-            font-size: 2.2rem;
+            font-size: clamp(1.45rem, 2vw, 2.15rem);
             font-weight: 800;
-            color: #fff;
+            color: #0f172a;
             margin: 0 0 10px 0;
-            text-transform: uppercase;
-            letter-spacing: -1px;
+            letter-spacing: -0.04em;
         }
 
-        .card-stack-content-pasar { flex: 1.5; padding-right: 20px; }
-        .card-stack-pasar p { font-size: 0.95rem; color: #94a3b8; line-height: 1.5; margin: 0; }
+        .card-stack-content-pasar { flex: 1.45; padding-right: 10px; }
+        .card-stack-pasar p { font-size: 0.95rem; color: #64748b; line-height: 1.65; margin: 0; }
         .card-stack-pasar .badge-pasar { 
             display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 9px; 
-            font-weight: 800; color: #fff; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px;
+            font-weight: 800; color: #fff; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 12px 20px -14px rgba(15, 23, 42, 0.35);
         }
         
         .card-stack-img-pasar {
-            flex: 1; height: 100%; border-radius: 20px; overflow: hidden; position: relative;
+            flex: 1; height: 100%; border-radius: 24px; overflow: hidden; position: relative;
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            box-shadow: 0 18px 30px -24px rgba(15, 23, 42, 0.2);
         }
-        .card-stack-img-pasar img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: transform 0.6s ease; }
-        .card-stack-pasar:hover .card-stack-img-pasar img { transform: scale(1.1); opacity: 1; }
+        .card-stack-img-pasar img { width: 100%; height: 100%; object-fit: cover; opacity: 0.95; transition: transform 0.6s ease; }
+        .card-stack-pasar:hover .card-stack-img-pasar img { transform: scale(1.05); opacity: 1; }
 
         @media (max-width: 768px) {
-            .card-stack-pasar { flex-direction: column; height: auto; min-height: 400px; top: 18vh; padding: 24px; }
-            .card-stack-content-pasar { padding-right: 0; margin-bottom: 20px; flex: 0; }
-            .card-stack-pasar h2 { font-size: 1.6rem; }
-            .card-stack-img-pasar { height: 180px; width: 100%; }
+            .card-stack-pasar { flex-direction: column; height: auto; min-height: 0; top: 18vh; padding: 18px; border-radius: 24px; }
+            .card-stack-content-pasar { padding-right: 0; margin-bottom: 16px; flex: 0; }
+            .card-stack-pasar h2 { font-size: 1.45rem; }
+            .card-stack-pasar p { font-size: 0.9rem; }
+            .card-stack-img-pasar { height: 190px; width: 100%; }
         }
     </style>
+    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000); // Fallback
@@ -496,7 +510,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                 </div>
             </div>
         <?php else: ?>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
                 <?php foreach($produk as $p): 
                     // Format & Bersihkan nomor WA
                     $wa = preg_replace('/[^0-9]/', '', $p['no_wa']);

@@ -25,9 +25,15 @@ $blogs = mysqli_query($conn, $query_blogs);
 // Ambil data Laporan Keamanan / Terbaru (Fallback jika tabel belum sesuai)
 $laporan_terbaru = [];
 try {
-    // Mencoba mengambil data riil dari tabel keamanan
-    $query_laporan = "SELECT * FROM laporan_keamanan ORDER BY waktu_kejadian DESC LIMIT 3";
+    // Mencoba mengambil data riil dari tabel keamanan (hanya yang sudah disetujui portal)
+    $query_laporan = "SELECT * FROM laporan_keamanan WHERE approved_portal = 1 ORDER BY waktu_kejadian DESC LIMIT 3";
     $laporan_result = @mysqli_query($conn, $query_laporan);
+
+    // Fallback untuk skema lama yang belum memiliki kolom approval
+    if (!$laporan_result) {
+        $query_laporan = "SELECT * FROM laporan_keamanan ORDER BY waktu_kejadian DESC LIMIT 3";
+        $laporan_result = @mysqli_query($conn, $query_laporan);
+    }
     
     if($laporan_result && mysqli_num_rows($laporan_result) > 0) {
         while ($row = mysqli_fetch_assoc($laporan_result)) {
@@ -111,7 +117,7 @@ $background_image_url = $settingsData['web_hero_image_1'] ?? 'https://images.uns
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Custom Portal CSS -->
-    <link rel="stylesheet" href="public/css/portal.css">
+    <link rel="stylesheet" href="public/css/portal.css?v=20260417r2">
     <style>
         .background-overlay {
             position: fixed;
@@ -132,6 +138,7 @@ $background_image_url = $settingsData['web_hero_image_1'] ?? 'https://images.uns
         html { visibility: hidden; opacity: 0; transition: opacity 0.5s ease; }
         html.js-loaded { visibility: visible; opacity: 1; }
     </style>
+    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417r2">
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000); // Fallback
@@ -139,6 +146,9 @@ $background_image_url = $settingsData['web_hero_image_1'] ?? 'https://images.uns
 </head>
 <body class="selection:bg-emerald-100 selection:text-emerald-900">
     <div class="background-overlay"></div>
+    <div class="portal-parallax-orb portal-parallax-orb--a" data-parallax-speed="0.18" data-parallax-mode="scroll"></div>
+    <div class="portal-parallax-orb portal-parallax-orb--b" data-parallax-speed="-0.12" data-parallax-mode="scroll"></div>
+    <div class="portal-parallax-orb portal-parallax-orb--c" data-parallax-speed="0.09" data-parallax-mode="scroll"></div>
     <?php 
     // Load Portal Sections
     include 'views/portal/navbar.php';
@@ -157,7 +167,7 @@ $background_image_url = $settingsData['web_hero_image_1'] ?? 'https://images.uns
     ?>
 
     <!-- Custom Portal JavaScript -->
-    <script src="public/js/portal.js"></script>
+    <script src="public/js/portal.js?v=20260417r2"></script>
 
 </body>
 </html>

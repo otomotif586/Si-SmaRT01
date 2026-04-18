@@ -1,5 +1,5 @@
     <!-- FITUR TRANSPARANSI KEUANGAN PUBLIK -->
-    <section id="transparansi" class="py-16 md:py-24 lg:py-32 bg-emerald-900/5 border-b border-emerald-900/10 relative">
+    <section id="transparansi" class="py-16 md:py-24 lg:py-32 bg-emerald-900/5 border-b border-emerald-900/10 relative" data-parallax-section data-parallax-speed="0.03">
         <div class="container mx-auto px-6 md:px-12">
             <div class="glass p-8 md:p-12 lg:p-20 rounded-[3rem] lg:rounded-[4rem] card-glow reveal relative overflow-hidden bg-white/60">
                 <div class="absolute top-0 right-0 p-8 md:p-12 opacity-5 pointer-events-none hidden md:block">

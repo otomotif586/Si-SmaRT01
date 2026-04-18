@@ -1,4 +1,4 @@
-<!-- Page: Keamanan -->
+<!-- Page: Info -->
 <div id="page-keamanan" class="page-content hidden page-section">
     
     <!-- Sub Navigation Tabs -->
@@ -27,16 +27,16 @@
                 <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
                     <i data-lucide="user-check"></i>
                 </div>
-                <p class="card-label">Satpam Bertugas</p>
+                <p class="card-label">Petugas Aktif</p>
                 <h3 id="km-current-guard" class="card-value text-color" style="font-size: 1.2rem;">3 Personel</h3>
-                <div class="card-sub-info">Shift Pagi (08:00 - 20:00)</div>
+                <div class="card-sub-info">Personel siap layanan warga</div>
             </div>
             
             <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
                 <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
                     <i data-lucide="alert-circle"></i>
                 </div>
-                <p class="card-label">Laporan Baru</p>
+                <p class="card-label">Aduan Baru</p>
                 <h3 id="km-unread-reports" class="card-value text-orange" style="font-size: 1.5rem;">2</h3>
                 <div class="card-sub-info">Butuh review hari ini</div>
             </div>
@@ -45,9 +45,9 @@
                 <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
                     <i data-lucide="shield"></i>
                 </div>
-                <p class="card-label">Status Lingkungan</p>
+                <p class="card-label">Status Info</p>
                 <h3 class="card-value text-emerald" style="font-size: 1.5rem;">Aman</h3>
-                <div class="card-sub-info">Patroli aktif berkelanjutan</div>
+                <div class="card-sub-info">Informasi warga terpantau</div>
             </div>
         </div>
 
@@ -116,24 +116,25 @@
         </div>
     </div>
 
-    <!-- Tab Content: Laporan Keamanan -->
+    <!-- Tab Content: Laporan Info -->
     <div id="km-laporan" class="km-tab-content hidden">
         <div class="glass-card card-section">
             <div class="section-header">
-                <h4 class="section-title">Log Kejadian & Patroli</h4>
+                <h4 class="section-title">Aduan Warga & Informasi Pengurus</h4>
                 <button class="button-primary" onclick="addIncident()">
                     <i data-lucide="plus"></i> Laporan Baru
                 </button>
             </div>
             <div class="table-responsive">
-                <table class="modern-table" style="width: 100%;">
+                <table class="modern-table km-incident-table" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>Waktu</th>
-                            <th>Petugas</th>
+                            <th>Dilaporkan Oleh</th>
                             <th>Kejadian/Tamu</th>
                             <th>Lokasi</th>
                             <th>Status</th>
+                            <th>Portal</th>
                             <th class="text-right">Aksi</th>
                         </tr>
                     </thead>
@@ -141,6 +142,13 @@
                         <!-- Incidents will be loaded here -->
                     </tbody>
                 </table>
+            </div>
+            <div id="km-incident-pagination" style="display:none; margin-top: 14px; border-top: 1px dashed var(--border-color); padding-top: 12px; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <span id="km-incident-pagination-info" class="text-secondary" style="font-size: 0.8rem;">Menampilkan 0 data</span>
+                <div style="display:flex; gap: 8px;">
+                    <button type="button" id="km-incident-prev" class="button-secondary button-sm" onclick="changeKmIncidentPage(-1)">Sebelumnya</button>
+                    <button type="button" id="km-incident-next" class="button-secondary button-sm" onclick="changeKmIncidentPage(1)">Berikutnya</button>
+                </div>
             </div>
         </div>
     </div>
@@ -271,7 +279,7 @@
     <div class="glass-card" style="width: 100%; max-width: 500px; padding: 32px; position: relative;">
         <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="closeKmModal('modal-lap-keamanan')"><i data-lucide="x"></i></button>
         <h2 id="modal-lap-title" class="section-title" style="margin-bottom: 8px;">Laporan Baru</h2>
-        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Catat kejadian darurat atau tamu di lingkungan RT.</p>
+        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Buat informasi/aduaan sebagai Pengurus untuk ditindaklanjuti dan ditampilkan di portal.</p>
         
         <input type="hidden" id="km-lap-id" value="0">
         <div class="form-group" style="margin-bottom: 16px;">
@@ -291,6 +299,11 @@
         <div class="form-group" style="margin-bottom: 16px;">
             <label class="card-label">Deskripsi Lengkap</label>
             <textarea id="km-lap-deskripsi" class="input-field" style="margin-top: 8px; min-height: 80px; padding: 12px 20px; border-radius: 16px; resize: vertical;"></textarea>
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+            <label class="card-label">Lampiran File (Opsional)</label>
+            <input type="file" id="km-lap-file" class="input-field" style="margin-top: 8px; padding: 10px 14px;" accept="image/*,video/*,.pdf,.doc,.docx,.xlsx,.xls,.zip,.rar">
+            <small class="text-secondary" style="display:block; margin-top:6px; font-size:0.78rem;">Dukung gambar, video, dan dokumen. Maksimal 8MB.</small>
         </div>
         <div class="form-group" style="margin-bottom: 24px;">
             <label class="card-label">Status Penanganan</label>
@@ -365,6 +378,98 @@
 }
 .hidden { display: none !important; }
 .active-tab { display: block !important; }
+
+.km-incident-table td,
+.km-incident-table th {
+    vertical-align: middle;
+}
+
+.sub-nav-tabs {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    padding-bottom: 2px;
+}
+
+.sub-nav-tabs .sub-nav-tab {
+    min-height: 42px;
+}
+
+@media (max-width: 860px) {
+    #page-keamanan .section-header {
+        gap: 10px;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #page-keamanan .section-header .button-primary,
+    #page-keamanan .section-header .button-secondary,
+    #page-keamanan .section-header .button-link {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .km-incident-table thead {
+        display: none;
+    }
+
+    .km-incident-table,
+    .km-incident-table tbody,
+    .km-incident-table tr,
+    .km-incident-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .km-incident-table tr {
+        background: color-mix(in srgb, var(--secondary-bg) 92%, transparent);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        margin-bottom: 12px;
+        padding: 10px;
+    }
+
+    .km-incident-table td {
+        border: 0 !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 4px !important;
+        font-size: 0.82rem;
+    }
+
+    .km-incident-table td::before {
+        content: attr(data-label);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 800;
+        color: var(--text-secondary-color);
+        flex: 0 0 96px;
+    }
+
+    .km-incident-table td.text-right {
+        justify-content: flex-end !important;
+        flex-wrap: wrap;
+        gap: 6px !important;
+    }
+
+    .km-incident-table td.text-right::before {
+        margin-right: auto;
+    }
+
+    .modal-content,
+    #modal-lap-keamanan .glass-card,
+    #modal-jadwal .glass-card,
+    #modal-satpam .glass-card,
+    #modal-izin .glass-card {
+        width: min(100%, 96vw) !important;
+        max-height: 92vh;
+        overflow-y: auto;
+        border-radius: 18px;
+        padding: 20px !important;
+    }
+}
 
 /* Custom Badge colors for reports */
 .badge-status-waiting { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }

@@ -1,5 +1,5 @@
     <!-- Visi & Misi Section -->
-    <section id="visimisi" class="py-16 md:py-24 lg:py-32 bg-white/50 backdrop-blur-md border-b border-white/60">
+    <section id="visimisi" class="py-16 md:py-24 lg:py-32 bg-white/50 backdrop-blur-md border-b border-white/60" data-parallax-section data-parallax-speed="0.017">
         <div class="container mx-auto px-6 md:px-12">
             <div class="grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
                 <div class="reveal">

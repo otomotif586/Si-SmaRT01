@@ -4,6 +4,7 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'] ?? 0;
+    $blok_id = (int)($_POST['blok_id'] ?? 0);
     $nama_lengkap = $_POST['nama_lengkap'] ?? '';
     $nik = $_POST['nik'] ?? '';
     $nik_kepala = $_POST['nik_kepala'] ?? '';
@@ -14,6 +15,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    if ($blok_id <= 0) {
+        $stmtCurrentBlok = $pdo->prepare("SELECT blok_id FROM warga WHERE id = ? LIMIT 1");
+        $stmtCurrentBlok->execute([$id]);
+        $blok_id = (int)($stmtCurrentBlok->fetchColumn() ?: 0);
+    }
+
+    $stmtBlokNama = $pdo->prepare("SELECT nama_blok FROM blok WHERE id = ? LIMIT 1");
+    $stmtBlokNama->execute([$blok_id]);
+    $blokNama = trim((string)($stmtBlokNama->fetchColumn() ?: ''));
+    if ($blokNama === '') {
+        echo json_encode(['status' => 'error', 'message' => 'Blok tidak valid.']);
+        exit;
+    }
+
+    $rawNoRumah = (string)($_POST['nomor_rumah'] ?? '');
+    $noRumahDigits = preg_replace('/\D+/', '', $rawNoRumah);
+    if ($noRumahDigits === '') {
+        echo json_encode(['status' => 'error', 'message' => 'Nomor rumah wajib 2 digit.']);
+        exit;
+    }
+    if (strlen($noRumahDigits) > 2) {
+        $noRumahDigits = substr($noRumahDigits, -2);
+    }
+    $nomorRumahFormatted = $blokNama . '-' . str_pad($noRumahDigits, 2, '0', STR_PAD_LEFT);
+
     // Validasi angka
     if ((!empty($nik) && !preg_match('/^[0-9]+$/', $nik)) || (!empty($nik_kepala) && !preg_match('/^[0-9]+$/', $nik_kepala)) || (!empty($no_wa) && !preg_match('/^[0-9]+$/', $no_wa))) {
         echo json_encode(['status' => 'error', 'message' => 'No KK, NIK Kepala, dan No WhatsApp harus murni angka!']);
@@ -23,11 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $pdo->beginTransaction();
         
-        $stmt = $pdo->prepare("
-            UPDATE warga SET nik = ?, nik_kepala = ?, nama_lengkap = ?, nomor_rumah = ?, no_wa = ?, tempat_lahir = ?, tanggal_lahir = ?, status_pernikahan = ?, status_kependudukan = ?
+        $stmt = $pdo->prepare(" 
+            UPDATE warga SET blok_id = ?, nik = ?, nik_kepala = ?, nama_lengkap = ?, nomor_rumah = ?, no_wa = ?, tempat_lahir = ?, tanggal_lahir = ?, status_pernikahan = ?, status_kependudukan = ?
             WHERE id = ?
         ");
-        $stmt->execute([$nik, $nik_kepala, $nama_lengkap, $_POST['nomor_rumah'], $no_wa, $_POST['tempat_lahir'], empty($_POST['tanggal_lahir']) ? null : $_POST['tanggal_lahir'], $_POST['status_pernikahan'], $_POST['status_kependudukan'], $id]);
+        $stmt->execute([$blok_id, $nik, $nik_kepala, $nama_lengkap, $nomorRumahFormatted, $no_wa, $_POST['tempat_lahir'], empty($_POST['tanggal_lahir']) ? null : $_POST['tanggal_lahir'], $_POST['status_pernikahan'], $_POST['status_kependudukan'], $id]);
         
         // Hapus data relasi lama
         $pdo->prepare("DELETE FROM warga_pasangan WHERE warga_id = ?")->execute([$id]);

@@ -69,6 +69,42 @@ $normalizeWa = function (string $wa): string {
     return $digits;
 };
 
+$normalizeNoRumahDigits = function (string $value): string {
+    $digits = preg_replace('/\D+/', '', trim($value));
+    if ($digits === '') {
+        return '';
+    }
+    if (strlen($digits) > 2) {
+        $digits = substr($digits, -2);
+    }
+    return str_pad($digits, 2, '0', STR_PAD_LEFT);
+};
+
+$fetchBlokNameById = function (int $blokId) use ($pdo): ?string {
+    if ($blokId <= 0) {
+        return null;
+    }
+    $stmt = $pdo->prepare("SELECT nama_blok FROM blok WHERE id = ? LIMIT 1");
+    $stmt->execute([$blokId]);
+    $name = $stmt->fetchColumn();
+    if ($name === false) {
+        return null;
+    }
+    return trim((string)$name);
+};
+
+$formatNomorRumah = function (?string $blokNama, string $nomorRaw) use ($normalizeNoRumahDigits): string {
+    $nomor2Digit = $normalizeNoRumahDigits($nomorRaw);
+    if ($nomor2Digit === '') {
+        return '';
+    }
+    $blok = trim((string)$blokNama);
+    if ($blok === '') {
+        return $nomor2Digit;
+    }
+    return $blok . '-' . $nomor2Digit;
+};
+
 $normalizeName = function (string $name): string {
     $name = strtolower(trim($name));
     return preg_replace('/\s+/', ' ', $name);
@@ -276,6 +312,18 @@ $sanitizeRows = function ($rows, array $allowed) {
 $isLoggedIn = isset($_SESSION['rw_account_id']);
 $account = null;
 $linkedWarga = null;
+$aduanPage = max(1, (int)($_GET['aduan_page'] ?? 1));
+$aduanPerPage = 15;
+$aduanTotalRows = 0;
+$aduanTotalPages = 1;
+
+$blokOptions = [];
+try {
+    $stmtBlok = $pdo->query("SELECT id, nama_blok FROM blok ORDER BY nama_blok ASC");
+    $blokOptions = $stmtBlok->fetchAll(PDO::FETCH_ASSOC);
+} catch (Throwable $ignored) {
+    $blokOptions = [];
+}
 
 if ($isLoggedIn) {
     $stmt = $pdo->prepare("SELECT * FROM ruang_warga_accounts WHERE id = ? LIMIT 1");
@@ -332,7 +380,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'register') {
         $nik = $normalizeNik($_POST['nik'] ?? '');
         $nama = trim($_POST['nama'] ?? '');
-        $noRumah = trim($_POST['no_rumah'] ?? '');
+        $blokId = (int)($_POST['blok_id'] ?? 0);
+        $blokNama = $fetchBlokNameById($blokId);
+        $noRumah = $formatNomorRumah($blokNama, (string)($_POST['no_rumah'] ?? ''));
         $noWa = $normalizeWa($_POST['no_wa'] ?? '');
 
         if (!preg_match('/^\d{16}$/', $nik)) {
@@ -340,7 +390,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $alertMessage = 'NIK harus terdiri dari 16 digit angka.';
         } elseif ($nama === '' || $noRumah === '' || $noWa === '') {
             $alertType = 'error';
-            $alertMessage = 'Nama, No Rumah, dan No WA wajib diisi.';
+            $alertMessage = 'Nama, Blok, No Rumah (2 digit), dan No WA wajib diisi.';
         } else {
             $check = $pdo->prepare("SELECT id FROM ruang_warga_accounts WHERE nik = ? LIMIT 1");
             $check->execute([$nik]);
@@ -384,10 +434,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nik = $normalizeNik($_POST['nik'] ?? '');
             $nikKepala = $normalizeNik($_POST['nik_kepala'] ?? '');
             $noWa = $normalizeWa($_POST['no_wa'] ?? '');
+            $blokId = (int)($_POST['blok_id'] ?? 0);
+            $blokNama = $fetchBlokNameById($blokId);
+            $nomorRumahFormatted = $formatNomorRumah($blokNama, (string)($_POST['nomor_rumah'] ?? ''));
 
             if ($namaLengkap === '') {
                 $alertType = 'error';
                 $alertMessage = 'Nama lengkap wajib diisi.';
+            } elseif ($blokId <= 0 || $blokNama === null) {
+                $alertType = 'error';
+                $alertMessage = 'Blok wajib dipilih.';
+            } elseif ($nomorRumahFormatted === '') {
+                $alertType = 'error';
+                $alertMessage = 'Nomor rumah wajib 2 digit.';
             } elseif ($nik !== '' && !preg_match('/^\d{16}$/', $nik)) {
                 $alertType = 'error';
                 $alertMessage = 'NIK harus 16 digit angka.';
@@ -402,12 +461,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $pdo->beginTransaction();
 
-                    $stmt = $pdo->prepare("UPDATE warga SET nik = ?, nik_kepala = ?, nama_lengkap = ?, nomor_rumah = ?, no_wa = ?, tempat_lahir = ?, tanggal_lahir = ?, status_pernikahan = ?, status_kependudukan = ? WHERE id = ?");
+                    $stmt = $pdo->prepare("UPDATE warga SET blok_id = ?, nik = ?, nik_kepala = ?, nama_lengkap = ?, nomor_rumah = ?, no_wa = ?, tempat_lahir = ?, tanggal_lahir = ?, status_pernikahan = ?, status_kependudukan = ? WHERE id = ?");
                     $stmt->execute([
+                        $blokId,
                         $nik,
                         $nikKepala,
                         $namaLengkap,
-                        trim($_POST['nomor_rumah'] ?? ''),
+                        $nomorRumahFormatted,
                         $noWa,
                         trim($_POST['tempat_lahir'] ?? ''),
                         trim($_POST['tanggal_lahir'] ?? '') !== '' ? trim($_POST['tanggal_lahir']) : null,
@@ -494,10 +554,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if ($avatarPathToSave !== null) {
                         $upAcc = $pdo->prepare("UPDATE ruang_warga_accounts SET nama = ?, no_rumah = ?, no_wa = ?, avatar = ? WHERE id = ?");
-                        $upAcc->execute([$namaLengkap, trim($_POST['nomor_rumah'] ?? ''), $noWa, $avatarPathToSave, (int)$account['id']]);
+                        $upAcc->execute([$namaLengkap, $nomorRumahFormatted, $noWa, $avatarPathToSave, (int)$account['id']]);
                     } else {
                         $upAcc = $pdo->prepare("UPDATE ruang_warga_accounts SET nama = ?, no_rumah = ?, no_wa = ? WHERE id = ?");
-                        $upAcc->execute([$namaLengkap, trim($_POST['nomor_rumah'] ?? ''), $noWa, (int)$account['id']]);
+                        $upAcc->execute([$namaLengkap, $nomorRumahFormatted, $noWa, (int)$account['id']]);
                     }
 
                     $_SESSION['rw_nama'] = $namaLengkap;
@@ -516,7 +576,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if ($action === 'submit_laporan_smart' && $isLoggedIn && $account) {
+    if ($action === 'submit_aduan_smart' && $isLoggedIn && $account) {
         try {
             $linkedWarga = $ensureLinkedWarga($account);
         } catch (Throwable $e) {
@@ -524,22 +584,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if (!$linkedWarga) {
             $alertType = 'warning';
-            $alertMessage = 'Data warga belum terhubung, laporan belum bisa dikirim.';
+            $alertMessage = 'Data warga belum terhubung, aduan belum bisa dikirim.';
         } else {
-            $judul = trim($_POST['lap_judul'] ?? '');
-            $keterangan = trim($_POST['lap_keterangan'] ?? '');
+            $judul = trim($_POST['adu_judul'] ?? '');
+            $keterangan = trim($_POST['adu_keterangan'] ?? '');
             if ($judul === '') {
                 $alertType = 'error';
-                $alertMessage = 'Judul laporan wajib diisi.';
+                $alertMessage = 'Judul aduan wajib diisi.';
             } else {
                 try {
-                    $stmtLap = $pdo->prepare("INSERT INTO laporan_masalah (blok_id, warga_id, judul_laporan, keterangan, status, tanggal_laporan, tanggal_selesai) VALUES (?, ?, ?, ?, 'Baru', NOW(), NULL)");
-                    $stmtLap->execute([(int)$linkedWarga['blok_id'], (int)$linkedWarga['id'], $judul, $keterangan]);
+                    $lampiranPath = null;
+                    $lampiranName = null;
+
+                    if (isset($_FILES['adu_lampiran']) && (int)($_FILES['adu_lampiran']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+                        $uploadError = (int)($_FILES['adu_lampiran']['error'] ?? UPLOAD_ERR_NO_FILE);
+                        if ($uploadError !== UPLOAD_ERR_OK) {
+                            throw new RuntimeException('Lampiran gagal diunggah.');
+                        }
+
+                        $tmp = (string)($_FILES['adu_lampiran']['tmp_name'] ?? '');
+                        $origName = basename((string)($_FILES['adu_lampiran']['name'] ?? 'lampiran'));
+                        $size = (int)($_FILES['adu_lampiran']['size'] ?? 0);
+                        $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
+                        $allowedExt = ['jpg', 'jpeg', 'png', 'webp', 'mp4', 'mov', 'pdf'];
+
+                        if ($size > 8 * 1024 * 1024) {
+                            throw new RuntimeException('Ukuran lampiran maksimal 8MB.');
+                        }
+                        if (!in_array($ext, $allowedExt, true)) {
+                            throw new RuntimeException('Format lampiran tidak didukung.');
+                        }
+
+                        $dirAbs = __DIR__ . '/../../public/uploads/lampiran_aduan';
+                        if (!is_dir($dirAbs) && !mkdir($dirAbs, 0777, true) && !is_dir($dirAbs)) {
+                            throw new RuntimeException('Folder upload tidak dapat dibuat.');
+                        }
+
+                        $safeName = preg_replace('/[^A-Za-z0-9._-]/', '_', $origName);
+                        $newName = date('YmdHis') . '_' . bin2hex(random_bytes(5)) . '_' . $safeName;
+                        $targetAbs = $dirAbs . '/' . $newName;
+                        if (!move_uploaded_file($tmp, $targetAbs)) {
+                            throw new RuntimeException('Gagal menyimpan lampiran aduan.');
+                        }
+
+                        $lampiranPath = 'public/uploads/lampiran_aduan/' . $newName;
+                        $lampiranName = $origName;
+                    }
+
+                    $pelapor = trim((string)($linkedWarga['nama_lengkap'] ?? ''));
+                    if ($pelapor === '') {
+                        $pelapor = trim((string)($account['nama'] ?? 'Sistem'));
+                    }
+
+                    $stmtLap = $pdo->prepare("INSERT INTO laporan_keamanan (judul, waktu_kejadian, lokasi, deskripsi, status, pelapor, kategori, sumber_input, sumber_warga_id, sumber_account_id, butuh_approval_portal, approved_portal, approved_portal_at, approved_portal_by, lampiran_path, lampiran_name) VALUES (?, NOW(), ?, ?, 'Baru', ?, 'Aduan Warga', 'Warga', ?, ?, 1, 0, NULL, NULL, ?, ?)");
+                    $stmtLap->execute([
+                        $judul,
+                        (string)($linkedWarga['nama_blok'] ?? ''),
+                        $keterangan,
+                        $pelapor,
+                        (int)$linkedWarga['id'],
+                        (int)$account['id'],
+                        $lampiranPath,
+                        $lampiranName,
+                    ]);
+
                     $alertType = 'success';
-                    $alertMessage = 'Laporan berhasil dikirim ke Si-SmaRT.';
+                    $alertMessage = 'Aduan berhasil dikirim. Menunggu persetujuan pengurus untuk tampil di portal.';
                 } catch (Throwable $e) {
                     $alertType = 'error';
-                    $alertMessage = 'Gagal kirim laporan: ' . $e->getMessage();
+                    $alertMessage = 'Gagal kirim aduan: ' . $e->getMessage();
                 }
             }
         }
@@ -594,9 +707,28 @@ if ($isLoggedIn) {
             $stmtHistory->execute([(int)$linkedWarga['id']]);
             $historyRows = $stmtHistory->fetchAll(PDO::FETCH_ASSOC);
 
-            $stmtLap = $pdo->prepare("SELECT * FROM laporan_masalah WHERE warga_id = ? ORDER BY tanggal_laporan DESC LIMIT 20");
-            $stmtLap->execute([(int)$linkedWarga['id']]);
-            $laporanRows = $stmtLap->fetchAll(PDO::FETCH_ASSOC);
+            try {
+                $stmtCountLap = $pdo->prepare("SELECT COUNT(*) FROM laporan_keamanan WHERE sumber_warga_id = ?");
+                $stmtCountLap->execute([(int)$linkedWarga['id']]);
+                $aduanTotalRows = (int)$stmtCountLap->fetchColumn();
+                $aduanTotalPages = max(1, (int)ceil($aduanTotalRows / $aduanPerPage));
+                if ($aduanPage > $aduanTotalPages) {
+                    $aduanPage = $aduanTotalPages;
+                }
+                $aduanOffset = ($aduanPage - 1) * $aduanPerPage;
+
+                $stmtLap = $pdo->prepare("SELECT id, judul, deskripsi, status, waktu_kejadian, approved_portal, lampiran_path, lampiran_name FROM laporan_keamanan WHERE sumber_warga_id = ? ORDER BY waktu_kejadian DESC LIMIT ? OFFSET ?");
+                $stmtLap->bindValue(1, (int)$linkedWarga['id'], PDO::PARAM_INT);
+                $stmtLap->bindValue(2, $aduanPerPage, PDO::PARAM_INT);
+                $stmtLap->bindValue(3, $aduanOffset, PDO::PARAM_INT);
+                $stmtLap->execute();
+                $laporanRows = $stmtLap->fetchAll(PDO::FETCH_ASSOC);
+            } catch (Throwable $ignored) {
+                $laporanRows = [];
+                $aduanTotalRows = 0;
+                $aduanTotalPages = 1;
+                $aduanPage = 1;
+            }
 
             $stmtPas = $pdo->prepare("SELECT * FROM warga_pasangan WHERE warga_id = ? LIMIT 1");
             $stmtPas->execute([(int)$linkedWarga['id']]);

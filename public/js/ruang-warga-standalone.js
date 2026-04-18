@@ -170,4 +170,10 @@ function bindAvatarPreview() {
     bindAvatarPreview();
     statusPernikahan?.addEventListener('change', togglePasangan);
     togglePasangan();
+
+    const params = new URLSearchParams(window.location.search);
+    const forcedTab = params.get('tab');
+    if (forcedTab === 'aduan' || params.has('aduan_page')) {
+        activateTab('aduan');
+    }
 })();

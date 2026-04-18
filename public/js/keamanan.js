@@ -3,6 +3,10 @@ window.initKeamanan = function() {
     loadKeamananRingkasan();
 }
 
+window.kmIncidentPage = 1;
+window.kmIncidentPerPage = 15;
+window.kmIncidentTotalPages = 1;
+
 window.switchKeamananTab = function(tabId, btnElement) {
     document.querySelectorAll('.km-tab-content').forEach(el => el.classList.add('hidden'));
     document.querySelectorAll('.sub-nav-tab').forEach(el => el.classList.remove('active'));
@@ -317,11 +321,20 @@ window.deleteJadwal = function(id) {
 // =========================================
 window.loadLaporanKeamanan = function() {
     const tbody = document.getElementById('km-incident-body');
-    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5">Memuat laporan kejadian...</td></tr>';
-    
-    fetch('api/keamanan/get_laporan.php')
+    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-5">Memuat aduan dan informasi...</td></tr>';
+
+    const paginationWrap = document.getElementById('km-incident-pagination');
+    const paginationInfo = document.getElementById('km-incident-pagination-info');
+    const prevBtn = document.getElementById('km-incident-prev');
+    const nextBtn = document.getElementById('km-incident-next');
+
+    fetch(`api/keamanan/get_laporan.php?page=${window.kmIncidentPage}&per_page=${window.kmIncidentPerPage}`)
         .then(r => r.ok ? r.json() : {status:'error', message:'API Endpoint Belum Tersedia.'})
         .then(res => {
+            const pg = res.pagination || { page: 1, per_page: window.kmIncidentPerPage, total: 0, total_pages: 1 };
+            window.kmIncidentPage = Number(pg.page || 1);
+            window.kmIncidentTotalPages = Math.max(1, Number(pg.total_pages || 1));
+
             if (res.status === 'success' && res.data.length > 0) {
                 let html = '';
                 res.data.forEach(l => {
@@ -329,15 +342,22 @@ window.loadLaporanKeamanan = function() {
                     if(l.status === 'Baru') statusClass = 'bg-red-light text-red';
                     if(l.status === 'Diproses') statusClass = 'bg-orange-light text-orange';
                     if(l.status === 'Selesai') statusClass = 'bg-emerald-light text-emerald';
+                    const portalApproved = Number(l.approved_portal || 0) === 1;
+                    const portalBadgeClass = portalApproved ? 'bg-emerald-light text-emerald' : 'bg-orange-light text-orange';
+                    const portalBadgeText = portalApproved ? 'Disetujui' : 'Menunggu';
+                    const nextApprove = portalApproved ? '0' : '1';
+                    const approveBtnLabel = portalApproved ? 'Unpublish' : 'Approve';
                     
                     html += `
                     <tr>
-                        <td style="font-size:0.85rem;">${l.waktu_kejadian}</td>
-                        <td style="font-weight:600;">${l.pelapor || 'Sistem'}</td>
-                        <td>${l.judul}</td>
-                        <td>${l.lokasi || '-'}</td>
-                        <td><span class="badge ${statusClass}" style="font-size:0.7rem;">${l.status}</span></td>
-                        <td class="text-right" style="display:flex; justify-content:flex-end; gap:8px;">
+                        <td data-label="Waktu" style="font-size:0.85rem;">${l.waktu_kejadian}</td>
+                        <td data-label="Pelapor" style="font-weight:600;">${l.pelapor || 'Sistem'}</td>
+                        <td data-label="Judul">${l.judul}</td>
+                        <td data-label="Lokasi">${l.lokasi || '-'}</td>
+                        <td data-label="Status"><span class="badge ${statusClass}" style="font-size:0.7rem;">${l.status}</span></td>
+                        <td data-label="Portal"><span class="badge ${portalBadgeClass}" style="font-size:0.7rem;">${portalBadgeText}</span></td>
+                        <td data-label="Aksi" class="text-right" style="display:flex; justify-content:flex-end; gap:8px;">
+                            <button class="button-secondary button-sm" onclick="setPortalApproval(${l.id}, ${nextApprove})">${approveBtnLabel}</button>
                             <button class="button-secondary button-sm" onclick="viewDetailLaporan(${l.id}, '${encodeURIComponent(JSON.stringify(l))}')"><i data-lucide="eye" style="width:14px; height:14px;"></i></button>
                             <button class="button-secondary button-sm" onclick="editLaporan(${l.id}, '${l.judul}', '${l.waktu_kejadian}', '${l.lokasi}', '${l.status}', '${encodeURIComponent(l.deskripsi)}')"><i data-lucide="edit" style="width:14px; height:14px;"></i></button>
                             <button class="button-secondary button-sm" style="color: #ef4444;" onclick="deleteLaporan(${l.id})"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
@@ -347,8 +367,50 @@ window.loadLaporanKeamanan = function() {
                 tbody.innerHTML = html;
                 if(typeof lucide !== 'undefined') lucide.createIcons();
             } else {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-5 text-secondary">${res.message || 'Lingkungan aman, belum ada laporan kejadian.'}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5 text-secondary">${res.message || 'Belum ada aduan/informasi terbaru.'}</td></tr>`;
             }
+
+            if (paginationWrap && paginationInfo && prevBtn && nextBtn) {
+                const total = Number(pg.total || 0);
+                const perPage = Number(pg.per_page || window.kmIncidentPerPage);
+                const start = total === 0 ? 0 : ((window.kmIncidentPage - 1) * perPage) + 1;
+                const end = Math.min(total, window.kmIncidentPage * perPage);
+                paginationInfo.textContent = total > 0
+                    ? `Menampilkan ${start}-${end} dari ${total} data`
+                    : 'Belum ada data';
+                paginationWrap.style.display = 'flex';
+                prevBtn.disabled = window.kmIncidentPage <= 1;
+                nextBtn.disabled = window.kmIncidentPage >= window.kmIncidentTotalPages;
+            }
+        });
+}
+
+window.changeKmIncidentPage = function(step) {
+    const nextPage = window.kmIncidentPage + Number(step || 0);
+    if (nextPage < 1 || nextPage > window.kmIncidentTotalPages) {
+        return;
+    }
+    window.kmIncidentPage = nextPage;
+    loadLaporanKeamanan();
+}
+
+window.setPortalApproval = function(id, approved) {
+    const fd = new FormData();
+    fd.append('id', String(id));
+    fd.append('approved_portal', String(approved));
+    fetch('api/keamanan/simpan_laporan.php', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(res => {
+            if (res.status === 'success') {
+                if (typeof showToast === 'function') showToast(res.message || 'Status portal diperbarui.');
+                loadLaporanKeamanan();
+                loadKeamananRingkasan();
+            } else if (typeof showToast === 'function') {
+                showToast(res.message || 'Gagal memperbarui status portal.', 'error');
+            }
+        })
+        .catch(() => {
+            if (typeof showToast === 'function') showToast('Gagal terhubung ke API persetujuan portal.', 'error');
         });
 }
 
@@ -363,8 +425,9 @@ window.addIncident = function() {
     
     document.getElementById('km-lap-lokasi').value = '';
     document.getElementById('km-lap-deskripsi').value = '';
+    document.getElementById('km-lap-file').value = '';
     document.getElementById('km-lap-status').value = 'Baru';
-    document.getElementById('modal-lap-title').innerText = 'Laporan Baru';
+    document.getElementById('modal-lap-title').innerText = 'Info/Aduan Baru';
     document.getElementById('modal-lap-keamanan').classList.remove('hidden');
 }
 
@@ -375,7 +438,8 @@ window.editLaporan = function(id, judul, waktu, lokasi, status, descEncoded) {
     document.getElementById('km-lap-lokasi').value = lokasi;
     document.getElementById('km-lap-status').value = status;
     document.getElementById('km-lap-deskripsi').value = decodeURIComponent(descEncoded);
-    document.getElementById('modal-lap-title').innerText = 'Edit Laporan';
+    document.getElementById('km-lap-file').value = '';
+    document.getElementById('modal-lap-title').innerText = 'Edit Info/Aduan';
     document.getElementById('modal-lap-keamanan').classList.remove('hidden');
 }
 
@@ -395,11 +459,13 @@ window.viewDetailLaporan = function(id, dataStr) {
                 <span style="display: flex; align-items: center; gap: 4px;"><i data-lucide="map-pin" style="width:14px; height:14px;"></i> Lokasi: ${l.lokasi || '-'}</span>
             </div>
             <p style="font-size: 0.85rem; color: var(--text-secondary-color);">Dilaporkan Oleh: <strong>${l.pelapor || 'Sistem'}</strong></p>
+            <p style="font-size: 0.85rem; color: var(--text-secondary-color);">Portal: <strong>${Number(l.approved_portal || 0) === 1 ? 'Disetujui Tayang' : 'Belum Disetujui'}</strong></p>
         </div>
         <div style="background: var(--hover-bg); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 24px;">
             <h4 style="font-size: 0.9rem; font-weight: 700; margin: 0 0 8px 0;">Deskripsi Kejadian:</h4>
             <p style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--text-color);">${l.deskripsi || 'Tidak ada deskripsi rinci.'}</p>
         </div>
+        ${l.lampiran_path ? `<div style="margin-bottom: 20px;"><a href="${l.lampiran_path}" target="_blank" class="button-secondary">Lihat Lampiran: ${l.lampiran_name || 'File Aduan'}</a></div>` : ''}
         <div style="display: flex; justify-content: flex-end;">
             <button class="button-secondary" onclick="closeKmModal('modal-detail-lap-keamanan')">Tutup Jendela</button>
         </div>
@@ -425,6 +491,13 @@ window.saveLaporanKeamanan = function() {
     fd.append('lokasi', document.getElementById('km-lap-lokasi').value);
     fd.append('deskripsi', document.getElementById('km-lap-deskripsi').value);
     fd.append('status', document.getElementById('km-lap-status').value);
+    fd.append('pelapor', 'Pengurus');
+    fd.append('kategori', 'Info Pengurus');
+    fd.append('sumber_input', 'Pengurus');
+    const lampiranFile = document.getElementById('km-lap-file').files[0];
+    if (lampiranFile) {
+        fd.append('lampiran_file', lampiranFile);
+    }
     showLoading('Menyimpan...');
     fetch('api/keamanan/simpan_laporan.php', { method: 'POST', body: fd }).then(r=>r.json()).then(res=>{
         if(res.status==='success') { showToast(res.message); closeKmModal('modal-lap-keamanan'); loadLaporanKeamanan(); loadKeamananRingkasan(); } 
