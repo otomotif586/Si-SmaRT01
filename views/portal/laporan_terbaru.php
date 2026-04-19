@@ -57,7 +57,7 @@
                         $icon = 'fa-check-circle'; $glowColor = 'group-hover:shadow-emerald-500/20 hover:border-emerald-300';
                     }
                 ?>
-                <div class="glass bg-white/80 p-8 rounded-[2.5rem] card-glow <?= $glowColor ?> group relative transition-all duration-500 flex flex-col h-full overflow-hidden border border-white" style="transition-delay: <?= $idx * 100 ?>ms">
+                <div class="glass bg-white/80 p-8 rounded-[2.5rem] card-glow <?= $glowColor ?> group relative transition-all duration-500 flex flex-col h-full overflow-hidden border border-white">
                     
                     <!-- Latar Aksen Lingkaran saat Di-hover -->
                     <div class="absolute -right-10 -top-10 w-40 h-40 <?= $statusBg ?> rounded-full blur-3xl opacity-60 pointer-events-none transition-all duration-700 group-hover:scale-150"></div>

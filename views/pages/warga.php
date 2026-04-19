@@ -58,7 +58,7 @@
                         <span class="tag text-emerald font-bold tag-plain-value"><?= $setor_format ?></span>
                     </div>
                     <div class="inline-actions">
-                        <button class="button-secondary button-sm button-secondary-accent compact-btn" onclick="event.stopPropagation(); window.currentBlokId = <?= $blok_id ?>; openMasterIuran()"><i data-lucide="settings" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Master Iuran</span></button>
+                        <button class="button-secondary button-sm button-secondary-accent compact-btn" onclick="event.stopPropagation(); window.currentBlokId = <?= $blok_id ?>; openMasterIuran()"><i data-lucide="settings" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Master Iuran</span></button>
                         <button onclick="event.stopPropagation(); editBlok(<?= $blok_id ?>, '<?= addslashes($nama_blok) ?>', '<?= addslashes($koordinator) ?>', <?= $blok['periode_mulai_bulan'] ?? 'null' ?>, <?= $blok['periode_mulai_tahun'] ?? 'null' ?>)" title="Pengaturan Blok" class="icon-btn-round"><i data-lucide="settings" class="icon-16"></i></button>
                         <button onclick="event.stopPropagation(); hapusBlok(<?= $blok_id ?>, '<?= addslashes($nama_blok) ?>', <?= $total_warga ?>)" title="Hapus Blok" class="icon-btn-round icon-btn-round-danger"><i data-lucide="trash-2" class="icon-16"></i></button>
                         <button class="ws-action-btn">Buka</button>
@@ -188,7 +188,7 @@
                                 <i data-lucide="upload" class="icon-18"></i> <span class="hide-text-mobile">Import</span>
                                 <input type="file" id="import-warga-csv" accept=".csv" class="hidden" onchange="importWargaCSV(this)">
                             </label>
-                            <button class="button-primary button-sm compact-btn" onclick="openFormWarga()"><i data-lucide="user-plus" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Tambah Warga</span></button>
+                            <button class="button-primary button-sm compact-btn" onclick="openFormWarga()"><i data-lucide="user-plus" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Tambah Warga</span></button>
                         </div>
                     </div>
                     
@@ -226,13 +226,13 @@
                             <i data-lucide="search"></i>
                             <input type="text" id="search-warga-input" placeholder="Cari nama atau NIK..." class="input-field input-field-compact" oninput="filterWargaList()">
                         </div>
-                        <select id="filter-pernikahan" class="input-field select-custom filter-mobile-flex compact-select flex-1 minw-120" onchange="filterWargaList()">
+                        <select id="filter-pernikahan" class="input-field select-custom filter-mobile-flex compact-select flex-1 min-w-[120px]" onchange="filterWargaList()">
                             <option value="">Pernikahan (Semua)</option>
                             <option value="Lajang">Lajang</option>
                             <option value="Menikah">Menikah</option>
                             <option value="Pisah">Pisah</option>
                         </select>
-                        <select id="filter-status" class="input-field select-custom filter-mobile-flex compact-select flex-1 minw-120" onchange="filterWargaList()">
+                        <select id="filter-status" class="input-field select-custom filter-mobile-flex compact-select flex-1 min-w-[120px]" onchange="filterWargaList()">
                             <option value="">Status (Semua)</option>
                             <option value="Tetap">Tetap</option>
                             <option value="Kontrak">Kontrak</option>
@@ -258,10 +258,10 @@
                     <div class="section-header page-filter-row mb-16 w-full">
                         <h3 class="section-title m-0">Kelola Kas & Iuran Blok</h3>
                         <div class="inline-wrap-8">
-                            <button class="button-secondary button-sm compact-btn fw-600" onclick="openRekonsiliasi()"><i data-lucide="activity" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Rekonsiliasi</span></button>
-                            <button class="button-secondary button-sm button-secondary-accent compact-btn" onclick="bayarTerpilihIuran()"><i data-lucide="check-square" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Bayar Terpilih</span></button>
-                            <button class="button-secondary button-sm compact-btn" onclick="bayarSemuaIuran()"><i data-lucide="check-circle" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Bayar Semua</span></button>
-                            <button class="button-primary button-sm compact-btn shadow-soft-blue" onclick="setorKeRT()"><i data-lucide="send" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Setor ke RT Pusat</span></button>
+                            <button class="button-secondary button-sm compact-btn fw-600" onclick="openRekonsiliasi()"><i data-lucide="activity" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Rekonsiliasi</span></button>
+                            <button class="button-secondary button-sm button-secondary-accent compact-btn" onclick="bayarTerpilihIuran()"><i data-lucide="check-square" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Bayar Terpilih</span></button>
+                            <button class="button-secondary button-sm compact-btn" onclick="bayarSemuaIuran()"><i data-lucide="check-circle" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Bayar Semua</span></button>
+                            <button class="button-primary button-sm compact-btn shadow-soft-blue" onclick="setorKeRT()"><i data-lucide="send" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Setor ke RT Pusat</span></button>
                         </div>
                     </div>
 
@@ -332,7 +332,7 @@
                 <div id="modal-agenda" class="modal-tab-content hidden">
                     <div class="section-header mb-16">
                         <h3 class="section-title">Agenda & Laporan</h3>
-                        <button class="button-primary button-sm compact-btn" onclick="openFormAgenda()"><i data-lucide="plus" class="icon-mr-6"></i> Buat Baru</button>
+                        <button class="button-primary button-sm compact-btn" onclick="openFormAgenda()"><i data-lucide="plus" class="mr-[6px]"></i> Buat Baru</button>
                     </div>
                     
                     <!-- SUMMARY AGENDA & LAPORAN -->
@@ -423,13 +423,13 @@
                     <div class="section-header page-filter-row mb-24 w-full gap-12">
                         <h3 class="section-title m-0">Laporan & Relasi Iuran Blok</h3>
                         <div class="page-filter-actions gap-12">
-                            <div class="input-with-icon minw-200">
+                            <div class="input-with-icon min-w-[200px]">
                                 <i data-lucide="search"></i>
-                                <input type="text" id="search-ws-laporan-warga" placeholder="Cari warga..." class="input-field input-field-compact text-size-sm rounded-12" oninput="filterWsLaporanWarga()">
+                                <input type="text" id="search-ws-laporan-warga" placeholder="Cari warga..." class="input-field input-field-compact text-sm rounded-12" oninput="filterWsLaporanWarga()">
                             </div>
-                            <label class="text-secondary text-size-08 fw-600">Tahun:</label>
+                            <label class="text-secondary text-[0.8rem] fw-600">Tahun:</label>
                             <input type="number" id="ws-relasi-year" class="input-field compact-control input-year-center" value="<?= date('Y') ?>" onchange="loadLaporanWargaWorkspace()">
-                            <button class="button-secondary button-sm compact-btn btn-compact-rounded btn-pad-10-16" onclick="exportWsLaporanWargaCSV()"><i data-lucide="download" class="icon-18 icon-mr-6"></i> Export</button>
+                            <button class="button-secondary button-sm compact-btn btn-compact-rounded btn-pad-10-16" onclick="exportWsLaporanWargaCSV()"><i data-lucide="download" class="icon-18 mr-[6px]"></i> Export</button>
                         </div>
                     </div>
 
@@ -494,7 +494,7 @@
                         </div>
                         
                         <div id="ws-laporan-pagination" class="glass-card pagination-card-shell panel-soft-float">
-                            <div id="ws-laporan-page-info" class="text-secondary pagination-bar-info text-size-08">Menampilkan 1-20 data</div>
+                            <div id="ws-laporan-page-info" class="text-secondary pagination-bar-info text-[0.8rem]">Menampilkan 1-20 data</div>
                             <div class="pagination-actions">
                                 <button onclick="prevWsLaporanPage()" class="button-secondary button-sm compact-btn"><i data-lucide="chevron-left" class="icon-16"></i></button>
                                 <button onclick="nextWsLaporanPage()" class="button-secondary button-sm compact-btn"><i data-lucide="chevron-right" class="icon-16"></i></button>
@@ -516,7 +516,7 @@
         <p class="text-secondary modal-desc">Deteksi otomatis warga yang menunggak berdasarkan periode pencatatan awal.</p>
         
         <div class="glass-card page-filter-card mb-24 bg-hover rounded-16 items-end">
-            <div class="flex-1 minw-120">
+            <div class="flex-1 min-w-[120px]">
                 <label class="card-label">Bulan Mulai Mencatat</label>
                 <select id="rekon-bulan" class="input-field select-custom mt-8 select-left-16">
                     <option value="0">Januari</option><option value="1">Februari</option><option value="2">Maret</option>
@@ -525,7 +525,7 @@
                     <option value="9">Oktober</option><option value="10">November</option><option value="11">Desember</option>
                 </select>
             </div>
-            <div class="flex-1 minw-100">
+            <div class="flex-1 min-w-[100px]">
                 <label class="card-label">Tahun</label>
                 <input type="number" id="rekon-tahun" class="input-field mt-8 select-left-16">
             </div>
@@ -534,7 +534,7 @@
 
         <div class="section-divider-row">
             <span class="font-bold text-color">Daftar Penunggak (Diurutkan Terlama)</span>
-            <span id="rekon-total-warga" class="badge bg-red-light text-red text-size-075">Memuat...</span>
+            <span id="rekon-total-warga" class="badge bg-red-light text-red text-[0.75rem]">Memuat...</span>
         </div>
 
         <div id="rekonsiliasi-list" class="hide-scrollbar scroll-flex-col">
@@ -563,7 +563,7 @@
                 <option value="Transfer">Transfer Bank / E-Wallet</option>
             </select>
         </div>
-        <button class="button-primary button-full-center" onclick="submitBayarIuran(this)"><i data-lucide="check-circle" class="icon-mr-8"></i> Konfirmasi Pembayaran</button>
+        <button class="button-primary button-full-center" onclick="submitBayarIuran(this)"><i data-lucide="check-circle" class="mr-2"></i> Konfirmasi Pembayaran</button>
     </div>
 </div>
 
@@ -578,10 +578,10 @@
             <label class="card-label">Tanggal Setor</label>
             <input type="date" id="setor-tanggal" class="input-field mt-8 input-left-20">
         </div>
-        <div class="glass-card mb-24 text-size-08 note-info-blue">
+        <div class="glass-card mb-24 text-[0.8rem] note-info-blue">
             <i data-lucide="info" class="icon-inline icon-16 icon-mr-4 text-blue"></i> Hanya tagihan berstatus LUNAS yang akan disetorkan.
         </div>
-        <button class="button-primary button-full-center" onclick="submitSetorRT(this)"><i data-lucide="send" class="icon-mr-8"></i> Konfirmasi Setoran</button>
+        <button class="button-primary button-full-center" onclick="submitSetorRT(this)"><i data-lucide="send" class="mr-2"></i> Konfirmasi Setoran</button>
     </div>
 </div>
 
@@ -655,7 +655,7 @@
         
         <div class="drawer-body hide-scrollbar pt-16">
             <div class="glass-card panel-soft-success">
-                <p class="text-emerald font-bold m-0 text-size-sm"><i data-lucide="info" class="icon-inline icon-16 icon-mr-4"></i> Total Tagihan Per Bulan: <span id="total-master-iuran" class="text-size-12-float-right">Rp 0</span></p>
+                <p class="text-emerald font-bold m-0 text-sm"><i data-lucide="info" class="icon-inline icon-16 icon-mr-4"></i> Total Tagihan Per Bulan: <span id="total-master-iuran" class="text-size-12-float-right">Rp 0</span></p>
             </div>
 
             <div id="master-iuran-list" class="list-container gap-12">
@@ -669,7 +669,7 @@
         
         <div class="drawer-footer">
             <button type="button" class="button-secondary" onclick="closeMasterIuran()">Tutup</button>
-            <button type="button" class="button-primary flex-grow" onclick="simpanMasterIuran()"><i data-lucide="save" class="icon-mr-8"></i> Simpan Pengaturan</button>
+            <button type="button" class="button-primary flex-grow" onclick="simpanMasterIuran()"><i data-lucide="save" class="mr-2"></i> Simpan Pengaturan</button>
         </div>
     </div>
 </div>
@@ -745,7 +745,7 @@
         
         <div class="drawer-footer">
             <button type="button" class="button-secondary" onclick="closeFormAgendaDrawer()">Batal</button>
-            <button type="button" class="button-primary flex-grow" onclick="simpanAgenda()"><i data-lucide="save" class="icon-mr-8"></i> Simpan Agenda</button>
+            <button type="button" class="button-primary flex-grow" onclick="simpanAgenda()"><i data-lucide="save" class="mr-2"></i> Simpan Agenda</button>
         </div>
     </div>
 </div>
@@ -803,7 +803,7 @@
         
         <div class="drawer-footer">
             <button type="button" class="button-secondary" onclick="closeFormLaporanDrawer()">Batal</button>
-            <button type="button" class="button-primary flex-grow" onclick="simpanLaporan()"><i data-lucide="save" class="icon-mr-8"></i> Simpan Laporan</button>
+            <button type="button" class="button-primary flex-grow" onclick="simpanLaporan()"><i data-lucide="save" class="mr-2"></i> Simpan Laporan</button>
         </div>
     </div>
 </div>
@@ -864,7 +864,7 @@
                 <input type="text" id="input-nama-blok" class="input-field input-stack" placeholder="Contoh: Blok C">
             </div>
             <div class="stack-card-footer">
-                <button class="button-secondary next-stack-btn rounded-12">Lanjut <i data-lucide="arrow-right" class="icon-16 icon-ml-8"></i></button>
+                <button class="button-secondary next-stack-btn rounded-12">Lanjut <i data-lucide="arrow-right" class="icon-16 ml-2"></i></button>
             </div>
         </div>
 
@@ -880,7 +880,7 @@
                 <input type="text" id="input-koordinator-blok" class="input-field input-stack" placeholder="Nama Lengkap...">
             </div>
             <div class="stack-card-footer">
-                <button class="button-secondary next-stack-btn rounded-12">Lanjut <i data-lucide="arrow-right" class="icon-16 icon-ml-8"></i></button>
+                <button class="button-secondary next-stack-btn rounded-12">Lanjut <i data-lucide="arrow-right" class="icon-16 ml-2"></i></button>
             </div>
         </div>
 
@@ -903,7 +903,7 @@
                 </div>
             </div>
             <div class="stack-card-footer">
-                <button class="button-secondary next-stack-btn rounded-12">Lewati / Lanjut <i data-lucide="arrow-right" class="icon-16 icon-ml-8"></i></button>
+                <button class="button-secondary next-stack-btn rounded-12">Lewati / Lanjut <i data-lucide="arrow-right" class="icon-16 ml-2"></i></button>
             </div>
         </div>
 
@@ -918,7 +918,7 @@
                 <p>Periksa kembali data yang dimasukkan. Simpan data workspace baru ke dalam database?</p>
             </div>
             <div class="stack-card-footer">
-                <button class="button-primary button-full-center" onclick="submitNewBlock(this)">Simpan Blok <i data-lucide="check-circle" class="icon-16 icon-ml-8"></i></button>
+                <button class="button-primary button-full-center" onclick="submitNewBlock(this)">Simpan Blok <i data-lucide="check-circle" class="icon-16 ml-2"></i></button>
             </div>
         </div>
     </div>

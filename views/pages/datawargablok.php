@@ -1,5 +1,5 @@
 <!-- Drawer Modal: Form Data Warga -->
-<div id="drawer-warga" class="modal-overlay hidden" style="z-index: 10010 !important; align-items: flex-end; justify-content: flex-end; padding: 0;">
+<div id="drawer-warga" class="modal-overlay hidden drawer-warga-overlay">
     <div class="drawer-panel glass-card">
         <div class="drawer-header">
             <div>
@@ -138,17 +138,47 @@
         
         <div class="drawer-footer">
             <button type="button" class="button-secondary" onclick="closeFormWarga()">Batal</button>
-            <button type="button" class="button-primary flex-grow" onclick="simpanDataWarga()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Data</button>
+            <button type="button" class="button-primary flex-grow" onclick="simpanDataWarga()"><i data-lucide="save" class="mr-[8px]"></i> Simpan Data</button>
         </div>
     </div>
 </div>
 
 <!-- Modal Detail Warga Full (Untuk melihat semua data diri & iuran) -->
-<div id="modal-detail-warga-full" class="modal-overlay hidden" style="z-index: 10020 !important; align-items: center; justify-content: center; padding: 16px;">
-    <div class="glass-card hide-scrollbar" style="width: 100%; max-width: 700px; max-height: 90dvh; overflow-y: auto; padding: 32px; position: relative; border-radius: 24px;">
-        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px; z-index: 10;" onclick="closeDetailWarga()"><i data-lucide="x"></i></button>
+<div id="modal-detail-warga-full" class="modal-overlay hidden detail-warga-overlay">
+    <div class="glass-card hide-scrollbar detail-warga-card">
+        <button class="modal-close-btn detail-warga-close" onclick="closeDetailWarga()"><i data-lucide="x"></i></button>
         <div id="modal-detail-warga-content">
             <!-- Konten detail akan di-load di sini via AJAX -->
         </div>
     </div>
 </div>
+
+<style>
+.drawer-warga-overlay {
+    z-index: 10010 !important;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0;
+}
+.detail-warga-overlay {
+    z-index: 10020 !important;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.detail-warga-card {
+    width: 100%;
+    max-width: 700px;
+    max-height: 90dvh;
+    overflow-y: auto;
+    padding: 32px;
+    position: relative;
+    border-radius: 24px;
+}
+.detail-warga-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+}
+</style>

@@ -1,5 +1,5 @@
 <!-- Drawer Modal: Form Data Warga -->
-<div id="drawer-warga" class="modal-overlay hidden" style="z-index: 10010 !important; align-items: flex-end; justify-content: flex-end; padding: 0;">
+<div id="drawer-warga" class="modal-overlay hidden drawer-warga-overlay">
     <div class="drawer-panel glass-card">
         <div class="drawer-header">
             <div>
@@ -140,7 +140,16 @@
         
         <div class="drawer-footer">
             <button type="button" class="button-secondary" onclick="closeFormWarga()">Batal</button>
-            <button type="button" class="button-primary flex-grow" onclick="simpanDataWarga()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Data</button>
+            <button type="button" class="button-primary flex-grow" onclick="simpanDataWarga()"><i data-lucide="save" class="mr-[8px]"></i> Simpan Data</button>
         </div>
     </div>
 </div>
+
+<style>
+.drawer-warga-overlay {
+    z-index: 10010 !important;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0;
+}
+</style>

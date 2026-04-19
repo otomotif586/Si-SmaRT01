@@ -194,7 +194,7 @@
                     <strong><?= $profileCompletion ?>%</strong>
                 </div>
                 <div class="progress-track" role="progressbar" aria-valuenow="<?= $profileCompletion ?>" aria-valuemin="0" aria-valuemax="100">
-                    <span style="width: <?= $profileCompletion ?>%"></span>
+                    <span class="profile-progress-fill"></span>
                 </div>
                 <p class="muted">Terisi <?= $profileFilled ?> dari <?= $profileTotal ?> komponen data utama.</p>
             </div>
@@ -261,7 +261,7 @@
                     <h2>Koneksi Data Warga</h2>
                     <?php if (!$linkedWarga): ?>
                         <div class="empty">Data warga belum tersedia. Silakan lengkapi data diri di menu Data Diri Lengkap.</div>
-                        <div style="margin-top:10px;">
+                        <div class="mt-10">
                             <a href="#" class="btn" data-go-tab="profil-lengkap"><i class="fas fa-arrow-up-right-from-square"></i> Buka Form Data Diri Lengkap</a>
                         </div>
                     <?php else: ?>
@@ -275,7 +275,7 @@
                 </div>
             </div>
 
-            <div class="grid2 ringkasan-grid-extra" style="margin-top:12px;">
+            <div class="grid2 ringkasan-grid-extra mt-12">
                 <div class="card section reminder-card <?= $overdueCount > 0 ? 'is-warning' : 'is-safe' ?>">
                     <h2>
                         <i class="fas <?= $overdueCount > 0 ? 'fa-bell' : 'fa-circle-check' ?>"></i>
@@ -299,7 +299,7 @@
                     <h2><i class="fas fa-bullhorn"></i> Pantau Informasi Terbaru</h2>
                     <?php if (empty($pantauInfoRows)): ?>
                         <div class="empty">Belum ada data laporan pada Pantau Informasi portal.</div>
-                        <div class="reminder-actions" style="margin-top:10px;">
+                        <div class="reminder-actions mt-10">
                             <a href="<?= htmlspecialchars($portalPantauUrl) ?>" class="btn" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Buka Pantau Informasi Portal</a>
                         </div>
                     <?php else: ?>
@@ -326,7 +326,7 @@
                                 </a>
                             <?php endforeach; ?>
                         </div>
-                        <div class="reminder-actions" style="margin-top:10px;">
+                        <div class="reminder-actions mt-10">
                             <a href="<?= htmlspecialchars($portalPantauUrl) ?>" class="btn primary" target="_blank" rel="noopener"><i class="fas fa-up-right-from-square"></i> Lihat Semua Laporan Pantau Informasi</a>
                         </div>
                     <?php endif; ?>
@@ -458,7 +458,7 @@
                         <div class="form-group full">
                             <label>Upload Dokumen Baru</label>
                             <input type="file" name="dokumen[]" multiple>
-                            <div class="doc-list" style="margin-top:8px;">
+                            <div class="doc-list mt-8">
                                 <?php if (empty($dokumen)): ?>
                                     <div class="empty">Belum ada dokumen tersimpan.</div>
                                 <?php else: ?>
@@ -538,26 +538,26 @@
                                 <div class="list-item">
                                     <h4><?= htmlspecialchars((string)($l['judul'] ?? 'Aduan')) ?></h4>
                                     <p><?= nl2br(htmlspecialchars((string)($l['deskripsi'] ?? ''))) ?></p>
-                                    <p style="margin-top:6px;">
+                                    <p class="mt-6">
                                         <span class="status <?= htmlspecialchars((string)($l['status'] ?? 'Baru')) ?>"><?= htmlspecialchars((string)($l['status'] ?? 'Baru')) ?></span>
-                                        <span style="color:var(--muted); margin-left:8px;"><?= htmlspecialchars((string)($l['waktu_kejadian'] ?? '-')) ?></span>
-                                        <span style="color:var(--muted); margin-left:8px;">Portal: <?= ((int)($l['approved_portal'] ?? 0) === 1) ? 'Disetujui' : 'Menunggu Approval' ?></span>
+                                        <span class="meta-inline"><?= htmlspecialchars((string)($l['waktu_kejadian'] ?? '-')) ?></span>
+                                        <span class="meta-inline">Portal: <?= ((int)($l['approved_portal'] ?? 0) === 1) ? 'Disetujui' : 'Menunggu Approval' ?></span>
                                     </p>
                                     <?php if (!empty($l['lampiran_path'])): ?>
-                                        <p style="margin-top:8px;"><a href="<?= htmlspecialchars(smart_asset((string)$l['lampiran_path']), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Lihat Lampiran: <?= htmlspecialchars((string)($l['lampiran_name'] ?? 'File')) ?></a></p>
+                                        <p class="mt-8"><a href="<?= htmlspecialchars(smart_asset((string)$l['lampiran_path']), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Lihat Lampiran: <?= htmlspecialchars((string)($l['lampiran_name'] ?? 'File')) ?></a></p>
                                     <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
                         </div>
 
                         <?php if (($aduanTotalPages ?? 1) > 1): ?>
-                            <div class="rw-aduan-pagination" style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; border-top:1px dashed var(--border-color); padding-top:10px; flex-wrap:wrap;">
-                                <span class="muted" style="font-size:0.82rem;">Halaman <?= (int)$aduanPage ?> dari <?= (int)$aduanTotalPages ?> (<?= (int)$aduanTotalRows ?> data)</span>
-                                <div style="display:flex; gap:8px;">
+                            <div class="rw-aduan-pagination">
+                                <span class="muted rw-aduan-page-meta">Halaman <?= (int)$aduanPage ?> dari <?= (int)$aduanTotalPages ?> (<?= (int)$aduanTotalRows ?> data)</span>
+                                <div class="rw-aduan-page-actions">
                                     <?php $prevAduan = max(1, (int)$aduanPage - 1); ?>
                                     <?php $nextAduan = min((int)$aduanTotalPages, (int)$aduanPage + 1); ?>
-                                    <a class="btn" href="ruang_warga.php?tab=aduan&aduan_page=<?= $prevAduan ?>" <?= ((int)$aduanPage <= 1) ? 'style="pointer-events:none;opacity:.5;"' : '' ?>>Sebelumnya</a>
-                                    <a class="btn" href="ruang_warga.php?tab=aduan&aduan_page=<?= $nextAduan ?>" <?= ((int)$aduanPage >= (int)$aduanTotalPages) ? 'style="pointer-events:none;opacity:.5;"' : '' ?>>Berikutnya</a>
+                                    <a class="btn <?= ((int)$aduanPage <= 1) ? 'btn-disabled' : '' ?>" href="ruang_warga.php?tab=aduan&aduan_page=<?= $prevAduan ?>" <?= ((int)$aduanPage <= 1) ? 'aria-disabled="true" tabindex="-1"' : '' ?>>Sebelumnya</a>
+                                    <a class="btn <?= ((int)$aduanPage >= (int)$aduanTotalPages) ? 'btn-disabled' : '' ?>" href="ruang_warga.php?tab=aduan&aduan_page=<?= $nextAduan ?>" <?= ((int)$aduanPage >= (int)$aduanTotalPages) ? 'aria-disabled="true" tabindex="-1"' : '' ?>>Berikutnya</a>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -590,6 +590,14 @@ Swal.fire({
 
 <script>
 (function () {
+    var progressTrack = document.querySelector('.progress-track[aria-valuenow]');
+    var progressFill = progressTrack ? progressTrack.querySelector('.profile-progress-fill') : null;
+    if (progressTrack && progressFill) {
+        var rawNow = parseInt(progressTrack.getAttribute('aria-valuenow') || '0', 10);
+        var safeNow = Number.isFinite(rawNow) ? Math.max(0, Math.min(100, rawNow)) : 0;
+        progressFill.style.width = safeNow + '%';
+    }
+
     function normalizeToTwoDigits(value, padLeft) {
         var digits = String(value || '').replace(/\D+/g, '');
         if (!digits) {

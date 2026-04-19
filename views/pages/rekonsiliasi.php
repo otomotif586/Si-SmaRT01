@@ -11,12 +11,12 @@
                 </div>
                 <div class="page-filter-group">
                     <label class="compact-label">Blok:</label>
-                    <select id="filter-blok-rekonsiliasi" class="input-field select-custom compact-control minw-120" onchange="loadGlobalRekonsiliasi()">
+                    <select id="filter-blok-rekonsiliasi" class="input-field select-custom compact-control min-w-[120px]" onchange="loadGlobalRekonsiliasi()">
                         <option value="all">Semua Blok</option>
                     </select>
                 </div>
             </div>
-            <button class="button-secondary button-sm compact-btn" onclick="exportRekonsiliasiCSV()"><i data-lucide="download" class="icon-16 icon-mr-6"></i> Export</button>
+            <button class="button-secondary button-sm compact-btn" onclick="exportRekonsiliasiCSV()"><i data-lucide="download" class="icon-16 mr-[6px]"></i> Export</button>
         </div>
     </div>
 
@@ -73,8 +73,8 @@
             <table class="modern-table rekon-table">
                 <thead>
                     <tr>
-                        <th style="width: 230px;">Nama Warga</th>
-                        <th style="width: 140px;">Blok/No</th>
+                        <th class="w-[230px]">Nama Warga</th>
+                        <th class="w-[140px]">Blok/No</th>
                         <th class="text-center">Jan</th>
                         <th class="text-center">Feb</th>
                         <th class="text-center">Mar</th>
@@ -87,7 +87,7 @@
                         <th class="text-center">Okt</th>
                         <th class="text-center">Nov</th>
                         <th class="text-center">Des</th>
-                        <th style="width: 150px;" class="text-right">Tunggakan</th>
+                        <th class="text-right w-[150px]">Tunggakan</th>
                     </tr>
                 </thead>
                 <tbody id="rekonsiliasi-table-body">
@@ -96,7 +96,7 @@
             </table>
         </div>
         
-        <div id="rekonsiliasi-empty" class="hidden" style="text-align: center; padding: 40px 20px;">
+        <div id="rekonsiliasi-empty" class="hidden text-center py-10 px-5">
             <p class="text-secondary">Tidak ada data ditemukan.</p>
         </div>
     </div>
@@ -125,6 +125,6 @@
     background-color: var(--hover-bg);
 }
 
-.text-center { text-align: center; }
-.text-right { text-align: right; }
+#page-rekonsiliasi .text-center { text-align: center; }
+#page-rekonsiliasi .text-right { text-align: right; }
 </style>

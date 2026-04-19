@@ -745,6 +745,47 @@ th { color: var(--muted); font-weight: 800; text-transform: uppercase; letter-sp
     align-items: stretch;
 }
 
+.mt-6 { margin-top: 6px; }
+.mt-8 { margin-top: 8px; }
+.mt-10 { margin-top: 10px; }
+.mt-12 { margin-top: 12px; }
+
+.profile-progress-fill {
+    display: block;
+    width: 0;
+    height: 100%;
+}
+
+.meta-inline {
+    color: var(--muted);
+    margin-left: 8px;
+}
+
+.rw-aduan-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 10px;
+    flex-wrap: wrap;
+}
+
+.rw-aduan-page-meta {
+    font-size: 0.82rem;
+}
+
+.rw-aduan-page-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 .reminder-card h2,
 .info-important-card h2 {
     display: inline-flex;

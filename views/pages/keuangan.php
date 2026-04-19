@@ -34,22 +34,22 @@
     <div class="glass-card page-filter-card page-filter-card--stack">
         <div class="page-filter-row">
             <p class="text-secondary page-filter-desc">Pencatatan arus kas masuk dan keluar tingkat pusat (RT).</p>
-            <button class="button-primary button-sm compact-btn" onclick="openFormKeuangan()"><i data-lucide="plus" class="icon-16 icon-mr-6"></i> Catat Transaksi</button>
+            <button class="button-primary button-sm compact-btn" onclick="openFormKeuangan()"><i data-lucide="plus" class="icon-16 mr-[6px]"></i> Catat Transaksi</button>
         </div>
         
         <div class="page-filter-row page-filter-divider items-end">
-            <div class="input-with-icon input-grow-wide minw-180">
+            <div class="input-with-icon input-grow-wide min-w-[180px]">
                 <i data-lucide="search"></i>
                 <input type="text" id="keuangan-search" class="input-field input-pl-40" placeholder="Cari keterangan..." oninput="filterKeuangan()">
             </div>
-            <div class="flex-1 minw-130">
+            <div class="flex-1 min-w-[130px]">
                 <select id="keuangan-jenis" class="input-field select-custom compact-control" onchange="filterKeuangan()">
                     <option value="">Semua Jenis</option>
                     <option value="Masuk">Masuk</option>
                     <option value="Keluar">Keluar</option>
                 </select>
             </div>
-            <div class="inline-wrap-8 minw-220">
+            <div class="inline-wrap-8 min-w-[220px]">
                 <button class="button-secondary button-sm compact-btn-icon" onclick="prevMonthKeuangan()"><i data-lucide="chevron-left" class="icon-16"></i></button>
                 <select id="filter-bulan-keuangan" class="input-field select-custom compact-control flex-1" onchange="filterKeuangan()"></select>
                 <select id="filter-tahun-keuangan" class="input-field select-custom compact-control flex-1" onchange="filterKeuangan()"></select>
@@ -91,14 +91,14 @@
                         <input type="radio" name="form_keuangan_jenis" value="Masuk" class="hidden peer" onchange="updateFormKeuanganStatus()" checked>
                         <div class="glass-card peer-checked:border-emerald transaction-type-card transaction-type-card-shell">
                             <i data-lucide="arrow-down-left" class="text-emerald icon-center-mb-8"></i>
-                            <div class="font-bold text-emerald text-center text-size-09">Uang Masuk</div>
+                            <div class="font-bold text-emerald text-center text-[0.9rem]">Uang Masuk</div>
                         </div>
                     </label>
                     <label class="option-tile-label">
                         <input type="radio" name="form_keuangan_jenis" value="Keluar" class="hidden peer" onchange="updateFormKeuanganStatus()">
                         <div class="glass-card peer-checked:border-red transaction-type-card transaction-type-card-shell">
                             <i data-lucide="arrow-up-right" class="text-red icon-center-mb-8"></i>
-                            <div class="font-bold text-red text-center text-size-09">Uang Keluar</div>
+                            <div class="font-bold text-red text-center text-[0.9rem]">Uang Keluar</div>
                         </div>
                     </label>
                 </div>
@@ -132,7 +132,7 @@
         
         <div class="drawer-footer">
             <button type="button" class="button-secondary" onclick="closeFormKeuangan()">Batal</button>
-            <button type="button" class="button-primary flex-grow" onclick="simpanKeuangan()"><i data-lucide="save" class="icon-mr-8"></i> Simpan Transaksi</button>
+            <button type="button" class="button-primary flex-grow" onclick="simpanKeuangan()"><i data-lucide="save" class="mr-2"></i> Simpan Transaksi</button>
         </div>
     </div>
 </div>

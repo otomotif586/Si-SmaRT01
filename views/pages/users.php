@@ -45,16 +45,16 @@
     <!-- MODAL MANAJEMEN USER -->
     <div id="modal-cms-user" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6 overlay-z10025">
         <div class="absolute inset-0 bg-slate-800/30 backdrop-blur-sm transition-opacity" onclick="closeUserModal()"></div>
-        <div class="glass-card relative w-full max-w-md flex flex-col overflow-hidden shadow-2xl" style="border-radius: 2.5rem; max-height: 90vh; background: #ffffff; border: 1px solid rgba(255,255,255,0.9);">
-            <div style="padding: 32px 32px 24px; border-bottom: 1px solid #f1f5f9;">
+        <div class="glass-card relative w-full max-w-md flex flex-col overflow-hidden shadow-2xl users-modal-shell">
+            <div class="users-modal-head">
                 <div>
                     <h2 id="modal-user-title" class="text-2xl font-black text-slate-800">Tambah Pengguna</h2>
                     <p class="text-slate-500 font-medium text-sm mt-1">Buat kredensial login baru untuk akses sistem.</p>
                 </div>
-                <button class="absolute top-8 right-8 w-10 h-10 rounded-[1rem] bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all" onclick="closeUserModal()"><i data-lucide="x" style="width: 20px; height: 20px;"></i></button>
+                <button class="absolute top-8 right-8 w-10 h-10 rounded-[1rem] bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all" onclick="closeUserModal()"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             
-            <div class="hide-scrollbar" style="padding: 24px 32px; overflow-y: auto;">
+            <div class="hide-scrollbar users-modal-body">
                 <input type="hidden" id="cms-user-id" value="0">
                 <div class="space-y-6">
                     <div>
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Password <span class="text-red-400 font-normal lowercase ml-1" style="font-size: 0.65rem;">(kosongkan jika tidak diubah)</span></label>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Password <span class="text-red-400 font-normal lowercase ml-1 text-[0.65rem]">(kosongkan jika tidak diubah)</span></label>
                         <input type="password" id="cms-user-password" class="w-full bg-slate-50 border border-slate-100 text-slate-800 rounded-[1.5rem] py-4 px-5 font-semibold focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all text-sm shadow-inner" placeholder="••••••••">
                     </div>
                     <div>
@@ -83,13 +83,25 @@
                 </div>
             </div>
             
-            <div style="padding: 24px 32px; border-top: 1px solid #f1f5f9; display: flex; gap: 12px; background: #fff;">
+            <div class="users-modal-foot">
                 <button type="button" class="px-6 py-4 rounded-[1.5rem] font-bold text-slate-500 bg-slate-50 hover:bg-slate-200 transition-all" onclick="closeUserModal()">Batal</button>
-                <button type="button" class="flex-grow px-6 py-4 rounded-[1.5rem] font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xl shadow-emerald-200 transition-all flex items-center justify-center gap-2" onclick="saveCmsUser()"><i data-lucide="save" style="width: 18px; height: 18px;"></i> Simpan Pengguna</button>
+                <button type="button" class="flex-grow px-6 py-4 rounded-[1.5rem] font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xl shadow-emerald-200 transition-all flex items-center justify-center gap-2" onclick="saveCmsUser()"><i data-lucide="save" class="w-[18px] h-[18px]"></i> Simpan Pengguna</button>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.users-modal-shell {
+    border-radius: 2.5rem;
+    max-height: 90vh;
+    background: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+.users-modal-head { padding: 32px 32px 24px; border-bottom: 1px solid #f1f5f9; }
+.users-modal-body { padding: 24px 32px; overflow-y: auto; }
+.users-modal-foot { padding: 24px 32px; border-top: 1px solid #f1f5f9; display: flex; gap: 12px; background: #fff; }
+</style>
 
 <script>
     // JS logic untuk Manajemen User

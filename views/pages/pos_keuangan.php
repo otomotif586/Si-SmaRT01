@@ -4,23 +4,23 @@
         <p class="text-secondary text-center py-4 grid-col-full">Memuat data anggaran...</p>
     </div>
 
-    <div class="glass-card" style="padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <div class="glass-card pk-filter-shell">
         <p class="text-secondary page-filter-desc">Kelola alokasi dana dan pengeluaran per komponen.</p>
-        <div class="header-actions" style="display: flex; gap: 8px; align-items: center;">
-            <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="prevMonthPos()"><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>
-            <div style="display: flex; gap: 6px;">
-                <select id="filter-bulan-pos" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 120px; border-radius: 10px;" onchange="loadPosKeuangan()"></select>
-                <select id="filter-tahun-pos" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 100px; border-radius: 10px;" onchange="loadPosKeuangan()"></select>
+        <div class="header-actions pk-header-actions">
+            <button class="button-secondary button-sm pk-btn-icon" onclick="prevMonthPos()"><i data-lucide="chevron-left" class="pk-icon-14"></i></button>
+            <div class="pk-nav-group">
+                <select id="filter-bulan-pos" class="input-field select-custom pk-filter-select pk-month" onchange="loadPosKeuangan()"></select>
+                <select id="filter-tahun-pos" class="input-field select-custom pk-filter-select pk-year" onchange="loadPosKeuangan()"></select>
             </div>
-            <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="nextMonthPos()"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
+            <button class="button-secondary button-sm pk-btn-icon" onclick="nextMonthPos()"><i data-lucide="chevron-right" class="pk-icon-14"></i></button>
         </div>
     </div>
 
-    <div class="glass-card" style="padding: 0; overflow: hidden; border-radius: 20px;">
-        <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02);">
-            <h4 style="font-size: 1.1rem; margin: 0; font-weight: 700;">Riwayat Pengeluaran Pos</h4>
+    <div class="glass-card pk-table-shell">
+        <div class="pk-headbar">
+            <h4 class="pk-title">Riwayat Pengeluaran Pos</h4>
         </div>
-        <div id="pos-history-container" style="display: flex; flex-direction: column;">
+        <div id="pos-history-container" class="pk-history-list">
             <!-- Diisi oleh JS -->
         </div>
     </div>
@@ -34,21 +34,50 @@
         <p class="text-secondary modal-desc">Gunakan dana dari pos <b id="pos-nama-label" class="text-color"></b>.</p>
         
         <input type="hidden" id="pos-input-nama">
-        <div style="margin-bottom: 16px;">
+        <div class="mb-16">
             <label class="card-label">Nominal Pengeluaran (Rp)</label>
-            <input type="number" id="pos-input-nominal" class="input-field" placeholder="0" style="margin-top: 8px; padding-left: 20px; font-size: 1.2rem; font-weight: bold; color: var(--text-color);">
+            <input type="number" id="pos-input-nominal" class="input-field pos-nominal-input" placeholder="0">
         </div>
-        <div style="margin-bottom: 16px;">
+        <div class="mb-16">
             <label class="card-label">Tanggal Pengeluaran</label>
             <input type="date" id="pos-input-tanggal" class="input-field mt-8 input-left-20">
         </div>
-        <div style="margin-bottom: 32px;">
+        <div class="mb-32">
             <label class="card-label">Keterangan Penggunaan</label>
-            <textarea id="pos-input-keterangan" class="input-field" style="margin-top: 8px; padding: 12px 20px; min-height: 80px; border-radius: 16px;" placeholder="Cth: Gaji Satpam Bulan Ini"></textarea>
+            <textarea id="pos-input-keterangan" class="input-field pos-textarea" placeholder="Cth: Gaji Satpam Bulan Ini"></textarea>
         </div>
-        <div style="display: flex; gap: 12px;">
+        <div class="flex-gap-12">
             <button class="button-secondary flex-grow" onclick="document.getElementById('modal-pengeluaran-pos').classList.add('hidden')">Batal</button>
-            <button class="button-primary flex-grow" onclick="submitPengeluaranPos(this)"><i data-lucide="check-circle" style="margin-right: 8px;"></i> Simpan</button>
+            <button class="button-primary flex-grow" onclick="submitPengeluaranPos(this)"><i data-lucide="check-circle" class="mr-2"></i> Simpan</button>
         </div>
     </div>
 </div>
+
+<style>
+.pk-filter-shell {
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.pk-header-actions { display: flex; gap: 8px; align-items: center; }
+.pk-btn-icon { padding: 8px; border-radius: 10px; }
+.pk-icon-14 { width: 14px; height: 14px; }
+.pk-nav-group { display: flex; gap: 6px; }
+.pk-filter-select { font-size: 0.8125rem; padding: 8px 12px; border-radius: 10px; }
+.pk-month { min-width: 120px; }
+.pk-year { min-width: 100px; }
+
+.pk-table-shell { padding: 0; overflow: hidden; border-radius: 20px; }
+.pk-headbar { padding: 20px 24px; border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02); }
+.pk-title { font-size: 1.1rem; margin: 0; font-weight: 700; }
+.pk-history-list { display: flex; flex-direction: column; }
+
+.pos-nominal-input { margin-top: 8px; padding-left: 20px; font-size: 1.2rem; font-weight: bold; color: var(--text-color); }
+.pos-textarea { margin-top: 8px; padding: 12px 20px; min-height: 80px; border-radius: 16px; }
+.flex-gap-12 { display: flex; gap: 12px; }
+</style>

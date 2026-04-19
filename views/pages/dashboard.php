@@ -27,10 +27,10 @@
             <p class="card-label">Partisipasi Iuran</p>
             <div class="inline-baseline-8">
                 <h3 class="card-value card-value-xl" id="dash-iuran-percent">0%</h3>
-                <span class="text-secondary text-size-08" id="dash-iuran-detail">0/0 Warga</span>
+                <span class="text-secondary text-[0.8rem]" id="dash-iuran-detail">0/0 Warga</span>
             </div>
-            <div class="progress-bar" style="height: 8px; margin-top: 16px; background: rgba(255,255,255,0.05);">
-                <div id="dash-iuran-progress" class="progress-fill progress-fill-info-success" style="width: 0%;"></div>
+            <div class="progress-bar h-2 mt-4 bg-white/5">
+                <div id="dash-iuran-progress" class="progress-fill progress-fill-info-success w-0"></div>
             </div>
             <div class="card-sub-info">
                 <i data-lucide="clock" class="icon-12"></i>

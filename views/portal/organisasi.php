@@ -29,7 +29,7 @@
             $titleSize = $isTop ? 'text-2xl' : 'text-lg';
             $badgeClass = $isTop ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-emerald-500/30' : 'bg-emerald-100 text-emerald-800 shadow-emerald-100/50';
             ?>
-            <div class="glass card-glow org-card reveal flex flex-col items-center text-center group transition-all duration-700 w-full relative <?= $cardClass ?>" style="transition-delay: <?= $delay ?>s; background: rgba(255, 255, 255, 0.7);">
+            <div class="glass card-glow org-card reveal flex flex-col items-center text-center group transition-all duration-700 w-full relative bg-white/70 <?= $cardClass ?>">
                 
                 <!-- Badge Jabatan Mengambang (Startup Style) -->
                 <div class="org-role-badge absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full text-[10px] md:text-xs font-black shadow-lg <?= $badgeClass ?> z-20">

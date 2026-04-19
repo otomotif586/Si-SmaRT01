@@ -36,11 +36,11 @@
         <div class="header-actions page-filter-actions">
             <div class="page-filter-group">
                 <button class="button-secondary button-sm compact-btn-icon" onclick="prevMonthPembukuan()"><i data-lucide="chevron-left" class="icon-14"></i></button>
-                <select id="filter-bulan-pembukuan" class="input-field select-custom compact-control minw-120" onchange="loadPembukuan()"></select>
-                <select id="filter-tahun-pembukuan" class="input-field select-custom compact-control minw-100" onchange="loadPembukuan()"></select>
+                <select id="filter-bulan-pembukuan" class="input-field select-custom compact-control min-w-[120px]" onchange="loadPembukuan()"></select>
+                <select id="filter-tahun-pembukuan" class="input-field select-custom compact-control min-w-[100px]" onchange="loadPembukuan()"></select>
                 <button class="button-secondary button-sm compact-btn-icon" onclick="nextMonthPembukuan()"><i data-lucide="chevron-right" class="icon-14"></i></button>
             </div>
-            <button class="button-secondary button-sm compact-btn" onclick="exportPembukuanCSV()"><i data-lucide="download" class="icon-16 icon-mr-6"></i> Export</button>
+            <button class="button-secondary button-sm compact-btn" onclick="exportPembukuanCSV()"><i data-lucide="download" class="icon-16 mr-[6px]"></i> Export</button>
         </div>
     </div>
 
@@ -115,7 +115,7 @@
                     <p class="pb-report-total-label">Total Sisa Kas Pos Anggaran</p>
                     <h2 id="laporan-total-sisa" class="pb-report-total-value">Rp 0</h2>
                 </div>
-                <button class="button-primary hide-on-print rounded-12" onclick="window.print()"><i data-lucide="printer" class="icon-18 icon-mr-8"></i> Cetak PDF Laporan</button>
+                <button class="button-primary hide-on-print rounded-12" onclick="window.print()"><i data-lucide="printer" class="icon-18 mr-2"></i> Cetak PDF Laporan</button>
             </div>
 
             <!-- History Transaksi di Bawah Laporan -->

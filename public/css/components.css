@@ -14,30 +14,24 @@
 .input-pl-40 {
     padding-left: 40px;
 }
+
+.mt-0 {
+    margin-top: 0;
+}
+
 .card-icon-header {
     width: 44px;
     height: 44px;
     border-radius: 12px;
     display: flex;
     align-items: center;
-.mt-0 {
-    margin-top: 0;
-}
     justify-content: center;
     margin-bottom: 16px;
 }
+
 .card-icon-header i {
     width: 20px;
     height: 20px;
-.minw-130 {
-    min-width: 130px;
-}
-.minw-180 {
-    min-width: 180px;
-}
-.minw-220 {
-    min-width: 220px;
-}
 }
 
 .chart-container {
@@ -48,17 +42,21 @@
 
 .chart-legend {
     display: flex;
+    gap: 12px;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
+
 .fw-600 {
     font-weight: 600;
 }
+
 .shadow-soft-blue {
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
-    gap: 12px;
-}
+
 .legend-item {
     display: flex;
     align-items: center;
@@ -69,12 +67,13 @@
 .dot {
     width: 8px;
     height: 8px;
+    border-radius: 50%;
+}
+
 .panel-soft-float {
     margin: 12px;
     background: rgba(255, 255, 255, 0.02);
     border: none;
-}
-    border-radius: 50%;
 }
 
 @keyframes badgePop {
@@ -106,22 +105,27 @@
     font-weight: bold;
     color: var(--text-color); /* Default, can be overridden by specific color classes */
 }
-.card-meta {
+
 .scroll-pane-pr8 {
     overflow-y: auto;
     flex: 1;
     padding-right: 8px;
 }
+
 .text-size-12-float-right {
     font-size: 1.2rem;
     float: right;
 }
+
 .items-end {
     align-items: flex-end;
 }
+
 .z-10 {
     z-index: 10;
 }
+
+.card-meta {
     font-size: 0.75em; /* text-xs */
     color: var(--text-secondary-color);
     margin-top: 10px;
@@ -693,14 +697,6 @@
     margin-right: 4px;
 }
 
-.icon-mr-6 {
-    margin-right: 6px;
-}
-
-.icon-ml-8 {
-    margin-left: 8px;
-}
-
 .text-secondary-sm {
     font-size: 0.875rem;
 }
@@ -780,18 +776,6 @@
 
 .flex-1 {
     flex: 1;
-}
-
-.minw-120 {
-    min-width: 120px;
-}
-
-.minw-100 {
-    min-width: 100px;
-}
-
-.minw-200 {
-    min-width: 200px;
 }
 
 .input-left-20 {
@@ -891,10 +875,6 @@
     z-index: 10001;
 }
 
-.icon-mr-8 {
-    margin-right: 8px;
-}
-
 .input-stack {
     width: 100%;
     margin-top: 10px;
@@ -972,10 +952,6 @@
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 12px;
     margin-bottom: 16px;
-}
-
-.text-size-sm {
-    font-size: 0.875rem;
 }
 
 .card-value-xl {
@@ -1254,26 +1230,6 @@
     margin-left: 8px;
 }
 
-.mr-6 {
-    margin-right: 6px;
-}
-
-.mr-8 {
-    margin-right: 8px;
-}
-
-.text-size-08 {
-    font-size: 0.8rem;
-}
-
-.text-size-09 {
-    font-size: 0.9rem;
-}
-
-.text-size-075 {
-    font-size: 0.75rem;
-}
-
 .grid-col-full {
     grid-column: 1 / -1;
 }
@@ -1513,53 +1469,6 @@
     }
 }
 
-/* Micro-Scaling for Mobile (3-across support) */
-@media (max-width: 768px) {
-    .summary-3-grid, .summary-wrapper-3 {
-        gap: 8px;
-        margin-bottom: 16px;
-        align-items: stretch; /* Ensure cards match height */
-    }
-    .glass-card-deluxe {
-        padding: 12px 6px !important; /* Slightly tighter padding for wrap support */
-        border-radius: 16px !important;
-        height: 100%; /* Support vertical growth */
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-    }
-    .card-icon-deluxe {
-        width: 32px !important;
-        height: 32px !important;
-        border-radius: 8px !important;
-        margin-bottom: 8px !important;
-    }
-    .card-icon-deluxe i {
-        width: 16px !important;
-        height: 16px !important;
-    }
-    .card-label {
-        font-size: 0.6rem !important;
-        margin-bottom: 2px !important;
-    }
-    .card-value {
-        font-size: 0.85rem !important;
-        line-height: 1.2 !important;
-    }
-    .card-trend-badge {
-        padding: 2px 6px !important;
-        font-size: 0.55rem !important;
-        margin-top: 6px !important;
-    }
-    .card-sub-info {
-        display: none !important; /* Hide sub-info on very small screens to save space */
-    }
-    .progress-bar {
-        height: 4px !important;
-        margin-top: 8px !important;
-    }
-}
-
 /* Deluxe Card Styles (Startup Grade) */
 .glass-card-deluxe {
     background: var(--card-bg);
@@ -1632,6 +1541,53 @@
     align-items: center;
     gap: 4px;
     opacity: 0.8;
+}
+
+/* Micro-Scaling for Mobile (3-across support) */
+@media (max-width: 768px) {
+    .summary-3-grid, .summary-wrapper-3 {
+        gap: 8px;
+        margin-bottom: 16px;
+        align-items: stretch; /* Ensure cards match height */
+    }
+    .glass-card-deluxe {
+        padding: 12px 6px !important; /* Slightly tighter padding for wrap support */
+        border-radius: 16px !important;
+        height: 100%; /* Support vertical growth */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    .card-icon-deluxe {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+        margin-bottom: 8px !important;
+    }
+    .card-icon-deluxe i {
+        width: 16px !important;
+        height: 16px !important;
+    }
+    .card-label {
+        font-size: 0.6rem !important;
+        margin-bottom: 2px !important;
+    }
+    .card-value {
+        font-size: 0.85rem !important;
+        line-height: 1.2 !important;
+    }
+    .card-trend-badge {
+        padding: 2px 6px !important;
+        font-size: 0.55rem !important;
+        margin-top: 6px !important;
+    }
+    .card-sub-info {
+        display: none !important; /* Hide sub-info on very small screens to save space */
+    }
+    .progress-bar {
+        height: 4px !important;
+        margin-top: 8px !important;
+    }
 }
 
 /* Specific Card Handling in Summary */

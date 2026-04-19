@@ -43,12 +43,12 @@
                 </div>
                 <div class="page-filter-group">
                     <label class="compact-label">Blok:</label>
-                    <select id="filter-blok-laporan-warga" class="input-field select-custom compact-control minw-120" onchange="loadLaporanIuranWarga()">
+                    <select id="filter-blok-laporan-warga" class="input-field select-custom compact-control min-w-[120px]" onchange="loadLaporanIuranWarga()">
                         <option value="all">Semua Blok</option>
                     </select>
                 </div>
             </div>
-            <button class="button-secondary button-sm compact-btn" onclick="exportLaporanWargaCSV()"><i data-lucide="download" class="icon-16 icon-mr-6"></i> Export</button>
+            <button class="button-secondary button-sm compact-btn" onclick="exportLaporanWargaCSV()"><i data-lucide="download" class="icon-16 mr-[6px]"></i> Export</button>
         </div>
     </div>
 
@@ -192,5 +192,5 @@ tr:hover .relation-line {
     stroke-width: 3.5;
 }
 
-.text-center { text-align: center; }
+#page-laporan-iuran-warga .text-center { text-align: center; }
 </style>
