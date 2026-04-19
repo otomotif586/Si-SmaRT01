@@ -874,6 +874,19 @@ body.mobile-menu-open {
     transition: all 0.4s ease;
 }
 
+/* Struktur organisasi: pastikan badge jabatan tidak terpotong */
+.org-card {
+    overflow: visible !important;
+}
+
+.org-role-badge {
+    max-width: calc(100% - 1rem);
+    white-space: normal;
+    text-wrap: balance;
+    word-break: break-word;
+    line-height: 1.2;
+}
+
 /* --- Hero Section Mobile Fixes --- */
 @media (max-width: 768px) {
     /* Memastikan tombol di Hero section menjadi responsif dan rapi (Tidak wrap/patah) */
@@ -893,6 +906,24 @@ body.mobile-menu-open {
         position: relative !important;
         bottom: auto !important;
         margin-top: 3rem !important;
+    }
+
+    .org-role-badge {
+        top: 0.65rem;
+        font-size: 10px;
+        letter-spacing: 0.03em !important;
+        text-transform: none !important;
+        padding: 0.4rem 0.75rem;
+        max-width: calc(100% - 0.75rem);
+        border-radius: 0.9rem;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        line-height: 1.25;
+    }
+
+    .org-card {
+        padding-top: 2.9rem !important;
+        overflow: visible !important;
     }
 }
 

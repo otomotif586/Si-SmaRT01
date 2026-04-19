@@ -38,7 +38,7 @@
             $logo_text = htmlspecialchars($blok['logo_text']);
             
             // Biarkan kosong jika tidak ada gambar agar memunculkan inisial NAMA BLOK
-            $logo_image = isset($blok['logo_image']) && !empty($blok['logo_image']) ? htmlspecialchars($blok['logo_image']) : '';
+            $logo_image = isset($blok['logo_image']) && !empty($blok['logo_image']) ? htmlspecialchars(smart_asset($blok['logo_image']), ENT_QUOTES, 'UTF-8') : '';
         ?>
         <!-- Dynamic Workspace Card -->
         <div class="interactive-ws-card" onclick="openWorkspaceModal(<?= $blok_id ?>, '<?= $nama_blok ?>', '<?= $koordinator ?>', '<?= $total_warga ?>', '<?= $kas_format ?>', '<?= $logo_class ?>', '<?= $logo_text ?>', '<?= $logo_image ?>')">

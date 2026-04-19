@@ -3,7 +3,7 @@
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
                     <?php if($web_logo): ?>
-                        <img src="<?= $web_logo ?>" class="w-10 h-10 object-contain rounded-xl bg-white p-1.5 border border-emerald-100" alt="Logo">
+                        <img src="<?= htmlspecialchars(smart_asset($web_logo), ENT_QUOTES, 'UTF-8') ?>" class="w-10 h-10 object-contain rounded-xl bg-white p-1.5 border border-emerald-100" alt="Logo">
                     <?php else: ?>
                         <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center"><i class="fas fa-users-rectangle"></i></div>
                     <?php endif; ?>
@@ -24,7 +24,7 @@
                     <a href="#visimisi" class="mobile-link">Visi Misi</a>
                     <a href="#berita" class="mobile-link">Berita Warga</a>
                     <a href="#organisasi" class="mobile-link">Organisasi</a>
-                    <a href="#layanan" class="mobile-link">Layanan</a>
+                    <a href="#laporan_terbaru" class="mobile-link">Layanan</a>
                     <a href="#wisata" class="mobile-link">Wisata</a>
                 <?php else: ?>
                     <?php foreach($menus as $m): ?>

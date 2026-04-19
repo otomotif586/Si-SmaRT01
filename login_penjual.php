@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once 'config/database.php';
+require_once 'config/asset_url.php';
+smart_send_html_no_cache_headers();
 
 // Jika sudah login sebagai penjual, lempar ke ruang_penjual
 if (isset($_SESSION['penjual_id'])) {
@@ -226,13 +228,13 @@ $alertType = $alertType ?? 'info';
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="public/css/mobile-ux.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/mobile-ux.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
     <style>
         :root {
             --bg-1: #071029;
             --bg-2: #0f172a;
-            --brand: #0f766e;
-            --brand-2: #14b8a6;
+            --brand: #059669;
+            --brand-2: #10b981;
             --card: rgba(255, 255, 255, 0.94);
             --line: rgba(15, 23, 42, 0.12);
             --text: #0f172a;
@@ -263,7 +265,7 @@ $alertType = $alertType ?? 'info';
             opacity: 0.45;
             animation: dotFloat 9s ease-in-out infinite alternate;
         }
-        .backdrop-dot.a { width: 350px; height: 350px; top: -90px; left: -110px; background: #2dd4bf; }
+        .backdrop-dot.a { width: 350px; height: 350px; top: -90px; left: -110px; background: #6ee7b7; }
         .backdrop-dot.b { width: 310px; height: 310px; right: -90px; bottom: -120px; background: #60a5fa; animation-delay: -2s; }
 
         @keyframes dotFloat {
@@ -458,7 +460,7 @@ $alertType = $alertType ?? 'info';
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: #0f766e;
+            color: #047857;
         }
 
         .auth-progress-head strong {
@@ -478,7 +480,7 @@ $alertType = $alertType ?? 'info';
             height: 100%;
             width: 0;
             border-radius: inherit;
-            background: linear-gradient(90deg, #0f766e, #14b8a6, #22c55e);
+            background: linear-gradient(90deg, #047857, #059669, #10b981);
             transition: width 0.25s ease;
         }
 
@@ -558,7 +560,7 @@ $alertType = $alertType ?? 'info';
             font-weight: 800;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: #0f766e;
+            color: #047857;
             background: rgba(15, 118, 110, 0.08);
             border: 1px solid rgba(15, 118, 110, 0.12);
         }
@@ -577,7 +579,7 @@ $alertType = $alertType ?? 'info';
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: #0f766e;
+            color: #047857;
         }
 
         .register-step strong {
@@ -842,7 +844,7 @@ $alertType = $alertType ?? 'info';
             transition: all 0.2s ease;
         }
         .field:focus-within {
-            border-color: #14b8a6;
+            border-color: #10b981;
             box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15);
             transform: translateY(-1px);
         }
@@ -918,7 +920,7 @@ $alertType = $alertType ?? 'info';
             width: 100%;
             background: rgba(15, 118, 110, 0.08);
             border: 1px solid rgba(15, 118, 110, 0.16);
-            color: #0f766e;
+            color: #047857;
             text-transform: none;
             letter-spacing: 0;
             box-shadow: none;
@@ -989,7 +991,7 @@ $alertType = $alertType ?? 'info';
         }
 
         .nik-modal-body input[type="text"]:focus {
-            border-color: #14b8a6;
+            border-color: #10b981;
             box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15);
             transform: translateY(-1px);
         }
@@ -1064,7 +1066,7 @@ $alertType = $alertType ?? 'info';
             .mobile-switch { font-size: 12px; margin-top: 12px; }
         }
     </style>
-    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/theme-glass.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
 </head>
 <body>
     <div class="backdrop-dot a"></div>

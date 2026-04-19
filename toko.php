@@ -1,5 +1,7 @@
 <?php
 require_once 'config/database.php';
+require_once 'config/asset_url.php';
+smart_send_html_no_cache_headers();
 
 $penjual = $_GET['penjual'] ?? '';
 if (!$penjual) {
@@ -86,7 +88,7 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
             z-index: 20;
         }
     </style>
-    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/theme-glass.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000);
@@ -141,7 +143,7 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
                 <?php foreach ($products as $p): 
                     $photos = [];
                     try { $photos = json_decode($p['foto'], true) ?: []; } catch(Exception $e) { if($p['foto']) $photos = [$p['foto']]; }
-                    $mainPhoto = !empty($photos) ? $photos[0] : 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400';
+                    $mainPhoto = !empty($photos) ? smart_asset($photos[0]) : 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400';
                 ?>
                     <div class="product-card group bg-white relative overflow-hidden flex flex-col h-full">
                         <!-- Image Container -->
@@ -152,7 +154,7 @@ $web_nama = $settings['web_nama'] ?? 'Portal Warga';
                                         <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400"></div>
                                     <?php else: ?>
                                         <?php foreach($photos as $ft): ?>
-                                            <div class="swiper-slide"><img src="<?= htmlspecialchars($ft) ?>"></div>
+                                            <div class="swiper-slide"><img src="<?= htmlspecialchars(smart_asset($ft), ENT_QUOTES, 'UTF-8') ?>"></div>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
                                 </div>

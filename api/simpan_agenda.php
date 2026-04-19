@@ -1,5 +1,6 @@
 <?php
 require_once '../config/database.php';
+require_once '../config/asset_url.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -26,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Unggah Gambar (Multifile)
         if ($status === 'Selesai' && isset($_FILES['gallery'])) {
-            $uploadDir = '../public/uploads/gallery/';
+            $uploadDir = smart_public_fs_path('public/uploads/gallery');
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
             
             $fileCount = count($_FILES['gallery']['name']);
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($_FILES['gallery']['error'][$i] === UPLOAD_ERR_OK) {
                     $tmpName = $_FILES['gallery']['tmp_name'][$i];
                     $fileName = time() . '_' . uniqid() . '_' . basename($_FILES['gallery']['name'][$i]);
-                    if (move_uploaded_file($tmpName, $uploadDir . $fileName)) {
+                    if (move_uploaded_file($tmpName, $uploadDir . DIRECTORY_SEPARATOR . $fileName)) {
                         $stmtGal = $pdo->prepare("INSERT INTO agenda_gallery (agenda_id, file_path) VALUES (?, ?)");
                         $stmtGal->execute([$agenda_id, 'public/uploads/gallery/' . $fileName]);
                     }
@@ -44,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Unggah Lampiran Dokumen
         if (isset($_FILES['lampiran'])) {
-            $uploadDir = '../public/uploads/lampiran_agenda/';
+            $uploadDir = smart_public_fs_path('public/uploads/lampiran_agenda');
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
             
             $fileCount = count($_FILES['lampiran']['name']);
@@ -53,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $tmpName = $_FILES['lampiran']['tmp_name'][$i];
                     $originalName = basename($_FILES['lampiran']['name'][$i]);
                     $fileName = time() . '_' . uniqid() . '_' . $originalName;
-                    if (move_uploaded_file($tmpName, $uploadDir . $fileName)) {
+                    if (move_uploaded_file($tmpName, $uploadDir . DIRECTORY_SEPARATOR . $fileName)) {
                         $stmtLamp = $pdo->prepare("INSERT INTO agenda_lampiran (agenda_id, file_path, file_name) VALUES (?, ?, ?)");
                         $stmtLamp->execute([$agenda_id, 'public/uploads/lampiran_agenda/' . $fileName, $originalName]);
                     }

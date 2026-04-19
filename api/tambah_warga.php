@@ -1,5 +1,6 @@
 <?php
 require_once '../config/database.php';
+require_once '../config/asset_url.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -88,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!empty($tmpName)) {
                     // Generate a safe unique name
                     $fileName = time() . '_' . uniqid() . '_' . preg_replace("/[^a-zA-Z0-9.-]/", "_", $_FILES['dokumen']['name'][$idx]);
-                    $destPath = '../public/uploads/' . $fileName;
+                    $destPath = smart_public_fs_path('public/uploads') . DIRECTORY_SEPARATOR . $fileName;
                     if (move_uploaded_file($tmpName, $destPath)) {
                         $stmtDokumen->execute([$warga_id, 'public/uploads/' . $fileName]);
                     }

@@ -10,6 +10,8 @@ if (!isset($_SESSION['user_id'])) {
 
 // Load Database Connection
 require_once 'config/database.php';
+require_once 'config/asset_url.php';
+smart_send_html_no_cache_headers();
 
 // Include the head section (meta, title, CSS, JS libraries)
 include 'views/layout/head.php';

@@ -4,7 +4,7 @@
             <div class="startup-nav-shell">
                 <a href="index.php" class="startup-brand group" aria-label="Kembali ke beranda portal">
                     <?php if($web_logo): ?>
-                        <img src="<?= $web_logo ?>" class="w-10 h-10 object-contain rounded-2xl shadow-lg shadow-emerald-100 group-hover:rotate-3 transition-transform bg-white" alt="Logo">
+                        <img src="<?= htmlspecialchars(smart_asset($web_logo), ENT_QUOTES, 'UTF-8') ?>" class="w-10 h-10 object-contain rounded-2xl shadow-lg shadow-emerald-100 group-hover:rotate-3 transition-transform bg-white" alt="Logo">
                     <?php else: ?>
                         <div class="w-10 h-10 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-100 group-hover:rotate-3 transition-transform">
                             <i class="fas fa-users-rectangle text-white text-base"></i>
@@ -23,7 +23,7 @@
                         <a href="#organisasi" class="nav-link">Organisasi</a>
                         <a href="#visimisi" class="nav-link">Visi Misi</a>
                         <a href="#berita" class="nav-link">Berita</a>
-                        <a href="#layanan" class="nav-link">Layanan</a>
+                        <a href="#laporan_terbaru" class="nav-link">Layanan</a>
                         <a href="#wisata" class="nav-link">Wisata</a>
                     <?php else: ?>
                         <?php foreach($menus as $m): ?>

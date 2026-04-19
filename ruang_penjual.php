@@ -6,6 +6,8 @@ if (!isset($_SESSION['penjual_id'])) {
     exit();
 }
 require_once 'config/database.php';
+require_once 'config/asset_url.php';
+smart_send_html_no_cache_headers();
 
 // Ambil setting untuk info RT
 $stmtSet = $pdo->query("SELECT setting_key, setting_value FROM web_settings");
@@ -27,9 +29,9 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="public/css/mobile-ux.css">
-    <link rel="stylesheet" href="public/css/ruang-penjual.css">
-    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/mobile-ux.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/ruang-penjual.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/theme-glass.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000);
@@ -251,6 +253,6 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
     <script>
         window.storeProfile = <?= json_encode($penjualData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
     </script>
-    <script src="public/js/ruang-penjual.js"></script>
+    <script src="<?= htmlspecialchars(smart_asset('public/js/ruang-penjual.js', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once 'config/database.php';
+require_once 'config/asset_url.php';
+smart_send_html_no_cache_headers();
 
 // Jika sudah login, lempar ke dashboard
 if (isset($_SESSION['user_id'])) {
@@ -44,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Login Si-SmaRT | Portal Warga</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="public/css/mobile-ux.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/mobile-ux.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
     <style>
         :root {
             --bg-night: #071025;
@@ -53,8 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             --line: rgba(15, 23, 42, 0.12);
             --text: #0f172a;
             --muted: #5b6476;
-            --brand: #0f766e;
-            --brand-2: #14b8a6;
+            --brand: #059669;
+            --brand-2: #10b981;
             --danger-bg: #fff1f2;
             --danger-text: #be123c;
         }
@@ -88,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             opacity: 0.42;
             animation: floatPulse 10s ease-in-out infinite alternate;
         }
-        .pulse-shape.a { width: 380px; height: 380px; background: #2dd4bf; top: -120px; left: -140px; }
+        .pulse-shape.a { width: 380px; height: 380px; background: #6ee7b7; top: -120px; left: -140px; }
         .pulse-shape.b { width: 360px; height: 360px; background: #60a5fa; bottom: -120px; right: -120px; animation-delay: -2s; }
 
         @keyframes floatPulse {
@@ -187,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            color: #0f766e;
+            color: #047857;
             font-weight: 700;
             letter-spacing: 0.06em;
             text-transform: uppercase;
@@ -238,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
         }
         .field:focus-within {
-            border-color: #14b8a6;
+            border-color: #10b981;
             box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.14);
             transform: translateY(-1px);
         }
@@ -284,8 +286,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             color: #4b5563;
             font-weight: 600;
         }
-        .remember input { accent-color: #0f766e; }
-        .utility-row a { color: #0f766e; font-weight: 700; text-decoration: none; }
+        .remember input { accent-color: #059669; }
+        .utility-row a { color: #047857; font-weight: 700; text-decoration: none; }
 
         .alt-link {
             display: block;
@@ -330,7 +332,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-size: 12px;
             font-weight: 600;
         }
-        .auth-foot a { color: #0f766e; font-weight: 800; text-decoration: none; }
+        .auth-foot a { color: #047857; font-weight: 800; text-decoration: none; }
 
         .submit-btn { order: 2; }
         .alt-link { order: 1; }
@@ -378,7 +380,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             .utility-row { font-size: 11px; }
         }
     </style>
-    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/theme-glass.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000);

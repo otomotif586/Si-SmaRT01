@@ -7,6 +7,15 @@ window.kmIncidentPage = 1;
 window.kmIncidentPerPage = 15;
 window.kmIncidentTotalPages = 1;
 
+function smartAssetUrl(path) {
+    if (!path) return '';
+    if (/^(?:https?:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+    const basePath = (window.__SMART_ASSET_BASE_PATH__ || '').replace(/\/$/, '');
+    const cleanedPath = String(path).replace(/^\/+/, '');
+    if (!basePath) return cleanedPath;
+    return `${basePath}/${cleanedPath}`;
+}
+
 window.switchKeamananTab = function(tabId, btnElement) {
     document.querySelectorAll('.km-tab-content').forEach(el => el.classList.add('hidden'));
     document.querySelectorAll('.sub-nav-tab').forEach(el => el.classList.remove('active'));
@@ -465,7 +474,7 @@ window.viewDetailLaporan = function(id, dataStr) {
             <h4 style="font-size: 0.9rem; font-weight: 700; margin: 0 0 8px 0;">Deskripsi Kejadian:</h4>
             <p style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--text-color);">${l.deskripsi || 'Tidak ada deskripsi rinci.'}</p>
         </div>
-        ${l.lampiran_path ? `<div style="margin-bottom: 20px;"><a href="${l.lampiran_path}" target="_blank" class="button-secondary">Lihat Lampiran: ${l.lampiran_name || 'File Aduan'}</a></div>` : ''}
+        ${l.lampiran_path ? `<div style="margin-bottom: 20px;"><a href="${smartAssetUrl(l.lampiran_path)}" target="_blank" class="button-secondary">Lihat Lampiran: ${l.lampiran_name || 'File Aduan'}</a></div>` : ''}
         <div style="display: flex; justify-content: flex-end;">
             <button class="button-secondary" onclick="closeKmModal('modal-detail-lap-keamanan')">Tutup Jendela</button>
         </div>

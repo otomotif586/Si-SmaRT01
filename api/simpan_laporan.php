@@ -1,5 +1,6 @@
 <?php
 require_once '../config/database.php';
+require_once '../config/asset_url.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -26,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Unggah Lampiran
         if (isset($_FILES['lampiran'])) {
-            $uploadDir = '../public/uploads/lampiran_laporan/';
+            $uploadDir = smart_public_fs_path('public/uploads/lampiran_laporan');
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
             
             $fileCount = count($_FILES['lampiran']['name']);
@@ -35,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $tmpName = $_FILES['lampiran']['tmp_name'][$i];
                     $originalName = basename($_FILES['lampiran']['name'][$i]);
                     $fileName = time() . '_' . uniqid() . '_' . $originalName;
-                    if (move_uploaded_file($tmpName, $uploadDir . $fileName)) {
+                    if (move_uploaded_file($tmpName, $uploadDir . DIRECTORY_SEPARATOR . $fileName)) {
                         $stmtLamp = $pdo->prepare("INSERT INTO laporan_lampiran (laporan_id, file_path, file_name) VALUES (?, ?, ?)");
                         $stmtLamp->execute([$laporan_id, 'public/uploads/lampiran_laporan/' . $fileName, $originalName]);
                     }

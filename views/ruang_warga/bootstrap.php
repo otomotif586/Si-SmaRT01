@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'config/database.php';
+require_once __DIR__ . '/../../config/asset_url.php';
 
 $alertMessage = '';
 $alertType = '';
@@ -514,7 +515,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
 
                     if (isset($_FILES['dokumen']) && isset($_FILES['dokumen']['tmp_name']) && is_array($_FILES['dokumen']['tmp_name'])) {
-                        $uploadDir = 'public/uploads/';
+                        $uploadDir = smart_public_fs_path('public/uploads');
                         if (!is_dir($uploadDir)) {
                             mkdir($uploadDir, 0777, true);
                         }
@@ -525,16 +526,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                             $safe = preg_replace("/[^a-zA-Z0-9.-]/", "_", $_FILES['dokumen']['name'][$idx]);
                             $fileName = time() . '_' . uniqid() . '_' . $safe;
-                            $destPath = $uploadDir . $fileName;
+                            $destPath = $uploadDir . DIRECTORY_SEPARATOR . $fileName;
                             if (move_uploaded_file($tmpName, $destPath)) {
-                                $stmtDoc->execute([$idWarga, $destPath]);
+                                $stmtDoc->execute([$idWarga, 'public/uploads/' . $fileName]);
                             }
                         }
                     }
 
                     $avatarPathToSave = null;
                     if (isset($_FILES['avatar']) && !empty($_FILES['avatar']['tmp_name']) && is_uploaded_file($_FILES['avatar']['tmp_name'])) {
-                        $avatarUploadDir = 'public/uploads/avatars/';
+                        $avatarUploadDir = smart_public_fs_path('public/uploads/avatars');
                         if (!is_dir($avatarUploadDir)) {
                             mkdir($avatarUploadDir, 0777, true);
                         }
@@ -545,9 +546,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         if (in_array($avatarExt, $allowedAvatarExt, true) && $avatarSize > 0 && $avatarSize <= (2 * 1024 * 1024)) {
                             $avatarName = 'avatar_' . ((int)$account['id']) . '_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $avatarExt;
-                            $avatarDest = $avatarUploadDir . $avatarName;
+                            $avatarDest = $avatarUploadDir . DIRECTORY_SEPARATOR . $avatarName;
                             if (move_uploaded_file($_FILES['avatar']['tmp_name'], $avatarDest)) {
-                                $avatarPathToSave = $avatarDest;
+                                $avatarPathToSave = 'public/uploads/avatars/' . $avatarName;
                             }
                         }
                     }

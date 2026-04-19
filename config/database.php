@@ -5,6 +5,12 @@ $dbname = 'smart_c';
 $username = 'root'; // Default XAMPP username
 $password = '';     // Default XAMPP password (kosong)
 
+// Konfigurasi Database
+//$host = 'localhost';
+//$dbname = 'uqxu0i6y_smart_bd';
+//$username = 'uqxu0i6y_mabolo'; // Default XAMPP username
+//$password = 'P@ssw0rd123';     // Default XAMPP password (kosong)
+
 try {
     // PDO Connection (For Modern CMS API)
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);

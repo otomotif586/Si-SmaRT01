@@ -1,5 +1,7 @@
 <?php
 require_once 'config/database.php';
+require_once 'config/asset_url.php';
+smart_send_html_no_cache_headers();
 
 $id = $_GET['id'] ?? 0;
 try {
@@ -38,7 +40,7 @@ try {
         .blog-content h1, .blog-content h2, .blog-content h3 { font-weight: 800; color: #0f172a; margin: 2.5rem 0 1rem; }
         .glossy { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
     </style>
-    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/theme-glass.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
 </head>
 <body class="bg-slate-50">
     <nav class="fixed top-0 w-full z-50 p-6">
@@ -50,7 +52,7 @@ try {
                 <span class="font-bold text-slate-800">Kembali</span>
             </a>
             <?php if($web_logo): ?>
-                <img src="<?= $web_logo ?>" class="h-8" alt="Logo">
+                <img src="<?= htmlspecialchars(smart_asset($web_logo), ENT_QUOTES, 'UTF-8') ?>" class="h-8" alt="Logo">
             <?php endif; ?>
         </div>
     </nav>
@@ -78,9 +80,9 @@ try {
                     <iframe class="w-full h-full" src="https://www.youtube.com/embed/<?= $yt_id ?>" frameborder="0" allowfullscreen></iframe>
                 </div>
             <?php elseif($blog['video_url']): ?>
-                <video src="<?= $blog['video_url'] ?>" controls class="w-full rounded-[3rem] shadow-2xl mb-12 border-8 border-white"></video>
+                <video src="<?= htmlspecialchars(smart_asset($blog['video_url']), ENT_QUOTES, 'UTF-8') ?>" controls class="w-full rounded-[3rem] shadow-2xl mb-12 border-8 border-white"></video>
             <?php elseif($blog['thumbnail']): ?>
-                <img src="<?= $blog['thumbnail'] ?>" class="w-full h-[500px] object-cover rounded-[3rem] shadow-2xl mb-12 border-8 border-white" alt="<?= htmlspecialchars($blog['judul']) ?>">
+                <img src="<?= htmlspecialchars(smart_asset($blog['thumbnail']), ENT_QUOTES, 'UTF-8') ?>" class="w-full h-[500px] object-cover rounded-[3rem] shadow-2xl mb-12 border-8 border-white" alt="<?= htmlspecialchars($blog['judul']) ?>">
             <?php endif; ?>
 
             <div class="blog-content prose prose-lg prose-slate max-w-none text-lg">

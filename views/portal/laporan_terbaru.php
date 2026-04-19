@@ -1,5 +1,5 @@
     <!-- LAPORAN TERBARU SECTION -->
-    <section id="laporan_terbaru" class="py-16 md:py-24 lg:py-32 bg-emerald-50/30 backdrop-blur-sm border-b border-emerald-100/50 relative overflow-hidden" data-parallax-section data-parallax-speed="0.02">
+    <section id="laporan_terbaru" class="py-16 md:py-24 lg:py-32 bg-emerald-50/30 backdrop-blur-sm border-b border-emerald-100/50 relative overflow-hidden">
         <!-- Dekorasi Background Ambient -->
         <div class="absolute -left-20 top-20 w-72 h-72 bg-emerald-400/10 rounded-full blur-[80px] pointer-events-none"></div>
         <div class="absolute right-0 bottom-0 w-96 h-96 bg-teal-400/5 rounded-full blur-[100px] pointer-events-none"></div>
@@ -84,12 +84,12 @@
                         <?php if ($lampiranPath !== ''): ?>
                             <div class="mt-5 rounded-2xl border border-emerald-100 bg-white/80 p-3 backdrop-blur-sm">
                                 <?php if ($isImageLampiran): ?>
-                                    <a href="<?= htmlspecialchars($lampiranPath) ?>" target="_blank" rel="noopener" class="block">
-                                        <img src="<?= htmlspecialchars($lampiranPath) ?>" alt="Lampiran Aduan" class="w-full h-40 object-cover rounded-xl border border-emerald-100">
+                                    <a href="<?= htmlspecialchars(smart_asset($lampiranPath), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="block">
+                                        <img src="<?= htmlspecialchars(smart_asset($lampiranPath), ENT_QUOTES, 'UTF-8') ?>" alt="Lampiran Aduan" class="w-full h-40 object-cover rounded-xl border border-emerald-100">
                                     </a>
                                 <?php elseif ($isVideoLampiran): ?>
                                     <video controls preload="metadata" class="w-full h-44 rounded-xl border border-emerald-100 bg-black/10" playsinline>
-                                        <source src="<?= htmlspecialchars($lampiranPath) ?>">
+                                        <source src="<?= htmlspecialchars(smart_asset($lampiranPath), ENT_QUOTES, 'UTF-8') ?>">
                                         Browser tidak mendukung pemutaran video.
                                     </video>
                                 <?php else: ?>
@@ -98,7 +98,7 @@
                                     </div>
                                 <?php endif; ?>
                                 <div class="mt-3 flex items-center justify-end gap-2">
-                                    <a href="<?= htmlspecialchars($lampiranPath) ?>" download class="px-3 py-1.5 rounded-lg border border-emerald-200 bg-white text-emerald-700 text-xs font-bold tracking-wide hover:bg-emerald-50 transition-colors">
+                                    <a href="<?= htmlspecialchars(smart_asset($lampiranPath), ENT_QUOTES, 'UTF-8') ?>" download class="px-3 py-1.5 rounded-lg border border-emerald-200 bg-white text-emerald-700 text-xs font-bold tracking-wide hover:bg-emerald-50 transition-colors">
                                         Download File
                                     </a>
                                 </div>

@@ -4,6 +4,15 @@ window.filteredKeuanganData = [];
 window.keuanganPage = 1;
 const keuanganItemsPerPage = 15;
 
+function smartAssetUrl(path) {
+    if (!path) return '';
+    if (/^(?:https?:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+    const basePath = (window.__SMART_ASSET_BASE_PATH__ || '').replace(/\/$/, '');
+    const cleanedPath = String(path).replace(/^\/+/, '');
+    if (!basePath) return cleanedPath;
+    return `${basePath}/${cleanedPath}`;
+}
+
 function initKeuanganGlobal() {
     const selBulan = document.getElementById('filter-bulan-keuangan');
     const selTahun = document.getElementById('filter-tahun-keuangan');
@@ -242,7 +251,7 @@ function editKeuangan(id) {
     document.getElementById('form-keuangan-tanggal').value = t.tanggal; document.getElementById('form-keuangan-keterangan').value = t.keterangan;
     document.querySelector(`input[name="form_keuangan_jenis"][value="${t.jenis}"]`).checked = true;
     document.getElementById('form-keuangan-lampiran').value = '';
-    document.getElementById('form-keuangan-lampiran-preview').innerHTML = t.lampiran ? `<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--hover-bg); border-radius: 8px; border: 1px solid var(--border-color);"><span style="font-size: 0.75rem; color: var(--text-color);"><i data-lucide="paperclip" style="width: 14px; height: 14px; margin-right: 4px; display: inline;"></i> Tersimpan</span><a href="${t.lampiran}" target="_blank" style="font-size: 0.75rem; color: var(--accent-color);">Lihat</a></div>` : '';
+    document.getElementById('form-keuangan-lampiran-preview').innerHTML = t.lampiran ? `<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--hover-bg); border-radius: 8px; border: 1px solid var(--border-color);"><span style="font-size: 0.75rem; color: var(--text-color);"><i data-lucide="paperclip" style="width: 14px; height: 14px; margin-right: 4px; display: inline;"></i> Tersimpan</span><a href="${smartAssetUrl(t.lampiran)}" target="_blank" style="font-size: 0.75rem; color: var(--accent-color);">Lihat</a></div>` : '';
     document.getElementById('drawer-keuangan-title').innerText = 'Edit Transaksi';
     updateFormKeuanganStatus();
     const drawer = document.getElementById('drawer-keuangan'); drawer.classList.remove('hidden');
@@ -277,9 +286,9 @@ function lihatBuktiKeuangan(url) {
     const isImage = url.match(/\.(jpeg|jpg|gif|png)$/i) != null;
     const content = document.getElementById('bukti-keuangan-content');
     if (isImage) {
-        content.innerHTML = `<img src="${url}" style="max-width: 100%; max-height: 70vh; border-radius: 12px; display: block; margin: 0 auto;">`;
+        content.innerHTML = `<img src="${smartAssetUrl(url)}" style="max-width: 100%; max-height: 70vh; border-radius: 12px; display: block; margin: 0 auto;">`;
     } else {
-        content.innerHTML = `<div style="padding: 40px; background: var(--hover-bg); border-radius: 12px; margin-bottom: 16px;"><i data-lucide="file-text" style="width: 48px; height: 48px; color: var(--text-secondary-color); margin: 0 auto 16px auto; display: block;"></i><p>Dokumen PDF/Word. Silakan unduh atau lihat di tab baru.</p></div><a href="${url}" target="_blank" class="button-primary" style="display: inline-flex; align-items: center; justify-content: center; width: 100%; border-radius: 12px;"><i data-lucide="external-link" style="margin-right: 8px;"></i> Buka di Tab Baru</a>`;
+        content.innerHTML = `<div style="padding: 40px; background: var(--hover-bg); border-radius: 12px; margin-bottom: 16px;"><i data-lucide="file-text" style="width: 48px; height: 48px; color: var(--text-secondary-color); margin: 0 auto 16px auto; display: block;"></i><p>Dokumen PDF/Word. Silakan unduh atau lihat di tab baru.</p></div><a href="${smartAssetUrl(url)}" target="_blank" class="button-primary" style="display: inline-flex; align-items: center; justify-content: center; width: 100%; border-radius: 12px;"><i data-lucide="external-link" style="margin-right: 8px;"></i> Buka di Tab Baru</a>`;
     }
     document.getElementById('modal-bukti-keuangan').classList.remove('hidden');
     lucide.createIcons();
@@ -305,9 +314,9 @@ function detailKeuangan(id) {
     if (t.lampiran) {
         const isImage = t.lampiran.match(/\.(jpeg|jpg|gif|png)$/i) != null;
         if (isImage) {
-            lampiranHtml = `<div style="margin-top: 16px;"><p class="card-label">Lampiran Bukti</p><img src="${t.lampiran}" style="max-width: 100%; border-radius: 12px; border: 1px solid var(--border-color); margin-top: 8px;"></div>`;
+            lampiranHtml = `<div style="margin-top: 16px;"><p class="card-label">Lampiran Bukti</p><img src="${smartAssetUrl(t.lampiran)}" style="max-width: 100%; border-radius: 12px; border: 1px solid var(--border-color); margin-top: 8px;"></div>`;
         } else {
-            lampiranHtml = `<div style="margin-top: 16px;"><p class="card-label">Lampiran Bukti</p><a href="${t.lampiran}" target="_blank" class="button-secondary" style="display: inline-flex; width: 100%; justify-content: center; border-radius: 12px; margin-top: 8px;"><i data-lucide="external-link" style="margin-right: 8px;"></i> Buka Dokumen Lampiran</a></div>`;
+            lampiranHtml = `<div style="margin-top: 16px;"><p class="card-label">Lampiran Bukti</p><a href="${smartAssetUrl(t.lampiran)}" target="_blank" class="button-secondary" style="display: inline-flex; width: 100%; justify-content: center; border-radius: 12px; margin-top: 8px;"><i data-lucide="external-link" style="margin-right: 8px;"></i> Buka Dokumen Lampiran</a></div>`;
         }
     } else {
         lampiranHtml = `<div style="margin-top: 16px; padding: 16px; background: var(--hover-bg); border-radius: 12px; text-align: center; border: 1px dashed var(--border-color);"><p class="text-secondary" style="margin: 0; font-size: 0.85rem;">Tidak ada lampiran dokumen</p></div>`;

@@ -1,5 +1,5 @@
     <!-- Stats Section -->
-    <section id="kawasan" class="py-16 md:py-24 lg:py-32 relative bg-white/30 backdrop-blur-sm border-y border-white/50" data-parallax-section data-parallax-speed="0.02">
+    <section id="kawasan" class="py-16 md:py-24 lg:py-32 relative bg-white/30 backdrop-blur-sm border-y border-white/50">
         <div class="container mx-auto px-6 md:px-12 text-center mb-12 md:mb-20">
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-emerald-950 tracking-tight reveal">Kawasan Mandiri Terpadu</h2>
         </div>

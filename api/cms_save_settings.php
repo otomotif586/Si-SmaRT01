@@ -1,6 +1,7 @@
 <?php
 error_reporting(0); // Matikan error HTML agar tidak memecah JSON
 require_once '../config/database.php';
+require_once '../config/asset_url.php';
 header('Content-Type: application/json');
 try {
     // Pastikan PDO terhubung
@@ -52,7 +53,7 @@ try {
         'web_info_item_4_desc' => $_POST['web_info_item_4_desc'] ?? '',
     ];
 
-    $uploadDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'cms' . DIRECTORY_SEPARATOR;
+    $uploadDir = smart_public_fs_path('public/uploads/cms');
     if (!is_dir($uploadDir)) {
         if (!@mkdir($uploadDir, 0777, true)) {
             throw new Exception("Gagal membuat direktori upload: " . $uploadDir);
@@ -69,7 +70,7 @@ try {
             if ($fileArray['error'] === UPLOAD_ERR_OK) {
                 $ext = pathinfo($fileArray['name'], PATHINFO_EXTENSION);
                 $filename = $prefix . '_' . time() . '.' . $ext;
-                if (@move_uploaded_file($fileArray['tmp_name'], $uploadDir . $filename)) {
+                if (@move_uploaded_file($fileArray['tmp_name'], $uploadDir . DIRECTORY_SEPARATOR . $filename)) {
                     return 'public/uploads/cms/' . $filename;
                 } else {
                     throw new Exception("Gagal memindahkan file yang diunggah ($prefix). Cek izin folder.");
@@ -111,7 +112,7 @@ try {
             if ($_FILES['web_slider_images']['error'][$i] === UPLOAD_ERR_OK) {
                 $ext = pathinfo($_FILES['web_slider_images']['name'][$i], PATHINFO_EXTENSION);
                 $filename = 'slider_' . time() . '_' . $i . '.' . $ext;
-                if (move_uploaded_file($_FILES['web_slider_images']['tmp_name'][$i], $uploadDir . $filename)) $sliderPaths[] = 'public/uploads/cms/' . $filename;
+                if (move_uploaded_file($_FILES['web_slider_images']['tmp_name'][$i], $uploadDir . DIRECTORY_SEPARATOR . $filename)) $sliderPaths[] = 'public/uploads/cms/' . $filename;
             }
         }
         if (!empty($sliderPaths)) $settings['web_slider_images'] = json_encode($sliderPaths);
