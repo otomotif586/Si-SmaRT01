@@ -1,5 +1,6 @@
 <?php
 require_once '../config/database.php';
+require_once '../config/asset_url.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,11 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $lampiran_path = null;
     if (isset($_FILES['lampiran']) && $_FILES['lampiran']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../public/uploads/keuangan/';
+        $uploadDir = smart_public_fs_path('public/uploads/keuangan');
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
         
         $fileName = time() . '_' . uniqid() . '_' . basename($_FILES['lampiran']['name']);
-        $targetPath = $uploadDir . preg_replace("/[^a-zA-Z0-9.-]/", "_", $fileName);
+        $targetPath = $uploadDir . DIRECTORY_SEPARATOR . preg_replace("/[^a-zA-Z0-9.-]/", "_", $fileName);
         
         if (move_uploaded_file($_FILES['lampiran']['tmp_name'], $targetPath)) {
             $lampiran_path = 'public/uploads/keuangan/' . basename($targetPath);

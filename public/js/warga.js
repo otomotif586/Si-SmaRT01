@@ -1,4 +1,14 @@
 ﻿// --- Detail Warga Full (Data Diri & Tunggakan) ---
+
+function smartAssetUrl(path) {
+    if (!path) return '';
+    if (/^(?:https?:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+    const basePath = (window.__SMART_ASSET_BASE_PATH__ || '').replace(/\/$/, '');
+    const cleanedPath = String(path).replace(/^\/+/, '');
+    if (!basePath) return cleanedPath;
+    return `${basePath}/${cleanedPath}`;
+}
+
 window.showDetailWarga = function(id) {
     // Buat elemen modal secara dinamis jika belum ada di halaman ini
     let modalFull = document.getElementById('modal-detail-warga-full');
@@ -97,7 +107,7 @@ window.renderWargaFullDetail = function(res) {
     if (dokumen.length > 0) {
         dokumen.forEach(d => {
             let fname = d.file_path.split('/').pop();
-            dokHtml += `<a href="${d.file_path}" target="_blank" class="document-item" style="padding: 12px 16px; background: rgba(128,128,128,0.03); border-radius: 16px; border: 1px solid var(--border-color); text-decoration: none; display: flex; align-items: center; gap: 12px; transition: all 0.3s;">
+            dokHtml += `<a href="${smartAssetUrl(d.file_path)}" target="_blank" class="document-item" style="padding: 12px 16px; background: rgba(128,128,128,0.03); border-radius: 16px; border: 1px solid var(--border-color); text-decoration: none; display: flex; align-items: center; gap: 12px; transition: all 0.3s;">
                 <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                     <i data-lucide="file-text" style="width:18px; height:18px;"></i>
                 </div>
@@ -358,6 +368,33 @@ function nextPageWarga() {
 // Variable untuk menyimpan status edit Warga
 window.currentWargaId = 0;
 
+function normalizeNomorRumah(inputValue, padLeft = true) {
+    const digitsOnly = String(inputValue || '').replace(/\D+/g, '');
+    if (!digitsOnly) return '';
+    const lastTwoDigits = digitsOnly.length > 2 ? digitsOnly.slice(-2) : digitsOnly;
+    return padLeft ? lastTwoDigits.padStart(2, '0') : lastTwoDigits;
+}
+
+function setupNoRumahAutoFormat() {
+    const input = document.getElementById('warga_norumah');
+    if (!input || input.dataset.autoNoRumahBound === '1') {
+        return;
+    }
+
+    input.dataset.autoNoRumahBound = '1';
+
+    input.addEventListener('input', () => {
+        input.value = normalizeNomorRumah(input.value, false);
+    });
+
+    const padValue = () => {
+        input.value = normalizeNomorRumah(input.value, true);
+    };
+
+    input.addEventListener('blur', padValue);
+    input.addEventListener('change', padValue);
+}
+
 // Fungsi untuk memuat ulang daftar warga tanpa merefresh halaman
 function refreshWargaList() {
     if (window.currentBlokId === 0) return;
@@ -377,6 +414,7 @@ function openFormWarga(isGlobal = false) {
     window.currentWargaId = 0; // Reset ke mode Tambah
     document.getElementById('form-tambah-warga').reset(); // Kosongkan form
     document.querySelector('#drawer-warga .ws-title').innerText = 'Tambah Data Warga';
+    setupNoRumahAutoFormat();
     
     const blokSelect = document.getElementById('warga_blok_id');
     if (isGlobal) {
@@ -498,6 +536,11 @@ function simpanDataWarga() {
     const valNik = elNik.value;
     const valWa = elWa.value;
     const selectedBlokId = elBlokId.value;
+    const elNoRumah = document.getElementById('warga_norumah');
+    const noRumah2Digit = normalizeNomorRumah(elNoRumah ? elNoRumah.value : '', true);
+    if (elNoRumah) {
+        elNoRumah.value = noRumah2Digit;
+    }
 
     if (!selectedBlokId) {
         alert('Silakan pilih Domisili Blok warga terlebih dahulu!');
@@ -520,7 +563,7 @@ function simpanDataWarga() {
         formData.append('id', window.currentWargaId);
     }
     formData.append('blok_id', selectedBlokId);
-    formData.append('nomor_rumah', document.getElementById('warga_norumah').value);
+    formData.append('nomor_rumah', noRumah2Digit);
     formData.append('nik', valNoKk); // Asumsi KK disimpan di kolom nik
     formData.append('nik_kepala', valNik);
     formData.append('nama_lengkap', document.getElementById('warga_kepala').value);
@@ -620,7 +663,11 @@ function editWarga(id) {
             blokSelect.value = data.blok_id || '';
             blokSelect.disabled = (localStorage.getItem('activePage') !== 'global-warga');
 
-            document.getElementById('warga_norumah').value = data.nomor_rumah || '';
+            const noRumahInput = document.getElementById('warga_norumah');
+            setupNoRumahAutoFormat();
+            if (noRumahInput) {
+                noRumahInput.value = normalizeNomorRumah(data.nomor_rumah || '', true);
+            }
             document.getElementById('warga_nokk').value = data.nik || '';
             document.getElementById('warga_nik_kepala').value = data.nik_kepala || '';
             document.getElementById('warga_kepala').value = data.nama_lengkap || '';

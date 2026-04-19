@@ -1,5 +1,15 @@
 <!-- Halaman Kelola UMKM/Pasar -->
 <div id="page-pasar" class="page-content hidden page-section stagger-ready">
+    <script>
+        function smartAssetUrl(path) {
+            if (!path) return '';
+            if (/^(?:https?:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+            const basePath = (window.__SMART_ASSET_BASE_PATH__ || '').replace(/\/$/, '');
+            const cleanedPath = String(path).replace(/^\/+/, '');
+            if (!basePath) return cleanedPath;
+            return `${basePath}/${cleanedPath}`;
+        }
+    </script>
     <!-- Modern Header for Page -->
     <div class="page-header-premium mb-8 stagger-item" style="animation-delay: 0.1s">
         <h2 class="text-3xl font-bold text-slate-900 font-space">Pasar Warga</h2>
@@ -311,9 +321,9 @@
                     let mainPhoto = 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&q=80';
                     try {
                         const photos = JSON.parse(p.foto);
-                        if (Array.isArray(photos) && photos.length > 0) mainPhoto = photos[0];
+                        if (Array.isArray(photos) && photos.length > 0) mainPhoto = smartAssetUrl(photos[0]);
                     } catch(e) {
-                        if (p.foto) mainPhoto = p.foto;
+                        if (p.foto) mainPhoto = smartAssetUrl(p.foto);
                     }
 
                     html += `
@@ -344,7 +354,7 @@
                 res.data.forEach(s => {
                     html += `
                         <div class="relative group rounded-3xl overflow-hidden shadow-lg aspect-video bg-slate-200">
-                            <img src="${s.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <img src="${smartAssetUrl(s.image)}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
                                 <button onclick="deleteSlider(${s.id})" class="p-4 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-red-500 transition-all"><i data-lucide="trash-2"></i></button>
                             </div>
@@ -400,9 +410,9 @@
         let mainPhoto = 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&q=80';
         try {
             const photos = JSON.parse(p.foto);
-            if (Array.isArray(photos) && photos.length > 0) mainPhoto = photos[0];
+                        if (Array.isArray(photos) && photos.length > 0) mainPhoto = smartAssetUrl(photos[0]);
         } catch(e) {
-            if (p.foto) mainPhoto = p.foto;
+                        if (p.foto) mainPhoto = smartAssetUrl(p.foto);
         }
         document.getElementById('detail-foto').src = mainPhoto;
 
@@ -479,7 +489,7 @@
                     const badge = p.status === 'Aktif' ? 'bg-emerald-100 text-emerald-700' : 
                                   (p.status === 'Pending' ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700');
                     const initialName = encodeURIComponent(p.nama_toko);
-                    const logoSrc = p.logo ? p.logo : `https://ui-avatars.com/api/?name=${initialName}&background=10b981&color=fff`;
+                    const logoSrc = p.logo ? smartAssetUrl(p.logo) : `https://ui-avatars.com/api/?name=${initialName}&background=10b981&color=fff`;
                     let approveBtn = p.status === 'Pending' ? `<button onclick="approvePasarPenjual(${p.id})" class="p-3 text-emerald-600 hover:bg-emerald-50 rounded-2xl transition-all mr-2" title="Setujui Akun UMKM"><i data-lucide="check-circle" class="w-5 h-5"></i></button>` : '';
                     html += `
                         <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">

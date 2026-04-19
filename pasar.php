@@ -1,5 +1,7 @@
 <?php
 require_once 'config/database.php';
+require_once 'config/asset_url.php';
+smart_send_html_no_cache_headers();
 
 // Auto-create database table jika belum ada (Tanpa repot buka phpMyAdmin)
 $pdo->exec("CREATE TABLE IF NOT EXISTS `pasar_produk` (
@@ -123,7 +125,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="public/css/mobile-ux.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/mobile-ux.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
     <!-- Swiper CSS untuk Slider Promosi -->
     <style>
         /* Mencegah FOUC (Flash of Unstyled Content) */
@@ -140,7 +142,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
         /* Efek Latar Belakang Semi Transparan Menyesuaikan Tema Portal */
         .background-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background-image: url('<?= htmlspecialchars($bg_overlay) ?>');
+            background-image: url('<?= htmlspecialchars(smart_asset($bg_overlay), ENT_QUOTES, 'UTF-8') ?>');
             background-size: cover; background-position: center center; background-repeat: no-repeat;
             filter: grayscale(18%) blur(4px); opacity: 0.11;
         }
@@ -375,7 +377,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
             .card-stack-img-pasar { height: 190px; width: 100%; }
         }
     </style>
-    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/theme-glass.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
     <script>
         document.addEventListener("DOMContentLoaded", () => { document.documentElement.classList.add("js-loaded"); });
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000); // Fallback

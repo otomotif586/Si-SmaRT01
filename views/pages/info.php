@@ -212,12 +212,12 @@
         </div>
     </div>
     
-    <!-- Tab Content: Slider Hero (Parallax Slides) -->
+    <!-- Tab Content: Slider Hero -->
     <div id="info-slider" class="info-tab-content hidden">
         <div class="glass-card card-section" style="margin-bottom: 24px;">
             <div class="section-header" style="margin-bottom: 20px;">
                 <div>
-                    <h4 class="section-title"><i data-lucide="layers" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Kelola 3 Slide Parallax Slider</h4>
+                    <h4 class="section-title"><i data-lucide="layers" style="display:inline; width:20px; margin-right:8px;" class="text-accent"></i> Kelola 3 Slide Slider</h4>
                     <p class="text-secondary" style="font-size: 0.8rem;">Sesuaikan gambar dan teks untuk ketiga slide di halaman depan.</p>
                 </div>
             </div>

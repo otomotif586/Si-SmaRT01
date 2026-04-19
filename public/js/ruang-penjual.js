@@ -9,6 +9,15 @@ let lastFilterQuery = '';
 let currentPage = 1;
 const itemsPerPage = 25;
 
+function smartAssetUrl(path) {
+    if (!path) return '';
+    if (/^(?:https?:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+    const basePath = (window.__SMART_ASSET_BASE_PATH__ || '').replace(/\/$/, '');
+    const cleanedPath = String(path).replace(/^\/+/, '');
+    if (!basePath) return cleanedPath;
+    return `${basePath}/${cleanedPath}`;
+}
+
 function getAdaptiveFilterDelay(query) {
     const now = Date.now();
     const gap = now - lastFilterAt;
@@ -208,7 +217,7 @@ function renderCards(data) {
     container.innerHTML = data.map((p) => {
         let photos = [];
         try { photos = JSON.parse(p.foto); } catch (e) { if (p.foto) photos = [p.foto]; }
-        const mainPhoto = photos.length > 0 ? photos[0] : 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=200';
+        const mainPhoto = photos.length > 0 ? smartAssetUrl(photos[0]) : 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=200';
 
         return `
         <div class="bg-white p-4 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4 group hover:shadow-xl hover:shadow-emerald-500/5 transition-all">

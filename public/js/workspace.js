@@ -1,5 +1,14 @@
 // --- Workspace Full-Screen Modal Functions ---
 
+function smartAssetUrl(path) {
+    if (!path) return '';
+    if (/^(?:https?:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+    const basePath = (window.__SMART_ASSET_BASE_PATH__ || '').replace(/\/$/, '');
+    const cleanedPath = String(path).replace(/^\/+/, '');
+    if (!basePath) return cleanedPath;
+    return `${basePath}/${cleanedPath}`;
+}
+
 // Menyimpan ID blok yang sedang aktif agar bisa diakses fungsi lain
 window.currentBlokId = 0;
 
@@ -16,7 +25,7 @@ function openWorkspaceModal(blokId, blockName, coord, warga, kas, logoClass, log
     if (logoEl) {
         if (logoImage) {
             logoEl.className = 'ws-logo-container';
-            logoEl.innerHTML = `<img src="${logoImage}" alt="Logo" class="ws-modal-img">`;
+            logoEl.innerHTML = `<img src="${smartAssetUrl(logoImage)}" alt="Logo" class="ws-modal-img">`;
         } else {
             logoEl.className = 'ws-logo-container ' + logoClass;
             logoEl.innerHTML = logoText;

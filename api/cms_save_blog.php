@@ -1,5 +1,6 @@
 <?php
 require_once '../config/database.php';
+require_once '../config/asset_url.php';
 header('Content-Type: application/json');
 try {
     $id = $_POST['id'] ?? 0;
@@ -8,14 +9,14 @@ try {
     $status = $_POST['status'] ?? 'Publish';
     $youtube_url = $_POST['youtube_url'] ?? '';
 
-    $uploadDir = '../public/uploads/cms/';
+    $uploadDir = smart_public_fs_path('public/uploads/cms');
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
     function handleUpload($fileArray, $prefix, $uploadDir) {
         if (isset($fileArray) && $fileArray['error'] === UPLOAD_ERR_OK) {
             $ext = pathinfo($fileArray['name'], PATHINFO_EXTENSION);
             $filename = $prefix . '_' . time() . '.' . $ext;
-            if (move_uploaded_file($fileArray['tmp_name'], $uploadDir . $filename)) {
+                if (move_uploaded_file($fileArray['tmp_name'], $uploadDir . DIRECTORY_SEPARATOR . $filename)) {
                 return 'public/uploads/cms/' . $filename;
             }
         }

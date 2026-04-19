@@ -1,5 +1,5 @@
     <!-- SEKSI BERITA & WARTA -->
-    <section id="berita" class="py-16 md:py-24 lg:py-32 bg-white/40 backdrop-blur-sm border-b border-white/50 relative overflow-hidden" data-parallax-section data-parallax-speed="0.035">
+    <section id="berita" class="py-16 md:py-24 lg:py-32 bg-white/40 backdrop-blur-sm border-b border-white/50 relative overflow-hidden">
         <div class="container mx-auto px-6 md:px-12">
             <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-12 md:mb-16 gap-6 reveal">
                 <div>
@@ -25,11 +25,11 @@
                     ?>
                     <div class="flex justify-center berita-item paginate-item">
                         <div class="card <?= $is_dark ? 'dark' : '' ?>">
-                            <div class="card-media-wrapper parallax-media-shell" data-parallax-media-speed="0.12">
+                            <div class="card-media-wrapper">
                                 <?php if($video_url): ?>
-                                    <video src="<?= htmlspecialchars($video_url) ?>" autoplay muted loop class="absolute inset-0 w-full h-full object-cover" data-parallax-media-speed="0.1"></video>
+                                    <video src="<?= htmlspecialchars(smart_asset($video_url), ENT_QUOTES, 'UTF-8') ?>" autoplay muted loop class="absolute inset-0 w-full h-full object-cover"></video>
                                 <?php else: ?>
-                                    <img src="<?= htmlspecialchars($thumb) ?>" alt="<?= htmlspecialchars($judul) ?>" class="w-full h-full object-cover" data-parallax-media-speed="0.14">
+                                    <img src="<?= htmlspecialchars(smart_asset($thumb), ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($judul) ?>" class="w-full h-full object-cover">
                                 <?php endif; ?>
                                 
                                 <div class="card-title-overlay">
@@ -51,8 +51,8 @@
                                         data-title="<?= htmlspecialchars($judul, ENT_QUOTES) ?>"
                                         data-content="<?= htmlspecialchars(str_replace(["\r", "\n"], '', $konten), ENT_QUOTES) ?>"
                                         data-date="<?= htmlspecialchars($tanggal_label, ENT_QUOTES) ?>"
-                                        data-thumb="<?= htmlspecialchars($thumb, ENT_QUOTES) ?>"
-                                        data-video="<?= htmlspecialchars($video_url, ENT_QUOTES) ?>"
+                                        data-thumb="<?= htmlspecialchars(smart_asset($thumb), ENT_QUOTES) ?>"
+                                        data-video="<?= htmlspecialchars(smart_asset($video_url), ENT_QUOTES) ?>"
                                         data-youtube="<?= htmlspecialchars($youtube_url, ENT_QUOTES) ?>"
                                     >Baca</button>
                                 </div>

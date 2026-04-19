@@ -6,6 +6,15 @@ const agendaItemsPerPage = 15;
 window.currentLaporanPage = 1;
 const laporanItemsPerPage = 15;
 
+function smartAssetUrl(path) {
+    if (!path) return '';
+    if (/^(?:https?:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+    const basePath = (window.__SMART_ASSET_BASE_PATH__ || '').replace(/\/$/, '');
+    const cleanedPath = String(path).replace(/^\/+/, '');
+    if (!basePath) return cleanedPath;
+    return `${basePath}/${cleanedPath}`;
+}
+
 function initAgendaLaporan() {
     // Reset ke tab pertama
     const firstSubTab = document.querySelector('.sub-nav-tab');
@@ -185,7 +194,7 @@ function renderAgendaList(agendas) {
         if (a.lampiran && a.lampiran.length > 0) {
             lampiranHtml += '<div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;">';
             a.lampiran.forEach(doc => {
-                lampiranHtml += `<a href="${doc.file_path}" target="_blank" class="document-item" style="padding: 6px 12px; background: var(--hover-bg); border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; width: fit-content; text-decoration: none; border: 1px solid var(--border-color);"><i data-lucide="paperclip" style="width: 14px; height: 14px; color: var(--text-secondary-color);"></i><span style="font-size: 0.75rem; color: var(--text-color);">${doc.file_name}</span></a>`;
+                lampiranHtml += `<a href="${smartAssetUrl(doc.file_path)}" target="_blank" class="document-item" style="padding: 6px 12px; background: var(--hover-bg); border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; width: fit-content; text-decoration: none; border: 1px solid var(--border-color);"><i data-lucide="paperclip" style="width: 14px; height: 14px; color: var(--text-secondary-color);"></i><span style="font-size: 0.75rem; color: var(--text-color);">${doc.file_name}</span></a>`;
             });
             lampiranHtml += '</div>';
         }
@@ -237,9 +246,9 @@ function renderLaporanList(laporans) {
             l.lampiran.forEach(doc => {
                 const isImage = doc.file_name.match(/\.(jpeg|jpg|gif|png)$/i) != null;
                 if (isImage) {
-                    lampiranHtml += `<a href="${doc.file_path}" target="_blank" style="display: inline-block; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden;"><img src="${doc.file_path}" style="height: 60px; width: 60px; object-fit: cover;"></a>`;
+                    lampiranHtml += `<a href="${smartAssetUrl(doc.file_path)}" target="_blank" style="display: inline-block; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden;"><img src="${smartAssetUrl(doc.file_path)}" style="height: 60px; width: 60px; object-fit: cover;"></a>`;
                 } else {
-                    lampiranHtml += `<a href="${doc.file_path}" target="_blank" class="document-item" style="padding: 6px 12px; background: var(--hover-bg); border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; width: fit-content; text-decoration: none; border: 1px solid var(--border-color);"><i data-lucide="paperclip" style="width: 14px; height: 14px; color: var(--text-secondary-color);"></i><span style="font-size: 0.75rem; color: var(--text-color);">${doc.file_name}</span></a>`;
+                    lampiranHtml += `<a href="${smartAssetUrl(doc.file_path)}" target="_blank" class="document-item" style="padding: 6px 12px; background: var(--hover-bg); border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; width: fit-content; text-decoration: none; border: 1px solid var(--border-color);"><i data-lucide="paperclip" style="width: 14px; height: 14px; color: var(--text-secondary-color);"></i><span style="font-size: 0.75rem; color: var(--text-color);">${doc.file_name}</span></a>`;
                 }
             });
             lampiranHtml += '</div>';

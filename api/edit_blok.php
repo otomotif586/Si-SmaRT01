@@ -1,5 +1,6 @@
 <?php
 require_once '../config/database.php';
+require_once '../config/asset_url.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -16,11 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $logo_image = null;
     if (isset($_FILES['logo_image']) && $_FILES['logo_image']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../public/uploads/';
+        $uploadDir = smart_public_fs_path('public/uploads');
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
         
         $fileName = time() . '_' . basename($_FILES['logo_image']['name']);
-        $targetPath = $uploadDir . $fileName;
+        $targetPath = $uploadDir . DIRECTORY_SEPARATOR . $fileName;
         
         if (move_uploaded_file($_FILES['logo_image']['tmp_name'], $targetPath)) {
             $logo_image = 'public/uploads/' . $fileName;

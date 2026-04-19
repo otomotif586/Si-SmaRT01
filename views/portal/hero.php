@@ -151,10 +151,10 @@ $clean_title = strip_tags($raw_title, '<br>');
     }
 </style>
 
-<div class="hero-stack-wrapper" data-parallax-section>
+<div class="hero-stack-wrapper">
     <!-- Hero Section -->
-    <section class="hero-main" data-parallax-speed="0.06">
-        <div class="inline-flex items-center space-x-3 px-5 py-3 mb-8 rounded-full bg-emerald-600/10 border border-emerald-600/20 text-emerald-400 text-[10px] font-bold tracking-[0.2em] uppercase backdrop-blur-md" data-parallax-speed="0.06" data-parallax-mode="scroll">
+    <section class="hero-main">
+        <div class="inline-flex items-center space-x-3 px-5 py-3 mb-8 rounded-full bg-emerald-600/10 border border-emerald-600/20 text-emerald-400 text-[10px] font-bold tracking-[0.2em] uppercase backdrop-blur-md">
             <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
             <span>RT 001 Go-Digital</span>
         </div>
@@ -178,7 +178,7 @@ $clean_title = strip_tags($raw_title, '<br>');
             </a>
         </div>
 
-        <div class="relative mt-12 sm:absolute sm:bottom-12 sm:mt-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 text-emerald-900 scroll-indicator" data-parallax-speed="0.1" data-parallax-mode="scroll">
+        <div class="relative mt-12 sm:absolute sm:bottom-12 sm:mt-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40 text-emerald-900 scroll-indicator">
             <span class="text-[10px] uppercase tracking-[0.3em] font-bold">Scroll Down</span>
             <div class="w-px h-12 bg-gradient-to-b from-emerald-500 to-transparent"></div>
         </div>
@@ -193,8 +193,8 @@ $clean_title = strip_tags($raw_title, '<br>');
                 <h2 class="text-white"><?= htmlspecialchars($s['title']) ?></h2>
                 <p><?= htmlspecialchars($s['description']) ?></p>
             </div>
-            <div class="card-stack-img parallax-media-shell" data-parallax-media-speed="0.16">
-                <img src="<?= htmlspecialchars($s['image']) ?>" alt="<?= htmlspecialchars($s['title']) ?>" data-parallax-media-speed="0.18">
+            <div class="card-stack-img">
+                <img src="<?= htmlspecialchars(smart_asset($s['image']), ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($s['title']) ?>" loading="lazy" decoding="async" fetchpriority="low">
             </div>
         </div>
         <?php endforeach; ?>
@@ -239,8 +239,7 @@ $clean_title = strip_tags($raw_title, '<br>');
             });
         };
 
-        window.addEventListener('scroll', handleScroll);
-        // Trigger once to set initial state
+        window.addEventListener('scroll', handleScroll, { passive: true });
         handleScroll();
     });
 </script>

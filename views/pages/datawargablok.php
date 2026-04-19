@@ -19,8 +19,8 @@
                         <select id="warga_blok_id" class="input-field select-custom"></select>
                     </div>
                     <div class="form-group">
-                        <label class="card-label">No Rumah</label>
-                        <input type="text" id="warga_norumah" class="input-field" placeholder="Cth: A-01">
+                        <label class="card-label">No Rumah (2 Digit)</label>
+                        <input type="text" id="warga_norumah" class="input-field" placeholder="Cth: 01" maxlength="2" inputmode="numeric">
                     </div>
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label class="card-label">No Kartu Keluarga (KK)</label>

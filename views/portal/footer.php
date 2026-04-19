@@ -1,5 +1,5 @@
     <!-- Footer -->
-    <footer class="py-12 bg-emerald-950 text-white rounded-t-[3rem] mt-20 relative overflow-hidden" data-parallax-section data-parallax-speed="0.012">
+    <footer class="py-12 bg-emerald-950 text-white rounded-t-[3rem] mt-20 relative overflow-hidden">
         <div class="container mx-auto px-6 text-center relative z-10">
             <div class="flex flex-col items-center space-y-4 mb-8">
                 <div class="flex items-center space-x-2 text-[10px] font-bold tracking-[0.3em] uppercase text-emerald-400 opacity-80">

@@ -1,4 +1,17 @@
 let quillBlog;
+
+function smartAssetUrl(path) {
+    const value = String(path || '').trim();
+    if (!value) return '';
+    if (/^(?:https?:)?\/\//i.test(value) || /^(?:data|mailto|tel):/i.test(value)) {
+        return value;
+    }
+
+    const basePath = String(window.__SMART_ASSET_BASE_PATH__ || '').replace(/\/+$/, '');
+    const cleanPath = value.replace(/^\/+/, '');
+    return `${basePath}/${cleanPath}`.replace(/([^:]\/)\/+/g, '$1');
+}
+
 window.initInfo = function () {
     if (typeof lucide !== 'undefined') lucide.createIcons();
     loadWebSettings();
@@ -117,26 +130,36 @@ window.loadWebSettings = function () {
                 }
 
                 // Tampilkan Tautan Preview Gambar jika sudah ada datanya
-                if (document.getElementById('preview_web_logo') && data.web_logo)
-                    document.getElementById('preview_web_logo').innerHTML = `<img src="${data.web_logo}" style="height:20px; width:20px; object-fit:contain; border-radius:4px; margin-right:8px; vertical-align:middle; border:1px solid var(--border-color);"><a href="${data.web_logo}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat</a>`;
-                if (document.getElementById('preview_web_favicon') && data.web_favicon)
-                    document.getElementById('preview_web_favicon').innerHTML = `<img src="${data.web_favicon}" style="height:20px; width:20px; object-fit:contain; border-radius:4px; margin-right:8px; vertical-align:middle; border:1px solid var(--border-color);"><a href="${data.web_favicon}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat</a>`;
-                if (document.getElementById('preview_web_hero_image') && data.web_hero_image)
-                    document.getElementById('preview_web_hero_image').innerHTML = `<a href="${data.web_hero_image}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat Banner</a>`;
+                if (document.getElementById('preview_web_logo') && data.web_logo) {
+                    const webLogo = smartAssetUrl(data.web_logo);
+                    document.getElementById('preview_web_logo').innerHTML = `<img src="${webLogo}" style="height:20px; width:20px; object-fit:contain; border-radius:4px; margin-right:8px; vertical-align:middle; border:1px solid var(--border-color);"><a href="${webLogo}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat</a>`;
+                }
+                if (document.getElementById('preview_web_favicon') && data.web_favicon) {
+                    const webFavicon = smartAssetUrl(data.web_favicon);
+                    document.getElementById('preview_web_favicon').innerHTML = `<img src="${webFavicon}" style="height:20px; width:20px; object-fit:contain; border-radius:4px; margin-right:8px; vertical-align:middle; border:1px solid var(--border-color);"><a href="${webFavicon}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat</a>`;
+                }
+                if (document.getElementById('preview_web_hero_image') && data.web_hero_image) {
+                    const heroImage = smartAssetUrl(data.web_hero_image);
+                    document.getElementById('preview_web_hero_image').innerHTML = `<a href="${heroImage}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat Banner</a>`;
+                }
                 if (document.getElementById('preview_web_slider_images') && data.web_slider_images) {
                     try { const sliders = JSON.parse(data.web_slider_images); document.getElementById('preview_web_slider_images').innerHTML = `<span class="badge bg-blue-light text-blue" style="font-size:0.6rem;">${sliders.length} Gambar Tersimpan</span>`; }
                     catch (e) { }
                 }
-                if (document.getElementById('preview_web_transparansi_file') && data.web_transparansi_file)
-                    document.getElementById('preview_web_transparansi_file').innerHTML = `<a href="${data.web_transparansi_file}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat Laporan</a>`;
+                if (document.getElementById('preview_web_transparansi_file') && data.web_transparansi_file) {
+                    const transparansiFile = smartAssetUrl(data.web_transparansi_file);
+                    document.getElementById('preview_web_transparansi_file').innerHTML = `<a href="${transparansiFile}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.6rem;">Lihat Laporan</a>`;
+                }
 
                 // Parallax Slider Data
                 for (let i = 1; i <= 3; i++) {
                     if (document.getElementById(`web_slider_${i}_title`)) document.getElementById(`web_slider_${i}_title`).value = data[`web_slider_${i}_title`] || '';
                     if (document.getElementById(`web_slider_${i}_subtitle`)) document.getElementById(`web_slider_${i}_subtitle`).value = data[`web_slider_${i}_subtitle`] || '';
                     if (document.getElementById(`web_slider_${i}_description`)) document.getElementById(`web_slider_${i}_description`).value = data[`web_slider_${i}_description`] || '';
-                    if (document.getElementById(`preview_web_slider_${i}_image`) && data[`web_slider_${i}_image`])
-                        document.getElementById(`preview_web_slider_${i}_image`).innerHTML = `<a href="${data[`web_slider_${i}_image`]}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.5rem;">Lihat</a>`;
+                    if (document.getElementById(`preview_web_slider_${i}_image`) && data[`web_slider_${i}_image`]) {
+                        const sliderImage = smartAssetUrl(data[`web_slider_${i}_image`]);
+                        document.getElementById(`preview_web_slider_${i}_image`).innerHTML = `<a href="${sliderImage}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.5rem;">Lihat</a>`;
+                    }
                 }
 
                 // Wisata Data
@@ -144,8 +167,10 @@ window.loadWebSettings = function () {
                     if (document.getElementById(`web_wisata_${i}_title`)) document.getElementById(`web_wisata_${i}_title`).value = data[`web_wisata_${i}_title`] || '';
                     if (document.getElementById(`web_wisata_${i}_category`)) document.getElementById(`web_wisata_${i}_category`).value = data[`web_wisata_${i}_category`] || '';
                     if (document.getElementById(`web_wisata_${i}_description`)) document.getElementById(`web_wisata_${i}_description`).value = data[`web_wisata_${i}_description`] || '';
-                    if (document.getElementById(`preview_web_wisata_${i}_image`) && data[`web_wisata_${i}_image`])
-                        document.getElementById(`preview_web_wisata_${i}_image`).innerHTML = `<a href="${data[`web_wisata_${i}_image`]}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.5rem;">Lihat</a>`;
+                    if (document.getElementById(`preview_web_wisata_${i}_image`) && data[`web_wisata_${i}_image`]) {
+                        const wisataImage = smartAssetUrl(data[`web_wisata_${i}_image`]);
+                        document.getElementById(`preview_web_wisata_${i}_image`).innerHTML = `<a href="${wisataImage}" target="_blank" class="badge bg-emerald-light text-emerald" style="font-size:0.5rem;">Lihat</a>`;
+                    }
                 }
             }
         }).catch(e => console.log('API Settings belum siap'));
@@ -321,7 +346,7 @@ window.loadCmsBlogs = function () {
                 let html = '';
                 res.data.forEach(b => {
                     const statusClass = b.status === 'Publish' ? 'badge bg-blue-light text-blue' : 'badge bg-secondary-light text-secondary';
-                    const mediaHtml = b.thumbnail ? `<img src="${b.thumbnail}" alt="">` : (b.video_url ? `<video src="${b.video_url}" muted loop></video>` : '<img src="https://images.unsplash.com/photo-1516245834210-c4c142787335?q=80&w=800" alt="">');
+                    const mediaHtml = b.thumbnail ? `<img src="${smartAssetUrl(b.thumbnail)}" alt="">` : (b.video_url ? `<video src="${smartAssetUrl(b.video_url)}" muted loop></video>` : '<img src="https://images.unsplash.com/photo-1516245834210-c4c142787335?q=80&w=800" alt="">');
                     html += `
                     <div class="premium-card">
                         ${mediaHtml}
@@ -367,8 +392,8 @@ window.editBlog = function (id, judulEncoded, kontenEncoded, status, youtube, th
     document.getElementById('cms-blog-youtube').value = youtube;
     if (quillBlog) quillBlog.root.innerHTML = decodeURIComponent(kontenEncoded);
     document.getElementById('cms-blog-status').value = status;
-    document.getElementById('preview_blog_thumbnail').innerHTML = thumb ? `<a href="${thumb}" target="_blank" class="badge bg-blue-light text-blue" style="font-size:0.5rem;">Lihat</a>` : '';
-    document.getElementById('preview_blog_video').innerHTML = video ? `<a href="${video}" target="_blank" class="badge bg-blue-light text-blue" style="font-size:0.5rem;">Lihat</a>` : '';
+    document.getElementById('preview_blog_thumbnail').innerHTML = thumb ? `<a href="${smartAssetUrl(thumb)}" target="_blank" class="badge bg-blue-light text-blue" style="font-size:0.5rem;">Lihat</a>` : '';
+    document.getElementById('preview_blog_video').innerHTML = video ? `<a href="${smartAssetUrl(video)}" target="_blank" class="badge bg-blue-light text-blue" style="font-size:0.5rem;">Lihat</a>` : '';
     document.getElementById('modal-blog-title').innerText = 'Edit Artikel';
     document.getElementById('modal-cms-blog').classList.remove('hidden');
 }
@@ -420,7 +445,7 @@ window.loadCmsPengurus = function () {
             if (res.status === 'success' && res.data.length > 0) {
                 let html = '';
                 res.data.forEach(p => {
-                    const fotoHtml = p.foto ? `<img src="${p.foto}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">` : `<div style="width:32px;height:32px;border-radius:50%;background:var(--accent-color);color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:0.8rem;">${p.nama.charAt(0)}</div>`;
+                    const fotoHtml = p.foto ? `<img src="${smartAssetUrl(p.foto)}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">` : `<div style="width:32px;height:32px;border-radius:50%;background:var(--accent-color);color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:0.8rem;">${p.nama.charAt(0)}</div>`;
                     html += `<tr>
                         <td class="font-bold text-center"><span class="badge bg-emerald-light text-emerald" style="padding:4px 8px;">Lv. ${p.urutan}</span></td>
                         <td class="text-center">${fotoHtml}</td>
@@ -449,7 +474,7 @@ window.editPengurus = function (id, namaEncoded, jabatanEncoded, urutan, foto) {
     document.getElementById('cms-pengurus-id').value = id; document.getElementById('cms-pengurus-nama').value = decodeURIComponent(namaEncoded);
     document.getElementById('cms-pengurus-jabatan').value = decodeURIComponent(jabatanEncoded); document.getElementById('cms-pengurus-urutan').value = urutan;
     document.getElementById('cms-pengurus-foto').value = '';
-    document.getElementById('preview_pengurus_foto').innerHTML = foto ? `<a href="${foto}" target="_blank" class="badge bg-blue-light text-blue" style="font-size:0.6rem;">Lihat Foto</a>` : '';
+    document.getElementById('preview_pengurus_foto').innerHTML = foto ? `<a href="${smartAssetUrl(foto)}" target="_blank" class="badge bg-blue-light text-blue" style="font-size:0.6rem;">Lihat Foto</a>` : '';
     document.getElementById('modal-pengurus-title').innerText = 'Edit Pengurus'; document.getElementById('modal-cms-pengurus').classList.remove('hidden');
 }
 

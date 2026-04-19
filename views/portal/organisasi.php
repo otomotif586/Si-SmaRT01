@@ -29,17 +29,17 @@
             $titleSize = $isTop ? 'text-2xl' : 'text-lg';
             $badgeClass = $isTop ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-emerald-500/30' : 'bg-emerald-100 text-emerald-800 shadow-emerald-100/50';
             ?>
-            <div class="glass card-glow reveal flex flex-col items-center text-center group transition-all duration-700 w-full relative <?= $cardClass ?>" style="transition-delay: <?= $delay ?>s; background: rgba(255, 255, 255, 0.7);">
+            <div class="glass card-glow org-card reveal flex flex-col items-center text-center group transition-all duration-700 w-full relative <?= $cardClass ?>" style="transition-delay: <?= $delay ?>s; background: rgba(255, 255, 255, 0.7);">
                 
                 <!-- Badge Jabatan Mengambang (Startup Style) -->
-                <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest shadow-lg <?= $badgeClass ?> z-20 whitespace-nowrap">
+                <div class="org-role-badge absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 rounded-full text-[10px] md:text-xs font-black shadow-lg <?= $badgeClass ?> z-20">
                     <?= htmlspecialchars($a['jabatan']) ?>
                 </div>
 
                 <!-- Foto/Icon Container -->
-                <div class="<?= $imgSize ?> rounded-full bg-white border-4 border-white shadow-xl flex items-center justify-center mb-6 group-hover:scale-105 group-hover:shadow-2xl transition-all duration-500 overflow-hidden relative z-10 ring-4 ring-emerald-50 parallax-media-shell" data-parallax-media-speed="0.1">
+                <div class="<?= $imgSize ?> rounded-full bg-white border-4 border-white shadow-xl flex items-center justify-center mb-6 group-hover:scale-105 group-hover:shadow-2xl transition-all duration-500 overflow-hidden relative z-10 ring-4 ring-emerald-50">
                     <?php if($a['foto']): ?>
-                        <img src="<?= htmlspecialchars($a['foto']) ?>" alt="<?= htmlspecialchars($a['nama']) ?>" class="w-full h-full object-cover" data-parallax-media-speed="0.12">
+                        <img src="<?= htmlspecialchars(smart_asset($a['foto']), ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($a['nama']) ?>" class="w-full h-full object-cover">
                     <?php else: ?>
                         <div class="w-full h-full bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-600 transition-colors duration-500">
                             <i class="fas <?= $icon ?> text-4xl <?= $isTop ? 'md:text-5xl' : '' ?> text-emerald-600 group-hover:text-white transition-colors duration-500"></i>
@@ -59,7 +59,7 @@
     }
     ?>
 
-    <section id="organisasi" class="py-16 md:py-24 lg:py-32 bg-emerald-50/40 border-b border-emerald-100/50 relative overflow-hidden" data-parallax-section data-parallax-speed="0.016">
+    <section id="organisasi" class="py-16 md:py-24 lg:py-32 bg-emerald-50/40 border-b border-emerald-100/50 relative overflow-x-hidden overflow-y-visible">
         <!-- Glow Background Layer -->
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full bg-gradient-to-b from-emerald-200/40 to-transparent pointer-events-none blur-3xl z-0"></div>
 

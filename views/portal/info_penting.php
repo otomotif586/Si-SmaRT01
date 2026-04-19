@@ -1,5 +1,5 @@
     <!-- Informasi Penting Section -->
-    <section id="info_penting" class="py-16 md:py-24 lg:py-32 bg-emerald-900/5 border-b border-emerald-900/10 relative" data-parallax-section data-parallax-speed="0.018">
+    <section id="info_penting" class="py-16 md:py-24 lg:py-32 bg-emerald-900/5 border-b border-emerald-900/10 relative">
         <div class="container mx-auto px-6 md:px-12">
             <div class="text-center mb-12 md:mb-20 reveal">
                 <h2 class="text-[10px] font-black tracking-[0.5em] text-emerald-600 uppercase mb-4">Layanan Cepat</h2>

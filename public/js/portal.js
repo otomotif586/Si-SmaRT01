@@ -185,42 +185,7 @@ initSectionPagination({
     perPageMobile: 1
 });
 
-function initPortalParallax() {
-    const lightweightParallax = Array.from(document.querySelectorAll('[data-parallax-speed][data-parallax-mode="scroll"]'));
-    const network = document.getElementById('portal-image-network');
-
-    if (network) network.remove();
-
-    if (!lightweightParallax.length) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth <= 1024) return;
-
-    let rafId = 0;
-    let lastY = -1;
-
-    const update = () => {
-        rafId = 0;
-        const y = window.scrollY || 0;
-        if (Math.abs(y - lastY) < 2) return;
-        lastY = y;
-
-        for (const element of lightweightParallax) {
-            const speed = Number(element.dataset.parallaxSpeed || 0);
-            element.style.setProperty('--parallax-y', `${(y * speed).toFixed(2)}px`);
-            element.style.setProperty('--parallax-scale', '1');
-        }
-    };
-
-    const schedule = () => {
-        if (rafId) return;
-        rafId = window.requestAnimationFrame(update);
-    };
-
-    schedule();
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule, { passive: true });
-}
-
-initPortalParallax();
+// Parallax dinonaktifkan penuh untuk menjaga performa portal.
 
 // --- PARALLAX SLIDER JS ---
 try {
@@ -441,6 +406,15 @@ function getYoutubeId(url) {
     return '';
 }
 
+function smartAssetUrl(path) {
+    if (!path) return '';
+    if (/^(?:https?:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
+    const basePath = (window.__SMART_ASSET_BASE_PATH__ || '').replace(/\/$/, '');
+    const cleanedPath = String(path).replace(/^\/+/, '');
+    if (!basePath) return cleanedPath;
+    return `${basePath}/${cleanedPath}`;
+}
+
 function resetBlogModalContent(modal) {
     const media = modal.querySelector('#blog-modal-media');
     if (media) media.innerHTML = '';
@@ -465,13 +439,13 @@ function buildBlogModalMedia(modal, thumb, video, youtube) {
     } else if (video) {
         mediaMarkup = `
             <div class="blog-modal__frame">
-                <video src="${video}" controls playsinline preload="metadata"></video>
+                <video src="${smartAssetUrl(video)}" controls playsinline preload="metadata"></video>
             </div>
         `;
     } else if (thumb) {
         mediaMarkup = `
             <div class="blog-modal__frame">
-                <img src="${thumb}" alt="Gambar berita">
+                <img src="${smartAssetUrl(thumb)}" alt="Gambar berita">
             </div>
         `;
     }

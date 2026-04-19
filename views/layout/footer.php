@@ -1,18 +1,18 @@
 <!-- Modular JS (split by function, load order matters) -->
-<script src="public/js/core.js?v=<?= time() ?>"></script>
-<script src="public/js/dashboard.js?v=<?= time() ?>"></script>
-<script src="public/js/workspace.js?v=<?= time() ?>"></script>
-<script src="public/js/warga.js?v=<?= time() ?>"></script>
-<script src="public/js/ruang-warga.js?v=<?= time() ?>"></script>
-<script src="public/js/global-warga.js?v=<?= time() ?>"></script>
-<script src="public/js/keuangan.js?v=<?= time() ?>"></script>
-<script src="public/js/agenda.js?v=<?= time() ?>"></script>
-<script src="public/js/gallery.js?v=<?= time() ?>"></script>
-<script src="public/js/laporan-iuran.js?v=<?= time() ?>"></script>
-<script src="public/js/rekonsiliasi.js?v=<?= time() ?>"></script>
-<script src="public/js/keuangan-global.js?v=<?= time() ?>"></script>
-<script src="public/js/detail-keuangan.js?v=<?= time() ?>"></script>
-<script src="public/js/pos-keuangan.js?v=<?= time() ?>"></script>
-<script src="public/js/pembukuan.js?v=<?= time() ?>"></script>
-<script src="public/js/keamanan.js?v=<?= time() ?>"></script>
-<script src="public/js/info.js?v=<?= time() ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/core.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/dashboard.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/workspace.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/warga.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/ruang-warga.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/global-warga.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/keuangan.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/agenda.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/gallery.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/laporan-iuran.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/rekonsiliasi.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/keuangan-global.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/detail-keuangan.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/pos-keuangan.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/pembukuan.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/keamanan.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>
+<script src="<?= htmlspecialchars(smart_asset('public/js/info.js', (string)time()), ENT_QUOTES, 'UTF-8') ?>"></script>

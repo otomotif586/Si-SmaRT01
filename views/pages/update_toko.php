@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../../config/database.php';
+require_once '../../config/asset_url.php';
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['penjual_id'])) {
@@ -15,12 +16,12 @@ try {
 
     $logo = '';
     if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../../public/uploads/penjual/';
+        $uploadDir = smart_public_fs_path('public/uploads/penjual');
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
         
         $ext = pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION);
         $filename = 'logo_' . time() . '_' . rand(1000, 9999) . '.' . $ext;
-        if (move_uploaded_file($_FILES['logo']['tmp_name'], $uploadDir . $filename)) {
+        if (move_uploaded_file($_FILES['logo']['tmp_name'], $uploadDir . DIRECTORY_SEPARATOR . $filename)) {
             $logo = 'public/uploads/penjual/' . $filename;
         }
     }

@@ -1,5 +1,6 @@
 <?php
 require_once '../../config/database.php';
+require_once '../../config/asset_url.php';
 header('Content-Type: application/json');
 try {
     $id = $_POST['id'] ?? 0;
@@ -9,12 +10,12 @@ try {
 
     // Tangani unggahan file gambar fisik jika ada
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../../public/uploads/cms/';
+        $uploadDir = smart_public_fs_path('public/uploads/cms');
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
         
         $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
         $filename = 'slider_pasar_' . time() . '.' . $ext;
-        if (move_uploaded_file($_FILES['foto']['tmp_name'], $uploadDir . $filename)) {
+        if (move_uploaded_file($_FILES['foto']['tmp_name'], $uploadDir . DIRECTORY_SEPARATOR . $filename)) {
             $image = 'public/uploads/cms/' . $filename;
         }
     }

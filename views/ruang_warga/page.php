@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../../config/asset_url.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -9,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="public/css/ruang-warga-standalone.css">
-    <link rel="stylesheet" href="public/css/theme-glass.css?v=20260417">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/ruang-warga-standalone.css', smart_asset_version() . '-rwfix2'), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/theme-glass.css', smart_asset_version() . '-rwfix2'), ENT_QUOTES, 'UTF-8') ?>">
 </head>
 <body>
 <div id="rwBootLoader" class="rw-boot-loader" aria-hidden="true">
@@ -40,7 +41,7 @@
 
     <?php if (!$isLoggedIn): ?>
         <div class="rw-auth-shell">
-            <div class="rw-auth-hero card">
+            <div class="rw-auth-hero">
                 <p class="rw-auth-kicker"><i class="fas fa-house-user"></i> Ruang Warga</p>
                 <h2>Akses Cepat ala Mobile App</h2>
                 <p>Masuk cukup pakai NIK 16 digit. Registrasi warga baru juga bisa langsung dari halaman ini.</p>
@@ -462,7 +463,7 @@
                                     <div class="empty">Belum ada dokumen tersimpan.</div>
                                 <?php else: ?>
                                     <?php foreach ($dokumen as $d): ?>
-                                        <a href="<?= htmlspecialchars((string)$d['file_path']) ?>" target="_blank" rel="noopener">Dokumen #<?= (int)$d['id'] ?></a>
+                                        <a href="<?= htmlspecialchars(smart_asset((string)$d['file_path']), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Dokumen #<?= (int)$d['id'] ?></a>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </div>
@@ -543,7 +544,7 @@
                                         <span style="color:var(--muted); margin-left:8px;">Portal: <?= ((int)($l['approved_portal'] ?? 0) === 1) ? 'Disetujui' : 'Menunggu Approval' ?></span>
                                     </p>
                                     <?php if (!empty($l['lampiran_path'])): ?>
-                                        <p style="margin-top:8px;"><a href="<?= htmlspecialchars((string)$l['lampiran_path']) ?>" target="_blank" rel="noopener">Lihat Lampiran: <?= htmlspecialchars((string)($l['lampiran_name'] ?? 'File')) ?></a></p>
+                                        <p style="margin-top:8px;"><a href="<?= htmlspecialchars(smart_asset((string)$l['lampiran_path']), ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Lihat Lampiran: <?= htmlspecialchars((string)($l['lampiran_name'] ?? 'File')) ?></a></p>
                                     <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
@@ -587,6 +588,49 @@ Swal.fire({
 </script>
 <?php endif; ?>
 
-<script src="public/js/ruang-warga-standalone.js"></script>
+<script>
+(function () {
+    function normalizeToTwoDigits(value, padLeft) {
+        var digits = String(value || '').replace(/\D+/g, '');
+        if (!digits) {
+            return '';
+        }
+        var sliced = digits.length > 2 ? digits.slice(-2) : digits;
+        return padLeft ? sliced.padStart(2, '0') : sliced;
+    }
+
+    function bindTwoDigitInput(input) {
+        if (!input || input.dataset.twoDigitBound === '1') {
+            return;
+        }
+        input.dataset.twoDigitBound = '1';
+
+        input.value = normalizeToTwoDigits(input.value, true);
+
+        input.addEventListener('input', function () {
+            input.value = normalizeToTwoDigits(input.value, false);
+        });
+
+        var pad = function () {
+            input.value = normalizeToTwoDigits(input.value, true);
+        };
+
+        input.addEventListener('blur', pad);
+        input.addEventListener('change', pad);
+
+        var form = input.closest('form');
+        if (form) {
+            form.addEventListener('submit', function () {
+                input.value = normalizeToTwoDigits(input.value, true);
+            });
+        }
+    }
+
+    bindTwoDigitInput(document.querySelector('input[name="no_rumah"]'));
+    bindTwoDigitInput(document.querySelector('input[name="nomor_rumah"]'));
+})();
+</script>
+
+<script src="<?= htmlspecialchars(smart_asset('public/js/ruang-warga-standalone.js', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

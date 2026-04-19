@@ -1,5 +1,6 @@
 <?php
 require_once '../../config/database.php';
+require_once '../../config/asset_url.php';
 header('Content-Type: application/json');
 
 try {
@@ -53,14 +54,14 @@ try {
             throw new RuntimeException('Format lampiran tidak didukung.');
         }
 
-        $uploadDir = dirname(__DIR__, 2) . '/public/uploads/lampiran_aduan';
+        $uploadDir = smart_public_fs_path('public/uploads/lampiran_aduan');
         if (!is_dir($uploadDir) && !mkdir($uploadDir, 0777, true) && !is_dir($uploadDir)) {
             throw new RuntimeException('Folder upload lampiran tidak dapat dibuat.');
         }
 
         $safeName = preg_replace('/[^A-Za-z0-9._-]/', '_', $origName);
         $newName = date('YmdHis') . '_' . bin2hex(random_bytes(5)) . '_' . $safeName;
-        $targetAbs = $uploadDir . '/' . $newName;
+        $targetAbs = $uploadDir . DIRECTORY_SEPARATOR . $newName;
         if (!move_uploaded_file($tmpName, $targetAbs)) {
             throw new RuntimeException('Gagal menyimpan file lampiran.');
         }
@@ -88,7 +89,7 @@ try {
             $stmt->execute([$judul, $waktu_kejadian, $lokasi, $deskripsi, $status, $pelapor, $kategori, $sumberInput, $lampiranPath, $lampiranName, $id]);
 
             if ($oldLampiranPath !== '') {
-                $oldAbs = dirname(__DIR__, 2) . '/' . ltrim($oldLampiranPath, '/');
+                $oldAbs = smart_public_fs_path($oldLampiranPath);
                 if (is_file($oldAbs)) {
                     @unlink($oldAbs);
                 }
