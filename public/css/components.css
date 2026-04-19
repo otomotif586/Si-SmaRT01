@@ -1471,6 +1471,14 @@
     flex-direction: column;
 }
 
+/* Normalize label spacing inside popup forms so setting dialogs stay readable */
+.modal-content label,
+.modal-shell label,
+.drawer-panel label {
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+}
+
 .modal-close-top-right {
     position: absolute;
     top: 16px;
@@ -2026,11 +2034,13 @@
     z-index: 998;
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transition: all 0.4s var(--bezier);
 }
 .sidebar-overlay.active {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
 }
 
 /* Visibility Helpers */

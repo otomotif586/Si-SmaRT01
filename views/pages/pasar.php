@@ -664,4 +664,28 @@
     #page-pasar .pasar-tab-content.hidden {
         display: none;
     }
+
+    #page-pasar #pasar-modal label,
+    #page-pasar #pasar-slider-modal label,
+    #page-pasar #modal-pasar-penjual label,
+    #page-pasar #modal-detail-produk p.text-\[10px\] {
+        letter-spacing: 0.04em !important;
+        font-size: 0.68rem !important;
+        margin-bottom: 6px !important;
+    }
+
+    #page-pasar #modal-pasar-penjual h4 {
+        letter-spacing: 0.05em !important;
+    }
+
+    #page-pasar #pasar-modal .space-y-5 > * + *,
+    #page-pasar #modal-pasar-penjual .space-y-5 > * + * {
+        margin-top: 14px;
+    }
+
+    #page-pasar #pasar-modal .hide-scrollbar,
+    #page-pasar #modal-pasar-penjual .hide-scrollbar,
+    #page-pasar #modal-detail-produk .hide-scrollbar {
+        padding-top: 30px;
+    }
 </style>

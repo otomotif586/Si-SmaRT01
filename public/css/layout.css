@@ -17,6 +17,13 @@
     padding: 0;
     padding-bottom: env(safe-area-inset-bottom);
     transition: width 0.3s ease-in-out, background-color 0.3s ease;
+    pointer-events: auto;
+    isolation: isolate;
+}
+
+#sidebar,
+#sidebar * {
+    pointer-events: auto;
 }
 
 #sidebar .sidebar-header {
@@ -150,10 +157,6 @@
     color: var(--accent-color);
     background-color: transparent;
     opacity: 1;
-}
-
-#sidebar .sidebar-nav button.active-tab {
-    /* Hapus transform translateY agar container tidak memicu overflow (penyebab navbar amblas) */
 }
 
 #sidebar .sidebar-nav button.active-tab i,
@@ -472,10 +475,16 @@
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
         padding: 15px 0;
+        z-index: 12000;
+    }
+
+    #main-header {
+        z-index: 11000;
     }
 
     #sidebar.collapsed {
         width: 100px;
+        overflow-x: hidden;
     }
 
     #sidebar .sidebar-header {
@@ -668,16 +677,29 @@
     }
 
     #sidebar.collapsed .sidebar-footer-link {
-        padding: 12px 10px 16px !important;
+        padding: 12px 8px 16px !important;
     }
 
     #sidebar.collapsed .sidebar-footer-link a {
         justify-content: center;
-        padding: 10px;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 10px 8px;
+        overflow: hidden;
     }
 
     #sidebar.collapsed .sidebar-footer-link a span {
         display: none;
+    }
+
+    #sidebar.collapsed .sidebar-footer-link a i,
+    #sidebar.collapsed .sidebar-footer-link a svg {
+        margin: 0;
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
     }
 
     #main-content {
@@ -718,7 +740,8 @@
         flex-shrink: 0;
     }
 
-    #desktop-sidebar-toggle i {
+    #desktop-sidebar-toggle i,
+    #desktop-sidebar-toggle svg {
         width: 16px;
         height: 16px;
         display: block;
