@@ -8,7 +8,7 @@ if (!function_exists('smart_asset_version')) {
             return trim($envVersion);
         }
 
-        return '20260419r1';
+            return '20260419r1';
     }
 }
 
