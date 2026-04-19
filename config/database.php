@@ -41,5 +41,25 @@ try {
     }
 
 } catch(Exception $e) {
-    die("Koneksi Database Gagal: " . $e->getMessage());
+    $errorMessage = (string)$e->getMessage();
+
+    if (stripos($errorMessage, 'Unknown database') !== false) {
+        try {
+            $pdoRoot = new PDO("mysql:host=$host;charset=utf8", $username, $password);
+            $pdoRoot->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdoRoot->exec("CREATE DATABASE IF NOT EXISTS `" . str_replace('`', '', $dbname) . "` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+
+            $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $conn = mysqli_connect($host, $username, $password, $dbname);
+            if (!$conn) {
+                throw new Exception("MySQLi Connection Failed: " . mysqli_connect_error());
+            }
+        } catch (Exception $inner) {
+            die("Koneksi Database Gagal (setelah auto-create DB): " . $inner->getMessage());
+        }
+    } else {
+        die("Koneksi Database Gagal: " . $errorMessage);
+    }
 }
