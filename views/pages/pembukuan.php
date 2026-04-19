@@ -1,7 +1,7 @@
 <!-- Page: Laporan Pembukuan (Trial Balance) -->
 <div id="page-pembukuan" class="page-content hidden page-section">
     <!-- SaaS Style Summary Dashboard -->
-    <div class="summary-3-grid" style="margin-bottom: 24px;">
+    <div class="summary-3-grid mb-24">
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s; border-top: 4px solid var(--accent-color);">
             <div class="card-icon-deluxe icon-tone-success">
                 <i data-lucide="trending-up"></i>
@@ -11,7 +11,7 @@
             <div class="card-sub-info">Penerimaan iuran & dana</div>
         </div>
         
-            <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s; border-top: 4px solid var(--status-danger);">
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s; border-top: 4px solid var(--status-danger);">
             <div class="card-icon-deluxe icon-tone-danger">
                 <i data-lucide="trending-down"></i>
             </div>
@@ -31,16 +31,16 @@
     </div>
 
     <!-- Filter & Periode -->
-    <div class="glass-card" style="padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-        <p class="text-secondary" style="font-size: 0.8125rem; margin: 0;">Neraca lajur (Trial Balance) perputaran kas RT.</p>
-        <div class="header-actions" style="display: flex; gap: 8px; align-items: center;">
-            <div style="display: flex; gap: 6px; align-items: center;">
-                <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="prevMonthPembukuan()"><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>
-                <select id="filter-bulan-pembukuan" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 120px; border-radius: 10px;" onchange="loadPembukuan()"></select>
-                <select id="filter-tahun-pembukuan" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 90px; border-radius: 10px;" onchange="loadPembukuan()"></select>
-                <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="nextMonthPembukuan()"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
+    <div class="glass-card page-filter-card">
+        <p class="text-secondary page-filter-desc">Neraca lajur (Trial Balance) perputaran kas RT.</p>
+        <div class="header-actions page-filter-actions">
+            <div class="page-filter-group">
+                <button class="button-secondary button-sm compact-btn-icon" onclick="prevMonthPembukuan()"><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>
+                <select id="filter-bulan-pembukuan" class="input-field select-custom compact-control" style="min-width: 120px;" onchange="loadPembukuan()"></select>
+                <select id="filter-tahun-pembukuan" class="input-field select-custom compact-control" style="min-width: 90px;" onchange="loadPembukuan()"></select>
+                <button class="button-secondary button-sm compact-btn-icon" onclick="nextMonthPembukuan()"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
             </div>
-            <button class="button-secondary button-sm" style="padding: 8px 14px; border-radius: 10px; font-size: 0.8125rem;" onclick="exportPembukuanCSV()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
+            <button class="button-secondary button-sm compact-btn" onclick="exportPembukuanCSV()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
         </div>
     </div>
 
@@ -56,9 +56,9 @@
 
     <!-- Tab 1: General Ledger (Rincian Transaksi Baris) -->
     <div id="pb-tab-ledger" class="pb-tab-content">
-        <div class="glass-card hide-card-border-print" style="padding: 0; overflow: hidden; border-radius: 20px; margin-bottom: 24px;">
-            <div class="hide-on-print" style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.02); display: flex; justify-content: space-between; align-items: center;">
-                <h4 style="font-size: 1.1rem; margin: 0; font-weight: 700; display: flex; align-items: center; gap: 8px;"><i data-lucide="list" class="text-blue"></i> Rincian Transaksi (Buku Besar)</h4>
+        <div class="glass-card hide-card-border-print table-panel mb-24">
+            <div class="hide-on-print table-panel-head">
+                <h4 class="table-panel-title" style="display: flex; align-items: center; gap: 8px;"><i data-lucide="list" class="text-blue"></i> Rincian Transaksi (Buku Besar)</h4>
             </div>
             
         <div class="table-responsive" style="overflow-x: auto;">
@@ -81,12 +81,12 @@
                 </tfoot>
             </table>
         </div>
-        <div id="pb-pagination" style="display: none; justify-content: space-between; align-items: center; padding: 16px 24px; border-top: 1px dashed var(--border-color); background: rgba(255,255,255,0.01);">
-            <span id="pb-page-info" class="text-secondary" style="font-size: 0.8125rem;">Menampilkan 0 data</span>
+        <div id="pb-pagination" class="pagination-bar" style="padding: 16px 24px; background: rgba(255,255,255,0.01); margin-top: 0;">
+            <span id="pb-page-info" class="text-secondary pagination-bar-info">Menampilkan 0 data</span>
             <div style="display: flex; gap: 8px;">
-                <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;" onclick="prevPbPage()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
+                <button class="button-secondary button-sm compact-btn" onclick="prevPbPage()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
                 <div id="pb-page-numbers" style="display: flex; gap: 4px;"></div>
-                <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;" onclick="nextPbPage()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
+                <button class="button-secondary button-sm compact-btn" onclick="nextPbPage()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
             </div>
         </div>
         </div> <!-- Penutup glass-card -->

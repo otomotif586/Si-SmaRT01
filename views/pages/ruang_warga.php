@@ -82,7 +82,7 @@
         <div class="glass-card rw-card">
             <h3>History Pembayaran</h3>
             <p class="text-secondary">Riwayat iuran berdasarkan data warga yang terhubung ke akun Anda.</p>
-            <div class="table-container" style="margin-top: 16px;">
+            <div class="table-container mt-16">
                 <table class="data-table">
                     <thead>
                         <tr>

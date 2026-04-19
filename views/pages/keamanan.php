@@ -22,8 +22,8 @@
 
     <!-- Tab Content: Ringkasan -->
     <div id="km-ringkasan" class="km-tab-content active-tab">
-        <div class="summary-3-grid" style="margin-bottom: 24px;">
-            <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+        <div class="summary-3-grid mb-24">
+            <div class="glass-card-deluxe stagger-item stagger-delay-1">
                 <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
                     <i data-lucide="user-check"></i>
                 </div>
@@ -32,21 +32,21 @@
                 <div class="card-sub-info">Personel siap layanan warga</div>
             </div>
             
-            <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+            <div class="glass-card-deluxe stagger-item stagger-delay-2">
                 <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
                     <i data-lucide="alert-circle"></i>
                 </div>
                 <p class="card-label">Aduan Baru</p>
-                <h3 id="km-unread-reports" class="card-value text-orange" style="font-size: 1.5rem;">2</h3>
+                <h3 id="km-unread-reports" class="card-value text-orange card-value-lg">2</h3>
                 <div class="card-sub-info">Butuh review hari ini</div>
             </div>
 
-            <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+            <div class="glass-card-deluxe stagger-item stagger-delay-3">
                 <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
                     <i data-lucide="shield"></i>
                 </div>
                 <p class="card-label">Status Info</p>
-                <h3 class="card-value text-emerald" style="font-size: 1.5rem;">Aman</h3>
+                <h3 class="card-value text-emerald card-value-lg">Aman</h3>
                 <div class="card-sub-info">Informasi warga terpantau</div>
             </div>
         </div>
@@ -68,7 +68,7 @@
         </div>
 
         <div class="glass-card card-section" style="margin-top: 32px;">
-            <div class="section-header" style="margin-bottom: 20px;">
+            <div class="section-header mb-20">
                 <h4 class="section-title" style="font-size: 1rem;">Aktifitas Terbaru</h4>
                 <button class="button-link" onclick="switchKeamananTab('km-laporan', document.querySelectorAll('.sub-nav-tab')[3])">Lihat Semua</button>
             </div>
@@ -86,7 +86,7 @@
                 <button class="button-primary button-sm" onclick="addJadwal()"><i data-lucide="plus"></i> Tambah Jadwal</button>
             </div>
             <div class="table-responsive">
-                <table class="modern-table" style="width: 100%;">
+                <table class="modern-table w-full">
                     <thead>
                         <tr>
                             <th>Hari/Tgl</th>
@@ -126,7 +126,7 @@
                 </button>
             </div>
             <div class="table-responsive">
-                <table class="modern-table km-incident-table" style="width: 100%;">
+                <table class="modern-table km-incident-table w-full">
                     <thead>
                         <tr>
                             <th>Waktu</th>
@@ -144,7 +144,7 @@
                 </table>
             </div>
             <div id="km-incident-pagination" style="display:none; margin-top: 14px; border-top: 1px dashed var(--border-color); padding-top: 12px; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
-                <span id="km-incident-pagination-info" class="text-secondary" style="font-size: 0.8rem;">Menampilkan 0 data</span>
+                <span id="km-incident-pagination-info" class="text-secondary text-size-08">Menampilkan 0 data</span>
                 <div style="display:flex; gap: 8px;">
                     <button type="button" id="km-incident-prev" class="button-secondary button-sm" onclick="changeKmIncidentPage(-1)">Sebelumnya</button>
                     <button type="button" id="km-incident-next" class="button-secondary button-sm" onclick="changeKmIncidentPage(1)">Berikutnya</button>
@@ -166,7 +166,7 @@
                 </div>
             </div>
             <div class="glass-card card-section">
-                <h4 class="section-title" style="margin-bottom: 20px;">Statistik Absensi</h4>
+                <h4 class="section-title mb-20">Statistik Absensi</h4>
                 <div id="km-attendance-stats">
                     <!-- Stats will be loaded here -->
                 </div>
@@ -177,7 +177,7 @@
 </div>
 
 <!-- Emergency Broadcast Modal -->
-<div id="modal-panic-broadcast" class="modal-overlay hidden" style="z-index: 10020 !important;">
+<div id="modal-panic-broadcast" class="modal-overlay hidden overlay-z10020">
     <div class="modal-content glass-card-deluxe" style="max-width: 450px; text-align: center; padding: 40px;">
         <div class="panic-button" style="width: 100px; height: 100px; margin: 0 auto 24px; cursor: default;">
             <i data-lucide="send"></i>
@@ -196,9 +196,9 @@
 </div>
 
 <!-- Panic Settings Modal -->
-<div id="modal-panic-settings" class="modal-overlay hidden" style="z-index: 10020 !important;">
+<div id="modal-panic-settings" class="modal-overlay hidden overlay-z10020">
     <div class="modal-content glass-card-deluxe" style="max-width: 500px;">
-        <div class="section-header" style="margin-bottom: 24px;">
+        <div class="section-header mb-24">
             <h3 class="section-title">Kontak Darurat</h3>
             <button class="button-link" onclick="closeKmModal('modal-panic-settings')"><i data-lucide="x"></i></button>
         </div>
@@ -221,122 +221,122 @@
 <!-- MODAL CRUD KEAMANAN -->
 
 <!-- 1. Modal Master Satpam -->
-<div id="modal-satpam" class="modal-overlay hidden" style="z-index: 10020 !important;">
-    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative;">
-        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="closeKmModal('modal-satpam')"><i data-lucide="x"></i></button>
-        <h2 id="modal-satpam-title" class="section-title" style="margin-bottom: 8px;">Tambah Personel</h2>
-        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Kelola data master petugas keamanan.</p>
+<div id="modal-satpam" class="modal-overlay hidden overlay-z10020">
+    <div class="glass-card modal-shell modal-shell-sm">
+        <button class="modal-close-btn modal-close-top-right" onclick="closeKmModal('modal-satpam')"><i data-lucide="x"></i></button>
+        <h2 id="modal-satpam-title" class="section-title mb-8">Tambah Personel</h2>
+        <p class="text-secondary modal-desc">Kelola data master petugas keamanan.</p>
         
         <input type="hidden" id="km-satpam-id" value="0">
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group mb-16">
             <label class="card-label">Nama Lengkap</label>
-            <input type="text" id="km-satpam-nama" class="input-field" style="margin-top: 8px;">
+            <input type="text" id="km-satpam-nama" class="input-field mt-8">
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group mb-16">
             <label class="card-label">Nomor HP / WA</label>
-            <input type="text" id="km-satpam-nohp" class="input-field" style="margin-top: 8px;">
+            <input type="text" id="km-satpam-nohp" class="input-field mt-8">
         </div>
-        <div class="form-group" style="margin-bottom: 24px;">
+        <div class="form-group mb-24">
             <label class="card-label">Status</label>
-            <select id="km-satpam-status" class="input-field select-custom" style="margin-top: 8px;">
+            <select id="km-satpam-status" class="input-field select-custom mt-8">
                 <option value="Aktif">Aktif Bertugas</option>
                 <option value="Nonaktif">Nonaktif / Berhenti</option>
             </select>
         </div>
-        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="saveSatpam()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Data</button>
+        <button class="button-primary button-full-center" onclick="saveSatpam()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Data</button>
     </div>
 </div>
 
 <!-- 2. Modal Jadwal Shift -->
-<div id="modal-jadwal" class="modal-overlay hidden" style="z-index: 10020 !important;">
-    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative;">
-        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="closeKmModal('modal-jadwal')"><i data-lucide="x"></i></button>
-        <h2 class="section-title" style="margin-bottom: 8px;">Atur Jadwal Shift</h2>
-        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Penugasan personel untuk patroli lingkungan.</p>
+<div id="modal-jadwal" class="modal-overlay hidden overlay-z10020">
+    <div class="glass-card modal-shell modal-shell-sm">
+        <button class="modal-close-btn modal-close-top-right" onclick="closeKmModal('modal-jadwal')"><i data-lucide="x"></i></button>
+        <h2 class="section-title mb-8">Atur Jadwal Shift</h2>
+        <p class="text-secondary modal-desc">Penugasan personel untuk patroli lingkungan.</p>
         
         <input type="hidden" id="km-jadwal-id" value="0">
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group mb-16">
             <label class="card-label">Personel Keamanan</label>
-            <select id="km-jadwal-satpam" class="input-field select-custom" style="margin-top: 8px;"></select>
+            <select id="km-jadwal-satpam" class="input-field select-custom mt-8"></select>
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group mb-16">
             <label class="card-label">Tanggal Bertugas</label>
-            <input type="date" id="km-jadwal-tanggal" class="input-field" style="margin-top: 8px; padding-left: 20px;">
+            <input type="date" id="km-jadwal-tanggal" class="input-field mt-8 input-left-20">
         </div>
-        <div class="form-group" style="margin-bottom: 24px;">
+        <div class="form-group mb-24">
             <label class="card-label">Waktu Shift</label>
-            <select id="km-jadwal-shift" class="input-field select-custom" style="margin-top: 8px;">
+            <select id="km-jadwal-shift" class="input-field select-custom mt-8">
                 <option value="Pagi">Pagi (08:00 - 20:00)</option>
                 <option value="Malam">Malam (20:00 - 08:00)</option>
             </select>
         </div>
-        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="saveJadwal()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Jadwal</button>
+        <button class="button-primary button-full-center" onclick="saveJadwal()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Jadwal</button>
     </div>
 </div>
 
 <!-- 3. Modal Laporan (Incident) -->
-<div id="modal-lap-keamanan" class="modal-overlay hidden" style="z-index: 10020 !important;">
+<div id="modal-lap-keamanan" class="modal-overlay hidden overlay-z10020">
     <div class="glass-card" style="width: 100%; max-width: 500px; padding: 32px; position: relative;">
-        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="closeKmModal('modal-lap-keamanan')"><i data-lucide="x"></i></button>
-        <h2 id="modal-lap-title" class="section-title" style="margin-bottom: 8px;">Laporan Baru</h2>
-        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Buat informasi/aduaan sebagai Pengurus untuk ditindaklanjuti dan ditampilkan di portal.</p>
+        <button class="modal-close-btn modal-close-top-right" onclick="closeKmModal('modal-lap-keamanan')"><i data-lucide="x"></i></button>
+        <h2 id="modal-lap-title" class="section-title mb-8">Laporan Baru</h2>
+        <p class="text-secondary modal-desc">Buat informasi/aduaan sebagai Pengurus untuk ditindaklanjuti dan ditampilkan di portal.</p>
         
         <input type="hidden" id="km-lap-id" value="0">
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group mb-16">
             <label class="card-label">Judul Kejadian / Tamu</label>
-            <input type="text" id="km-lap-judul" class="input-field" style="margin-top: 8px;">
+            <input type="text" id="km-lap-judul" class="input-field mt-8">
         </div>
         <div class="grid-container-2-col" style="gap: 16px; margin-bottom: 16px;">
             <div class="form-group">
                 <label class="card-label">Waktu</label>
-                <input type="datetime-local" id="km-lap-waktu" class="input-field" style="margin-top: 8px; padding-left: 20px;">
+                <input type="datetime-local" id="km-lap-waktu" class="input-field mt-8 input-left-20">
             </div>
             <div class="form-group">
                 <label class="card-label">Lokasi / Blok</label>
-                <input type="text" id="km-lap-lokasi" class="input-field" style="margin-top: 8px;" placeholder="Cth: Gerbang Depan">
+                <input type="text" id="km-lap-lokasi" class="input-field mt-8" placeholder="Cth: Gerbang Depan">
             </div>
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group mb-16">
             <label class="card-label">Deskripsi Lengkap</label>
             <textarea id="km-lap-deskripsi" class="input-field" style="margin-top: 8px; min-height: 80px; padding: 12px 20px; border-radius: 16px; resize: vertical;"></textarea>
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group mb-16">
             <label class="card-label">Lampiran File (Opsional)</label>
             <input type="file" id="km-lap-file" class="input-field" style="margin-top: 8px; padding: 10px 14px;" accept="image/*,video/*,.pdf,.doc,.docx,.xlsx,.xls,.zip,.rar">
             <small class="text-secondary" style="display:block; margin-top:6px; font-size:0.78rem;">Dukung gambar, video, dan dokumen. Maksimal 8MB.</small>
         </div>
-        <div class="form-group" style="margin-bottom: 24px;">
+        <div class="form-group mb-24">
             <label class="card-label">Status Penanganan</label>
-            <select id="km-lap-status" class="input-field select-custom" style="margin-top: 8px;">
+            <select id="km-lap-status" class="input-field select-custom mt-8">
                 <option value="Baru">Baru / Menunggu</option>
                 <option value="Diproses">Sedang Ditangani</option>
                 <option value="Selesai">Selesai / Aman</option>
             </select>
         </div>
-        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="saveLaporanKeamanan()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Laporan</button>
+        <button class="button-primary button-full-center" onclick="saveLaporanKeamanan()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Laporan</button>
     </div>
 </div>
 
 <!-- Modal Detail Laporan Keamanan -->
 <div id="modal-detail-lap-keamanan" class="modal-overlay hidden" style="z-index: 10025 !important;">
     <div class="glass-card" style="width: 100%; max-width: 500px; padding: 32px; position: relative;">
-        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="closeKmModal('modal-detail-lap-keamanan')"><i data-lucide="x"></i></button>
+        <button class="modal-close-btn modal-close-top-right" onclick="closeKmModal('modal-detail-lap-keamanan')"><i data-lucide="x"></i></button>
         <h3 class="section-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;"><i data-lucide="file-text" class="text-blue"></i> Detail Kejadian</h3>
         <div id="km-detail-lap-content" class="hide-scrollbar" style="overflow-y: auto; max-height: 60vh;"></div>
     </div>
 </div>
 
 <!-- 4. Modal Pengajuan Izin / Cuti -->
-<div id="modal-izin" class="modal-overlay hidden" style="z-index: 10020 !important;">
-    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative;">
-        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="closeKmModal('modal-izin')"><i data-lucide="x"></i></button>
-        <h2 id="modal-izin-title" class="section-title" style="margin-bottom: 8px;">Formulir Izin</h2>
-        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Pengajuan ketidakhadiran (Cuti/Izin/Sakit).</p>
+<div id="modal-izin" class="modal-overlay hidden overlay-z10020">
+    <div class="glass-card modal-shell modal-shell-sm">
+        <button class="modal-close-btn modal-close-top-right" onclick="closeKmModal('modal-izin')"><i data-lucide="x"></i></button>
+        <h2 id="modal-izin-title" class="section-title mb-8">Formulir Izin</h2>
+        <p class="text-secondary modal-desc">Pengajuan ketidakhadiran (Cuti/Izin/Sakit).</p>
         
         <input type="hidden" id="km-izin-id" value="0">
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group mb-16">
             <label class="card-label">Pilih Personel</label>
-            <select id="km-izin-satpam" class="input-field select-custom" style="margin-top: 8px;"></select>
+            <select id="km-izin-satpam" class="input-field select-custom mt-8"></select>
         </div>
         <div class="grid-container-2-col" style="gap: 16px; margin-bottom: 16px;">
             <div class="form-group">
@@ -348,27 +348,27 @@
                 <input type="date" id="km-izin-selesai" class="input-field" style="margin-top: 8px; padding-left: 16px;">
             </div>
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group mb-16">
             <label class="card-label">Jenis Pengajuan</label>
-            <select id="km-izin-jenis" class="input-field select-custom" style="margin-top: 8px;">
+            <select id="km-izin-jenis" class="input-field select-custom mt-8">
                 <option value="Sakit">Sakit</option>
                 <option value="Izin">Izin Pribadi</option>
                 <option value="Cuti">Cuti Tahunan</option>
             </select>
         </div>
-        <div class="form-group" style="margin-bottom: 24px;">
+        <div class="form-group mb-24">
             <label class="card-label">Keterangan / Alasan</label>
             <textarea id="km-izin-ket" class="input-field" style="margin-top: 8px; min-height: 80px; padding: 12px 20px; border-radius: 16px; resize: vertical;"></textarea>
         </div>
         <div class="form-group hidden" id="km-izin-status-group" style="margin-bottom: 24px;">
             <label class="card-label">Status Persetujuan</label>
-            <select id="km-izin-status" class="input-field select-custom" style="margin-top: 8px;">
+            <select id="km-izin-status" class="input-field select-custom mt-8">
                 <option value="Pending">Menunggu (Pending)</option>
                 <option value="Disetujui">Disetujui</option>
                 <option value="Ditolak">Ditolak</option>
             </select>
         </div>
-        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="saveIzin()"><i data-lucide="send" style="margin-right: 8px;"></i> Kirim Pengajuan</button>
+        <button class="button-primary button-full-center" onclick="saveIzin()"><i data-lucide="send" style="margin-right: 8px;"></i> Kirim Pengajuan</button>
     </div>
 </div>
 

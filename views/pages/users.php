@@ -1,12 +1,12 @@
 <!-- Page: Manajemen Akses User Si-SmaRT -->
 <div id="page-users" class="page-content hidden page-section stagger-ready">
     <!-- Modern Header for Page -->
-    <div class="page-header-premium mb-8 stagger-item" style="animation-delay: 0.1s">
+    <div class="page-header-premium mb-8 stagger-item stagger-delay-1">
         <h2 class="text-3xl font-bold text-slate-900 font-space">Master User</h2>
         <p class="text-slate-500 font-medium">Manajemen Akses & Kredensial Sistem Si-SmaRT</p>
     </div>
 
-    <div class="glass-card card-section stagger-item" style="animation-delay: 0.2s">
+    <div class="glass-card card-section stagger-item stagger-delay-2">
         <div class="section-header">
             <div>
                 <h4 class="section-title text-2xl font-bold text-slate-800">Manajemen Akun Sistem</h4>
@@ -18,7 +18,7 @@
         </div>
 
         <div class="table-responsive mt-8">
-            <table class="modern-table" style="width: 100%;">
+            <table class="modern-table w-full">
                 <thead class="bg-slate-50">
                     <tr>
                         <th class="py-4 px-6 text-left">Nama Lengkap</th>
@@ -43,7 +43,7 @@
     </div>
 
     <!-- MODAL MANAJEMEN USER -->
-    <div id="modal-cms-user" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6" style="z-index: 10025;">
+    <div id="modal-cms-user" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6 overlay-z10025">
         <div class="absolute inset-0 bg-slate-800/30 backdrop-blur-sm transition-opacity" onclick="closeUserModal()"></div>
         <div class="glass-card relative w-full max-w-md flex flex-col overflow-hidden shadow-2xl" style="border-radius: 2.5rem; max-height: 90vh; background: #ffffff; border: 1px solid rgba(255,255,255,0.9);">
             <div style="padding: 32px 32px 24px; border-bottom: 1px solid #f1f5f9;">

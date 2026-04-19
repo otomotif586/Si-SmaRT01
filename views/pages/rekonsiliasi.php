@@ -1,28 +1,28 @@
 <!-- Page: Rekonsiliasi & Audit Iuran (Annual Summary) -->
 <div id="page-rekonsiliasi" class="page-content hidden page-section">
     
-    <div class="glass-card" style="padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-        <p class="text-secondary" style="font-size: 0.8125rem; margin: 0;">Monitoring kedisiplinan pembayaran warga per tahun buku.</p>
-        <div class="header-actions" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <label style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary-color);">Tahun:</label>
-                    <input type="number" id="filter-tahun-rekonsiliasi" class="input-field" style="font-size: 0.8125rem; padding: 8px 12px; width: 85px; border-radius: 10px;" value="<?= date('Y') ?>" onchange="loadGlobalRekonsiliasi()">
+    <div class="glass-card page-filter-card" style="gap: 16px;">
+        <p class="text-secondary page-filter-desc">Monitoring kedisiplinan pembayaran warga per tahun buku.</p>
+        <div class="header-actions page-filter-actions" style="gap: 12px;">
+            <div class="page-filter-group page-filter-group--spacious">
+                <div class="page-filter-group">
+                    <label class="compact-label">Tahun:</label>
+                    <input type="number" id="filter-tahun-rekonsiliasi" class="input-field compact-control" style="width: 85px;" value="<?= date('Y') ?>" onchange="loadGlobalRekonsiliasi()">
                 </div>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <label style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary-color);">Blok:</label>
-                    <select id="filter-blok-rekonsiliasi" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 120px; border-radius: 10px;" onchange="loadGlobalRekonsiliasi()">
+                <div class="page-filter-group">
+                    <label class="compact-label">Blok:</label>
+                    <select id="filter-blok-rekonsiliasi" class="input-field select-custom compact-control" style="min-width: 120px;" onchange="loadGlobalRekonsiliasi()">
                         <option value="all">Semua Blok</option>
                     </select>
                 </div>
             </div>
-            <button class="button-secondary button-sm" style="padding: 8px 14px; border-radius: 10px; font-size: 0.8125rem;" onclick="exportRekonsiliasiCSV()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
+            <button class="button-secondary button-sm compact-btn" onclick="exportRekonsiliasiCSV()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
         </div>
     </div>
 
     <!-- Reconciliation Summary Cards -->
     <div class="summary-3-grid">
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-1">
             <div class="card-icon-deluxe icon-tone-info">
                 <i data-lucide="users"></i>
             </div>
@@ -31,7 +31,7 @@
             <div class="card-sub-info">Total KK terdaftar</div>
         </div>
         
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-2">
             <div class="card-icon-deluxe icon-tone-success">
                 <i data-lucide="check-circle"></i>
             </div>
@@ -40,7 +40,7 @@
             <div class="card-sub-info">Pembayaran setahun penuh</div>
         </div>
 
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-3">
             <div class="card-icon-deluxe icon-tone-warning">
                 <i data-lucide="help-circle"></i>
             </div>
@@ -54,18 +54,18 @@
 
     <!-- Legend -->
     <div class="glass-card" style="padding: 12px 24px; margin-bottom: 16px; border-radius: 12px; display: flex; gap: 20px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
-        <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;"><span style="width:10px; height:10px; border-radius:50%; background:#10b981;"></span> Lunas</div>
-        <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;"><span style="width:10px; height:10px; border-radius:50%; background:#ef4444;"></span> Menunggak</div>
-        <div style="display:flex; align-items:center; gap:8px; font-size:0.75rem;"><span style="width:10px; height:10px; border-radius:50%; background:var(--border-color);"></span> Belum Berjalan</div>
+        <div class="legend-inline"><span class="legend-dot legend-dot--success"></span> Lunas</div>
+        <div class="legend-inline"><span class="legend-dot legend-dot--danger"></span> Menunggak</div>
+        <div class="legend-inline"><span class="legend-dot legend-dot--muted"></span> Belum Berjalan</div>
     </div>
 
     <!-- Main Reconciliation Table -->
-    <div class="glass-card" style="padding: 0; overflow: hidden; border-radius: 20px;">
-        <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02);">
-            <h4 style="font-size: 1.1rem; margin: 0; font-weight: 700;">Daftar Status Iuran Per Bulan</h4>
+    <div class="glass-card table-panel">
+        <div class="table-panel-head">
+            <h4 class="table-panel-title">Daftar Status Iuran Per Bulan</h4>
             <div class="input-with-icon" style="max-width: 250px; width: 100%;">
                 <i data-lucide="search" style="width: 18px; height: 18px;"></i>
-                <input type="text" id="search-rekonsiliasi" class="input-field" placeholder="Cari Warga..." oninput="filterRekonsiliasi()" style="padding: 10px 16px 10px 40px; font-size: 0.8125rem; border-radius: 10px;">
+                <input type="text" id="search-rekonsiliasi" class="input-field input-field-compact" placeholder="Cari Warga..." oninput="filterRekonsiliasi()">
             </div>
         </div>
 

@@ -2,36 +2,36 @@
 <div id="page-detail-keuangan" class="page-content hidden page-section">
     <!-- Premium Summary Section (3-Across) -->
     <div class="summary-3-grid">
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-1">
             <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
                 <i data-lucide="users"></i>
             </div>
             <p class="card-label">Setoran Lunas</p>
-            <h3 id="dk-total-lunas" class="card-value text-color" style="font-size: 1.5rem;">0 Setoran</h3>
+            <h3 id="dk-total-lunas" class="card-value text-color card-value-lg">0 Setoran</h3>
             <div class="card-sub-info">Cakupan bulan terpilih</div>
         </div>
         
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-2">
             <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
                 <i data-lucide="banknote"></i>
             </div>
             <p class="card-label">Total Pendapatan</p>
-            <h3 id="dk-total-pendapatan" class="card-value text-emerald" style="font-size: 1.5rem;">Rp 0</h3>
+            <h3 id="dk-total-pendapatan" class="card-value text-emerald card-value-lg">Rp 0</h3>
             <div class="card-sub-info">Nilai ekonomi iuran</div>
         </div>
 
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-3">
             <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
                 <i data-lucide="home"></i>
             </div>
             <p class="card-label">Total KK Terdata</p>
-            <h3 id="dk-total-warga" class="card-value text-color" style="font-size: 1.5rem;">0 KK</h3>
+            <h3 id="dk-total-warga" class="card-value text-color card-value-lg">0 KK</h3>
             <div class="card-sub-info">Basis data warga aktif</div>
         </div>
     </div>
 
     <div class="glass-card" style="padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-        <p class="text-secondary" style="font-size: 0.8125rem; margin: 0;">Rincian pendapatan berdasarkan master pembayaran per blok.</p>
+        <p class="text-secondary page-filter-desc">Rincian pendapatan berdasarkan master pembayaran per blok.</p>
         <div class="header-actions" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <div style="display: flex; gap: 6px; align-items: center;">
                 <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="prevMonthDetail()"><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>

@@ -2,70 +2,70 @@
 <div id="page-keuangan" class="page-content hidden page-section">
     <!-- Premium Summary Section -->
     <div class="summary-3-grid">
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-1">
             <div class="card-icon-deluxe icon-tone-info">
                 <i data-lucide="wallet"></i>
             </div>
             <p class="card-label">Saldo Kas Tersedia</p>
-            <h3 id="keuangan-saldo" class="card-value text-color" style="font-size: 1.5rem;">Rp 0</h3>
+            <h3 id="keuangan-saldo" class="card-value text-color card-value-lg">Rp 0</h3>
             <div class="card-sub-info">Total dana saat ini</div>
         </div>
         
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-2">
             <div class="card-icon-deluxe icon-tone-success">
                 <i data-lucide="arrow-down-left"></i>
             </div>
             <p class="card-label">Total Pemasukan</p>
-            <h3 id="keuangan-pemasukan" class="card-value text-emerald" style="font-size: 1.5rem;">Rp 0</h3>
+            <h3 id="keuangan-pemasukan" class="card-value text-emerald card-value-lg">Rp 0</h3>
             <div class="card-sub-info">Arus kas masuk</div>
         </div>
 
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-3">
             <div class="card-icon-deluxe icon-tone-danger">
                 <i data-lucide="arrow-up-right"></i>
             </div>
             <p class="card-label">Total Pengeluaran</p>
-            <h3 id="keuangan-pengeluaran" class="card-value text-red" style="font-size: 1.5rem;">Rp 0</h3>
+            <h3 id="keuangan-pengeluaran" class="card-value text-red card-value-lg">Rp 0</h3>
             <div class="card-sub-info">Arus kas keluar</div>
         </div>
     </div>
 
     <!-- Multi-Filter Canggih -->
-    <div class="glass-card" style="padding: 20px; margin-bottom: 12px; border-radius: 20px; display: flex; flex-direction: column; gap: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <p class="text-secondary" style="font-size: 0.8125rem; margin: 0;">Pencatatan arus kas masuk dan keluar tingkat pusat (RT).</p>
-            <button class="button-primary button-sm" style="border-radius: 12px; padding: 10px 16px; font-size: 0.8125rem;" onclick="openFormKeuangan()"><i data-lucide="plus" style="margin-right: 6px; width: 16px; height: 16px;"></i> Catat Transaksi</button>
+    <div class="glass-card page-filter-card page-filter-card--stack">
+        <div class="page-filter-row">
+            <p class="text-secondary page-filter-desc">Pencatatan arus kas masuk dan keluar tingkat pusat (RT).</p>
+            <button class="button-primary button-sm compact-btn" onclick="openFormKeuangan()"><i data-lucide="plus" style="margin-right: 6px; width: 16px; height: 16px;"></i> Catat Transaksi</button>
         </div>
         
-        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; border-top: 1px dashed var(--border-color); padding-top: 16px;">
+        <div class="page-filter-row page-filter-divider" style="gap: 10px; align-items: flex-end;">
             <div class="input-with-icon" style="flex: 2; min-width: 180px;">
                 <i data-lucide="search"></i>
-                <input type="text" id="keuangan-search" class="input-field" placeholder="Cari keterangan..." style="padding-left: 40px; border-radius: 12px;" oninput="filterKeuangan()">
+                <input type="text" id="keuangan-search" class="input-field" placeholder="Cari keterangan..." style="padding-left: 40px;" oninput="filterKeuangan()">
             </div>
             <div style="flex: 1; min-width: 130px;">
-                <select id="keuangan-jenis" class="input-field select-custom" style="border-radius: 12px;" onchange="filterKeuangan()">
+                <select id="keuangan-jenis" class="input-field select-custom compact-control" onchange="filterKeuangan()">
                     <option value="">Semua Jenis</option>
                     <option value="Masuk">Masuk</option>
                     <option value="Keluar">Keluar</option>
                 </select>
             </div>
             <div style="flex: 1.5; min-width: 220px; display: flex; gap: 6px; align-items: center;">
-                <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="prevMonthKeuangan()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
-                <select id="filter-bulan-keuangan" class="input-field select-custom" style="font-size: 0.8125rem; padding: 10px; flex: 1; border-radius: 12px;" onchange="filterKeuangan()"></select>
-                <select id="filter-tahun-keuangan" class="input-field select-custom" style="font-size: 0.8125rem; padding: 10px;flex: 1; border-radius: 12px;" onchange="filterKeuangan()"></select>
-                <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="nextMonthKeuangan()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
+                <button class="button-secondary button-sm compact-btn-icon" onclick="prevMonthKeuangan()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
+                <select id="filter-bulan-keuangan" class="input-field select-custom compact-control" style="flex: 1;" onchange="filterKeuangan()"></select>
+                <select id="filter-tahun-keuangan" class="input-field select-custom compact-control" style="flex: 1;" onchange="filterKeuangan()"></select>
+                <button class="button-secondary button-sm compact-btn-icon" onclick="nextMonthKeuangan()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
             </div>
         </div>
     </div>
 
     <div id="keuangan-list-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
     
-    <div id="keuangan-pagination" style="display: none; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
-        <span id="keuangan-page-info" class="text-secondary" style="font-size: 0.875rem;">Menampilkan 0 data</span>
+    <div id="keuangan-pagination" class="pagination-bar">
+        <span id="keuangan-page-info" class="text-secondary pagination-bar-info">Menampilkan 0 data</span>
         <div style="display: flex; gap: 8px;">
-            <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;" onclick="prevKeuanganPage()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
+            <button class="button-secondary button-sm compact-btn" onclick="prevKeuanganPage()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
             <div id="keuangan-page-numbers" style="display: flex; gap: 4px;"></div>
-            <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;" onclick="nextKeuanganPage()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
+            <button class="button-secondary button-sm compact-btn" onclick="nextKeuanganPage()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
         </div>
     </div>
 </div>
@@ -77,14 +77,14 @@
             <div>
                 <h2 id="drawer-keuangan-title" class="ws-title" style="display: inline-block;">Catat Transaksi</h2>
                 <span id="form-keuangan-status-badge" class="badge bg-emerald-light text-emerald" style="vertical-align: top; margin-left: 8px;"><i data-lucide="arrow-down-left" style="width: 12px; height: 12px; display: inline;"></i> Pemasukan</span>
-                <p class="text-secondary" style="font-size: 0.875rem; margin-top: 4px;">Bukukan pemasukan atau pengeluaran kas RT.</p>
+                <p class="text-secondary drawer-subtitle">Bukukan pemasukan atau pengeluaran kas RT.</p>
             </div>
             <button class="modal-close-btn" onclick="closeFormKeuangan()"><i data-lucide="x"></i></button>
         </div>
         
         <div class="drawer-body hide-scrollbar">
             <input type="hidden" id="form-keuangan-id" value="0">
-            <div class="form-group" style="margin-bottom: 24px;">
+            <div class="form-group mb-24">
                 <label class="card-label font-bold text-color">Tipe Pembukuan</label>
                 <div style="display: flex; gap: 12px; margin-top: 8px;">
                     <label style="flex: 1; cursor: pointer;">
@@ -104,15 +104,15 @@
                 </div>
             </div>
             
-            <div class="form-group" style="margin-bottom: 16px;">
+            <div class="form-group mb-16">
                 <label class="card-label">Nominal (Rp)</label>
                 <input type="number" id="form-keuangan-nominal" class="input-field" placeholder="0" style="font-size: 1.5rem; font-weight: 700; color: var(--text-color); padding-left: 20px;">
             </div>
-            <div class="form-group" style="margin-bottom: 16px;">
+            <div class="form-group mb-16">
                 <label class="card-label">Tanggal Transaksi</label>
-                <input type="date" id="form-keuangan-tanggal" class="input-field" style="padding-left: 20px;">
+                <input type="date" id="form-keuangan-tanggal" class="input-field input-left-20">
             </div>
-            <div class="form-group" style="margin-bottom: 16px;">
+            <div class="form-group mb-16">
                 <label class="card-label">Keterangan / Rincian</label>
                 <textarea id="form-keuangan-keterangan" class="input-field" style="padding: 16px; min-height: 100px; border-radius: 16px; resize: vertical;" placeholder="Cth: Pembelian alat kebersihan / Donasi Bp. Andi..."></textarea>
             </div>
@@ -138,10 +138,10 @@
 </div>
 
 <!-- Modal Pratilik Bukti Lampiran Full -->
-<div id="modal-bukti-keuangan" class="modal-overlay hidden" style="z-index: 10020 !important;">
+<div id="modal-bukti-keuangan" class="modal-overlay hidden overlay-z10020">
     <div class="glass-card" style="width: 100%; max-width: 600px; padding: 24px; position: relative;">
-        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="document.getElementById('modal-bukti-keuangan').classList.add('hidden')"><i data-lucide="x"></i></button>
-        <h3 class="section-title" style="margin-bottom: 16px;">Bukti Lampiran</h3>
+        <button class="modal-close-btn modal-close-top-right" onclick="document.getElementById('modal-bukti-keuangan').classList.add('hidden')"><i data-lucide="x"></i></button>
+        <h3 class="section-title mb-16">Bukti Lampiran</h3>
         <div id="bukti-keuangan-content" style="text-align: center;"></div>
     </div>
 </div>

@@ -4,7 +4,7 @@
     <!-- Premium Informative Summary Section -->
     <div class="summary-3-grid">
         <!-- Card 1: Saldo Kas Utama -->
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-1">
             <div class="card-icon-deluxe icon-tone-success">
                 <i data-lucide="wallet"></i>
             </div>
@@ -20,14 +20,14 @@
         </div>
 
         <!-- Card 2: Partisipasi Iuran -->
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-2">
             <div class="card-icon-deluxe icon-tone-info">
                 <i data-lucide="shield-check"></i>
             </div>
             <p class="card-label">Partisipasi Iuran</p>
             <div style="display: flex; align-items: baseline; gap: 8px;">
                 <h3 class="card-value" id="dash-iuran-percent" style="font-size: 1.8rem;">0%</h3>
-                <span class="text-secondary" style="font-size: 0.8rem;" id="dash-iuran-detail">0/0 Warga</span>
+                <span class="text-secondary text-size-08" id="dash-iuran-detail">0/0 Warga</span>
             </div>
             <div class="progress-bar" style="height: 8px; margin-top: 16px; background: rgba(255,255,255,0.05);">
                 <div id="dash-iuran-progress" class="progress-fill progress-fill-info-success" style="width: 0%;"></div>
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Card 3: Laporan Aktif -->
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+        <div class="glass-card-deluxe stagger-item stagger-delay-3">
             <div class="card-icon-deluxe icon-tone-warning">
                 <i data-lucide="bell"></i>
             </div>

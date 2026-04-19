@@ -4,106 +4,106 @@
     <!-- Summary Cards -->
     <!-- Deluxe Summary Section -->
     <div class="summary-3-grid">
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
-            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+        <div class="glass-card-deluxe stagger-item stagger-delay-1">
+            <div class="card-icon-deluxe icon-tone-info">
                 <i data-lucide="users"></i>
             </div>
             <p class="card-label">Total Warga</p>
-            <h3 id="laporan-warga-total" class="card-value text-color" style="font-size: 1.5rem;">0</h3>
+            <h3 id="laporan-warga-total" class="card-value text-color card-value-lg">0</h3>
             <div class="card-sub-info">Pemilih data aktif</div>
         </div>
         
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
-            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+        <div class="glass-card-deluxe stagger-item stagger-delay-2">
+            <div class="card-icon-deluxe icon-tone-success">
                 <i data-lucide="check-circle"></i>
             </div>
             <p class="card-label">Lunas (12 Bln)</p>
-            <h3 id="laporan-warga-lunas" class="card-value text-emerald" style="font-size: 1.5rem;">0</h3>
+            <h3 id="laporan-warga-lunas" class="card-value text-emerald card-value-lg">0</h3>
             <div class="card-sub-info">Pembayaran sempurna</div>
         </div>
 
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
-            <div class="card-icon-deluxe" style="color: #ef4444; background: rgba(239, 68, 68, 0.1);">
+        <div class="glass-card-deluxe stagger-item stagger-delay-3">
+            <div class="card-icon-deluxe icon-tone-danger">
                 <i data-lucide="alert-circle"></i>
             </div>
             <p class="card-label">Ada Tunggakan</p>
-            <h3 id="laporan-warga-menunggak" class="card-value text-red" style="font-size: 1.5rem;">0</h3>
+            <h3 id="laporan-warga-menunggak" class="card-value text-red card-value-lg">0</h3>
             <div class="card-sub-info">Perlu ditagih</div>
         </div>
     </div>
 
     <!-- Filter Glass Card -->
-    <div class="glass-card" style="padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-        <p class="text-secondary" style="font-size: 0.8125rem; margin: 0;">Visualisasi pelunasan iuran warga per tahun buku.</p>
-        <div class="header-actions" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <label style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary-color);">Tahun:</label>
-                    <input type="number" id="filter-tahun-laporan-warga" class="input-field" style="font-size: 0.8125rem; padding: 8px; width: 85px; border-radius: 10px;" value="<?= date('Y') ?>" onchange="loadLaporanIuranWarga()">
+    <div class="glass-card page-filter-card gap-16">
+        <p class="text-secondary page-filter-desc">Visualisasi pelunasan iuran warga per tahun buku.</p>
+        <div class="header-actions page-filter-actions gap-12">
+            <div class="page-filter-group page-filter-group--spacious">
+                <div class="page-filter-group">
+                    <label class="compact-label">Tahun:</label>
+                    <input type="number" id="filter-tahun-laporan-warga" class="input-field compact-control w-85" value="<?= date('Y') ?>" onchange="loadLaporanIuranWarga()">
                 </div>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <label style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary-color);">Blok:</label>
-                    <select id="filter-blok-laporan-warga" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px; min-width: 120px; border-radius: 10px;" onchange="loadLaporanIuranWarga()">
+                <div class="page-filter-group">
+                    <label class="compact-label">Blok:</label>
+                    <select id="filter-blok-laporan-warga" class="input-field select-custom compact-control minw-120" onchange="loadLaporanIuranWarga()">
                         <option value="all">Semua Blok</option>
                     </select>
                 </div>
             </div>
-            <button class="button-secondary button-sm" style="padding: 8px 14px; border-radius: 10px; font-size: 0.8125rem;" onclick="exportLaporanWargaCSV()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
+            <button class="button-secondary button-sm compact-btn" onclick="exportLaporanWargaCSV()"><i data-lucide="download" class="icon-16 icon-mr-6"></i> Export</button>
         </div>
     </div>
 
     <!-- Legend -->
-    <div class="glass-card" style="padding: 12px 20px; margin-bottom: 12px; border-radius: 12px; display: flex; gap: 20px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
-        <div style="display:flex; align-items:center; gap:8px; font-size:0.7rem;"><span class="rekon-dot rekon-dot-lunas" style="width:8px; height:8px; margin:0;"></span> Lunas</div>
-        <div style="display:flex; align-items:center; gap:8px; font-size:0.7rem;"><span style="width:16px; height:2px; background:var(--accent-color); border-radius: 1px;"></span> Relasi Tunggakan</div>
-        <div style="display:flex; align-items:center; gap:8px; font-size:0.7rem;"><span style="width:16px; height:2px; background:#3b82f6; border-radius: 1px;"></span> Bayar Lebih Awal</div>
-        <div style="display:flex; align-items:center; gap:8px; font-size:0.7rem;"><span class="rekon-dot rekon-dot-menunggak" style="width:8px; height:8px; margin:0;"></span> Belum Bayar</div>
-        <div style="display:flex; align-items:center; gap:8px; font-size:0.7rem;"><span class="rekon-dot rekon-dot-sebelum" style="width:8px; height:8px; margin:0;"></span> Di Luar Periode</div>
+    <div class="glass-card legend-wrap-end">
+        <div class="legend-inline legend-inline-xs"><span class="rekon-dot rekon-dot-lunas dot-mini"></span> Lunas</div>
+        <div class="legend-inline legend-inline-xs"><span class="line-mini line-mini-accent"></span> Relasi Tunggakan</div>
+        <div class="legend-inline legend-inline-xs"><span class="line-mini line-mini-info"></span> Bayar Lebih Awal</div>
+        <div class="legend-inline legend-inline-xs"><span class="rekon-dot rekon-dot-menunggak dot-mini"></span> Belum Bayar</div>
+        <div class="legend-inline legend-inline-xs"><span class="rekon-dot rekon-dot-sebelum dot-mini"></span> Di Luar Periode</div>
     </div>
 
     <!-- Main Table Container with SVG Overlay -->
-    <div class="glass-card" style="padding: 0; border-radius: 20px; position: relative; overflow: hidden;">
-        <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02);">
-            <h4 style="font-size: 1.1rem; margin: 0; font-weight: 700;">Mapping Pelunasan Iuran</h4>
-            <div class="input-with-icon" style="max-width: 250px; width: 100%;">
-                <i data-lucide="search" style="width: 18px; height: 18px;"></i>
-                <input type="text" id="search-laporan-warga" class="input-field" placeholder="Cari Warga..." oninput="filterLaporanWarga()" style="padding: 10px 16px 10px 40px; font-size: 0.8125rem; border-radius: 10px;">
+    <div class="glass-card table-panel pos-relative">
+        <div class="table-panel-head">
+            <h4 class="table-panel-title">Mapping Pelunasan Iuran</h4>
+            <div class="input-with-icon search-shell-250">
+                <i data-lucide="search" class="icon-18"></i>
+                <input type="text" id="search-laporan-warga" class="input-field input-field-compact" placeholder="Cari Warga..." oninput="filterLaporanWarga()">
             </div>
         </div>
 
-        <div class="table-responsive" style="overflow-x: auto; position: relative; -webkit-overflow-scrolling: touch;">
+        <div class="table-responsive table-scroll-shell">
             <!-- Continer for SVG + Table to handle scroll together -->
-            <div id="laporan-warga-scroll-wrapper" style="position: relative; min-width: 1100px; padding-bottom: 40px;">
+            <div id="laporan-warga-scroll-wrapper" class="scroll-relasi-wrapper">
                 <!-- SVG Layer -->
-                <svg id="svg-relations" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;">
+                <svg id="svg-relations" class="svg-relasi-overlay">
                     <defs>
                         <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
                             <polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)" opacity="0.6" />
                         </marker>
                         <marker id="arrowhead-advance" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                            <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" opacity="0.6" />
+                            <polygon points="0 0, 10 3.5, 0 7" fill="var(--status-info)" opacity="0.6" />
                         </marker>
                     </defs>
                 </svg>
 
-                <table id="laporan-warga-table" class="modern-table rekon-table" style="width: 100%; border-collapse: collapse;">
+                <table id="laporan-warga-table" class="modern-table rekon-table ws-relasi-table">
                     <thead>
                         <tr>
-                            <th style="width: 180px; min-width: 180px; position: sticky; left: 0; z-index: 20; background: var(--secondary-bg);">Nama Warga</th>
-                            <th style="width: 100px; min-width: 100px;">NO/Blok</th>
-                            <th class="text-center" style="width: 100px; min-width: 100px;">Status</th>
-                            <th class="text-center" style="width: 60px;">Jan</th>
-                            <th class="text-center" style="width: 60px;">Feb</th>
-                            <th class="text-center" style="width: 60px;">Mar</th>
-                            <th class="text-center" style="width: 60px;">Apr</th>
-                            <th class="text-center" style="width: 60px;">Mei</th>
-                            <th class="text-center" style="width: 60px;">Jun</th>
-                            <th class="text-center" style="width: 60px;">Jul</th>
-                            <th class="text-center" style="width: 60px;">Agu</th>
-                            <th class="text-center" style="width: 60px;">Sep</th>
-                            <th class="text-center" style="width: 60px;">Okt</th>
-                            <th class="text-center" style="width: 60px;">Nov</th>
-                            <th class="text-center" style="width: 60px;">Des</th>
+                            <th class="ws-col-warga">Nama Warga</th>
+                            <th class="ws-col-blok">NO/Blok</th>
+                            <th class="text-center ws-col-status">Status</th>
+                            <th class="text-center ws-col-month">Jan</th>
+                            <th class="text-center ws-col-month">Feb</th>
+                            <th class="text-center ws-col-month">Mar</th>
+                            <th class="text-center ws-col-month">Apr</th>
+                            <th class="text-center ws-col-month">Mei</th>
+                            <th class="text-center ws-col-month">Jun</th>
+                            <th class="text-center ws-col-month">Jul</th>
+                            <th class="text-center ws-col-month">Agu</th>
+                            <th class="text-center ws-col-month">Sep</th>
+                            <th class="text-center ws-col-month">Okt</th>
+                            <th class="text-center ws-col-month">Nov</th>
+                            <th class="text-center ws-col-month">Des</th>
                         </tr>
                     </thead>
                     <tbody id="laporan-warga-table-body">
@@ -114,16 +114,16 @@
         </div>
         
         <!-- Pagination Controls -->
-        <div id="laporan-warga-pagination" class="glass-card" style="margin-top: 16px; padding: 12px 24px; border-radius: 12px; display: none; align-items: center; justify-content: space-between; gap: 16px;">
-            <div id="laporan-warga-page-info" class="text-secondary" style="font-size: 0.8125rem;">Menampilkan 1-20 dari 100 data</div>
-            <div class="pagination-buttons" style="display: flex; gap: 8px;">
-                <button onclick="prevLaporanWargaPage()" class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;"><i data-lucide="chevron-left" style="width: 18px; height: 18px;"></i></button>
-                <button onclick="nextLaporanWargaPage()" class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;"><i data-lucide="chevron-right" style="width: 18px; height: 18px;"></i></button>
+        <div id="laporan-warga-pagination" class="glass-card pagination-card-shell">
+            <div id="laporan-warga-page-info" class="text-secondary pagination-bar-info">Menampilkan 1-20 dari 100 data</div>
+            <div class="pagination-buttons pagination-actions">
+                <button onclick="prevLaporanWargaPage()" class="button-secondary button-sm compact-btn"><i data-lucide="chevron-left" class="icon-18"></i></button>
+                <button onclick="nextLaporanWargaPage()" class="button-secondary button-sm compact-btn"><i data-lucide="chevron-right" class="icon-18"></i></button>
             </div>
         </div>
 
-        <div id="laporan-warga-empty" class="hidden" style="text-align: center; padding: 60px 20px;">
-            <i data-lucide="file-x" style="width: 48px; height: 48px; color: var(--text-secondary-color); opacity: 0.3; margin-bottom: 16px;"></i>
+        <div id="laporan-warga-empty" class="hidden empty-state">
+            <i data-lucide="file-x" class="icon-48 icon-muted-soft mb-16"></i>
             <p class="text-secondary">Tidak ada data ditemukan untuk kriteria ini.</p>
         </div>
     </div>
@@ -150,7 +150,7 @@
 
 .rekon-dot-lunas { background-color: #10b981; }
 .rekon-dot-menunggak { background-color: #ef4444; }
-.rekon-dot-sebelum { background-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.4); }
+.rekon-dot-sebelum { background-color: var(--status-info); box-shadow: 0 0 10px color-mix(in srgb, var(--status-info) 40%, transparent); }
 .rekon-dot-empty { background-color: var(--border-color); opacity: 0.3; }
 
 .relation-line {
@@ -172,7 +172,7 @@
 /* Garis Biru untuk Pembayaran Dimuka (Advance) */
 .relation-line-advance {
     fill: none;
-    stroke: #3b82f6;
+    stroke: var(--status-info);
     stroke-width: 2.2;
     stroke-linecap: round;
     opacity: 0.4;
