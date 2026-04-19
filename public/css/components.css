@@ -160,6 +160,21 @@
 .card-section {
     padding: 24px;
 }
+
+.glass-card,
+.glass-card-deluxe,
+.card,
+.card-item,
+.card-section {
+    min-width: 0;
+}
+
+.card-label,
+.card-value,
+.card-sub-info {
+    overflow-wrap: anywhere;
+}
+
 @media (min-width: 768px) {
     .card-section {
         padding: 40px;
@@ -335,6 +350,9 @@
     justify-content: center;
     transition: all 0.4s var(--bezier);
     box-shadow: 0 4px 15px color-mix(in srgb, var(--accent-color) 40%, transparent);
+    min-height: 44px;
+    line-height: 1.2;
+    min-width: 0;
 }
 .button-primary:hover {
     background-color: color-mix(in srgb, var(--accent-color) 80%, black); 
@@ -344,6 +362,7 @@
 .button-primary i {
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
 }
 .button-secondary {
     background-color: var(--secondary-bg);
@@ -359,6 +378,16 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    min-height: 44px;
+    line-height: 1.2;
+    min-width: 0;
+}
+.button-primary svg,
+.button-secondary i,
+.button-secondary svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
 }
 .button-secondary:hover {
     background-color: var(--hover-bg);
@@ -387,6 +416,17 @@
         border-radius: 14px;
         padding-top: 12px;
         padding-bottom: 12px;
+    }
+
+    .modal-shell,
+    .modal-shell-sm,
+    .modal-shell-md,
+    .modal-shell-lg {
+        width: min(100%, calc(100vw - 20px));
+        max-width: min(100%, calc(100vw - 20px));
+        max-height: calc(100dvh - 20px);
+        padding: 20px;
+        border-radius: 18px;
     }
 
     .card-section {
@@ -1408,6 +1448,9 @@
     width: 100%;
     padding: 32px;
     position: relative;
+    box-sizing: border-box;
+    max-height: min(90dvh, calc(100dvh - 24px));
+    overflow-y: auto;
 }
 
 .modal-shell-sm {
