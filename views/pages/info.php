@@ -667,7 +667,7 @@
     height: 30rem;
     overflow: clip;
     position: relative;
-    font-family: Lato, Montserrat, Helvetica, Arial, sans-serif;
+    font-family: var(--font-sans);
     transition: transform 0.3s ease;
 }
 

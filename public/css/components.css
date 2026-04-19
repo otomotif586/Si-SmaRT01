@@ -548,6 +548,10 @@
 }
 .card-trend-badge.up { background: rgba(16, 185, 129, 0.15); color: #10b981; }
 .card-trend-badge.down { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.card-trend-badge.warning {
+    background: color-mix(in srgb, var(--status-warning) 15%, transparent);
+    color: var(--status-warning);
+}
 
 .card-sub-info {
     font-size: 0.725rem;
@@ -827,6 +831,8 @@
 .text-emerald { color: var(--accent-color); }
 .text-red { color: #ef4444; } /* Tailwind red-500 */
 .text-orange { color: #f97316; } /* Tailwind orange-500 */
+.text-blue { color: var(--status-info); }
+.text-warning { color: var(--status-warning); }
 .text-purple { color: #a855f7; } /* Tailwind purple-500 */
 .text-color { color: var(--text-color); }
 .text-secondary { color: var(--text-secondary-color); }
@@ -837,6 +843,30 @@
 .bg-orange-light { background-color: rgba(249, 115, 22, 0.2); } /* orange-500/20 */
 .bg-red-light { background-color: rgba(239, 68, 68, 0.1); } /* red-500/10 */
 .bg-blue-light { background-color: rgba(59, 130, 246, 0.15); }
+
+.icon-tone-info {
+    color: var(--status-info);
+    background: color-mix(in srgb, var(--status-info) 12%, transparent);
+}
+
+.icon-tone-success {
+    color: var(--status-success);
+    background: color-mix(in srgb, var(--status-success) 12%, transparent);
+}
+
+.icon-tone-warning {
+    color: var(--status-warning);
+    background: color-mix(in srgb, var(--status-warning) 12%, transparent);
+}
+
+.icon-tone-danger {
+    color: var(--status-danger);
+    background: color-mix(in srgb, var(--status-danger) 12%, transparent);
+}
+
+.progress-fill-info-success {
+    background: linear-gradient(90deg, var(--status-info), var(--status-success));
+}
 
 /* Smooth Hover Lift for Cards & Lists */
 .card-item, .list-item, .document-item, .announcement-item, .contact-item {

@@ -5,7 +5,7 @@
     <div class="summary-3-grid">
         <!-- Card 1: Saldo Kas Utama -->
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
-            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+            <div class="card-icon-deluxe icon-tone-success">
                 <i data-lucide="wallet"></i>
             </div>
             <p class="card-label">Saldo Kas Utama</p>
@@ -21,7 +21,7 @@
 
         <!-- Card 2: Partisipasi Iuran -->
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
-            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+            <div class="card-icon-deluxe icon-tone-info">
                 <i data-lucide="shield-check"></i>
             </div>
             <p class="card-label">Partisipasi Iuran</p>
@@ -30,7 +30,7 @@
                 <span class="text-secondary" style="font-size: 0.8rem;" id="dash-iuran-detail">0/0 Warga</span>
             </div>
             <div class="progress-bar" style="height: 8px; margin-top: 16px; background: rgba(255,255,255,0.05);">
-                <div id="dash-iuran-progress" class="progress-fill" style="width: 0%; background: linear-gradient(90deg, #3b82f6, #10b981);"></div>
+                <div id="dash-iuran-progress" class="progress-fill progress-fill-info-success" style="width: 0%;"></div>
             </div>
             <div class="card-sub-info">
                 <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
@@ -40,12 +40,12 @@
 
         <!-- Card 3: Laporan Aktif -->
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
-            <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
+            <div class="card-icon-deluxe icon-tone-warning">
                 <i data-lucide="bell"></i>
             </div>
             <p class="card-label">Laporan & Keluhan</p>
-            <h3 class="card-value" id="dash-laporan-count" style="font-size: 1.8rem; color: #f59e0b;">0</h3>
-            <div class="card-trend-badge down" id="dash-laporan-status" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+            <h3 class="card-value text-warning" id="dash-laporan-count" style="font-size: 1.8rem;">0</h3>
+            <div class="card-trend-badge warning" id="dash-laporan-status">
                 <i data-lucide="alert-circle" style="width: 12px; height: 12px;"></i>
                 <span>Butuh Tindak Lanjut</span>
             </div>
@@ -114,4 +114,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>

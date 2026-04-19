@@ -3,7 +3,7 @@
     <!-- Premium Summary Section -->
     <div class="summary-3-grid">
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
-            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+            <div class="card-icon-deluxe icon-tone-info">
                 <i data-lucide="wallet"></i>
             </div>
             <p class="card-label">Saldo Kas Tersedia</p>
@@ -12,7 +12,7 @@
         </div>
         
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
-            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+            <div class="card-icon-deluxe icon-tone-success">
                 <i data-lucide="arrow-down-left"></i>
             </div>
             <p class="card-label">Total Pemasukan</p>
@@ -21,7 +21,7 @@
         </div>
 
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
-            <div class="card-icon-deluxe" style="color: #ef4444; background: rgba(239, 68, 68, 0.1);">
+            <div class="card-icon-deluxe icon-tone-danger">
                 <i data-lucide="arrow-up-right"></i>
             </div>
             <p class="card-label">Total Pengeluaran</p>

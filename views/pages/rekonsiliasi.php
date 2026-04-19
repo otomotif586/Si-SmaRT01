@@ -23,7 +23,7 @@
     <!-- Reconciliation Summary Cards -->
     <div class="summary-3-grid">
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
-            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
+            <div class="card-icon-deluxe icon-tone-info">
                 <i data-lucide="users"></i>
             </div>
             <p class="card-label">Warga Audit</p>
@@ -32,7 +32,7 @@
         </div>
         
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
-            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
+            <div class="card-icon-deluxe icon-tone-success">
                 <i data-lucide="check-circle"></i>
             </div>
             <p class="card-label">Lunas 100%</p>
@@ -41,7 +41,7 @@
         </div>
 
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
-            <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
+            <div class="card-icon-deluxe icon-tone-warning">
                 <i data-lucide="help-circle"></i>
             </div>
             <p class="card-label">Potensi Piutang</p>

@@ -9,7 +9,7 @@
             <button id="theme-toggle" class="header-btn" title="Toggle Theme">
                 <i data-lucide="sun"></i>
             </button>
-            <a href="logout.php" class="header-btn" title="Keluar / Logout" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.05); text-decoration: none;">
+            <a href="logout.php" class="header-btn header-btn-danger" title="Keluar / Logout">
                 <i data-lucide="log-out"></i>
             </a>
             <div class="user-profile ripple">

@@ -3,7 +3,7 @@
     <!-- SaaS Style Summary Dashboard -->
     <div class="summary-3-grid" style="margin-bottom: 24px;">
         <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s; border-top: 4px solid var(--accent-color);">
-            <div class="card-icon-deluxe" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+            <div class="card-icon-deluxe icon-tone-success">
                 <i data-lucide="trending-up"></i>
             </div>
             <p class="card-label">Total Debit (Masuk)</p>
@@ -11,8 +11,8 @@
             <div class="card-sub-info">Penerimaan iuran & dana</div>
         </div>
         
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s; border-top: 4px solid #ef4444;">
-            <div class="card-icon-deluxe" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+            <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s; border-top: 4px solid var(--status-danger);">
+            <div class="card-icon-deluxe icon-tone-danger">
                 <i data-lucide="trending-down"></i>
             </div>
             <p class="card-label">Total Kredit (Keluar)</p>
