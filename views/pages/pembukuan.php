@@ -2,7 +2,7 @@
 <div id="page-pembukuan" class="page-content hidden page-section">
     <!-- SaaS Style Summary Dashboard -->
     <div class="summary-3-grid mb-24">
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s; border-top: 4px solid var(--accent-color);">
+        <div class="glass-card-deluxe stagger-item stagger-delay-1 card-top-accent">
             <div class="card-icon-deluxe icon-tone-success">
                 <i data-lucide="trending-up"></i>
             </div>
@@ -11,7 +11,7 @@
             <div class="card-sub-info">Penerimaan iuran & dana</div>
         </div>
         
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s; border-top: 4px solid var(--status-danger);">
+        <div class="glass-card-deluxe stagger-item stagger-delay-2 card-top-danger">
             <div class="card-icon-deluxe icon-tone-danger">
                 <i data-lucide="trending-down"></i>
             </div>
@@ -20,8 +20,8 @@
             <div class="card-sub-info">Pengeluaran & alokasi pos</div>
         </div>
 
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s; border: 1px solid var(--accent-color); background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 5%, transparent), transparent);">
-            <div class="card-icon-deluxe" style="background: var(--accent-color); color: white; box-shadow: 0 4px 12px -2px var(--accent-color);">
+        <div class="glass-card-deluxe stagger-item stagger-delay-3 card-highlight-accent">
+            <div class="card-icon-deluxe icon-tone-accent-shadow">
                 <i data-lucide="wallet"></i>
             </div>
             <p class="card-label">Net Saldo Tersedia</p>
@@ -35,17 +35,17 @@
         <p class="text-secondary page-filter-desc">Neraca lajur (Trial Balance) perputaran kas RT.</p>
         <div class="header-actions page-filter-actions">
             <div class="page-filter-group">
-                <button class="button-secondary button-sm compact-btn-icon" onclick="prevMonthPembukuan()"><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>
-                <select id="filter-bulan-pembukuan" class="input-field select-custom compact-control" style="min-width: 120px;" onchange="loadPembukuan()"></select>
-                <select id="filter-tahun-pembukuan" class="input-field select-custom compact-control" style="min-width: 90px;" onchange="loadPembukuan()"></select>
-                <button class="button-secondary button-sm compact-btn-icon" onclick="nextMonthPembukuan()"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
+                <button class="button-secondary button-sm compact-btn-icon" onclick="prevMonthPembukuan()"><i data-lucide="chevron-left" class="icon-14"></i></button>
+                <select id="filter-bulan-pembukuan" class="input-field select-custom compact-control minw-120" onchange="loadPembukuan()"></select>
+                <select id="filter-tahun-pembukuan" class="input-field select-custom compact-control minw-100" onchange="loadPembukuan()"></select>
+                <button class="button-secondary button-sm compact-btn-icon" onclick="nextMonthPembukuan()"><i data-lucide="chevron-right" class="icon-14"></i></button>
             </div>
-            <button class="button-secondary button-sm compact-btn" onclick="exportPembukuanCSV()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
+            <button class="button-secondary button-sm compact-btn" onclick="exportPembukuanCSV()"><i data-lucide="download" class="icon-16 icon-mr-6"></i> Export</button>
         </div>
     </div>
 
     <!-- Tab Navigasi -->
-    <div class="sub-nav-container hide-on-print" style="margin-bottom: 24px; border-bottom: 1px solid var(--border-color);">
+    <div class="sub-nav-container hide-on-print pb-subnav-shell">
         <button class="sub-nav-tab active" onclick="switchPbTab('pb-tab-ledger', this)">
             <i data-lucide="list"></i> Rincian Transaksi
         </button>
@@ -58,35 +58,35 @@
     <div id="pb-tab-ledger" class="pb-tab-content">
         <div class="glass-card hide-card-border-print table-panel mb-24">
             <div class="hide-on-print table-panel-head">
-                <h4 class="table-panel-title" style="display: flex; align-items: center; gap: 8px;"><i data-lucide="list" class="text-blue"></i> Rincian Transaksi (Buku Besar)</h4>
+                <h4 class="table-panel-title inline-wrap-8"><i data-lucide="list" class="text-blue"></i> Rincian Transaksi (Buku Besar)</h4>
             </div>
             
-        <div class="table-responsive" style="overflow-x: auto;">
-            <table class="modern-table rekon-table" style="width: 100%; border-collapse: collapse; white-space: nowrap;">
-                <thead style="background: var(--secondary-bg);">
+        <div class="table-responsive table-scroll-shell">
+            <table class="modern-table rekon-table w-full table-nowrap pb-ledger-table">
+                <thead class="pb-ledger-head">
                     <tr>
-                        <th style="padding: 16px 24px; width: 120px;">Tanggal</th>
-                        <th style="padding: 16px 24px;">Keterangan & Ref</th>
-                        <th style="padding: 16px 24px;">Pos Alokasi</th>
-                        <th class="text-right" style="padding: 16px 24px; width: 130px;">Debit (Masuk)</th>
-                        <th class="text-right" style="padding: 16px 24px; width: 130px;">Kredit (Keluar)</th>
-                        <th class="text-right" style="padding: 16px 24px; width: 140px; color: var(--text-color);">Saldo Berjalan</th>
+                        <th class="pb-ledger-th pb-ledger-th-date">Tanggal</th>
+                        <th class="pb-ledger-th">Keterangan & Ref</th>
+                        <th class="pb-ledger-th">Pos Alokasi</th>
+                        <th class="text-right pb-ledger-th pb-ledger-th-money">Debit (Masuk)</th>
+                        <th class="text-right pb-ledger-th pb-ledger-th-money">Kredit (Keluar)</th>
+                        <th class="text-right pb-ledger-th pb-ledger-th-balance">Saldo Berjalan</th>
                     </tr>
                 </thead>
                 <tbody id="pb-ledger-body">
                     <!-- Rows generated by JS -->
                 </tbody>
-                <tfoot id="pb-ledger-foot" style="background: var(--secondary-bg); color: var(--text-color); font-weight: bold;">
+                <tfoot id="pb-ledger-foot" class="pb-ledger-foot">
                     <!-- Footer generated by JS -->
                 </tfoot>
             </table>
         </div>
-        <div id="pb-pagination" class="pagination-bar" style="padding: 16px 24px; background: rgba(255,255,255,0.01); margin-top: 0;">
+        <div id="pb-pagination" class="pagination-bar pb-pagination-shell">
             <span id="pb-page-info" class="text-secondary pagination-bar-info">Menampilkan 0 data</span>
-            <div style="display: flex; gap: 8px;">
-                <button class="button-secondary button-sm compact-btn" onclick="prevPbPage()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
-                <div id="pb-page-numbers" style="display: flex; gap: 4px;"></div>
-                <button class="button-secondary button-sm compact-btn" onclick="nextPbPage()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
+            <div class="pagination-actions">
+                <button class="button-secondary button-sm compact-btn" onclick="prevPbPage()"><i data-lucide="chevron-left" class="icon-16"></i></button>
+                <div id="pb-page-numbers" class="row-gap-4"></div>
+                <button class="button-secondary button-sm compact-btn" onclick="nextPbPage()"><i data-lucide="chevron-right" class="icon-16"></i></button>
             </div>
         </div>
         </div> <!-- Penutup glass-card -->
@@ -94,41 +94,41 @@
 
     <!-- Tab 2: Laporan Kas Warga (Sisa Detail Pos) -->
     <div id="pb-tab-laporan" class="pb-tab-content hidden">
-        <div class="glass-card hide-card-border-print" style="padding: 32px; border-radius: 20px; margin-bottom: 24px; background: var(--secondary-bg);">
+        <div class="glass-card hide-card-border-print pb-report-shell">
             
             <!-- Kop Surat / Judul Laporan -->
-            <div style="text-align: center; margin-bottom: 32px;">
-                <div class="hide-on-print" style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: color-mix(in srgb, var(--accent-color) 10%, transparent); color: var(--accent-color); border-radius: 20px; margin-bottom: 16px;">
-                    <i data-lucide="briefcase" style="width: 32px; height: 32px;"></i>
+            <div class="pb-report-header">
+                <div class="hide-on-print pb-report-icon-wrap">
+                    <i data-lucide="briefcase" class="icon-32"></i>
                 </div>
-                <h2 style="margin: 0 0 8px 0; font-size: 1.8rem; font-weight: 800; color: var(--text-color);">Laporan Pos Anggaran</h2>
-                <p class="text-secondary" style="margin: 0; font-size: 0.95rem;">Rincian mutasi dan sisa dana pada masing-masing pos anggaran / kas</p>
-                <p class="text-color font-bold" style="margin: 8px 0 0 0; font-size: 1rem;" id="laporan-periode-text">Periode: Semua Bulan</p>
+                <h2 class="pb-report-title">Laporan Pos Anggaran</h2>
+                <p class="text-secondary pb-report-subtitle">Rincian mutasi dan sisa dana pada masing-masing pos anggaran / kas</p>
+                <p class="text-color font-bold pb-report-period" id="laporan-periode-text">Periode: Semua Bulan</p>
             </div>
             
-            <div id="laporan-pos-cards" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px;">
+            <div id="laporan-pos-cards" class="pb-report-cards-grid">
                 <!-- Cards generated by JS -->
             </div>
 
-            <div style="padding: 24px; border-radius: 16px; background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color) 10%, transparent), transparent); border: 1px solid var(--accent-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div class="pb-report-total-card">
                 <div>
-                    <p style="margin: 0 0 4px 0; color: var(--text-secondary-color); font-weight: 600; text-transform: uppercase; font-size: 0.8rem;">Total Sisa Kas Pos Anggaran</p>
-                    <h2 id="laporan-total-sisa" style="margin: 0; font-size: 2rem; font-weight: 800; color: var(--text-color);">Rp 0</h2>
+                    <p class="pb-report-total-label">Total Sisa Kas Pos Anggaran</p>
+                    <h2 id="laporan-total-sisa" class="pb-report-total-value">Rp 0</h2>
                 </div>
-                <button class="button-primary hide-on-print" onclick="window.print()" style="border-radius: 12px;"><i data-lucide="printer" style="width: 18px; height: 18px; margin-right: 8px;"></i> Cetak PDF Laporan</button>
+                <button class="button-primary hide-on-print rounded-12" onclick="window.print()"><i data-lucide="printer" class="icon-18 icon-mr-8"></i> Cetak PDF Laporan</button>
             </div>
 
             <!-- History Transaksi di Bawah Laporan -->
-            <div style="margin-top: 40px; padding-top: 32px; border-top: 2px dashed var(--border-color);">
-                <h4 style="font-size: 1.2rem; margin: 0 0 16px 0; font-weight: 800; color: var(--text-color);">Riwayat Transaksi Periode Ini</h4>
-                <div class="table-responsive" style="border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden;">
-                    <table class="modern-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
-                        <thead style="background: var(--secondary-bg); border-bottom: 2px solid var(--border-color);">
+            <div class="pb-history-section">
+                <h4 class="pb-history-title">Riwayat Transaksi Periode Ini</h4>
+                <div class="table-responsive pb-history-table-wrap">
+                    <table class="modern-table pb-history-table">
+                        <thead class="pb-history-head">
                             <tr>
-                                <th style="padding: 12px 20px;">Tanggal</th>
-                                <th style="padding: 12px 20px;">Pos Anggaran</th>
-                                <th style="padding: 12px 20px;">Keterangan</th>
-                                <th style="padding: 12px 20px; text-align: right;">Nominal Mutasi</th>
+                                <th class="pb-history-th">Tanggal</th>
+                                <th class="pb-history-th">Pos Anggaran</th>
+                                <th class="pb-history-th">Keterangan</th>
+                                <th class="pb-history-th text-right">Nominal Mutasi</th>
                             </tr>
                         </thead>
                         <tbody id="laporan-pos-history-body">
@@ -141,6 +141,162 @@
     </div>
 
 <style>
+.pb-subnav-shell {
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.pb-ledger-table {
+    border-collapse: collapse;
+}
+
+.pb-ledger-head {
+    background: var(--secondary-bg);
+}
+
+.pb-ledger-th {
+    padding: 16px 24px;
+}
+
+.pb-ledger-th-date {
+    width: 120px;
+}
+
+.pb-ledger-th-money {
+    width: 130px;
+}
+
+.pb-ledger-th-balance {
+    width: 140px;
+    color: var(--text-color);
+}
+
+.pb-ledger-foot {
+    background: var(--secondary-bg);
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+.pb-pagination-shell {
+    padding: 16px 24px;
+    background: rgba(255, 255, 255, 0.01);
+    margin-top: 0;
+}
+
+.pb-report-shell {
+    padding: 32px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    background: var(--secondary-bg);
+}
+
+.pb-report-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.pb-report-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+    color: var(--accent-color);
+    border-radius: 20px;
+    margin-bottom: 16px;
+}
+
+.pb-report-title {
+    margin: 0 0 8px 0;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-color);
+}
+
+.pb-report-subtitle {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.pb-report-period {
+    margin: 8px 0 0 0;
+    font-size: 1rem;
+}
+
+.pb-report-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.pb-report-total-card {
+    padding: 24px;
+    border-radius: 16px;
+    background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--accent-color) 10%, transparent),
+        transparent
+    );
+    border: 1px solid var(--accent-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.pb-report-total-label {
+    margin: 0 0 4px 0;
+    color: var(--text-secondary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.pb-report-total-value {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-color);
+}
+
+.pb-history-section {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 2px dashed var(--border-color);
+}
+
+.pb-history-title {
+    font-size: 1.2rem;
+    margin: 0 0 16px 0;
+    font-weight: 800;
+    color: var(--text-color);
+}
+
+.pb-history-table-wrap {
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.pb-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.85rem;
+}
+
+.pb-history-head {
+    background: var(--secondary-bg);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.pb-history-th {
+    padding: 12px 20px;
+}
+
 /* Gaya Spesifik Ketika Pengguna Mencetak ke PDF / Kertas */
 @media print {
     body { background: #fff !important; color: #000 !important; }

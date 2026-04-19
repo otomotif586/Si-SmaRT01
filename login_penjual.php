@@ -1293,7 +1293,7 @@ $alertType = $alertType ?? 'info';
                 <form action="login_penjual.php" method="POST" id="nikLoginFormPenjual">
                     <input type="hidden" name="action" value="login_nik">
                     <input type="text" name="nik" placeholder="Masuk Cepat dengan NIK (16 digit)" maxlength="16" inputmode="numeric" pattern="[0-9]{16}" required />
-                    <button type="submit" id="btnSubmitNikLogin" style="width:100%;">Masuk Tanpa Password</button>
+                    <button type="submit" id="btnSubmitNikLogin">Masuk Tanpa Password</button>
                 </form>
             </div>
         </div>

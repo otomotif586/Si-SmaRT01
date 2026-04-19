@@ -1,22 +1,22 @@
 <!-- Page: Rekonsiliasi & Audit Iuran (Annual Summary) -->
 <div id="page-rekonsiliasi" class="page-content hidden page-section">
     
-    <div class="glass-card page-filter-card" style="gap: 16px;">
+    <div class="glass-card page-filter-card gap-16">
         <p class="text-secondary page-filter-desc">Monitoring kedisiplinan pembayaran warga per tahun buku.</p>
-        <div class="header-actions page-filter-actions" style="gap: 12px;">
+        <div class="header-actions page-filter-actions gap-12">
             <div class="page-filter-group page-filter-group--spacious">
                 <div class="page-filter-group">
                     <label class="compact-label">Tahun:</label>
-                    <input type="number" id="filter-tahun-rekonsiliasi" class="input-field compact-control" style="width: 85px;" value="<?= date('Y') ?>" onchange="loadGlobalRekonsiliasi()">
+                    <input type="number" id="filter-tahun-rekonsiliasi" class="input-field compact-control w-85" value="<?= date('Y') ?>" onchange="loadGlobalRekonsiliasi()">
                 </div>
                 <div class="page-filter-group">
                     <label class="compact-label">Blok:</label>
-                    <select id="filter-blok-rekonsiliasi" class="input-field select-custom compact-control" style="min-width: 120px;" onchange="loadGlobalRekonsiliasi()">
+                    <select id="filter-blok-rekonsiliasi" class="input-field select-custom compact-control minw-120" onchange="loadGlobalRekonsiliasi()">
                         <option value="all">Semua Blok</option>
                     </select>
                 </div>
             </div>
-            <button class="button-secondary button-sm compact-btn" onclick="exportRekonsiliasiCSV()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
+            <button class="button-secondary button-sm compact-btn" onclick="exportRekonsiliasiCSV()"><i data-lucide="download" class="icon-16 icon-mr-6"></i> Export</button>
         </div>
     </div>
 
@@ -53,7 +53,7 @@
     <div id="rekon-stat-menunggak" class="hidden">0</div>
 
     <!-- Legend -->
-    <div class="glass-card" style="padding: 12px 24px; margin-bottom: 16px; border-radius: 12px; display: flex; gap: 20px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+    <div class="glass-card legend-wrap-end mb-16">
         <div class="legend-inline"><span class="legend-dot legend-dot--success"></span> Lunas</div>
         <div class="legend-inline"><span class="legend-dot legend-dot--danger"></span> Menunggak</div>
         <div class="legend-inline"><span class="legend-dot legend-dot--muted"></span> Belum Berjalan</div>
@@ -63,13 +63,13 @@
     <div class="glass-card table-panel">
         <div class="table-panel-head">
             <h4 class="table-panel-title">Daftar Status Iuran Per Bulan</h4>
-            <div class="input-with-icon" style="max-width: 250px; width: 100%;">
-                <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+            <div class="input-with-icon search-shell-250">
+                <i data-lucide="search" class="icon-18"></i>
                 <input type="text" id="search-rekonsiliasi" class="input-field input-field-compact" placeholder="Cari Warga..." oninput="filterRekonsiliasi()">
             </div>
         </div>
 
-        <div class="table-responsive" style="overflow-x: auto;">
+        <div class="table-responsive table-scroll-shell">
             <table class="modern-table rekon-table">
                 <thead>
                     <tr>

@@ -1,7 +1,7 @@
 <!-- Page: Warga -->
 <div id="page-warga" class="page-content hidden page-section"> <!-- Added page-section class -->
     
-    <div class="glass-card" style="padding: 20px; margin-bottom: 24px; border-radius: 20px;">
+    <div class="glass-card page-filter-card mb-24">
         <p class="text-secondary page-filter-desc text-secondary-sm">Pilih blok untuk mengelola data, iuran, dan agenda spesifik.</p>
     </div>
 
@@ -58,7 +58,7 @@
                         <span class="tag text-emerald font-bold tag-plain-value"><?= $setor_format ?></span>
                     </div>
                     <div class="inline-actions">
-                        <button class="button-secondary button-sm button-secondary-accent" style="padding: 8px 16px; border-radius: 12px;" onclick="event.stopPropagation(); window.currentBlokId = <?= $blok_id ?>; openMasterIuran()"><i data-lucide="settings" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Master Iuran</span></button>
+                        <button class="button-secondary button-sm button-secondary-accent compact-btn" onclick="event.stopPropagation(); window.currentBlokId = <?= $blok_id ?>; openMasterIuran()"><i data-lucide="settings" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Master Iuran</span></button>
                         <button onclick="event.stopPropagation(); editBlok(<?= $blok_id ?>, '<?= addslashes($nama_blok) ?>', '<?= addslashes($koordinator) ?>', <?= $blok['periode_mulai_bulan'] ?? 'null' ?>, <?= $blok['periode_mulai_tahun'] ?? 'null' ?>)" title="Pengaturan Blok" class="icon-btn-round"><i data-lucide="settings" class="icon-16"></i></button>
                         <button onclick="event.stopPropagation(); hapusBlok(<?= $blok_id ?>, '<?= addslashes($nama_blok) ?>', <?= $total_warga ?>)" title="Hapus Blok" class="icon-btn-round icon-btn-round-danger"><i data-lucide="trash-2" class="icon-16"></i></button>
                         <button class="ws-action-btn">Buka</button>
@@ -71,7 +71,7 @@
         <!-- Tambah Blok Baru -->
         <div class="interactive-ws-card" onclick="openAddBlockModal()">
             <div class="ws-hero logo-new">
-                <i data-lucide="plus" class="hero-letter" style="color: var(--text-secondary-color);"></i>
+                <i data-lucide="plus" class="hero-letter icon-muted"></i>
             </div>
             <section>
                 <h2>Tambah Blok</h2>
@@ -95,7 +95,7 @@
                 <div id="modal-block-logo" class="ws-logo-container logo-a">A</div>
                 <div>
                     <h2 id="modal-block-title" class="ws-title">Nama Blok</h2>
-                    <p id="modal-block-coord" class="text-secondary text-secondary-sm" style="margin-top: 4px;">Koordinator: -</p>
+                    <p id="modal-block-coord" class="text-secondary text-secondary-sm mt-4">Koordinator: -</p>
                 </div>
             </div>
             <button class="modal-close-btn" onclick="closeWorkspaceModal()"><i data-lucide="x"></i></button>
@@ -119,9 +119,9 @@
                 <div id="modal-dash" class="modal-tab-content">
                     
                     <!-- Pencarian Cepat & Quick Actions -->
-                    <div style="margin-bottom: 24px; position: relative;">
+                    <div class="mb-24 pos-relative">
                         <div class="input-with-icon mb-16">
-                            <i data-lucide="search" class="icon-20" style="color: var(--accent-color);"></i>
+                            <i data-lucide="search" class="icon-20 text-accent"></i>
                             <input type="text" id="quick-search-input" class="input-field quick-search-input" placeholder="Pencarian Cepat (Ketik nama warga/NIK lalu Enter...)" onkeypress="handleQuickSearch(event)">
                         </div>
                         <div class="quick-action-hub">
@@ -184,11 +184,11 @@
                         <div class="inline-wrap-8">
                             <button class="button-secondary button-sm compact-btn" onclick="downloadTemplateWarga()" title="Download Template Import"><i data-lucide="file-spreadsheet" class="icon-18"></i> <span class="hide-text-mobile">Template</span></button>
                             <button class="button-secondary button-sm compact-btn" onclick="exportWargaCSV()" title="Export ke Excel (CSV)"><i data-lucide="download" class="icon-18"></i> <span class="hide-text-mobile">Export</span></button>
-                            <label class="button-secondary button-sm compact-btn" style="cursor: pointer; margin: 0;" title="Import dari Excel (CSV)">
+                            <label class="button-secondary button-sm compact-btn cursor-pointer m-0" title="Import dari Excel (CSV)">
                                 <i data-lucide="upload" class="icon-18"></i> <span class="hide-text-mobile">Import</span>
                                 <input type="file" id="import-warga-csv" accept=".csv" class="hidden" onchange="importWargaCSV(this)">
                             </label>
-                            <button class="button-primary button-sm compact-btn" onclick="openFormWarga()"><i data-lucide="user-plus" style="margin-right: 6px; width: 18px; height: 18px;"></i> <span class="hide-text-mobile">Tambah Warga</span></button>
+                            <button class="button-primary button-sm compact-btn" onclick="openFormWarga()"><i data-lucide="user-plus" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Tambah Warga</span></button>
                         </div>
                     </div>
                     
@@ -258,10 +258,10 @@
                     <div class="section-header page-filter-row mb-16 w-full">
                         <h3 class="section-title m-0">Kelola Kas & Iuran Blok</h3>
                         <div class="inline-wrap-8">
-                            <button class="button-secondary button-sm compact-btn" style="font-weight: 600;" onclick="openRekonsiliasi()"><i data-lucide="activity" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Rekonsiliasi</span></button>
+                            <button class="button-secondary button-sm compact-btn fw-600" onclick="openRekonsiliasi()"><i data-lucide="activity" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Rekonsiliasi</span></button>
                             <button class="button-secondary button-sm button-secondary-accent compact-btn" onclick="bayarTerpilihIuran()"><i data-lucide="check-square" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Bayar Terpilih</span></button>
                             <button class="button-secondary button-sm compact-btn" onclick="bayarSemuaIuran()"><i data-lucide="check-circle" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Bayar Semua</span></button>
-                            <button class="button-primary button-sm compact-btn" style="box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);" onclick="setorKeRT()"><i data-lucide="send" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Setor ke RT Pusat</span></button>
+                            <button class="button-primary button-sm compact-btn shadow-soft-blue" onclick="setorKeRT()"><i data-lucide="send" class="icon-18 icon-mr-6"></i> <span class="hide-text-mobile">Setor ke RT Pusat</span></button>
                         </div>
                     </div>
 
@@ -323,7 +323,7 @@
                         <span id="iuran-page-info" class="text-secondary pagination-bar-info text-secondary-sm">Menampilkan 0-0 dari 0</span>
                         <div class="pagination-actions">
                             <button class="button-secondary button-sm compact-btn" onclick="prevPageIuran()"><i data-lucide="chevron-left" class="icon-16"></i></button>
-                            <div id="iuran-page-numbers" style="display: flex; gap: 4px;"></div>
+                            <div id="iuran-page-numbers" class="row-gap-4"></div>
                             <button class="button-secondary button-sm compact-btn" onclick="nextPageIuran()"><i data-lucide="chevron-right" class="icon-16"></i></button>
                         </div>
                     </div>
@@ -420,16 +420,16 @@
 
                 <!-- Tab 5: Laporan & Relasi (Spesifik Blok) -->
                 <div id="modal-laporan-relasi" class="modal-tab-content hidden">
-                    <div class="section-header page-filter-row" style="margin-bottom: 24px; width: 100%; gap: 12px;">
+                    <div class="section-header page-filter-row mb-24 w-full gap-12">
                         <h3 class="section-title m-0">Laporan & Relasi Iuran Blok</h3>
-                        <div class="page-filter-actions" style="gap: 12px;">
-                            <div class="input-with-icon" style="min-width: 200px;">
+                        <div class="page-filter-actions gap-12">
+                            <div class="input-with-icon minw-200">
                                 <i data-lucide="search"></i>
                                 <input type="text" id="search-ws-laporan-warga" placeholder="Cari warga..." class="input-field input-field-compact text-size-sm rounded-12" oninput="filterWsLaporanWarga()">
                             </div>
-                            <label class="text-secondary" style="font-size: 0.8rem; font-weight: 600;">Tahun:</label>
+                            <label class="text-secondary text-size-08 fw-600">Tahun:</label>
                             <input type="number" id="ws-relasi-year" class="input-field compact-control input-year-center" value="<?= date('Y') ?>" onchange="loadLaporanWargaWorkspace()">
-                            <button class="button-secondary button-sm compact-btn btn-compact-rounded" style="padding: 10px 16px;" onclick="exportWsLaporanWargaCSV()"><i data-lucide="download" class="icon-18"></i> Export</button>
+                            <button class="button-secondary button-sm compact-btn btn-compact-rounded btn-pad-10-16" onclick="exportWsLaporanWargaCSV()"><i data-lucide="download" class="icon-18 icon-mr-6"></i> Export</button>
                         </div>
                     </div>
 
@@ -452,10 +452,10 @@
                         </div>
                     </div>
 
-                    <div class="glass-card" style="padding: 0; border-radius: 20px; position: relative; overflow: hidden;">
-                        <div class="table-responsive" style="overflow-x: auto; position: relative;">
-                            <div id="ws-laporan-scroll-wrapper" style="position: relative; min-width: 1100px; padding-bottom: 40px;">
-                                <svg id="ws-svg-relations" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;">
+                    <div class="glass-card table-panel pos-relative">
+                        <div class="table-responsive table-scroll-shell pos-relative">
+                            <div id="ws-laporan-scroll-wrapper" class="scroll-relasi-wrapper">
+                                <svg id="ws-svg-relations" class="svg-relasi-overlay">
                                     <defs>
                                         <marker id="ws-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
                                             <polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)" opacity="0.6" />
@@ -493,9 +493,9 @@
                             </div>
                         </div>
                         
-                        <div id="ws-laporan-pagination" class="glass-card" style="margin: 12px; padding: 12px 24px; border-radius: 12px; display: none; align-items: center; justify-content: space-between; gap: 16px; background: rgba(255,255,255,0.02); border: none;">
+                        <div id="ws-laporan-pagination" class="glass-card pagination-card-shell panel-soft-float">
                             <div id="ws-laporan-page-info" class="text-secondary pagination-bar-info text-size-08">Menampilkan 1-20 data</div>
-                            <div style="display: flex; gap: 8px;">
+                            <div class="pagination-actions">
                                 <button onclick="prevWsLaporanPage()" class="button-secondary button-sm compact-btn"><i data-lucide="chevron-left" class="icon-16"></i></button>
                                 <button onclick="nextWsLaporanPage()" class="button-secondary button-sm compact-btn"><i data-lucide="chevron-right" class="icon-16"></i></button>
                             </div>
@@ -515,7 +515,7 @@
         <h2 class="section-title mb-8">Audit & Rekonsiliasi Kas</h2>
         <p class="text-secondary modal-desc">Deteksi otomatis warga yang menunggak berdasarkan periode pencatatan awal.</p>
         
-        <div style="background: var(--hover-bg); padding: 16px; border-radius: 16px; margin-bottom: 24px; display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+        <div class="glass-card page-filter-card mb-24 bg-hover rounded-16 items-end">
             <div class="flex-1 minw-120">
                 <label class="card-label">Bulan Mulai Mencatat</label>
                 <select id="rekon-bulan" class="input-field select-custom mt-8 select-left-16">
@@ -537,7 +537,7 @@
             <span id="rekon-total-warga" class="badge bg-red-light text-red text-size-075">Memuat...</span>
         </div>
 
-        <div id="rekonsiliasi-list" class="hide-scrollbar" style="overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px;">
+        <div id="rekonsiliasi-list" class="hide-scrollbar scroll-flex-col">
             <!-- Data akan diisi oleh JS -->
             <p class="text-center text-secondary py-4">Memuat data rekonsiliasi...</p>
         </div>
@@ -578,8 +578,8 @@
             <label class="card-label">Tanggal Setor</label>
             <input type="date" id="setor-tanggal" class="input-field mt-8 input-left-20">
         </div>
-        <div class="glass-card" style="padding: 12px 16px; background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; margin-bottom: 24px; font-size: 0.8rem; color: var(--text-color);">
-            <i data-lucide="info" style="display:inline; width:16px; height:16px; margin-right:4px; color: #3b82f6;"></i> Hanya tagihan berstatus LUNAS yang akan disetorkan.
+        <div class="glass-card mb-24 text-size-08 note-info-blue">
+            <i data-lucide="info" class="icon-inline icon-16 icon-mr-4 text-blue"></i> Hanya tagihan berstatus LUNAS yang akan disetorkan.
         </div>
         <button class="button-primary button-full-center" onclick="submitSetorRT(this)"><i data-lucide="send" class="icon-mr-8"></i> Konfirmasi Setoran</button>
     </div>
@@ -611,7 +611,7 @@
                 <option value="Transfer">Transfer Bank / E-Wallet</option>
             </select>
         </div>
-        <div id="edit-iuran-dates-container" style="display: none;">
+        <div id="edit-iuran-dates-container" class="hidden">
             <div class="mb-16">
                 <label class="card-label">Tanggal Bayar</label>
                 <input type="date" id="edit-iuran-tgl-bayar" class="input-field mt-8 input-left-20">
@@ -632,10 +632,10 @@
         <h2 class="section-title mb-8">Rincian Tagihan</h2>
         <p class="text-secondary modal-desc">Rincian alokasi dana iuran bulan ini.</p>
         
-        <div id="detail-iuran-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
+        <div id="detail-iuran-list" class="list-col-gap-sm mb-24 mt-0">
             <!-- Diisi oleh JS -->
         </div>
-        <div style="border-top: 2px dashed var(--border-color); padding-top: 16px; display: flex; justify-content: space-between; align-items: center;">
+        <div class="section-top-divider-strong">
             <span class="font-bold text-color">Total Tagihan</span>
             <h3 id="detail-iuran-total" class="text-emerald m-0">Rp 0</h3>
         </div>
@@ -653,17 +653,17 @@
             <button class="modal-close-btn" onclick="closeMasterIuran()"><i data-lucide="x"></i></button>
         </div>
         
-        <div class="drawer-body hide-scrollbar" style="padding-top: 16px;">
-            <div class="glass-card" style="padding: 16px; background: rgba(16, 185, 129, 0.1); border-color: var(--accent-color); margin-bottom: 24px;">
-                <p class="text-emerald font-bold m-0 text-size-sm"><i data-lucide="info" class="icon-inline icon-16 icon-mr-4"></i> Total Tagihan Per Bulan: <span id="total-master-iuran" style="font-size: 1.2rem; float:right;">Rp 0</span></p>
+        <div class="drawer-body hide-scrollbar pt-16">
+            <div class="glass-card panel-soft-success">
+                <p class="text-emerald font-bold m-0 text-size-sm"><i data-lucide="info" class="icon-inline icon-16 icon-mr-4"></i> Total Tagihan Per Bulan: <span id="total-master-iuran" class="text-size-12-float-right">Rp 0</span></p>
             </div>
 
-            <div id="master-iuran-list" class="list-container" style="gap: 12px;">
+            <div id="master-iuran-list" class="list-container gap-12">
                 <!-- List Komponen dari JS -->
             </div>
 
             <div class="dynamic-add-section">
-                <button type="button" class="button-secondary button-full-width" style="border-style: dashed; color: var(--accent-color); border-color: var(--accent-color);" onclick="addMasterIuranField()"><i data-lucide="plus"></i> Tambah Komponen Baru</button>
+                <button type="button" class="button-secondary button-full-width button-dashed-accent" onclick="addMasterIuranField()"><i data-lucide="plus"></i> Tambah Komponen Baru</button>
             </div>
         </div>
         
@@ -722,7 +722,7 @@
                 </select>
             </div>
             
-            <div class="form-group" style="margin-bottom: 20px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+            <div class="form-group section-top-divider mb-20">
                 <label class="card-label">Lampiran Berkas Agenda</label>
                 <div class="upload-premium-container">
                     <input type="file" id="agenda_lampiran_files" multiple class="upload-premium-input">
@@ -737,7 +737,7 @@
             
             <div id="agenda_gallery_section" class="hidden section-top-divider">
                 <label class="card-label">Unggah Galeri (Foto & Video Sekaligus)</label>
-                <input type="file" id="agenda_gallery_files" accept="image/*,video/mp4,video/webm" multiple class="input-field file-input-modern" style="margin-top: 8px; width: 100%;" onchange="previewAgendaGallery(this)">
+                <input type="file" id="agenda_gallery_files" accept="image/*,video/mp4,video/webm" multiple class="input-field file-input-modern mt-8 w-full" onchange="previewAgendaGallery(this)">
                 <div id="agenda_gallery_preview" class="list-wrap-gap-sm"></div>
                 <div id="agenda_existing_gallery" class="list-wrap-gap-sm"></div>
             </div>
@@ -788,7 +788,7 @@
                 <input type="datetime-local" id="laporan_tanggal_selesai" class="input-field mt-8 input-left-20">
             </div>
             
-            <div class="form-group" style="margin-bottom: 20px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+            <div class="form-group section-top-divider mb-20">
                 <label class="card-label">Lampiran Bukti Kejadian</label>
                 <div class="upload-premium-container">
                     <input type="file" id="laporan_lampiran_files" multiple class="upload-premium-input">
@@ -825,7 +825,7 @@
             <input type="text" id="edit-koordinator-blok" class="input-field mt-8 input-left-20">
         </div>
         <div class="mb-16 inline-form-row">
-            <div style="flex: 1;">
+            <div class="flex-1">
                 <label class="card-label">Bulan Mulai Iuran</label>
                 <select id="edit-periode-bulan" class="input-field select-custom mt-8 input-left-20">
                     <option value="0">Januari</option><option value="1">Februari</option><option value="2">Maret</option>
@@ -834,7 +834,7 @@
                     <option value="9">Oktober</option><option value="10">November</option><option value="11">Desember</option>
                 </select>
             </div>
-            <div style="flex: 1;">
+            <div class="flex-1">
                 <label class="card-label">Tahun Mulai</label>
                 <input type="number" id="edit-periode-tahun" class="input-field mt-8 input-left-20" placeholder="Cth: 2026">
             </div>
@@ -849,7 +849,7 @@
 
 <!-- Modal Add Workspace (Card Stack Form) dipindah ke luar agar tidak nyangkut -->
 <div id="add-block-modal" class="modal-overlay hidden modal-stack-bg overlay-z10005">
-    <button class="modal-close-btn" style="position: absolute; top: 24px; right: 24px; z-index: 10001;" onclick="closeAddBlockModal()"><i data-lucide="x"></i></button>
+    <button class="modal-close-btn modal-close-floating" onclick="closeAddBlockModal()"><i data-lucide="x"></i></button>
 
     <div class="stack-container" id="form-stack">
         <!-- Step 1: Nama Blok -->

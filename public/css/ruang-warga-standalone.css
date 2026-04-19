@@ -105,6 +105,7 @@ body {
     flex-wrap: wrap;
     justify-content: flex-end;
 }
+.topbar-logout-form { margin: 0; }
 .btn {
     display: inline-flex;
     align-items: center;
@@ -530,16 +531,20 @@ body {
     display: grid;
     gap: 12px;
     margin-bottom: 12px;
+    font-family: 'Outfit', 'Manrope', 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
 }
 
 .rw-auth-shell .rw-auth-hero,
 .rw-auth-hero.card {
-    padding: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 20px !important;
+    padding: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 22px !important;
     overflow: hidden;
-    background: linear-gradient(145deg, rgba(16, 185, 129, 0.92), rgba(5, 150, 105, 0.9));
-    box-shadow: 0 24px 50px -38px rgba(15, 23, 42, 0.55);
+    background:
+        radial-gradient(380px 180px at 8% 0%, rgba(45, 212, 191, 0.34), transparent 62%),
+        radial-gradient(360px 220px at 100% 100%, rgba(59, 130, 246, 0.3), transparent 68%),
+        linear-gradient(150deg, rgba(6, 78, 59, 0.96), rgba(15, 23, 42, 0.9));
+    box-shadow: 0 28px 56px -40px rgba(15, 23, 42, 0.72);
     color: #fff;
 }
 
@@ -558,8 +563,9 @@ body {
 
 .rw-auth-shell .rw-auth-hero h2,
 .rw-auth-hero.card h2 {
-    margin: 8px 0 6px;
-    font-size: 1.36rem;
+    margin: 10px 0 6px;
+    font-size: 1.42rem;
+    letter-spacing: -0.02em;
     color: #fff;
 }
 
@@ -596,23 +602,36 @@ body {
 }
 
 .rw-auth-card {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(240, 253, 250, 0.92));
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.97), rgba(240, 253, 250, 0.92));
+    box-shadow: 0 26px 54px -44px rgba(15, 23, 42, 0.62);
 }
 
 .rw-auth-card-register {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(239, 246, 255, 0.93));
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.97), rgba(239, 246, 255, 0.93));
 }
 
-.rw-auth-form input {
+.rw-auth-form input,
+.rw-auth-form select {
+    min-height: 46px;
     border-radius: 14px;
     padding: 12px;
+    border-color: rgba(15, 23, 42, 0.14);
+}
+
+.rw-auth-form input:focus,
+.rw-auth-form select:focus {
+    border-color: rgba(16, 185, 129, 0.72);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.16);
 }
 
 .rw-auth-btn {
-    min-height: 44px;
+    min-height: 46px;
     border-radius: 14px;
     width: 100%;
     justify-content: center;
+    box-shadow: 0 16px 30px -22px rgba(5, 150, 105, 0.62);
 }
 
 .grid2 {

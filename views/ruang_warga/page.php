@@ -31,7 +31,7 @@
             <a href="ruang_warga.php" class="btn">Ruang Warga</a>
             <?php if ($isLoggedIn): ?>
                 <a href="ruang_penjual.php" class="btn primary">Ruang Penjual</a>
-                <form method="POST" style="margin:0;">
+                <form method="POST" class="topbar-logout-form">
                     <input type="hidden" name="action" value="logout">
                     <button class="btn danger" type="submit">Keluar</button>
                 </form>
