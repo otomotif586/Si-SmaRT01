@@ -56,12 +56,7 @@
             <h2>Ruang Warga</h2>
             <p class="rw-app-sub"><?= $isLoggedIn ? 'Kelola data diri, iuran, dan aduan dari satu dashboard interaktif.' : 'Masuk dengan NIK atau daftar cepat untuk mengakses layanan warga.' ?></p>
             <div class="rw-app-chip-row">
-                <?php if ($isLoggedIn): ?>
-                    <button type="button" class="rw-head-chip" data-go-tab="ringkasan"><i class="fas fa-house"></i> Ringkasan</button>
-                    <button type="button" class="rw-head-chip" data-go-tab="history"><i class="fas fa-wallet"></i> Iuran</button>
-                    <button type="button" class="rw-head-chip" data-go-tab="aduan"><i class="fas fa-paper-plane"></i> Aduan</button>
-                    <button type="button" class="rw-head-chip" data-go-tab="profil-lengkap"><i class="fas fa-id-card"></i> Data Diri</button>
-                <?php else: ?>
+                <?php if (!$isLoggedIn): ?>
                     <button type="button" class="rw-head-chip" data-rw-scroll="rwLoginCard"><i class="fas fa-right-to-bracket"></i> Login Warga</button>
                     <button type="button" class="rw-head-chip" data-rw-scroll="rwRegisterCard"><i class="fas fa-user-plus"></i> Daftar Cepat</button>
                     <a href="pasar.php" class="rw-head-chip"><i class="fas fa-store"></i> Pasar Warga</a>
@@ -254,11 +249,143 @@
             </div>
         </div>
 
-        <div class="rw-action-grid">
-            <button class="rw-action-btn" type="button" data-go-tab="history"><i class="fas fa-credit-card"></i><span>Bayar Iuran</span></button>
-            <button class="rw-action-btn" type="button" data-go-tab="history"><i class="fas fa-clock-rotate-left"></i><span>Cek History</span></button>
-            <button class="rw-action-btn" type="button" data-go-tab="aduan" data-open-modal="rwAduanModal"><i class="fas fa-paper-plane"></i><span>Ajukan Aduan</span></button>
-            <button class="rw-action-btn" type="button" data-go-tab="ringkasan"><i class="fas fa-bullhorn"></i><span>Lihat Info</span></button>
+
+        <?php if ($iuranProgress >= 100): ?>
+        <div class="rw-celebration-card" id="rwCelebrationCard">
+            <div class="rw-celebration-orb rw-celebration-orb-1"></div>
+            <div class="rw-celebration-orb rw-celebration-orb-2"></div>
+            <div class="rw-celebration-text">
+                <p class="rw-celebration-eyebrow"><i class="fas fa-party-horn"></i> Status Iuran</p>
+                <h3 class="rw-celebration-title">Semua Iuran Lunas! 🎉</h3>
+                <p class="rw-celebration-sub">Anda telah menyelesaikan semua kewajiban iuran tepat waktu.<br>Terima kasih atas kepatuhan Anda.</p>
+            </div>
+            <div class="rw-celebration-illustration" aria-hidden="true">🏠</div>
+        </div>
+        <?php endif; ?>
+
+        <!-- Widget Kalender Mini -->
+        <div class="rw-calendar-widget" id="rwMiniCalendar" aria-label="Kalender bulan ini">
+            <div class="rw-cal-header">
+                <div>
+                    <p class="rw-cal-year" id="rwCalYear"></p>
+                    <p class="rw-cal-month" id="rwCalMonth"></p>
+                </div>
+                <div class="rw-cal-nav">
+                    <button class="rw-cal-nav-btn" id="rwCalPrev" aria-label="Bulan sebelumnya"><i class="fas fa-chevron-left"></i></button>
+                    <button class="rw-cal-nav-btn" id="rwCalNext" aria-label="Bulan berikutnya"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div class="rw-cal-weekdays">
+                <span class="rw-cal-weekday">Min</span>
+                <span class="rw-cal-weekday">Sen</span>
+                <span class="rw-cal-weekday">Sel</span>
+                <span class="rw-cal-weekday">Rab</span>
+                <span class="rw-cal-weekday">Kam</span>
+                <span class="rw-cal-weekday">Jum</span>
+                <span class="rw-cal-weekday">Sab</span>
+            </div>
+            <div class="rw-cal-grid" id="rwCalGrid"></div>
+            <div class="rw-cal-legend">
+                <div class="rw-cal-legend-item">
+                    <span class="rw-cal-legend-dot" style="background:linear-gradient(145deg,#8454ca,#673ab7)"></span> Hari Ini
+                </div>
+                <div class="rw-cal-legend-item">
+                    <span class="rw-cal-legend-dot" style="background:#f59e0b"></span> Tenggat Iuran
+                </div>
+                <div class="rw-cal-legend-item">
+                    <span class="rw-cal-legend-dot" style="background:#8b5cf6"></span> Akhir Pekan
+                </div>
+            </div>
+        </div>
+
+        <!-- Widget Agenda & Jadwal Penting -->
+        <!-- Widget Agenda & Jadwal Penting -->
+        <div class="rw-agenda-widget" id="rwAgendaWidget">
+            <div class="rw-agenda-tabs" role="tablist">
+                <button class="rw-agenda-tab-btn active" data-agenda-tab="agenda" role="tab" aria-selected="true">Agenda Warga</button>
+                <button class="rw-agenda-tab-btn" data-agenda-tab="jadwal" role="tab" aria-selected="false">Jadwal Iuran</button>
+            </div>
+
+            <div class="rw-agenda-panel active" data-agenda-panel="agenda">
+                <div class="rw-timeline" id="rwTimelineList">
+                    <?php if (empty($agendaWargaRows)): ?>
+                        <div class="rw-empty-state" style="padding: 40px 20px; text-align: center; opacity: 0.6;">
+                            <i data-lucide="calendar" style="width: 48px; height: 48px; margin-bottom: 12px;"></i>
+                            <p>Belum ada agenda kegiatan dalam waktu dekat.</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($agendaWargaRows as $index => $ag): 
+                            $isSelesai = $ag['status'] === 'Selesai';
+                            $isUpcoming = $ag['status'] === 'Direncanakan' || $ag['status'] === 'Berjalan';
+                            $tglAg = $ag['tanggal_kegiatan'] ? date('d M Y', strtotime($ag['tanggal_kegiatan'])) : date('d M Y', strtotime($ag['created_at']));
+                        ?>
+                        <div class="rw-timeline-item <?= $isSelesai ? 'completed' : '' ?>">
+                            <div class="rw-timeline-dot"></div>
+                            <p class="rw-timeline-time"><?= strtoupper($ag['status'] ?? 'AGENDA') ?></p>
+                            <div class="rw-timeline-card <?= ($index === 0 && $isUpcoming) ? 'is-active' : '' ?>">
+                                <p class="rw-timeline-title"><?= htmlspecialchars($ag['judul']) ?></p>
+                                <p class="rw-timeline-desc"><?= htmlspecialchars($ag['deskripsi']) ?></p>
+                                <div class="rw-timeline-meta">
+                                    <span><i data-lucide="calendar"></i> <?= $tglAg ?></span>
+                                    <?php if ($ag['status'] === 'Berjalan'): ?>
+                                        <span class="rw-badge-live">LIVE</span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="rw-agenda-panel" data-agenda-panel="jadwal">
+                <div class="rw-dates-list">
+                    <div class="rw-date-item">
+                        <div class="rw-date-badge lunas">
+                            <i data-lucide="check-circle"></i>
+                        </div>
+                        <div class="rw-date-info">
+                            <p class="rw-date-title">Iuran Lunas</p>
+                            <p class="rw-date-subtitle"><?= $iuranLunasCount ?? 0 ?> Bulan Terbayar</p>
+                        </div>
+                    </div>
+
+                    <div class="rw-date-item">
+                        <div class="rw-date-badge <?= (($iuranTunggakCount ?? 0) > 0) ? 'tunggak' : 'lunas' ?>">
+                            <i data-lucide="<?= (($iuranTunggakCount ?? 0) > 0) ? 'alert-circle' : 'shield-check' ?>"></i>
+                        </div>
+                        <div class="rw-date-info">
+                            <p class="rw-date-title">Status Tunggakan</p>
+                            <p class="rw-date-subtitle"><?= $iuranTunggakCount ?? 0 ?> Bulan Belum Bayar</p>
+                        </div>
+                    </div>
+
+                    <div class="rw-dates-divider"></div>
+
+                    <div class="rw-history-preview">
+                        <p class="rw-history-label">Histori Iuran Terakhir</p>
+                        <?php if (empty($historyRows)): ?>
+                            <p class="text-secondary" style="font-size: 0.8rem; margin-top: 8px;">Belum ada riwayat pembayaran.</p>
+                        <?php else: ?>
+                            <?php 
+                            $limitHistory = array_slice($historyRows, 0, 3);
+                            $namasBulan = ['','Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+                            foreach ($limitHistory as $hRow): 
+                                $isLunas = strtoupper($hRow['status']) === 'LUNAS';
+                            ?>
+                            <div class="rw-history-mini-item">
+                                <div class="rw-history-mini-dot <?= $isLunas ? 'is-lunas' : 'is-tunggak' ?>"></div>
+                                <div class="rw-history-mini-main">
+                                    <span class="rw-history-mini-month"><?= $namasBulan[(int)$hRow['bulan']] ?> <?= $hRow['tahun'] ?></span>
+                                    <span class="rw-history-mini-status"><?= $isLunas ? 'Lunas' : 'Menunggak' ?></span>
+                                </div>
+                                <span class="rw-history-mini-price">Rp <?= number_format($hRow['total_tagihan'], 0, ',', '.') ?></span>
+                            </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <?php if ($linkedWarga): ?>
@@ -280,16 +407,9 @@
                 <p class="muted">
                     Beberapa data masih kosong: <?= htmlspecialchars(implode(', ', array_slice($missingDataFields, 0, 5))) ?><?= count($missingDataFields) > 5 ? ', dan lainnya' : '' ?>.
                 </p>
-                <a href="#" class="btn primary" data-go-tab="profil-lengkap"><i class="fas fa-pen-to-square"></i> Lengkapi Data Diri Sekarang</a>
             </div>
         <?php endif; ?>
 
-        <div class="card tabs" id="rwTabs">
-            <button class="tab-btn active" data-tab="ringkasan"><i class="fas fa-house"></i> Ringkasan</button>
-            <button class="tab-btn" data-tab="profil-lengkap"><i class="fas fa-id-card"></i> Data Diri Lengkap</button>
-            <button class="tab-btn" data-tab="history"><i class="fas fa-clock-rotate-left"></i> History Iuran</button>
-            <button class="tab-btn" data-tab="aduan"><i class="fas fa-paper-plane"></i> Aduan</button>
-        </div>
 
         <div class="tab-panel active" data-panel="ringkasan">
             <div class="card section rw-wizard-head">
@@ -364,7 +484,6 @@
                     <?php if (!$linkedWarga): ?>
                         <div class="empty">Data warga belum tersedia. Silakan lengkapi data diri di menu Data Diri Lengkap.</div>
                         <div style="margin-top:10px;">
-                            <a href="#" class="btn" data-go-tab="profil-lengkap"><i class="fas fa-arrow-up-right-from-square"></i> Buka Form Data Diri Lengkap</a>
                         </div>
                     <?php else: ?>
                         <div class="form-grid">
@@ -389,8 +508,6 @@
                             <strong>Rp <?= number_format($overdueNominal, 0, ',', '.') ?></strong>.
                         </p>
                         <div class="reminder-actions">
-                            <a href="#" class="btn primary" data-go-tab="history"><i class="fas fa-clock-rotate-left"></i> Lihat Rincian Tunggakan</a>
-                            <a href="#" class="btn" data-go-tab="aduan"><i class="fas fa-paper-plane"></i> Butuh Bantuan Pengurus</a>
                         </div>
                     <?php else: ?>
                         <p class="muted">Tidak ada tunggakan aktif. Pertahankan pembayaran iuran tepat waktu.</p>
@@ -437,7 +554,6 @@
 
             <div class="card section rw-panel-cta">
                 <p>Selesaikan langkah berikutnya untuk menjaga status akun tetap aktif dan iuran tetap aman.</p>
-                <a href="#" class="btn primary" data-go-tab="history"><i class="fas fa-arrow-right"></i> Lanjutkan ke History Iuran</a>
             </div>
         </div>
 
@@ -681,7 +797,6 @@
 
             <div class="card section rw-panel-cta">
                 <p>Perlu bantuan terkait status iuran? Anda bisa langsung kirim aduan ke pengurus.</p>
-                <a href="#" class="btn primary" data-go-tab="aduan"><i class="fas fa-paper-plane"></i> Lanjut ke Aduan</a>
             </div>
         </div>
 

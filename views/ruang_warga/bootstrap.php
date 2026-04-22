@@ -709,6 +709,15 @@ if ($isLoggedIn) {
             $stmtHistory->execute([(int)$linkedWarga['id']]);
             $historyRows = $stmtHistory->fetchAll(PDO::FETCH_ASSOC);
 
+            // Hitung statistik iuran untuk widget
+            $iuranLunasCount = 0;
+            $iuranTunggakCount = 0;
+            foreach ($historyRows as $h) {
+                $st = strtoupper(trim((string)($h['status'] ?? '')));
+                if ($st === 'LUNAS' || $st === 'DIBAYAR') $iuranLunasCount++;
+                if ($st === 'MENUNGGAK' || $st === 'TUNGGAK') $iuranTunggakCount++;
+            }
+
             try {
                 $stmtCountLap = $pdo->prepare("SELECT COUNT(*) FROM laporan_keamanan WHERE sumber_warga_id = ?");
                 $stmtCountLap->execute([(int)$linkedWarga['id']]);
@@ -755,7 +764,7 @@ if ($isLoggedIn) {
             // Feed informasi penting untuk warga (gabungan berita + agenda terbaru)
             try {
                 $blogRows = [];
-                $agendaRows = [];
+                $agendaWargaRows = []; // Untuk widget timeline khusus
 
                 try {
                     $stmtBlog = $pdo->query("SELECT judul, LEFT(REPLACE(REPLACE(konten, '\\r', ' '), '\\n', ' '), 180) AS ringkas, created_at AS waktu, 'Berita' AS jenis FROM web_blogs ORDER BY created_at DESC LIMIT 5");
@@ -763,17 +772,30 @@ if ($isLoggedIn) {
                 } catch (Throwable $ignored) {}
 
                 try {
-                    $stmtAgenda = $pdo->query("SELECT judul, LEFT(IFNULL(deskripsi, ''), 180) AS ringkas, created_at AS waktu, 'Agenda' AS jenis FROM agenda_kegiatan ORDER BY created_at DESC LIMIT 5");
-                    $agendaRows = $stmtAgenda->fetchAll(PDO::FETCH_ASSOC);
+                    // Ambil agenda kegiatan yang akan datang atau terbaru
+                    $stmtAgenda = $pdo->query("SELECT id, judul, deskripsi, tanggal_kegiatan, created_at, status FROM agenda_kegiatan ORDER BY tanggal_kegiatan DESC LIMIT 6");
+                    $agendaWargaRows = $stmtAgenda->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    // Format untuk importantInfoRows (legacy compatibility)
+                    $agendaRowsLegacy = [];
+                    foreach ($agendaWargaRows as $ag) {
+                        $agendaRowsLegacy[] = [
+                            'judul' => $ag['judul'],
+                            'ringkas' => $ag['deskripsi'],
+                            'waktu' => $ag['tanggal_kegiatan'] ?: $ag['created_at'],
+                            'jenis' => 'Agenda'
+                        ];
+                    }
                 } catch (Throwable $ignored) {}
 
-                $importantInfoRows = array_merge($blogRows, $agendaRows);
+                $importantInfoRows = array_merge($blogRows, $agendaRowsLegacy ?? []);
                 usort($importantInfoRows, function ($a, $b) {
                     return strcmp((string)($b['waktu'] ?? ''), (string)($a['waktu'] ?? ''));
                 });
                 $importantInfoRows = array_slice($importantInfoRows, 0, 6);
             } catch (Throwable $ignored) {
                 $importantInfoRows = [];
+                $agendaWargaRows = [];
             }
         }
     }

@@ -82,6 +82,10 @@
                 <i data-lucide="shield-check"></i>
                 <span>Info</span>
             </button>
+            <button onclick="showPage('agenda')" id="nav-agenda" title="Kelola Agenda & Laporan">
+                <i data-lucide="calendar"></i>
+                <span>Agenda</span>
+            </button>
             <button onclick="showPage('info')" id="nav-info" title="Pengaturan CMS">
                 <i data-lucide="megaphone"></i>
                 <span>Pengaturan CMS</span>

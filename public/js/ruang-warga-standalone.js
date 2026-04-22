@@ -525,6 +525,90 @@ function bindAvatarPreview() {
     });
 }
 
+
+function rwInitMiniCalendar() {
+    const grid = document.getElementById('rwCalGrid');
+    const monthEl = document.getElementById('rwCalMonth');
+    const yearEl = document.getElementById('rwCalYear');
+    const prevBtn = document.getElementById('rwCalPrev');
+    const nextBtn = document.getElementById('rwCalNext');
+    if (!grid || !monthEl || !yearEl) return;
+
+    const MONTHS_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    const now = new Date();
+    let viewYear = now.getFullYear();
+    let viewMonth = now.getMonth(); // 0-indexed
+
+    // Tenggat iuran = tanggal 10 setiap bulan
+    const IURAN_DAY = 10;
+
+    function renderCalendar() {
+        monthEl.textContent = MONTHS_ID[viewMonth];
+        yearEl.textContent = String(viewYear);
+        grid.innerHTML = '';
+
+        const firstDay = new Date(viewYear, viewMonth, 1).getDay(); // 0=Sun
+        const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+        const todayDate = now.getDate();
+        const isCurrentMonth = viewYear === now.getFullYear() && viewMonth === now.getMonth();
+
+        // Empty cells before first day
+        for (let i = 0; i < firstDay; i++) {
+            const empty = document.createElement('div');
+            empty.className = 'rw-cal-day empty';
+            grid.appendChild(empty);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const cell = document.createElement('div');
+            cell.className = 'rw-cal-day';
+            cell.textContent = String(d);
+
+            const dayOfWeek = new Date(viewYear, viewMonth, d).getDay();
+            if (dayOfWeek === 0 || dayOfWeek === 6) cell.classList.add('is-weekend');
+            if (d === IURAN_DAY) { cell.classList.add('is-iuran', 'has-event'); }
+            if (isCurrentMonth && d === todayDate) { cell.classList.add('today'); }
+
+            grid.appendChild(cell);
+        }
+    }
+
+    renderCalendar();
+
+    prevBtn && prevBtn.addEventListener('click', () => {
+        viewMonth--;
+        if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+        renderCalendar();
+    });
+
+    nextBtn && nextBtn.addEventListener('click', () => {
+        viewMonth++;
+        if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+        renderCalendar();
+    });
+}
+
+function rwInitAgendaTabs() {
+    const widget = document.getElementById('rwAgendaWidget');
+    if (!widget) return;
+
+    const tabBtns = Array.from(widget.querySelectorAll('.rw-agenda-tab-btn'));
+    const panels = Array.from(widget.querySelectorAll('.rw-agenda-panel'));
+
+    tabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-agenda-tab');
+            tabBtns.forEach((b) => {
+                b.classList.toggle('active', b === btn);
+                b.setAttribute('aria-selected', String(b === btn));
+            });
+            panels.forEach((p) => {
+                p.classList.toggle('active', p.getAttribute('data-agenda-panel') === targetId);
+            });
+        });
+    });
+}
+
 (function initRuangWargaStandalone() {
     initBootLoader();
     bindTabNavigation();
@@ -535,6 +619,8 @@ function bindAvatarPreview() {
     bindStandaloneHaptic();
     bindRwHeaderInteractions();
     initRwSummarySkeleton();
+    rwInitMiniCalendar();
+    rwInitAgendaTabs();
     statusPernikahan?.addEventListener('change', togglePasangan);
     togglePasangan();
 
@@ -551,3 +637,4 @@ function bindAvatarPreview() {
 
     rwStandaloneStaggerReveal(document);
 })();
+

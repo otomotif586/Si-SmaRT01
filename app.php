@@ -107,9 +107,12 @@ include 'views/layout/head.php';
         include 'views/pages/info.php';
         include 'views/pages/users.php';
         include 'views/pages/pasar.php';
+        include 'views/pages/agenda.php';
         ?>
     </main>
     <!-- Include the footer section (closing tags and main JS script) -->
     <?php include 'views/layout/footer.php'; ?>
+    <script src="public/js/pasar.js"></script>
+    <script src="public/js/agenda.js"></script>
 </body>
 </html>
