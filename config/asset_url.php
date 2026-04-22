@@ -8,6 +8,7 @@ if (!function_exists('smart_asset_version')) {
             return trim($envVersion);
         }
 
+<<<<<<< HEAD
         return '20260419r2';
     }
 }
@@ -29,6 +30,9 @@ if (!function_exists('smart_asset_file_version')) {
         }
 
         return smart_asset_version();
+=======
+            return '20260419r1';
+>>>>>>> 2cfa5c83922f435094998b0ddbe53f3f01287bcf
     }
 }
 

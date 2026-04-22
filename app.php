@@ -18,6 +18,7 @@ include 'views/layout/head.php';
 ?>
 <!DOCTYPE html>
 <html lang="id">
+<<<<<<< HEAD
 <body class="smart-installer-app sx-font-body sx-installer-shell">
     <div class="smart-installer-navbar">
         <div class="si-nav-inner">
@@ -33,6 +34,9 @@ include 'views/layout/head.php';
             <a href="index.php" class="si-download-btn" data-si-install>Download Now</a>
         </div>
     </div>
+=======
+<body>
+>>>>>>> 2cfa5c83922f435094998b0ddbe53f3f01287bcf
     <?php
     // Include the sidebar navigation
     include 'views/layout/sidebar.php';
