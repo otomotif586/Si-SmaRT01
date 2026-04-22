@@ -74,24 +74,38 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
     </nav>
 
     <main class="container mx-auto px-4 py-8">
-        <!-- Welcoming Section -->
-        <div class="mb-8 p-5 sm:p-6 bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 rounded-[2rem] sm:rounded-[2.5rem] text-white shadow-2xl shadow-emerald-200 relative overflow-hidden">
-            <div class="relative z-10">
-                <h2 class="text-2xl font-black mb-1">Halo, <?= htmlspecialchars($penjualData['nama_pemilik'] ?? 'Penjual') ?>! 👋</h2>
-                <p class="text-emerald-100 text-sm font-medium opacity-90">Kelola dagangan Anda dengan mudah dari genggaman.</p>
-                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                    <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10 flex-1">
-                        <p class="text-[9px] uppercase font-bold tracking-widest text-emerald-200 mb-1">Total Produk</p>
-                        <h3 id="stat-total" class="text-xl font-black">0</h3>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10 flex-1">
-                        <p class="text-[9px] uppercase font-bold tracking-widest text-emerald-200 mb-1">Status Aktif</p>
-                        <h3 id="stat-aktif" class="text-xl font-black">0</h3>
-                    </div>
+        <!-- App Header -->
+        <section id="sellerAppHeader" class="seller-app-header mb-8" aria-label="Header ringkasan ruang penjual">
+            <div class="seller-app-intro">
+                <p class="seller-kicker"><i class="fas fa-sparkles"></i> Si-SmaRT Commerce Space</p>
+                <h2>Ruang Penjual</h2>
+                <p>Kelola katalog, update harga, dan respons pembeli lebih cepat dalam satu panel modern.</p>
+                <div class="seller-head-chips">
+                    <button type="button" class="seller-chip" onclick="openModal()"><i class="fas fa-plus"></i> Tambah Dagangan</button>
+                    <button type="button" class="seller-chip" onclick="document.getElementById('searchInput')?.focus()"><i class="fas fa-magnifying-glass"></i> Cari Produk</button>
+                    <button type="button" class="seller-chip" onclick="openProfileModal()"><i class="fas fa-user-gear"></i> Profil Toko</button>
                 </div>
             </div>
-            <i class="fas fa-shop text-white/5 absolute -right-4 -bottom-4 text-9xl"></i>
-        </div>
+            <div class="seller-app-summary is-loading" id="sellerAppSummary">
+                <div class="seller-metric" data-seller-metric>
+                    <span>Total Produk</span>
+                    <strong id="stat-total">0</strong>
+                </div>
+                <div class="seller-metric" data-seller-metric>
+                    <span>Status Aktif</span>
+                    <strong id="stat-aktif">0</strong>
+                </div>
+                <div class="seller-metric" data-seller-metric>
+                    <span>Kategori Tersedia</span>
+                    <strong id="stat-kategori">0</strong>
+                </div>
+                <div class="seller-metric seller-time" id="sellerTimeMetric">
+                    <span>Update Terakhir</span>
+                    <strong id="sellerNowTime">--:--</strong>
+                </div>
+            </div>
+            <i class="fas fa-shop seller-bg-icon" aria-hidden="true"></i>
+        </section>
 
         <!-- Action Bar -->
         <div class="bg-white p-4 sm:p-5 rounded-[2rem] shadow-sm border border-slate-100 mb-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">

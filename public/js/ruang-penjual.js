@@ -74,6 +74,12 @@ function showPageToast(title, icon = 'success') {
     });
 }
 
+function setSellerSummaryLoading(isLoading) {
+    const summary = document.getElementById('sellerAppSummary');
+    if (!summary) return;
+    summary.classList.toggle('is-loading', !!isLoading);
+}
+
 function previewProfileLogo(e) {
     const file = e.target.files[0];
     if (file) {
@@ -97,6 +103,7 @@ async function loadProducts(page = 1) {
     currentPage = page;
     const offset = (page - 1) * itemsPerPage;
     renderSkeletonCards(6);
+    setSellerSummaryLoading(true);
     showPageLoading('Memuat dagangan...');
     try {
         const resp = await fetch(`api/get_produk_pasar.php?limit=${itemsPerPage}&offset=${offset}&penjual_nama=${encodeURIComponent(storeProfile.nama_toko)}`);
@@ -111,6 +118,7 @@ async function loadProducts(page = 1) {
         console.error(e);
         showPageToast('Gagal memuat data dagangan.', 'error');
     } finally {
+        setSellerSummaryLoading(false);
         hidePageLoading();
     }
 }
@@ -252,8 +260,71 @@ function renderCards(data) {
 }
 
 function updateStats(total, currentData) {
-    document.getElementById('stat-total').innerText = total;
-    document.getElementById('stat-aktif').innerText = currentData.filter((p) => p.status === 'Tersedia').length;
+    const totalNode = document.getElementById('stat-total');
+    const aktifNode = document.getElementById('stat-aktif');
+    const kategoriNode = document.getElementById('stat-kategori');
+
+    const aktifCount = currentData.filter((p) => p.status === 'Tersedia').length;
+    const kategoriCount = new Set(currentData.map((p) => String(p.kategori || '').trim()).filter(Boolean)).size;
+
+    if (totalNode) totalNode.innerText = total;
+    if (aktifNode) aktifNode.innerText = aktifCount;
+    if (kategoriNode) kategoriNode.innerText = kategoriCount;
+}
+
+function initSellerHeaderInteractions() {
+    const header = document.getElementById('sellerAppHeader');
+    const timeNode = document.getElementById('sellerNowTime');
+    if (!header || !timeNode) return;
+    let ticking = false;
+    let isCompact = false;
+
+    const computeThreshold = () => {
+        const headerHeight = header.offsetHeight || 140;
+        const enter = Math.max(48, Math.min(138, Math.round(headerHeight * 0.36)));
+        const exit = Math.max(24, Math.round(enter * 0.58));
+        return { enter, exit };
+    };
+
+    let threshold = computeThreshold();
+    window.addEventListener('resize', () => {
+        threshold = computeThreshold();
+    }, { passive: true });
+
+    const syncCompactHeader = () => {
+        const y = window.scrollY || 0;
+        if (!isCompact && y >= threshold.enter) {
+            isCompact = true;
+        } else if (isCompact && y <= threshold.exit) {
+            isCompact = false;
+        }
+        header.classList.toggle('is-sticky-compact', isCompact);
+        ticking = false;
+    };
+    syncCompactHeader();
+    window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(syncCompactHeader);
+    }, { passive: true });
+
+    const drawTime = () => {
+        const now = new Date();
+        timeNode.textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    };
+    drawTime();
+    window.setInterval(drawTime, 30000);
+
+    header.addEventListener('pointermove', (event) => {
+        const rect = header.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        header.style.background = `radial-gradient(circle at ${x}% ${y}%, rgba(255,255,255,0.16), rgba(255,255,255,0) 42%), linear-gradient(140deg, #059669 0%, #0f766e 45%, #0891b2 100%)`;
+    });
+
+    header.addEventListener('pointerleave', () => {
+        header.style.background = 'linear-gradient(140deg, #059669 0%, #0f766e 45%, #0891b2 100%)';
+    });
 }
 
 function filterProducts() {
@@ -460,4 +531,8 @@ async function saveProfile() {
 function openProfileModal() { document.getElementById('profileModal').classList.replace('hidden', 'flex'); }
 function closeProfileModal() { document.getElementById('profileModal').classList.replace('flex', 'hidden'); }
 
-window.onload = init;
+window.onload = () => {
+    initSellerHeaderInteractions();
+    setSellerSummaryLoading(true);
+    init();
+};

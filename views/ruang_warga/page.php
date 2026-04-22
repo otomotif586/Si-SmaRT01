@@ -41,6 +41,49 @@
         </div>
     </div>
 
+    <?php
+        $rwSummaryPeriods = $isLoggedIn ? count((array)($historyRows ?? [])) : 0;
+        $rwSummaryAduan = $isLoggedIn ? count((array)($laporanRows ?? [])) : 0;
+        $rwSummaryIdentity = '-';
+        if ($isLoggedIn && !empty($linkedWarga)) {
+            $rwSummaryIdentity = trim((string)($linkedWarga['nama_blok'] ?? '-')) . ' / ' . trim((string)($linkedWarga['nomor_rumah'] ?? '-'));
+        }
+    ?>
+
+    <div class="rw-app-header card" id="rwAppHeader">
+        <div class="rw-app-header-main">
+            <p class="rw-app-kicker"><i class="fas fa-sparkles"></i> Si-SmaRT Resident Suite</p>
+            <h2>Ruang Warga</h2>
+            <p class="rw-app-sub"><?= $isLoggedIn ? 'Kelola data diri, iuran, dan aduan dari satu dashboard interaktif.' : 'Masuk dengan NIK atau daftar cepat untuk mengakses layanan warga.' ?></p>
+            <div class="rw-app-chip-row">
+                <?php if ($isLoggedIn): ?>
+                    <button type="button" class="rw-head-chip" data-go-tab="ringkasan"><i class="fas fa-house"></i> Ringkasan</button>
+                    <button type="button" class="rw-head-chip" data-go-tab="history"><i class="fas fa-wallet"></i> Iuran</button>
+                    <button type="button" class="rw-head-chip" data-go-tab="aduan"><i class="fas fa-paper-plane"></i> Aduan</button>
+                    <button type="button" class="rw-head-chip" data-go-tab="profil-lengkap"><i class="fas fa-id-card"></i> Data Diri</button>
+                <?php else: ?>
+                    <button type="button" class="rw-head-chip" data-rw-scroll="rwLoginCard"><i class="fas fa-right-to-bracket"></i> Login Warga</button>
+                    <button type="button" class="rw-head-chip" data-rw-scroll="rwRegisterCard"><i class="fas fa-user-plus"></i> Daftar Cepat</button>
+                    <a href="pasar.php" class="rw-head-chip"><i class="fas fa-store"></i> Pasar Warga</a>
+                <?php endif; ?>
+            </div>
+        </div>
+        <div class="rw-app-summary" aria-label="Ringkasan akun ruang warga">
+            <div class="rw-app-summary-item" data-rw-metric data-value="<?= (int)$rwSummaryPeriods ?>">
+                <span>Periode Iuran</span>
+                <strong><?= (int)$rwSummaryPeriods ?></strong>
+            </div>
+            <div class="rw-app-summary-item" data-rw-metric data-value="<?= (int)$rwSummaryAduan ?>">
+                <span>Riwayat Aduan</span>
+                <strong><?= (int)$rwSummaryAduan ?></strong>
+            </div>
+            <div class="rw-app-summary-item">
+                <span>Identitas Rumah</span>
+                <strong><?= htmlspecialchars($rwSummaryIdentity !== '' ? $rwSummaryIdentity : '-') ?></strong>
+            </div>
+        </div>
+    </div>
+
     <?php if (!$isLoggedIn): ?>
         <div class="rw-auth-shell">
             <div class="rw-auth-hero">
@@ -55,7 +98,7 @@
             </div>
 
             <div class="grid2 rw-auth-grid">
-                <div class="card section rw-auth-card">
+                <div class="card section rw-auth-card" id="rwLoginCard">
                     <h2>Login Ruang Warga</h2>
                     <p class="muted">Masukkan NIK 16 digit untuk langsung masuk.</p>
                     <form method="POST" class="form-grid rw-auth-form">
@@ -70,7 +113,7 @@
                     </form>
                 </div>
 
-                <div class="card section rw-auth-card rw-auth-card-register">
+                <div class="card section rw-auth-card rw-auth-card-register" id="rwRegisterCard">
                     <h2>Pendaftaran Warga</h2>
                     <p class="muted">Jika NIK sudah terdaftar, sistem akan menolak otomatis.</p>
                     <form method="POST" class="form-grid rw-auth-form">

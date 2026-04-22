@@ -224,6 +224,84 @@ function bindStandaloneHaptic() {
     });
 }
 
+function bindRwHeaderInteractions() {
+    const appHeader = document.getElementById('rwAppHeader');
+    if (!appHeader) return;
+    let ticking = false;
+    let isCompact = false;
+
+    const computeThreshold = () => {
+        const headerHeight = appHeader.offsetHeight || 120;
+        const enter = Math.max(42, Math.min(130, Math.round(headerHeight * 0.34)));
+        const exit = Math.max(22, Math.round(enter * 0.56));
+        return { enter, exit };
+    };
+
+    let threshold = computeThreshold();
+    window.addEventListener('resize', () => {
+        threshold = computeThreshold();
+    }, { passive: true });
+
+    const syncCompactHeader = () => {
+        const y = window.scrollY || 0;
+        if (!isCompact && y >= threshold.enter) {
+            isCompact = true;
+        } else if (isCompact && y <= threshold.exit) {
+            isCompact = false;
+        }
+        appHeader.classList.toggle('is-sticky-compact', isCompact);
+        ticking = false;
+    };
+
+    syncCompactHeader();
+    window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(syncCompactHeader);
+    }, { passive: true });
+
+    document.querySelectorAll('[data-rw-scroll]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-rw-scroll');
+            if (!targetId) return;
+            const target = document.getElementById(targetId);
+            if (!target) return;
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    const metrics = document.querySelectorAll('[data-rw-metric] strong');
+    metrics.forEach((node) => {
+        const parent = node.closest('[data-rw-metric]');
+        const rawValue = parent ? Number(parent.getAttribute('data-value') || 0) : 0;
+        const target = Number.isFinite(rawValue) ? Math.max(0, rawValue) : 0;
+
+        if (target <= 0) {
+            node.textContent = '0';
+            return;
+        }
+
+        let current = 0;
+        const step = Math.max(1, Math.ceil(target / 16));
+        const timer = window.setInterval(() => {
+            current = Math.min(target, current + step);
+            node.textContent = String(current);
+            if (current >= target) {
+                window.clearInterval(timer);
+            }
+        }, 26);
+    });
+}
+
+function initRwSummarySkeleton() {
+    const summary = document.querySelector('.rw-app-summary');
+    if (!summary) return;
+    summary.classList.add('is-loading');
+    window.setTimeout(() => {
+        summary.classList.remove('is-loading');
+    }, 520);
+}
+
 function openStandaloneModal(modalId) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
@@ -455,6 +533,8 @@ function bindAvatarPreview() {
     bindAvatarPreview();
     bindProfileWizard();
     bindStandaloneHaptic();
+    bindRwHeaderInteractions();
+    initRwSummarySkeleton();
     statusPernikahan?.addEventListener('change', togglePasangan);
     togglePasangan();
 
