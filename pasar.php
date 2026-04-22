@@ -122,10 +122,11 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UMKM & Pasar Warga - <?= htmlspecialchars($web_nama) ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/mobile-ux.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/smart-installer-theme.css', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>">
     <!-- Swiper CSS untuk Slider Promosi -->
     <style>
         /* Mencegah FOUC (Flash of Unstyled Content) */
@@ -383,7 +384,7 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
         setTimeout(() => document.documentElement.classList.add("js-loaded"), 2000); // Fallback
     </script>
 </head>
-<body class="pb-24 selection:bg-emerald-200">
+<body class="pb-24 selection:bg-emerald-200 smart-installer-market sx-font-body sx-installer-shell">
     <div id="smartLoadingOverlay" class="smart-loading-overlay">
         <div class="smart-loading-card">
             <h3 class="smart-loading-title" id="smartLoadingTitle">Menyiapkan halaman...</h3>
@@ -394,6 +395,21 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
     </div>
 
     <div class="background-overlay"></div>
+
+    <div class="smart-installer-navbar">
+        <div class="si-nav-inner">
+            <a href="index.php" class="si-logo">
+                <span class="si-logo-badge"><i class="fas fa-bolt"></i></span>
+                <span>Si SmaRT</span>
+            </a>
+            <div class="si-nav-links">
+                <a href="#si-market-hero">Install</a>
+                <a href="#si-market-features">Features</a>
+                <a href="#si-market-changelog">v2.0</a>
+            </div>
+            <a href="ruang_warga.php" class="si-download-btn" data-si-install>Download Now</a>
+        </div>
+    </div>
     
     <!-- Sticky Top Navigation & Filter -->
     <div class="sticky top-0 z-50">
@@ -443,6 +459,49 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
 
     <!-- Product Grid -->
     <main class="container mx-auto px-4 pt-6 md:pt-8">
+
+        <section id="si-market-hero" class="smart-installer-hero">
+            <div class="si-panel si-main-card">
+                <div class="si-app-meta">
+                    <div class="si-app-icon"><i class="fas fa-store"></i></div>
+                    <div>
+                        <h2 class="si-app-title">Si SmaRT</h2>
+                        <p class="si-app-publisher">Go Digital</p>
+                    </div>
+                </div>
+                <div class="si-badges">
+                    <span class="si-badge">4.9 ★</span>
+                    <span class="si-badge">20K+ install</span>
+                    <span class="si-badge">Publisher: RT Digital</span>
+                </div>
+                <button class="si-cta" type="button" data-si-install>Install / Get Started</button>
+                <div class="si-install-track"><span class="si-install-fill"></span></div>
+                <div class="si-steps">
+                    <div class="si-step is-active">Downloading</div>
+                    <div class="si-step">Verifying</div>
+                    <div class="si-step">Installing</div>
+                    <div class="si-step">Ready</div>
+                </div>
+            </div>
+            <div class="si-panel si-right-stack">
+                <div class="si-phone-shot">Screenshot Carousel</div>
+                <div class="si-phone-shot">Installer Wizard</div>
+                <div class="si-phone-shot">Mobile Mockup</div>
+            </div>
+        </section>
+
+        <div class="sx-permission-list">
+            <h4 class="sx-font-display">Permissions</h4>
+            <div class="sx-permission-row"><span><i class="fas fa-camera"></i> Kamera</span><strong>Untuk lampiran aduan</strong></div>
+            <div class="sx-permission-row"><span><i class="fas fa-image"></i> Galeri</span><strong>Upload foto produk</strong></div>
+            <div class="sx-permission-row"><span><i class="fas fa-bell"></i> Notifikasi</span><strong>Update iuran dan info</strong></div>
+        </div>
+
+        <div class="sx-screens">
+            <div class="sx-screen"><span>Home Installer</span></div>
+            <div class="sx-screen"><span>Pasar Warga</span></div>
+            <div class="sx-screen"><span>Ruang Warga</span></div>
+        </div>
 
         <!-- Header Media Promosi Stacking Cards -->
         <div class="stack-area-pasar">
@@ -623,9 +682,58 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
             </div>
             <?php endif; ?>
         <?php endif; ?>
+
+        <section id="si-market-features" class="si-sections">
+            <div class="si-grid-3">
+                <article class="si-card"><h4>Feature Grid</h4><p>Kelola katalog UMKM, transaksi cepat, dan pengaturan toko dari satu ekosistem.</p></article>
+                <article class="si-card"><h4>System Requirements</h4><p>Modern browser, Android iOS support, dan responsive desktop layout.</p></article>
+                <article class="si-card"><h4>Secure Installer UX</h4><p>Progress loading, step transitions, serta sticky CTA download.</p></article>
+            </div>
+            <article class="si-card">
+                <h4>Compatible With</h4>
+                <div class="si-compat">
+                    <span class="si-chip">Windows</span>
+                    <span class="si-chip">macOS</span>
+                    <span class="si-chip">Linux</span>
+                    <span class="si-chip">Chrome</span>
+                    <span class="si-chip">Edge</span>
+                </div>
+            </article>
+            <article class="si-card">
+                <h4>Download Options</h4>
+                <div class="si-download-options">
+                    <a href="ruang_warga.php" class="si-os-btn" data-si-install>.exe <small>Windows installer</small></a>
+                    <a href="ruang_warga.php" class="si-os-btn" data-si-install>.dmg <small>macOS package</small></a>
+                    <a href="ruang_warga.php" class="si-os-btn" data-si-install>.AppImage <small>Linux portable</small></a>
+                </div>
+            </article>
+            <article id="si-market-changelog" class="si-card">
+                <h4>What's New In v2.0</h4>
+                <ul class="si-release-list">
+                    <li>Tampilan startup dark-mode untuk mobile dan desktop.</li>
+                    <li>Flow installer visual dengan animasi progress step.</li>
+                    <li>Review cards dan permission rows ala app store.</li>
+                </ul>
+            </article>
+            <div class="sx-reviews">
+                <article class="sx-review-card"><strong>Farhan R.</strong><div class="sx-review-stars">★★★★★</div><p>UX mobile sekarang berasa seperti install app native.</p></article>
+                <article class="sx-review-card"><strong>Rani P.</strong><div class="sx-review-stars">★★★★★</div><p>Navigasi lebih jelas dan CTA download mudah ditemukan.</p></article>
+                <article class="sx-review-card"><strong>Bima K.</strong><div class="sx-review-stars">★★★★★</div><p>Dark startup look-nya modern tapi fitur lama tetap aman.</p></article>
+            </div>
+            <footer class="sx-footer">
+                <div><a href="index.php">Portal</a><a href="ruang_warga.php">Ruang Warga</a><a href="login_penjual.php">Penjual</a></div>
+                <span>Made with ❤</span>
+            </footer>
+        </section>
     </main>
 
+    <div class="si-mobile-install-bar">
+        <p>Install Si SmaRT sekarang</p>
+        <button type="button" data-si-install>Install</button>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="<?= htmlspecialchars(smart_asset('public/js/smart-installer-theme.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
     <script>
         let pageLoadingTick;
         function showPageLoading(title = 'Memuat...') {
