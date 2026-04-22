@@ -3,19 +3,37 @@
  * Handles data fetching, charts rendering, and animated counters.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Check if we are on dashboard page
-    const activePage = localStorage.getItem('activePage') || 'dashboard';
+let dashboardBooted = false;
+
+function bootDashboard() {
+    if (dashboardBooted) return;
+    dashboardBooted = true;
+
+    let activePage = 'dashboard';
+    try {
+        activePage = localStorage.getItem('activePage') || 'dashboard';
+    } catch (e) {
+        activePage = 'dashboard';
+    }
     if (activePage === 'dashboard') {
         initDashboard();
     }
-});
+}
+
+bootDashboard();
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootDashboard, { once: true });
+}
 
 // Override showPage to init dashboard when selected
 const originalShowPage = window.showPage;
 window.showPage = function(pageId) {
     originalShowPage(pageId);
-    if (pageId === 'dashboard') {
+    const dashboardVisible = (() => {
+        const el = document.getElementById('page-dashboard');
+        return !!el && !el.classList.contains('hidden') && el.style.display !== 'none';
+    })();
+    if (pageId === 'dashboard' || dashboardVisible) {
         initDashboard();
     }
 };

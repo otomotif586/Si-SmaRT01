@@ -2,49 +2,17 @@
 
 function smartAssetUrl(path) {
     if (!path) return '';
-    const normalizedPath = String(path).trim().replace(/&amp;/g, '&');
-    if (/^(?:https?:)?\/\//i.test(normalizedPath) || normalizedPath.startsWith('data:') || normalizedPath.startsWith('blob:') || normalizedPath.startsWith('/')) return normalizedPath;
+    if (/^(?:https?:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('blob:')) return path;
     const basePath = (window.__SMART_ASSET_BASE_PATH__ || '').replace(/\/$/, '');
-    const cleanedPath = normalizedPath.replace(/^\/+/, '');
+    const cleanedPath = String(path).replace(/^\/+/, '');
     if (!basePath) return cleanedPath;
     return `${basePath}/${cleanedPath}`;
-}
-
-function renderWorkspaceModalLogo(logoEl, logoClass, logoText, logoImage) {
-    const fallbackClass = (logoClass && String(logoClass).trim()) ? String(logoClass).trim() : 'logo-a';
-    const fallbackText = (logoText && String(logoText).trim()) ? String(logoText).trim() : '?';
-
-    const applyFallback = () => {
-        logoEl.className = `ws-logo-container ${fallbackClass}`;
-        logoEl.textContent = fallbackText;
-    };
-
-    if (!logoImage) {
-        applyFallback();
-        return;
-    }
-
-    const resolvedUrl = smartAssetUrl(logoImage);
-    if (!resolvedUrl) {
-        applyFallback();
-        return;
-    }
-
-    logoEl.className = 'ws-logo-container';
-    logoEl.textContent = '';
-
-    const img = document.createElement('img');
-    img.className = 'ws-modal-img';
-    img.alt = 'Logo';
-    img.src = resolvedUrl;
-    img.onerror = applyFallback;
-    logoEl.appendChild(img);
 }
 
 // Menyimpan ID blok yang sedang aktif agar bisa diakses fungsi lain
 window.currentBlokId = 0;
 
-function openWorkspaceModal(blokId, blockName, coord, warga, kas, logoClass, logoText, logoImage, cardElement) {
+function openWorkspaceModal(blokId, blockName, coord, warga, kas, logoClass, logoText, logoImage) {
     window.currentBlokId = blokId;
     // Set Modal Data
     document.getElementById('modal-block-title').innerText = blockName;
@@ -55,17 +23,13 @@ function openWorkspaceModal(blokId, blockName, coord, warga, kas, logoClass, log
     // Set Modal Logo Dinamis
     const logoEl = document.getElementById('modal-block-logo');
     if (logoEl) {
-        let modalLogoImage = logoImage;
-
-        // Prioritaskan src gambar yang benar-benar sedang tampil di card blok.
-        if (cardElement && typeof cardElement.querySelector === 'function') {
-            const cardImage = cardElement.querySelector('.ws-hero-img');
-            if (cardImage && cardImage.getAttribute('src')) {
-                modalLogoImage = cardImage.getAttribute('src');
-            }
+        if (logoImage) {
+            logoEl.className = 'ws-logo-container';
+            logoEl.innerHTML = `<img src="${smartAssetUrl(logoImage)}" alt="Logo" class="ws-modal-img">`;
+        } else {
+            logoEl.className = 'ws-logo-container ' + logoClass;
+            logoEl.innerHTML = logoText;
         }
-
-        renderWorkspaceModalLogo(logoEl, logoClass, logoText, modalLogoImage);
     }
 
     // Load Data Warga Khusus Blok Ini via AJAX

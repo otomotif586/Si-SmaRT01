@@ -3,107 +3,107 @@
     
     <!-- Summary Overview (Deluxe Adaptive Style) -->
     <div class="summary-3-grid">
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s; border-bottom: 4px solid var(--accent-color);">
-            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1); margin-bottom: 12px;">
+        <div class="glass-card-deluxe stagger-item stagger-delay-1 card-border-bottom-accent">
+            <div class="card-icon-deluxe icon-tone-info card-icon-mb-sm">
                 <i data-lucide="layers"></i>
             </div>
             <p class="card-label">Blok Menyetor</p>
-            <h3 id="report-stat-blok" class="card-value text-color" style="margin: 0; font-size: 1.8rem;">0 Blok</h3>
+            <h3 id="report-stat-blok" class="card-value text-color m-0 card-value-xl">0 Blok</h3>
             <div class="card-sub-info">Partisipasi kolektif blok</div>
         </div>
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s; border-bottom: 4px solid #10b981;">
-            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1); margin-bottom: 12px;">
+        <div class="glass-card-deluxe stagger-item stagger-delay-2 card-border-bottom-success">
+            <div class="card-icon-deluxe icon-tone-success card-icon-mb-sm">
                 <i data-lucide="banknote"></i>
             </div>
             <p class="card-label">Total Dana Pusat</p>
-            <h3 id="report-stat-total" class="card-value text-emerald" style="margin: 0; font-size: 1.8rem;">Rp 0</h3>
+            <h3 id="report-stat-total" class="card-value text-emerald m-0 card-value-xl">Rp 0</h3>
             <div class="card-sub-info">Akumulasi iuran tervalidasi</div>
         </div>
-        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s; border-bottom: 4px solid #f59e0b;">
-            <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1); margin-bottom: 12px;">
+        <div class="glass-card-deluxe stagger-item stagger-delay-3 card-border-bottom-warning">
+            <div class="card-icon-deluxe icon-tone-warning card-icon-mb-sm">
                 <i data-lucide="users"></i>
             </div>
             <p class="card-label">Warga Berkontribusi</p>
-            <h3 id="report-stat-warga" class="card-value text-color" style="margin: 0; font-size: 1.8rem;">0 KK</h3>
+            <h3 id="report-stat-warga" class="card-value text-color m-0 card-value-xl">0 KK</h3>
             <div class="card-sub-info">Kepatuhan pembayaran warga</div>
         </div>
     </div>
 
-    <div class="glass-card" style="padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; display: flex; flex-direction: column; gap: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <label style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-secondary-color);">Filter:</label>
-                <select id="filter-blok-laporan" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 120px; border-radius: 10px;" onchange="filterLaporanBlok()">
+    <div class="glass-card page-filter-card page-filter-card--stack">
+        <div class="page-filter-row">
+            <div class="page-filter-group page-filter-group--spacious">
+                <label class="compact-label">Filter:</label>
+                <select id="filter-blok-laporan" class="input-field select-custom compact-control min-w-[120px]" onchange="filterLaporanBlok()">
                     <option value="all">Semua Blok</option>
                 </select>
             </div>
-            <button class="button-secondary button-sm" style="padding: 8px 14px; border-radius: 10px; font-size: 0.8125rem;" onclick="exportLaporanBlokCSV()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
+            <button class="button-secondary button-sm compact-btn" onclick="exportLaporanBlokCSV()"><i data-lucide="download" class="icon-16 mr-[6px]"></i> Export</button>
         </div>
-        <div class="action-buttons-scroll hide-scrollbar" style="display: flex; gap: 10px; align-items: center; overflow-x: auto; max-width: 100%; border-top: 1px dashed var(--border-color); padding-top: 16px;">
-            <button class="button-primary button-sm" style="padding: 8px 12px; border-radius: 10px; background-color: var(--accent-color); flex-shrink: 0;" onclick="bulkValidateIuranRT()"><i data-lucide="check-check" style="margin-right: 6px; width: 16px; height: 16px;"></i> Validasi Semua</button>
-            <button class="button-primary button-sm" style="padding: 8px 12px; border-radius: 10px; background-color: var(--accent-color); opacity: 0.8; flex-shrink: 0;" onclick="validateSelectedIuran()"><i data-lucide="check" style="margin-right: 6px; width: 16px; height: 16px;"></i> Validasi Terpilih</button>
-            <button class="button-primary button-sm" style="padding: 8px 12px; border-radius: 10px; background-color: #3b82f6; flex-shrink: 0;" onclick="bulkPostIuranRT()"><i data-lucide="upload-cloud" style="margin-right: 6px; width: 16px; height: 16px;"></i> Posting Semua</button>
-            <button class="button-primary button-sm" style="padding: 8px 12px; border-radius: 10px; background-color: #3b82f6; opacity: 0.8; flex-shrink: 0;" onclick="postSelectedIuran()"><i data-lucide="upload-cloud" style="margin-right: 6px; width: 16px; height: 16px;"></i> Posting Terpilih</button>
-            <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 10px; color: #f59e0b; border-color: rgba(245,158,11,0.3); flex-shrink: 0;" onclick="bulkUnlockIuranRT()"><i data-lucide="rotate-ccw" style="margin-right: 6px; width: 16px; height: 16px;"></i> Tarik Semua</button>
-            <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 10px; color: #f59e0b; border-color: rgba(245,158,11,0.3); flex-shrink: 0;" onclick="unlockSelectedIuran()"><i data-lucide="rotate-ccw" style="margin-right: 6px; width: 16px; height: 16px;"></i> Tarik Terpilih</button>
+        <div class="action-buttons-scroll hide-scrollbar page-filter-row page-filter-divider toolbar-scroll-row">
+            <button class="button-primary button-sm compact-btn btn-accent btn-no-shrink" onclick="bulkValidateIuranRT()"><i data-lucide="check-check" class="icon-16 mr-[6px]"></i> Validasi Semua</button>
+            <button class="button-primary button-sm compact-btn btn-accent-soft btn-no-shrink" onclick="validateSelectedIuran()"><i data-lucide="check" class="icon-16 mr-[6px]"></i> Validasi Terpilih</button>
+            <button class="button-primary button-sm compact-btn btn-info btn-no-shrink" onclick="bulkPostIuranRT()"><i data-lucide="upload-cloud" class="icon-16 mr-[6px]"></i> Posting Semua</button>
+            <button class="button-primary button-sm compact-btn btn-info-soft btn-no-shrink" onclick="postSelectedIuran()"><i data-lucide="upload-cloud" class="icon-16 mr-[6px]"></i> Posting Terpilih</button>
+            <button class="button-secondary button-sm compact-btn btn-warning-outline btn-no-shrink" onclick="bulkUnlockIuranRT()"><i data-lucide="rotate-ccw" class="icon-16 mr-[6px]"></i> Tarik Semua</button>
+            <button class="button-secondary button-sm compact-btn btn-warning-outline btn-no-shrink" onclick="unlockSelectedIuran()"><i data-lucide="rotate-ccw" class="icon-16 mr-[6px]"></i> Tarik Terpilih</button>
         </div>
     </div>
 
     <!-- Main List / Table -->
-    <div class="glass-card" style="padding: 0; overflow: hidden; border-radius: 20px;">
-        <div style="padding: 24px; border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 16px; background: rgba(255,255,255,0.02);">
+    <div class="glass-card table-panel">
+        <div class="table-panel-head table-head-stack">
             
             <!-- Navigator Bulan Dipindah ke Sini -->
-            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="prevMonthLaporanBlok()" title="Bulan Sebelumnya"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
-                <select id="filter-bulan-laporan" class="input-field select-custom" style="font-size: 0.875rem; padding: 10px; width: auto; min-width: 120px; border-radius: 12px;" onchange="loadLaporanIuranBlok()">
+            <div class="page-filter-group filter-row-wrap">
+                <button class="button-secondary button-sm compact-btn-icon" onclick="prevMonthLaporanBlok()" title="Bulan Sebelumnya"><i data-lucide="chevron-left" class="icon-16"></i></button>
+                <select id="filter-bulan-laporan" class="input-field select-custom compact-control select-auto-120" onchange="loadLaporanIuranBlok()">
                     <!-- Diisi dinamis -->
                 </select>
-                <select id="filter-tahun-laporan" class="input-field select-custom" style="font-size: 0.875rem; padding: 10px; width: auto; min-width: 100px; border-radius: 12px;" onchange="loadLaporanIuranBlok()">
+                <select id="filter-tahun-laporan" class="input-field select-custom compact-control select-auto-100" onchange="loadLaporanIuranBlok()">
                     <!-- Diisi dinamis -->
                 </select>
-                <button class="button-secondary button-sm" style="padding: 10px; border-radius: 12px;" onclick="nextMonthLaporanBlok()" title="Bulan Selanjutnya"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
+                <button class="button-secondary button-sm compact-btn-icon" onclick="nextMonthLaporanBlok()" title="Bulan Selanjutnya"><i data-lucide="chevron-right" class="icon-16"></i></button>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                <h4 class="section-title" style="font-size: 1.1rem; margin: 0;">Rincian Setoran Per Blok</h4>
-                <div class="input-with-icon" style="max-width: 280px; width: 100%;">
-                    <i data-lucide="search" style="width: 18px; height: 18px;"></i>
-                    <input type="text" id="search-laporan-blok" class="input-field" placeholder="Cari Blok atau Warga..." oninput="filterLaporanBlok()" style="padding: 10px 16px 10px 40px; font-size: 0.875rem; border-radius: 12px;">
+            <div class="toolbar-space-between">
+                <h4 class="section-title table-panel-title">Rincian Setoran Per Blok</h4>
+                <div class="input-with-icon search-shell-280">
+                    <i data-lucide="search" class="icon-18"></i>
+                    <input type="text" id="search-laporan-blok" class="input-field input-field-compact text-sm rounded-12" placeholder="Cari Blok atau Warga..." oninput="filterLaporanBlok()">
                 </div>
             </div>
             
             <!-- Modern Segmented Tabs -->
-            <div class="tab-pill-wrapper" style="margin-top: 8px;">
+            <div class="tab-pill-wrapper mt-8">
                 <div class="tab-pill-container">
                     <button class="tab-pill-btn active-tab-pending" id="tab-laporan-belum" onclick="switchLaporanIuranTab('belum_posting', this)">
-                        <i data-lucide="clock" style="width: 14px; height: 14px; margin-right: 6px;"></i> Belum Diposting
+                        <i data-lucide="clock" class="icon-14 mr-[6px]"></i> Belum Diposting
                     </button>
                     <button class="tab-pill-btn" id="tab-laporan-sudah" onclick="switchLaporanIuranTab('sudah_posting', this)">
-                        <i data-lucide="check-circle" style="width: 14px; height: 14px; margin-right: 6px;"></i> Sudah Diposting
+                        <i data-lucide="check-circle" class="icon-14 mr-[6px]"></i> Sudah Diposting
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="laporan-blok-container" class="hide-scrollbar" style="min-height: 300px;">
+        <div id="laporan-blok-container" class="hide-scrollbar min-h-300">
             <p class="text-secondary text-center py-5">Memuat data setoran...</p>
         </div>
 
         <!-- Pagination Controls -->
-        <div id="laporan-blok-pagination" class="pagination-wrapper" style="padding: 16px 24px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.01);">
-            <p id="laporan-blok-pagination-info" class="text-secondary" style="font-size: 0.8125rem;">Menampilkan 0 dari 0 data</p>
-            <div style="display: flex; gap: 8px;">
-                <button class="button-secondary button-sm" id="btn-prev-laporan-page" onclick="changeLaporanPage(-1)" style="padding: 8px 12px; border-radius: 8px;"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i> Prev</button>
-                <div id="laporan-page-numbers" style="display: flex; gap: 4px;"></div>
-                <button class="button-secondary button-sm" id="btn-next-laporan-page" onclick="changeLaporanPage(1)" style="padding: 8px 12px; border-radius: 8px;">Next <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
+        <div id="laporan-blok-pagination" class="pagination-wrapper pagination-shell">
+            <p id="laporan-blok-pagination-info" class="text-secondary pagination-bar-info">Menampilkan 0 dari 0 data</p>
+            <div class="pagination-actions">
+                <button class="button-secondary button-sm compact-btn" id="btn-prev-laporan-page" onclick="changeLaporanPage(-1)"><i data-lucide="chevron-left" class="icon-16"></i> Prev</button>
+                <div id="laporan-page-numbers" class="row-gap-4"></div>
+                <button class="button-secondary button-sm compact-btn" id="btn-next-laporan-page" onclick="changeLaporanPage(1)">Next <i data-lucide="chevron-right" class="icon-16"></i></button>
             </div>
         </div>
     </div>
 
-    <div id="laporan-blok-empty" class="hidden" style="text-align: center; padding: 60px 20px;">
-        <div style="width: 80px; height: 80px; background: var(--hover-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto;">
-            <i data-lucide="info" style="width: 40px; height: 40px; color: var(--text-secondary-color);"></i>
+    <div id="laporan-blok-empty" class="hidden empty-state">
+        <div class="empty-state-icon-wrap">
+            <i data-lucide="info" class="icon-40 icon-muted"></i>
         </div>
         <h3 class="text-color">Belum Ada Setoran</h3>
         <p class="text-secondary">Tidak ada data setoran dari warga manapun untuk periode yang dipilih.</p>
@@ -113,7 +113,7 @@
 
 <style>
 /* Modern Tab Pill Styles */
-.tab-pill-container {
+#page-laporan-iuran-blok .tab-pill-container {
     display: inline-flex;
     background: rgba(0, 0, 0, 0.04);
     padding: 4px;
@@ -122,7 +122,7 @@
     gap: 4px;
 }
 
-.tab-pill-btn {
+#page-laporan-iuran-blok .tab-pill-btn {
     display: flex;
     align-items: center;
     padding: 8px 16px;
@@ -136,38 +136,38 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.tab-pill-btn:hover {
+#page-laporan-iuran-blok .tab-pill-btn:hover {
     background: rgba(0, 0, 0, 0.02);
     color: var(--text-color);
 }
 
 /* Active State Colors */
-.tab-pill-btn.active-tab-pending {
+#page-laporan-iuran-blok .tab-pill-btn.active-tab-pending {
     background: rgba(239, 68, 68, 0.1) !important;
     color: #ef4444 !important;
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.05);
 }
 
-.tab-pill-btn.active-tab-posted {
+#page-laporan-iuran-blok .tab-pill-btn.active-tab-posted {
     background: rgba(16, 185, 129, 0.1) !important;
     color: #10b981 !important;
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.05);
 }
 
-.dark-theme .tab-pill-container {
+.dark-theme #page-laporan-iuran-blok .tab-pill-container {
     background: rgba(255, 255, 255, 0.04);
 }
 
-.dark-theme .tab-pill-btn.active-tab-pending {
+.dark-theme #page-laporan-iuran-blok .tab-pill-btn.active-tab-pending {
     background: rgba(239, 68, 68, 0.15) !important;
 }
 
-.dark-theme .tab-pill-btn.active-tab-posted {
+.dark-theme #page-laporan-iuran-blok .tab-pill-btn.active-tab-posted {
     background: rgba(16, 185, 129, 0.15) !important;
 }
 
 /* Modern Report Styles */
-.report-row {
+#page-laporan-iuran-blok .report-row {
     display: grid;
     grid-template-columns: 40px 1fr 140px 110px 110px 110px 180px;
     align-items: center;
@@ -177,15 +177,15 @@
     cursor: default;
 }
 
-.report-row:hover {
+#page-laporan-iuran-blok .report-row:hover {
     background: var(--hover-bg);
 }
 
-.report-row:last-child {
+#page-laporan-iuran-blok .report-row:last-child {
     border-bottom: none;
 }
 
-.report-header-row {
+#page-laporan-iuran-blok .report-header-row {
     display: grid;
     grid-template-columns: 40px 1fr 140px 110px 110px 110px 180px;
     padding: 16px 24px;
@@ -198,13 +198,13 @@
     letter-spacing: 0.05em;
 }
 
-.report-warga-info {
+#page-laporan-iuran-blok .report-warga-info {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.report-avatar {
+#page-laporan-iuran-blok .report-avatar {
     width: 36px;
     height: 36px;
     border-radius: 10px;
@@ -215,7 +215,7 @@
     font-size: 0.9rem;
 }
 
-.report-amount {
+#page-laporan-iuran-blok .report-amount {
     font-family: 'DM Mono', monospace;
     font-weight: 700;
     font-size: 0.95rem;
@@ -223,21 +223,21 @@
 }
 
 @media (max-width: 992px) {
-    .report-header-row { display: none; }
-    .report-row { 
+    #page-laporan-iuran-blok .report-header-row { display: none; }
+    #page-laporan-iuran-blok .report-row { 
         grid-template-columns: 40px 1fr;
         gap: 12px;
         padding: 20px;
     }
-    .report-warga-info { grid-column: 2; }
-    .report-blok-no { grid-column: 2; font-size: 1rem !important; }
-    .report-amount { font-size: 1rem; text-align: left !important; grid-column: 2; margin-top: 4px; }
-    .report-date { text-align: left !important; grid-column: 2; }
-    .report-action-btns { grid-column: 1 / -1; justify-content: flex-start !important; margin-top: 8px; }
+    #page-laporan-iuran-blok .report-warga-info { grid-column: 2; }
+    #page-laporan-iuran-blok .report-blok-no { grid-column: 2; font-size: 1rem !important; }
+    #page-laporan-iuran-blok .report-amount { font-size: 1rem; text-align: left !important; grid-column: 2; margin-top: 4px; }
+    #page-laporan-iuran-blok .report-date { text-align: left !important; grid-column: 2; }
+    #page-laporan-iuran-blok .report-action-btns { grid-column: 1 / -1; justify-content: flex-start !important; margin-top: 8px; }
 }
 
 @media (max-width: 576px) {
-    .report-row { 
+    #page-laporan-iuran-blok .report-row { 
         grid-template-columns: 30px 1fr;
     }
 }

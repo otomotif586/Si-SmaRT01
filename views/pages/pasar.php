@@ -11,12 +11,12 @@
         }
     </script>
     <!-- Modern Header for Page -->
-    <div class="page-header-premium mb-8 stagger-item" style="animation-delay: 0.1s">
+    <div class="page-header-premium mb-8 stagger-item stagger-delay-1">
         <h2 class="text-3xl font-bold text-slate-900 font-space">Pasar Warga</h2>
         <p class="text-slate-500 font-medium">Kelola Produk UMKM dan Promosi Pasar</p>
     </div>
 
-    <div class="sub-nav-tabs mb-8 stagger-item" style="display: flex; gap: 8px; animation-delay: 0.2s">
+    <div class="sub-nav-tabs mb-8 stagger-item flex gap-2 [animation-delay:0.2s]">
         <button id="btn-tab-produk" class="sub-nav-tab active" onclick="switchPasarTab('tab-produk-warga', this)">
             <i data-lucide="shopping-bag" class="mr-2"></i> Produk Warga
         </button>
@@ -30,7 +30,7 @@
 
     <!-- TAB: PRODUK WARGA -->
     <div id="tab-produk-warga" class="pasar-tab-content active">
-        <div class="glass-card card-section mb-8 stagger-item" style="animation-delay: 0.3s">
+        <div class="glass-card card-section mb-8 stagger-item stagger-delay-3">
             <div class="section-header">
                 <div>
                     <h4 class="section-title text-2xl font-bold text-slate-800">Daftar Produk UMKM</h4>
@@ -39,7 +39,7 @@
             </div>
 
             <div class="table-responsive mt-8">
-                <table class="modern-table" style="width: 100%;">
+                <table class="modern-table w-full">
                     <thead class="bg-slate-50">
                         <tr>
                             <th class="py-4 px-6 text-left">Foto</th>
@@ -60,7 +60,7 @@
 
     <!-- TAB: SLIDER PASAR -->
     <div id="tab-slider-pasar" class="pasar-tab-content hidden">
-        <div class="glass-card card-section stagger-item" style="animation-delay: 0.3s">
+        <div class="glass-card card-section stagger-item stagger-delay-3">
             <div class="section-header">
                 <div>
                     <h4 class="section-title text-2xl font-bold text-slate-800">Slider Promosi Pasar</h4>
@@ -71,7 +71,7 @@
                 </button>
             </div>
             
-            <div id="pasar-slider-container" class="grid-container-3-col mt-8" style="gap: 20px;">
+            <div id="pasar-slider-container" class="grid-container-3-col mt-8 gap-5">
                 <!-- Diisi via AJAX -->
                 <div class="text-center py-12 col-span-full">Memuat slider...</div>
             </div>
@@ -80,7 +80,7 @@
 
     <!-- TAB: PENJUAL PASAR -->
     <div id="tab-penjual-pasar" class="pasar-tab-content hidden">
-        <div class="glass-card card-section mb-8 stagger-item" style="animation-delay: 0.3s">
+        <div class="glass-card card-section mb-8 stagger-item stagger-delay-3">
             <div class="section-header">
                 <div>
                     <h4 class="section-title text-2xl font-bold text-slate-800">Daftar Penjual (UMKM)</h4>
@@ -91,7 +91,7 @@
                 </button>
             </div>
             <div class="table-responsive mt-8">
-                <table class="modern-table" style="width: 100%;">
+                <table class="modern-table w-full">
                     <thead class="bg-slate-50">
                         <tr>
                             <th class="py-4 px-6 text-left">Toko & Pemilik</th>
@@ -110,13 +110,13 @@
     </div>
 
     <!-- MODAL FORM PRODUK -->
-    <div id="pasar-modal" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6" style="z-index: 10025;">
+    <div id="pasar-modal" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6 overlay-z10025">
         <div class="absolute inset-0 bg-slate-800/30 backdrop-blur-sm transition-opacity" onclick="closePasarModal()"></div>
-        <div class="glass-card relative w-full max-w-lg m-auto flex flex-col overflow-hidden shadow-2xl" style="border-radius: 2.5rem; max-height: 90vh; background: #ffffff; border: 1px solid rgba(255,255,255,0.9);">
+        <div class="glass-card relative w-full max-w-lg m-auto flex flex-col overflow-hidden shadow-2xl rounded-[2.5rem] max-h-[90vh] bg-white border border-white/90">
             <button class="absolute top-6 right-6 w-12 h-12 rounded-[1.25rem] bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all z-10" onclick="closePasarModal()">
-                <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="hide-scrollbar" style="padding: 40px; overflow-y: auto;">
+            <div class="hide-scrollbar p-10 overflow-y-auto">
                 <div class="mb-8 pr-12">
                     <h2 id="modal-pasar-title" class="text-3xl font-black text-slate-800 tracking-tight mb-2">Form Produk</h2>
                     <p class="text-slate-500 font-medium text-sm">Informasi produk UMKM warga.</p>
@@ -156,13 +156,13 @@
     </div>
 
     <!-- MODAL DETAIL PRODUK -->
-    <div id="modal-detail-produk" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6" style="z-index: 10025;">
+    <div id="modal-detail-produk" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6 overlay-z10025">
         <div class="absolute inset-0 bg-slate-800/30 backdrop-blur-sm transition-opacity" onclick="closeDetailPasar()"></div>
-        <div class="glass-card relative w-full max-w-lg m-auto flex flex-col overflow-hidden shadow-2xl" style="border-radius: 2.5rem; max-height: 90vh; background: #ffffff; border: 1px solid rgba(255,255,255,0.9);">
+        <div class="glass-card relative w-full max-w-lg m-auto flex flex-col overflow-hidden shadow-2xl rounded-[2.5rem] max-h-[90vh] bg-white border border-white/90">
             <button class="absolute top-6 right-6 w-12 h-12 rounded-[1.25rem] bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all z-10" onclick="closeDetailPasar()">
-                <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="hide-scrollbar" style="padding: 40px; overflow-y: auto;">
+            <div class="hide-scrollbar p-10 overflow-y-auto">
                 <div class="mb-6 pr-12">
                     <h2 class="text-3xl font-black text-slate-800 tracking-tight mb-2">Detail Produk</h2>
                     <p class="text-slate-500 font-medium text-sm">Informasi lengkap dagangan UMKM warga.</p>
@@ -198,11 +198,11 @@
     </div>
 
     <!-- MODAL FORM SLIDER -->
-    <div id="pasar-slider-modal" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6" style="z-index: 10025;">
+    <div id="pasar-slider-modal" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6 overlay-z10025">
         <div class="absolute inset-0 bg-slate-800/30 backdrop-blur-sm transition-opacity" onclick="closeSliderModal()"></div>
-        <div class="glass-card relative w-full max-w-md m-auto flex flex-col overflow-hidden shadow-2xl" style="border-radius: 2.5rem; background: #ffffff; padding: 40px; border: 1px solid rgba(255,255,255,0.9);">
+        <div class="glass-card relative w-full max-w-md m-auto flex flex-col overflow-hidden shadow-2xl rounded-[2.5rem] max-h-[90vh] bg-white border border-white/90 p-10">
             <button class="absolute top-6 right-6 w-12 h-12 rounded-[1.25rem] bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all z-10" onclick="closeSliderModal()">
-                <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="pr-12 mb-8">
                 <h2 class="text-2xl font-black text-slate-800 mb-1">Tambah Slider</h2>
@@ -220,18 +220,18 @@
     </div>
 
     <!-- MODAL FORM PENJUAL -->
-    <div id="modal-pasar-penjual" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6" style="z-index: 10025;">
+    <div id="modal-pasar-penjual" class="fixed inset-0 w-full h-full hidden items-center justify-center p-4 sm:p-6 overlay-z10025">
         <div class="absolute inset-0 bg-slate-800/30 backdrop-blur-sm transition-opacity" onclick="closePenjualModal()"></div>
-        <div class="glass-card relative w-full max-w-md m-auto flex flex-col overflow-hidden shadow-2xl" style="border-radius: 2.5rem; max-height: 90vh; background: #ffffff; border: 1px solid rgba(255,255,255,0.9);">
-            <div style="padding: 32px 32px 24px; border-bottom: 1px solid #f1f5f9;">
+        <div class="glass-card relative w-full max-w-md m-auto flex flex-col overflow-hidden shadow-2xl rounded-[2.5rem] max-h-[90vh] bg-white border border-white/90">
+            <div class="px-8 pt-8 pb-6 border-b border-slate-100">
                 <div>
                     <h2 id="modal-penjual-title" class="text-2xl font-black text-slate-800">Tambah Penjual</h2>
                     <p class="text-slate-500 font-medium text-sm mt-1">Buat akun akses dan profil toko UMKM.</p>
                 </div>
-                <button class="absolute top-8 right-8 w-10 h-10 rounded-[1rem] bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all z-10" onclick="closePenjualModal()"><i data-lucide="x" style="width: 20px; height: 20px;"></i></button>
+                <button class="absolute top-8 right-8 w-10 h-10 rounded-[1rem] bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all z-10" onclick="closePenjualModal()"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             
-            <div class="hide-scrollbar" style="padding: 24px 32px; overflow-y: auto;">
+            <div class="hide-scrollbar py-6 px-8 overflow-y-auto">
                 <input type="hidden" id="pasar-penjual-id" value="0">
                 <h4 class="text-xs font-black uppercase tracking-widest text-emerald-600 mb-4 bg-emerald-50 inline-block px-4 py-1.5 rounded-full">Profil Toko</h4>
                 
@@ -269,7 +269,7 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Password <span class="text-red-400 font-normal lowercase ml-1" style="font-size: 0.65rem;">(kosongkan jika tidak diubah)</span></label>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Password <span class="text-red-400 font-normal lowercase ml-1 text-[0.65rem]">(kosongkan jika tidak diubah)</span></label>
                         <input type="password" id="pasar-penjual-password" class="w-full bg-slate-50 border border-slate-100 text-slate-800 rounded-[1.5rem] py-4 px-5 font-semibold focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all text-sm shadow-inner" placeholder="••••••••">
                     </div>
                     <div>
@@ -283,9 +283,9 @@
                 </div>
             </div>
             
-            <div style="padding: 24px 32px; border-top: 1px solid #f1f5f9; display: flex; gap: 12px; background: #fff; border-radius: 0 0 2.5rem 2.5rem; flex-shrink: 0;">
+            <div class="px-8 py-6 border-t border-slate-100 flex gap-3 bg-white rounded-b-[2.5rem] shrink-0">
                 <button type="button" class="px-6 py-4 rounded-[1.5rem] font-bold text-slate-500 bg-slate-50 hover:bg-slate-200 transition-all" onclick="closePenjualModal()">Batal</button>
-                <button type="button" class="flex-grow px-6 py-4 rounded-[1.5rem] font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xl shadow-emerald-200 transition-all flex items-center justify-center gap-2" onclick="savePasarPenjual()"><i data-lucide="save" style="width: 18px; height: 18px;"></i> Simpan Penjual</button>
+                <button type="button" class="flex-grow px-6 py-4 rounded-[1.5rem] font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-xl shadow-emerald-200 transition-all flex items-center justify-center gap-2" onclick="savePasarPenjual()"><i data-lucide="save" class="w-[18px] h-[18px]"></i> Simpan Penjual</button>
             </div>
         </div>
     </div>
@@ -637,11 +637,55 @@
 </script>
 
 <style>
-    .sub-nav-tab {
-        display: flex; align-items: center; padding: 12px 24px; border-radius: 16px;
-        background: transparent; color: #64748b; font-weight: 600; border: 1px solid transparent; transition: all 0.3s;
+    #page-pasar .sub-nav-tab {
+        display: flex;
+        align-items: center;
+        padding: 12px 24px;
+        border-radius: 16px;
+        background: transparent;
+        color: #64748b;
+        font-weight: 600;
+        border: 1px solid transparent;
+        transition: all 0.3s;
     }
-    .sub-nav-tab:hover { background: rgba(16, 185, 129, 0.05); color: #10b981; }
-    .sub-nav-tab.active { background: white; color: #10b981; border-color: rgba(16, 185, 129, 0.1); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
-    .pasar-tab-content.hidden { display: none; }
+
+    #page-pasar .sub-nav-tab:hover {
+        background: rgba(16, 185, 129, 0.05);
+        color: #10b981;
+    }
+
+    #page-pasar .sub-nav-tab.active {
+        background: #fff;
+        color: #10b981;
+        border-color: rgba(16, 185, 129, 0.1);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+
+    #page-pasar .pasar-tab-content.hidden {
+        display: none;
+    }
+
+    #page-pasar #pasar-modal label,
+    #page-pasar #pasar-slider-modal label,
+    #page-pasar #modal-pasar-penjual label,
+    #page-pasar #modal-detail-produk p.text-\[10px\] {
+        letter-spacing: 0.04em !important;
+        font-size: 0.68rem !important;
+        margin-bottom: 6px !important;
+    }
+
+    #page-pasar #modal-pasar-penjual h4 {
+        letter-spacing: 0.05em !important;
+    }
+
+    #page-pasar #pasar-modal .space-y-5 > * + *,
+    #page-pasar #modal-pasar-penjual .space-y-5 > * + * {
+        margin-top: 14px;
+    }
+
+    #page-pasar #pasar-modal .hide-scrollbar,
+    #page-pasar #modal-pasar-penjual .hide-scrollbar,
+    #page-pasar #modal-detail-produk .hide-scrollbar {
+        padding-top: 30px;
+    }
 </style>

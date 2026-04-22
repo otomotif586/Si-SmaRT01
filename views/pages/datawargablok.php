@@ -1,10 +1,10 @@
 <!-- Drawer Modal: Form Data Warga -->
-<div id="drawer-warga" class="modal-overlay hidden" style="z-index: 10010 !important; align-items: flex-end; justify-content: flex-end; padding: 0;">
+<div id="drawer-warga" class="modal-overlay hidden drawer-warga-overlay">
     <div class="drawer-panel glass-card">
         <div class="drawer-header">
             <div>
                 <h2 class="ws-title">Tambah Data Warga</h2>
-                <p class="text-secondary" style="font-size: 0.875rem; margin-top: 4px;">Lengkapi form berikut untuk menambahkan warga ke dalam blok.</p>
+                <p class="text-secondary drawer-subtitle">Lengkapi form berikut untuk menambahkan warga ke dalam blok.</p>
             </div>
             <button class="modal-close-btn" onclick="closeFormWarga()"><i data-lucide="x"></i></button>
         </div>
@@ -22,19 +22,19 @@
                         <label class="card-label">No Rumah (2 Digit)</label>
                         <input type="text" id="warga_norumah" class="input-field" placeholder="Cth: 01" maxlength="2" inputmode="numeric">
                     </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
+                    <div class="form-group grid-col-full">
                         <label class="card-label">No Kartu Keluarga (KK)</label>
                         <input type="number" id="warga_nokk" class="input-field" placeholder="16 Digit No KK">
                     </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
+                    <div class="form-group grid-col-full">
                         <label class="card-label">NIK Kepala Keluarga</label>
                         <input type="number" id="warga_nik_kepala" class="input-field" placeholder="16 Digit NIK">
                     </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
+                    <div class="form-group grid-col-full">
                         <label class="card-label">Kepala Keluarga</label>
                         <input type="text" id="warga_kepala" class="input-field" placeholder="Nama Lengkap Kepala Keluarga">
                     </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
+                    <div class="form-group grid-col-full">
                         <label class="card-label">Nomor WhatsApp</label>
                         <input type="number" id="warga_nowa" class="input-field" placeholder="Cth: 08123456789">
                     </div>
@@ -44,14 +44,14 @@
                     </div>
                     <div class="form-group">
                         <label class="card-label">Tanggal Lahir</label>
-                        <input type="date" id="warga_tgllahir" class="input-field" style="padding-left: 20px;">
+                        <input type="date" id="warga_tgllahir" class="input-field input-left-20">
                     </div>
                 </div>
 
                 <!-- Status Pernikahan -->
                 <h4 class="form-section-title">2. Status & Keluarga</h4>
                 <div class="form-grid">
-                    <div class="form-group" style="grid-column: 1 / -1;">
+                    <div class="form-group grid-col-full">
                         <label class="card-label">Status Pernikahan</label>
                         <select id="warga_pernikahan" class="input-field select-custom" onchange="togglePasangan(this.value)">
                             <option value="Lajang">Lajang</option>
@@ -78,14 +78,14 @@
                         </div>
                         <div class="form-group">
                             <label class="card-label">Tanggal Lahir Pasangan</label>
-                            <input type="date" id="pasangan_tgl" class="input-field" style="padding-left: 20px;">
+                            <input type="date" id="pasangan_tgl" class="input-field input-left-20">
                         </div>
                     </div>
                 </div>
 
                 <!-- Anak -->
-                <div class="form-grid" style="margin-top: 16px;">
-                    <div class="form-group" style="grid-column: 1 / -1;">
+                <div class="form-grid mt-16">
+                    <div class="form-group grid-col-full">
                         <label class="card-label">Jumlah Anak</label>
                         <select id="warga_jumlah_anak" class="input-field select-custom" onchange="generateAnakFields(this.value)">
                             <option value="0">Tidak ada anak</option>
@@ -98,8 +98,8 @@
                 <div id="container-anak" class="dynamic-section hidden"></div>
 
                 <!-- Orang Lain / Penghuni Tambahan -->
-                <div class="form-grid" style="margin-top: 16px;">
-                    <div class="form-group" style="grid-column: 1 / -1;">
+                <div class="form-grid mt-16">
+                    <div class="form-group grid-col-full">
                         <label class="card-label">Penghuni Lainnya (Selain Pasangan/Anak)</label>
                         <select id="warga_jumlah_orang" class="input-field select-custom" onchange="generateOrangLainFields(this.value)">
                             <option value="0">Tidak ada penghuni lain</option>
@@ -114,7 +114,7 @@
                 <!-- Status Warga & Info Tambahan -->
                 <h4 class="form-section-title">3. Informasi Tambahan</h4>
                 <div class="form-grid">
-                    <div class="form-group" style="grid-column: 1 / -1;">
+                    <div class="form-group grid-col-full">
                         <label class="card-label">Status Warga</label>
                         <select id="warga_status" class="input-field select-custom">
                             <option value="Tetap">Warga Tetap</option>
@@ -138,17 +138,47 @@
         
         <div class="drawer-footer">
             <button type="button" class="button-secondary" onclick="closeFormWarga()">Batal</button>
-            <button type="button" class="button-primary flex-grow" onclick="simpanDataWarga()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Data</button>
+            <button type="button" class="button-primary flex-grow" onclick="simpanDataWarga()"><i data-lucide="save" class="mr-[8px]"></i> Simpan Data</button>
         </div>
     </div>
 </div>
 
 <!-- Modal Detail Warga Full (Untuk melihat semua data diri & iuran) -->
-<div id="modal-detail-warga-full" class="modal-overlay hidden" style="z-index: 10020 !important; align-items: center; justify-content: center; padding: 16px;">
-    <div class="glass-card hide-scrollbar" style="width: 100%; max-width: 700px; max-height: 90dvh; overflow-y: auto; padding: 32px; position: relative; border-radius: 24px;">
-        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px; z-index: 10;" onclick="closeDetailWarga()"><i data-lucide="x"></i></button>
+<div id="modal-detail-warga-full" class="modal-overlay hidden detail-warga-overlay">
+    <div class="glass-card hide-scrollbar detail-warga-card">
+        <button class="modal-close-btn detail-warga-close" onclick="closeDetailWarga()"><i data-lucide="x"></i></button>
         <div id="modal-detail-warga-content">
             <!-- Konten detail akan di-load di sini via AJAX -->
         </div>
     </div>
 </div>
+
+<style>
+.drawer-warga-overlay {
+    z-index: 10010 !important;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0;
+}
+.detail-warga-overlay {
+    z-index: 10020 !important;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.detail-warga-card {
+    width: 100%;
+    max-width: 700px;
+    max-height: 90dvh;
+    overflow-y: auto;
+    padding: 32px;
+    position: relative;
+    border-radius: 24px;
+}
+.detail-warga-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+}
+</style>

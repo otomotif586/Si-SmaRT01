@@ -507,8 +507,8 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                 <p class="text-slate-500 text-sm mt-2 font-medium">Coba cari kata kunci lain atau cek kembali nanti.</p>
                 <div class="mt-8 max-w-md mx-auto space-y-3 px-6" aria-hidden="true">
                     <div class="h-3 rounded-full smart-skeleton"></div>
-                    <div class="h-3 rounded-full smart-skeleton" style="width: 80%; margin-left: auto; margin-right: auto;"></div>
-                    <div class="h-3 rounded-full smart-skeleton" style="width: 65%; margin-left: auto; margin-right: auto;"></div>
+                    <div class="h-3 rounded-full smart-skeleton w-[80%] mx-auto"></div>
+                    <div class="h-3 rounded-full smart-skeleton w-[65%] mx-auto"></div>
                 </div>
             </div>
         <?php else: ?>
@@ -570,8 +570,8 @@ $bg_overlay = $settings['web_hero_image_1'] ?? 'https://images.unsplash.com/phot
                     </div>
 
                     <div class="card-text-skeleton" aria-hidden="true">
-                        <div class="line smart-skeleton" style="width: 74%;"></div>
-                        <div class="line smart-skeleton" style="width: 48%;"></div>
+                        <div class="line smart-skeleton w-[74%]"></div>
+                        <div class="line smart-skeleton w-[48%]"></div>
                     </div>
 
                     <!-- Bagian Detail yang Menggeser dari Bawah Saat Hover -->

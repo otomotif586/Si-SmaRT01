@@ -1,78 +1,15 @@
 <!-- Page: Ruang Warga -->
 <div id="page-ruang-warga" class="page-content hidden page-section">
-    <!-- Header Greeting -->
-    <div class="rw-greeting-header">
+    <div class="glass-card rw-hero">
         <div>
-            <p class="rw-greeting-eyebrow">Selamat Datang</p>
-            <h1 class="rw-greeting-name" id="rw-greeting-name">Halo, Warga</h1>
+            <p class="rw-eyebrow">Portal Personal Warga</p>
+            <h2 class="rw-title">Ruang Warga</h2>
+            <p class="rw-subtitle">Kelola data diri, pantau histori pembayaran, kirim pengaduan, update informasi, dan akses cepat ke Pasar Warga.</p>
         </div>
-        <div class="rw-profile-avatar" id="rw-profile-avatar">
-            <span><i data-lucide="user-circle"></i></span>
+        <div class="rw-cta-wrap">
+            <a href="pasar.php" class="rw-btn rw-btn-ghost" target="_blank" rel="noopener">Lihat Pasar Warga</a>
+            <a href="login_penjual.php" class="rw-btn rw-btn-primary" target="_blank" rel="noopener">Masuk sebagai Penjual</a>
         </div>
-    </div>
-
-    <!-- Primary Gradient Card -->
-    <div class="rw-primary-card glass-card">
-        <div class="rw-primary-bg"></div>
-        <div class="rw-primary-content">
-            <p class="rw-primary-label">Nama Lengkap</p>
-            <h2 class="rw-primary-name" id="rw-primary-name">-</h2>
-            
-            <div class="rw-primary-info">
-                <div class="rw-primary-item">
-                    <span class="rw-primary-small">Blok & Rumah</span>
-                    <span class="rw-primary-value" id="rw-primary-blok">-</span>
-                </div>
-                <div class="rw-primary-divider"></div>
-                <div class="rw-primary-item">
-                    <span class="rw-primary-small">Status</span>
-                    <span class="rw-primary-value" id="rw-primary-status">-</span>
-                </div>
-            </div>
-
-            <div class="rw-primary-stats">
-                <div class="rw-stat-mini">
-                    <span class="rw-stat-mini-label">Lunas</span>
-                    <span class="rw-stat-mini-value" id="rw-primary-lunas">0</span>
-                    <span class="rw-stat-mini-unit">bulan</span>
-                </div>
-                <div class="rw-stat-mini">
-                    <span class="rw-stat-mini-label">Tunggakan</span>
-                    <span class="rw-stat-mini-value" id="rw-primary-tunggakan">0</span>
-                    <span class="rw-stat-mini-unit">bulan</span>
-                </div>
-            </div>
-
-            <div class="rw-primary-progress-wrap">
-                <div class="rw-primary-progress-head">
-                    <span id="rw-primary-level" class="rw-tier-badge">Level 1</span>
-                    <strong id="rw-primary-progress-text">0%</strong>
-                </div>
-                <div class="rw-primary-progress-track">
-                    <span class="rw-primary-progress-fill" id="rw-primary-progress-fill" style="width: 0%;"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Action Buttons Grid -->
-    <div class="rw-action-grid">
-        <button class="rw-action-btn rw-action-bayar" data-rw-tab="history" type="button">
-            <span class="rw-action-icon"><i data-lucide="credit-card"></i></span>
-            <span class="rw-action-label">Bayar Iuran</span>
-        </button>
-        <button class="rw-action-btn rw-action-history" data-rw-tab="history" type="button">
-            <span class="rw-action-icon"><i data-lucide="receipt-text"></i></span>
-            <span class="rw-action-label">Cek History</span>
-        </button>
-        <button class="rw-action-btn rw-action-pengaduan" data-rw-tab="pengaduan" type="button">
-            <span class="rw-action-icon"><i data-lucide="alert-circle"></i></span>
-            <span class="rw-action-label">Ajukan Aduan</span>
-        </button>
-        <button class="rw-action-btn rw-action-info" data-rw-tab="informasi" type="button">
-            <span class="rw-action-icon"><i data-lucide="bell-ring"></i></span>
-            <span class="rw-action-label">Lihat Info</span>
-        </button>
     </div>
 
     <div class="rw-summary-grid">
@@ -95,41 +32,39 @@
     </div>
 
     <div class="rw-tab-nav glass-card">
-        <button class="rw-tab-btn rw-tab-profil active" data-rw-tab="profil" type="button">
-            <span class="rw-tab-icon-wrap"><i data-lucide="user-round"></i></span>
-            <span class="rw-tab-label">Data Diri</span>
-        </button>
-        <button class="rw-tab-btn rw-tab-history" data-rw-tab="history" type="button">
-            <span class="rw-tab-icon-wrap"><i data-lucide="receipt-text"></i></span>
-            <span class="rw-tab-label">History</span>
-        </button>
-        <button class="rw-tab-btn rw-tab-pengaduan" data-rw-tab="pengaduan" type="button">
-            <span class="rw-tab-icon-wrap"><i data-lucide="message-square-warning"></i></span>
-            <span class="rw-tab-label">Pengaduan</span>
-        </button>
-        <button class="rw-tab-btn rw-tab-informasi" data-rw-tab="informasi" type="button">
-            <span class="rw-tab-icon-wrap"><i data-lucide="bell-ring"></i></span>
-            <span class="rw-tab-label">Informasi</span>
-        </button>
-        <button class="rw-tab-btn rw-tab-pasar" data-rw-tab="pasar" type="button">
-            <span class="rw-tab-icon-wrap"><i data-lucide="store"></i></span>
-            <span class="rw-tab-label">Pasar</span>
-        </button>
+        <button class="rw-tab-btn active" data-rw-tab="profil">Data Diri</button>
+        <button class="rw-tab-btn" data-rw-tab="history">History Pembayaran</button>
+        <button class="rw-tab-btn" data-rw-tab="pengaduan">Pengaduan</button>
+        <button class="rw-tab-btn" data-rw-tab="informasi">Update Informasi</button>
+        <button class="rw-tab-btn" data-rw-tab="pasar">Link Pasar Warga</button>
     </div>
 
     <div id="rw-tab-profil" class="rw-tab-panel">
         <div class="rw-grid-2">
             <div class="glass-card rw-card">
-                <h3>Data Diri</h3>
-                <p class="text-secondary">Kelola data profil Anda melalui panel form seperti aplikasi mobile.</p>
-                <button type="button" id="rw-open-profile-form" class="rw-sheet-trigger">
-                    <span class="rw-sheet-trigger-icon"><i data-lucide="user-cog"></i></span>
-                    <span class="rw-sheet-trigger-main">
-                        <strong>Edit Data Diri</strong>
-                        <small>Ubah nama, username, dan password</small>
-                    </span>
-                    <span class="rw-sheet-trigger-trail"><i data-lucide="chevron-right"></i></span>
-                </button>
+                <h3>Data Diri (CRUD)</h3>
+                <p class="text-secondary">Perubahan username dan password akan langsung mempengaruhi proses login Anda.</p>
+                <form id="rw-profile-form" class="rw-form-grid">
+                    <div>
+                        <label>Nama Lengkap</label>
+                        <input type="text" id="rw-nama" class="input-field" required>
+                    </div>
+                    <div>
+                        <label>Username</label>
+                        <input type="text" id="rw-username" class="input-field" required>
+                    </div>
+                    <div>
+                        <label>Role</label>
+                        <input type="text" id="rw-role" class="input-field" readonly>
+                    </div>
+                    <div>
+                        <label>Password Baru</label>
+                        <input type="password" id="rw-password" class="input-field" placeholder="Kosongkan jika tidak ingin ganti">
+                    </div>
+                    <div class="rw-form-actions">
+                        <button type="submit" class="button-primary">Simpan Perubahan</button>
+                    </div>
+                </form>
             </div>
 
             <div class="glass-card rw-card">
@@ -147,8 +82,21 @@
         <div class="glass-card rw-card">
             <h3>History Pembayaran</h3>
             <p class="text-secondary">Riwayat iuran berdasarkan data warga yang terhubung ke akun Anda.</p>
-            <div id="rw-history-list" class="rw-list-wrap" style="margin-top: 16px;">
-                <p class="text-secondary">Memuat data...</p>
+            <div class="table-container mt-16">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Tahun</th>
+                            <th>Bulan</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                            <th>Tanggal Bayar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rw-history-body">
+                        <tr><td colspan="5" class="text-center text-secondary">Memuat data...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -157,15 +105,21 @@
         <div class="rw-grid-2">
             <div class="glass-card rw-card">
                 <h3>Kirim Pengaduan</h3>
-                <p class="text-secondary">Buat atau edit pengaduan melalui bottom sheet agar lebih nyaman di HP.</p>
-                <button type="button" id="rw-open-pengaduan-form" class="rw-sheet-trigger">
-                    <span class="rw-sheet-trigger-icon"><i data-lucide="message-square-plus"></i></span>
-                    <span class="rw-sheet-trigger-main">
-                        <strong>Tulis Pengaduan Baru</strong>
-                        <small>Masukkan judul dan isi pengaduan</small>
-                    </span>
-                    <span class="rw-sheet-trigger-trail"><i data-lucide="chevron-right"></i></span>
-                </button>
+                <form id="rw-pengaduan-form" class="rw-form-grid">
+                    <input type="hidden" id="rw-pengaduan-id">
+                    <div>
+                        <label>Judul Pengaduan</label>
+                        <input type="text" id="rw-pengaduan-judul" class="input-field" required>
+                    </div>
+                    <div>
+                        <label>Isi Pengaduan</label>
+                        <textarea id="rw-pengaduan-isi" class="input-field" rows="5" required></textarea>
+                    </div>
+                    <div class="rw-form-actions">
+                        <button type="submit" class="button-primary">Simpan Pengaduan</button>
+                        <button type="button" id="rw-pengaduan-reset" class="button-secondary">Reset</button>
+                    </div>
+                </form>
             </div>
 
             <div class="glass-card rw-card">
@@ -181,15 +135,21 @@
         <div class="rw-grid-2">
             <div class="glass-card rw-card">
                 <h3>Update Informasi Warga</h3>
-                <p class="text-secondary">Tulis update melalui bottom sheet dengan pengalaman seperti aplikasi Android.</p>
-                <button type="button" id="rw-open-update-form" class="rw-sheet-trigger">
-                    <span class="rw-sheet-trigger-icon"><i data-lucide="square-pen"></i></span>
-                    <span class="rw-sheet-trigger-main">
-                        <strong>Buat Update Baru</strong>
-                        <small>Bagikan info terbaru untuk warga</small>
-                    </span>
-                    <span class="rw-sheet-trigger-trail"><i data-lucide="chevron-right"></i></span>
-                </button>
+                <form id="rw-update-form" class="rw-form-grid">
+                    <input type="hidden" id="rw-update-id">
+                    <div>
+                        <label>Judul Informasi</label>
+                        <input type="text" id="rw-update-judul" class="input-field" required>
+                    </div>
+                    <div>
+                        <label>Isi Informasi</label>
+                        <textarea id="rw-update-isi" class="input-field" rows="5" required></textarea>
+                    </div>
+                    <div class="rw-form-actions">
+                        <button type="submit" class="button-primary">Simpan Update</button>
+                        <button type="button" id="rw-update-reset" class="button-secondary">Reset</button>
+                    </div>
+                </form>
             </div>
 
             <div class="glass-card rw-card">
@@ -222,129 +182,6 @@
                     <a href="portal.php" target="_blank" rel="noopener" class="rw-btn rw-btn-ghost">Kembali ke Portal</a>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <nav class="rw-bottom-nav" aria-label="Navigasi Ruang Warga">
-        <button class="rw-bottom-nav-btn rw-tab-btn rw-tab-profil active" data-rw-tab="profil" type="button">
-            <i data-lucide="house"></i>
-            <span>Beranda</span>
-        </button>
-        <button class="rw-bottom-nav-btn rw-tab-btn rw-tab-history" data-rw-tab="history" type="button">
-            <i data-lucide="scroll-text"></i>
-            <span>Iuran</span>
-        </button>
-        <button class="rw-bottom-nav-btn rw-tab-btn rw-tab-pengaduan" data-rw-tab="pengaduan" type="button">
-            <i data-lucide="triangle-alert"></i>
-            <span>Aduan</span>
-        </button>
-        <button class="rw-bottom-nav-btn rw-tab-btn rw-tab-informasi" data-rw-tab="informasi" type="button">
-            <i data-lucide="newspaper"></i>
-            <span>Info</span>
-        </button>
-        <button class="rw-bottom-nav-btn rw-tab-btn rw-tab-pasar" data-rw-tab="pasar" type="button">
-            <i data-lucide="store"></i>
-            <span>Pasar</span>
-        </button>
-    </nav>
-
-    <div id="rw-info-popup" class="rw-popup hidden" aria-hidden="true">
-        <div class="rw-popup-sheet">
-            <div class="rw-popup-handle"></div>
-            <div class="rw-popup-header">
-                <h3 id="rw-popup-title">Detail</h3>
-                <button type="button" id="rw-popup-close" class="rw-popup-close" aria-label="Tutup detail">
-                    <i data-lucide="x"></i>
-                </button>
-            </div>
-            <div id="rw-popup-content" class="rw-popup-content"></div>
-        </div>
-    </div>
-
-    <div id="rw-profile-modal" class="rw-form-modal hidden" aria-hidden="true">
-        <div class="rw-form-sheet">
-            <div class="rw-form-handle"></div>
-            <div class="rw-form-header">
-                <h3>Edit Data Diri</h3>
-                <button type="button" class="rw-form-close" data-rw-close-modal="rw-profile-modal" aria-label="Tutup form data diri">
-                    <i data-lucide="x"></i>
-                </button>
-            </div>
-            <form id="rw-profile-form" class="rw-form-grid rw-sheet-form">
-                <div>
-                    <label>Nama Lengkap</label>
-                    <input type="text" id="rw-nama" class="input-field" required>
-                </div>
-                <div>
-                    <label>Username</label>
-                    <input type="text" id="rw-username" class="input-field" required>
-                </div>
-                <div>
-                    <label>Role</label>
-                    <input type="text" id="rw-role" class="input-field" readonly>
-                </div>
-                <div>
-                    <label>Password Baru</label>
-                    <input type="password" id="rw-password" class="input-field" placeholder="Kosongkan jika tidak ingin ganti">
-                </div>
-                <div class="rw-form-actions">
-                    <button type="submit" class="button-primary">Simpan Perubahan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="rw-pengaduan-modal" class="rw-form-modal hidden" aria-hidden="true">
-        <div class="rw-form-sheet">
-            <div class="rw-form-handle"></div>
-            <div class="rw-form-header">
-                <h3>Kirim Pengaduan</h3>
-                <button type="button" class="rw-form-close" data-rw-close-modal="rw-pengaduan-modal" aria-label="Tutup form pengaduan">
-                    <i data-lucide="x"></i>
-                </button>
-            </div>
-            <form id="rw-pengaduan-form" class="rw-form-grid rw-sheet-form">
-                <input type="hidden" id="rw-pengaduan-id">
-                <div>
-                    <label>Judul Pengaduan</label>
-                    <input type="text" id="rw-pengaduan-judul" class="input-field" required>
-                </div>
-                <div>
-                    <label>Isi Pengaduan</label>
-                    <textarea id="rw-pengaduan-isi" class="input-field" rows="5" required></textarea>
-                </div>
-                <div class="rw-form-actions">
-                    <button type="submit" class="button-primary">Simpan Pengaduan</button>
-                    <button type="button" id="rw-pengaduan-reset" class="button-secondary">Reset</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="rw-update-modal" class="rw-form-modal hidden" aria-hidden="true">
-        <div class="rw-form-sheet">
-            <div class="rw-form-handle"></div>
-            <div class="rw-form-header">
-                <h3>Update Informasi</h3>
-                <button type="button" class="rw-form-close" data-rw-close-modal="rw-update-modal" aria-label="Tutup form update informasi">
-                    <i data-lucide="x"></i>
-                </button>
-            </div>
-            <form id="rw-update-form" class="rw-form-grid rw-sheet-form">
-                <input type="hidden" id="rw-update-id">
-                <div>
-                    <label>Judul Informasi</label>
-                    <input type="text" id="rw-update-judul" class="input-field" required>
-                </div>
-                <div>
-                    <label>Isi Informasi</label>
-                    <textarea id="rw-update-isi" class="input-field" rows="5" required></textarea>
-                </div>
-                <div class="rw-form-actions">
-                    <button type="submit" class="button-primary">Simpan Update</button>
-                    <button type="button" id="rw-update-reset" class="button-secondary">Reset</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
