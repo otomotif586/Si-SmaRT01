@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet"> <!-- Font Inter + Startup display fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"> <!-- Font Inter -->
     <!-- Modular CSS (split by function) -->
     <?php $v = 'auto'; // Versi asset mengikuti filemtime agar cache lokal tidak nyangkut ?>
     <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/animations.css', $v), ENT_QUOTES, 'UTF-8') ?>">
@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/gallery.css', $v), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/rekonsiliasi.css', $v), ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/mobile-ux.css', $v), ENT_QUOTES, 'UTF-8') ?>">
-    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/smart-installer-theme.css', $v), ENT_QUOTES, 'UTF-8') ?>">
 
     <!-- FOUC Prevention untuk Tailwind CDN -->
     <style>

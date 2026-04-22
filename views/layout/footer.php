@@ -17,4 +17,3 @@
 <script src="<?= htmlspecialchars(smart_asset('public/js/pembukuan.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
 <script src="<?= htmlspecialchars(smart_asset('public/js/keamanan.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
 <script src="<?= htmlspecialchars(smart_asset('public/js/info.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
-<script src="<?= htmlspecialchars(smart_asset('public/js/smart-installer-theme.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
