@@ -4,15 +4,15 @@
     <!-- Premium Informative Summary Section -->
     <div class="summary-3-grid">
         <!-- Card 1: Saldo Kas Utama -->
-        <div class="glass-card-deluxe stagger-item stagger-delay-1">
-            <div class="card-icon-deluxe icon-tone-success">
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
                 <i data-lucide="wallet"></i>
             </div>
             <p class="card-label">Saldo Kas Utama</p>
-            <h3 class="card-value text-emerald animated-counter card-value-xl" id="dash-saldo">Rp 0</h3>
-            <div class="inline-wrap-12">
+            <h3 class="card-value text-emerald animated-counter" id="dash-saldo" style="font-size: 1.8rem;">Rp 0</h3>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <div class="card-trend-badge up">
-                    <i data-lucide="trending-up" class="icon-12"></i>
+                    <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i>
                     <span id="dash-saldo-trend">0%</span>
                 </div>
                 <span class="card-sub-info">Pertumbuhan bulan ini</span>
@@ -20,36 +20,36 @@
         </div>
 
         <!-- Card 2: Partisipasi Iuran -->
-        <div class="glass-card-deluxe stagger-item stagger-delay-2">
-            <div class="card-icon-deluxe icon-tone-info">
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
                 <i data-lucide="shield-check"></i>
             </div>
             <p class="card-label">Partisipasi Iuran</p>
-            <div class="inline-baseline-8">
-                <h3 class="card-value card-value-xl" id="dash-iuran-percent">0%</h3>
-                <span class="text-secondary text-[0.8rem]" id="dash-iuran-detail">0/0 Warga</span>
+            <div style="display: flex; align-items: baseline; gap: 8px;">
+                <h3 class="card-value" id="dash-iuran-percent" style="font-size: 1.8rem;">0%</h3>
+                <span class="text-secondary" style="font-size: 0.8rem;" id="dash-iuran-detail">0/0 Warga</span>
             </div>
-            <div class="progress-bar h-2 mt-4 bg-white/5">
-                <div id="dash-iuran-progress" class="progress-fill progress-fill-info-success w-0"></div>
+            <div class="progress-bar" style="height: 8px; margin-top: 16px; background: rgba(255,255,255,0.05);">
+                <div id="dash-iuran-progress" class="progress-fill" style="width: 0%; background: linear-gradient(90deg, #3b82f6, #10b981);"></div>
             </div>
             <div class="card-sub-info">
-                <i data-lucide="clock" class="icon-12"></i>
+                <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
                 <span>Update otomatis per 24 jam</span>
             </div>
         </div>
 
         <!-- Card 3: Laporan Aktif -->
-        <div class="glass-card-deluxe stagger-item stagger-delay-3">
-            <div class="card-icon-deluxe icon-tone-warning">
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+            <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
                 <i data-lucide="bell"></i>
             </div>
             <p class="card-label">Laporan & Keluhan</p>
-            <h3 class="card-value text-warning card-value-xl" id="dash-laporan-count">0</h3>
-            <div class="card-trend-badge warning" id="dash-laporan-status">
-                <i data-lucide="alert-circle" class="icon-12"></i>
+            <h3 class="card-value" id="dash-laporan-count" style="font-size: 1.8rem; color: #f59e0b;">0</h3>
+            <div class="card-trend-badge down" id="dash-laporan-status" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                <i data-lucide="alert-circle" style="width: 12px; height: 12px;"></i>
                 <span>Butuh Tindak Lanjut</span>
             </div>
-            <p class="card-sub-info mt-12">
+            <p class="card-sub-info" style="margin-top: 12px;">
                 Cek detail di menu Keamanan
             </p>
         </div>
@@ -58,24 +58,24 @@
     <!-- Charts Section -->
     <div class="grid-container-2-col">
         <!-- Line Chart: Tren Pemasukan -->
-        <div class="glass-card card-section stagger-item stagger-delay-4">
+        <div class="glass-card card-section stagger-item" style="animation-delay: 0.4s">
             <div class="section-header">
                 <h4 class="section-title">Tren Pemasukan (6 Bln)</h4>
                 <div class="chart-legend">
                     <span class="legend-item"><span class="dot bg-emerald"></span> Iuran</span>
                 </div>
             </div>
-            <div class="chart-container chart-h-250">
+            <div class="chart-container" style="height: 250px;">
                 <canvas id="iuranTrendChart"></canvas>
             </div>
         </div>
 
         <!-- Doughnut Chart: Demografi -->
-        <div class="glass-card card-section stagger-item stagger-delay-5">
+        <div class="glass-card card-section stagger-item" style="animation-delay: 0.5s">
             <div class="section-header">
                 <h4 class="section-title">Status Kependudukan</h4>
             </div>
-            <div class="chart-container chart-h-250">
+            <div class="chart-container" style="height: 250px;">
                 <canvas id="demografiChart"></canvas>
             </div>
         </div>
@@ -84,7 +84,7 @@
     <!-- Info & Activity Section -->
     <div class="grid-container-2-col">
          <!-- Pengumuman -->
-        <div class="glass-card card-section stagger-item stagger-delay-6">
+        <div class="glass-card card-section stagger-item" style="animation-delay: 0.6s">
             <div class="section-header">
                 <h4 class="section-title">Pengumuman Terbaru</h4>
                 <button class="button-link" onclick="showPage('info')">Lihat Semua</button>
@@ -103,7 +103,7 @@
         </div>
 
         <!-- Agenda -->
-        <div class="glass-card card-section stagger-item stagger-delay-7">
+        <div class="glass-card card-section stagger-item" style="animation-delay: 0.7s">
             <div class="section-header">
                 <h4 class="section-title">Agenda Terdekat</h4>
                 <button class="button-link">Kalender</button>
@@ -114,4 +114,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>

@@ -137,7 +137,7 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
                     <div id="imagePreviewContainer" class="flex flex-wrap justify-center sm:justify-start gap-4 mb-4">
                         <!-- Previews will go here -->
                         <label class="w-24 h-24 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-500 transition-all cursor-pointer bg-slate-50 relative group">
-                            <input type="file" id="photoInput" multiple accept="image/*" capture="environment" class="hidden" onchange="handlePhotoSelect(event)">
+                            <input type="file" id="photoInput" multiple accept="image/*" class="hidden" onchange="handlePhotoSelect(event)">
                             <i class="fas fa-camera text-xl mb-1 group-hover:animate-float"></i>
                             <span class="text-[9px] font-bold">Ambil Foto</span>
                         </label>
@@ -253,6 +253,7 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
     <script>
         window.storeProfile = <?= json_encode($penjualData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
     </script>
+    <script src="<?= htmlspecialchars(smart_asset('public/js/file-source-picker.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
     <script src="<?= htmlspecialchars(smart_asset('public/js/ruang-penjual.js', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

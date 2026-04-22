@@ -106,7 +106,7 @@ $background_image_url = $settingsData['web_hero_image_1'] ?? 'https://images.uns
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($web_nama) ?> | Portal Informasi Warga</title>
+    <title><?= htmlspecialchars($web_nama) ?> | Portal Informasi Warga RT001</title>
     
     <!-- Favicon -->
     <?php if($web_favicon): ?><link rel="icon" href="<?= htmlspecialchars(smart_asset($web_favicon), ENT_QUOTES, 'UTF-8') ?>"><?php endif; ?>

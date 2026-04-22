@@ -2,143 +2,87 @@
 <div id="page-detail-keuangan" class="page-content hidden page-section">
     <!-- Premium Summary Section (3-Across) -->
     <div class="summary-3-grid">
-        <div class="glass-card-deluxe stagger-item stagger-delay-1">
-            <div class="card-icon-deluxe dk-icon-blue">
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
                 <i data-lucide="users"></i>
             </div>
             <p class="card-label">Setoran Lunas</p>
-            <h3 id="dk-total-lunas" class="card-value text-color card-value-lg">0 Setoran</h3>
+            <h3 id="dk-total-lunas" class="card-value text-color" style="font-size: 1.5rem;">0 Setoran</h3>
             <div class="card-sub-info">Cakupan bulan terpilih</div>
         </div>
         
-        <div class="glass-card-deluxe stagger-item stagger-delay-2">
-            <div class="card-icon-deluxe dk-icon-emerald">
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
                 <i data-lucide="banknote"></i>
             </div>
             <p class="card-label">Total Pendapatan</p>
-            <h3 id="dk-total-pendapatan" class="card-value text-emerald card-value-lg">Rp 0</h3>
+            <h3 id="dk-total-pendapatan" class="card-value text-emerald" style="font-size: 1.5rem;">Rp 0</h3>
             <div class="card-sub-info">Nilai ekonomi iuran</div>
         </div>
 
-        <div class="glass-card-deluxe stagger-item stagger-delay-3">
-            <div class="card-icon-deluxe dk-icon-amber">
+        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+            <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
                 <i data-lucide="home"></i>
             </div>
             <p class="card-label">Total KK Terdata</p>
-            <h3 id="dk-total-warga" class="card-value text-color card-value-lg">0 KK</h3>
+            <h3 id="dk-total-warga" class="card-value text-color" style="font-size: 1.5rem;">0 KK</h3>
             <div class="card-sub-info">Basis data warga aktif</div>
         </div>
     </div>
 
-    <div class="glass-card dk-filter-shell">
-        <p class="text-secondary page-filter-desc">Rincian pendapatan berdasarkan master pembayaran per blok.</p>
-        <div class="header-actions dk-header-actions">
-            <div class="dk-nav-group">
-                <button class="button-secondary button-sm dk-btn-icon" onclick="prevMonthDetail()"><i data-lucide="chevron-left" class="dk-icon-14"></i></button>
-                <select id="filter-bulan-detail" class="input-field select-custom dk-filter-select dk-filter-month" onchange="loadDetailKeuangan()">
+    <div class="glass-card" style="padding: 16px 20px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <p class="text-secondary" style="font-size: 0.8125rem; margin: 0;">Rincian pendapatan berdasarkan master pembayaran per blok.</p>
+        <div class="header-actions" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; gap: 6px; align-items: center;">
+                <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="prevMonthDetail()"><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>
+                <select id="filter-bulan-detail" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 120px; border-radius: 10px;" onchange="loadDetailKeuangan()">
                     <option value="all" selected>Semua Bulan</option>
                     <?php
                     $months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
                     foreach($months as $i => $m) { echo "<option value='$i'>$m</option>"; }
                     ?>
                 </select>
-                <select id="filter-tahun-detail" class="input-field select-custom dk-filter-select dk-filter-year" onchange="loadDetailKeuangan()">
+                <select id="filter-tahun-detail" class="input-field select-custom" style="font-size: 0.8125rem; padding: 8px 12px; min-width: 90px; border-radius: 10px;" onchange="loadDetailKeuangan()">
                     <option value="all" selected>Pilih Tahun</option>
                     <?php
                     $currY = (int)date('Y');
                     for($y = $currY; $y >= $currY - 3; $y--) echo "<option value='$y'>$y</option>";
                     ?>
                 </select>
-                <button class="button-secondary button-sm dk-btn-icon" onclick="nextMonthDetail()"><i data-lucide="chevron-right" class="dk-icon-14"></i></button>
+                <button class="button-secondary button-sm" style="padding: 8px; border-radius: 10px;" onclick="nextMonthDetail()"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
             </div>
-            <button class="button-secondary button-sm dk-btn-export" onclick="exportDetailKeuangan()"><i data-lucide="download" class="dk-icon-16-mr6"></i> Export</button>
+            <button class="button-secondary button-sm" style="padding: 8px 14px; border-radius: 10px; font-size: 0.8125rem;" onclick="exportDetailKeuangan()"><i data-lucide="download" style="margin-right: 6px; width: 16px; height: 16px;"></i> Export</button>
         </div>
     </div>
 
 
     <!-- Main Table Container -->
-    <div class="glass-card dk-table-shell">
-        <div class="dk-table-headbar">
-            <h4 class="dk-table-title">Rincian Komponen Iuran Per Blok</h4>
+    <div class="glass-card" style="padding: 0; overflow: hidden; border-radius: 20px;">
+        <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02);">
+            <h4 style="font-size: 1.1rem; margin: 0; font-weight: 700;">Rincian Komponen Iuran Per Blok</h4>
         </div>
-        <div class="table-scrollable dk-table-scroll">
-            <table class="modern-table rekon-table dk-table-base">
-                <thead id="dk-table-head" class="dk-table-thead">
+        <div class="table-scrollable" style="margin-top: 0; overflow-x: auto;">
+            <table class="modern-table rekon-table" style="width: 100%; border-collapse: collapse; white-space: nowrap;">
+                <thead id="dk-table-head" style="background: var(--secondary-bg);">
                     <!-- Headers generated by JS -->
                 </thead>
                 <tbody id="dk-table-body">
                     <!-- Rows generated by JS -->
                 </tbody>
-                <tfoot id="dk-table-foot" class="dk-table-tfoot">
+                <tfoot id="dk-table-foot" style="background: var(--secondary-bg); font-weight: bold;">
                     <!-- Footer generated by JS -->
                 </tfoot>
             </table>
         </div>
         
         <!-- Pagination Controls -->
-        <div id="dk-pagination" class="dk-pagination">
-            <span id="dk-page-info" class="text-secondary dk-page-info">Menampilkan 0 data</span>
-            <div class="dk-page-actions">
-                <button class="button-secondary button-sm dk-btn-page" onclick="prevDkPage()"><i data-lucide="chevron-left" class="dk-icon-16"></i></button>
-                <div id="dk-page-numbers" class="dk-page-numbers"></div>
-                <button class="button-secondary button-sm dk-btn-page" onclick="nextDkPage()"><i data-lucide="chevron-right" class="dk-icon-16"></i></button>
+        <div id="dk-pagination" style="display: none; justify-content: space-between; align-items: center; padding: 16px 24px; border-top: 1px dashed var(--border-color); background: rgba(255,255,255,0.01);">
+            <span id="dk-page-info" class="text-secondary" style="font-size: 0.8125rem;">Menampilkan 0 data</span>
+            <div style="display: flex; gap: 8px;">
+                <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;" onclick="prevDkPage()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
+                <div id="dk-page-numbers" style="display: flex; gap: 4px;"></div>
+                <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;" onclick="nextDkPage()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-.dk-icon-blue { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
-.dk-icon-emerald { color: #10b981; background: rgba(16, 185, 129, 0.1); }
-.dk-icon-amber { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
-
-.dk-filter-shell {
-    padding: 16px 20px;
-    margin-bottom: 12px;
-    border-radius: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.dk-header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.dk-nav-group { display: flex; gap: 6px; align-items: center; }
-.dk-btn-icon { padding: 8px; border-radius: 10px; }
-.dk-icon-14 { width: 14px; height: 14px; }
-.dk-filter-select { font-size: 0.8125rem; padding: 8px 12px; border-radius: 10px; }
-.dk-filter-month { min-width: 120px; }
-.dk-filter-year { min-width: 90px; }
-.dk-btn-export { padding: 8px 14px; border-radius: 10px; font-size: 0.8125rem; }
-.dk-icon-16-mr6 { margin-right: 6px; width: 16px; height: 16px; }
-
-.dk-table-shell { padding: 0; overflow: hidden; border-radius: 20px; }
-.dk-table-headbar {
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.02);
-}
-.dk-table-title { font-size: 1.1rem; margin: 0; font-weight: 700; }
-.dk-table-scroll { margin-top: 0; overflow-x: auto; }
-.dk-table-base { width: 100%; border-collapse: collapse; white-space: nowrap; }
-.dk-table-thead { background: var(--secondary-bg); }
-.dk-table-tfoot { background: var(--secondary-bg); font-weight: bold; }
-
-.dk-pagination {
-    display: none;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 24px;
-    border-top: 1px dashed var(--border-color);
-    background: rgba(255, 255, 255, 0.01);
-}
-.dk-page-info { font-size: 0.8125rem; }
-.dk-page-actions { display: flex; gap: 8px; }
-.dk-btn-page { padding: 8px 12px; border-radius: 8px; }
-.dk-page-numbers { display: flex; gap: 4px; }
-.dk-icon-16 { width: 16px; height: 16px; }
-</style>

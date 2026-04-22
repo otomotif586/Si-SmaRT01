@@ -17,13 +17,6 @@
     padding: 0;
     padding-bottom: env(safe-area-inset-bottom);
     transition: width 0.3s ease-in-out, background-color 0.3s ease;
-    pointer-events: auto;
-    isolation: isolate;
-}
-
-#sidebar,
-#sidebar * {
-    pointer-events: auto;
 }
 
 #sidebar .sidebar-header {
@@ -157,6 +150,10 @@
     color: var(--accent-color);
     background-color: transparent;
     opacity: 1;
+}
+
+#sidebar .sidebar-nav button.active-tab {
+    /* Hapus transform translateY agar container tidak memicu overflow (penyebab navbar amblas) */
 }
 
 #sidebar .sidebar-nav button.active-tab i,
@@ -475,16 +472,10 @@
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
         padding: 15px 0;
-        z-index: 12000;
-    }
-
-    #main-header {
-        z-index: 11000;
     }
 
     #sidebar.collapsed {
         width: 100px;
-        overflow-x: hidden;
     }
 
     #sidebar .sidebar-header {
@@ -654,52 +645,39 @@
     }
 
     .sidebar-footer-link {
-        position: static;
+        position: relative;
         left: auto;
         bottom: auto;
         transform: none;
         z-index: auto;
-        width: 100%;
-        margin-top: auto !important;
-        padding: 12px 20px 16px !important;
+        width: auto;
+        margin: auto 14px 10px !important;
+        padding: 0 !important;
         pointer-events: auto;
-        box-sizing: border-box;
     }
 
     .sidebar-footer-link a {
         justify-content: flex-start;
-        width: 100%;
-        padding: 11px 14px;
-        border-radius: 14px;
-        font-size: 0.82rem;
+        padding: 11px 12px;
+        border-radius: 12px;
+        font-size: 0.8rem;
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
+        transition: all 0.3s var(--bezier);
     }
 
     #sidebar.collapsed .sidebar-footer-link {
-        padding: 12px 8px 16px !important;
+        margin-left: 10px !important;
+        margin-right: 10px !important;
     }
 
     #sidebar.collapsed .sidebar-footer-link a {
         justify-content: center;
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-        padding: 10px 8px;
-        overflow: hidden;
+        padding: 11px 0;
     }
 
     #sidebar.collapsed .sidebar-footer-link a span {
         display: none;
-    }
-
-    #sidebar.collapsed .sidebar-footer-link a i,
-    #sidebar.collapsed .sidebar-footer-link a svg {
-        margin: 0;
-        width: 18px;
-        height: 18px;
-        flex-shrink: 0;
     }
 
     #main-content {
@@ -716,15 +694,21 @@
 
     /* Show desktop sidebar toggle on desktop */
     #desktop-sidebar-toggle {
-        display: flex;
+        display: flex !important;
         position: absolute;
         right: -14px;
         /* Mengambang di atas garis border */
         top: 32px;
-        width: 28px;
-        height: 28px;
-        aspect-ratio: 1 / 1;
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        min-height: 34px;
+        max-width: 34px;
+        max-height: 34px;
         padding: 0;
+        aspect-ratio: 1 / 1;
+        box-sizing: border-box;
+        flex: 0 0 34px;
         background-color: var(--accent-color);
         color: #ffffff;
         border: 4px solid var(--primary-bg);
@@ -732,20 +716,13 @@
         border-radius: 50%;
         box-shadow: 0 2px 4px var(--shadow-color);
         transition: all 0.4s var(--bezier);
-        z-index: 100;
-        align-items: center;
-        justify-content: center;
-        box-sizing: border-box;
-        line-height: 0;
-        flex-shrink: 0;
+        z-index: 1102;
     }
 
-    #desktop-sidebar-toggle i,
-    #desktop-sidebar-toggle svg {
+    #desktop-sidebar-toggle i {
         width: 16px;
         height: 16px;
-        display: block;
-        flex-shrink: 0;
+        margin: 0;
     }
 
     #desktop-sidebar-toggle:hover {
@@ -842,19 +819,6 @@
     border-color: var(--accent-color);
     color: var(--accent-color);
     transform: translateY(-2px);
-}
-
-.header-btn-danger {
-    color: var(--status-danger);
-    border-color: color-mix(in srgb, var(--status-danger) 30%, transparent);
-    background: color-mix(in srgb, var(--status-danger) 7%, var(--secondary-bg));
-    text-decoration: none;
-}
-
-.header-btn-danger:hover {
-    border-color: var(--status-danger);
-    color: var(--status-danger);
-    background: color-mix(in srgb, var(--status-danger) 12%, var(--secondary-bg));
 }
 
 .user-profile {

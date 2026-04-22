@@ -1,8 +1,8 @@
 <!-- Page: Warga -->
 <div id="page-warga" class="page-content hidden page-section"> <!-- Added page-section class -->
     
-    <div class="glass-card page-filter-card mb-24">
-        <p class="text-secondary page-filter-desc text-secondary-sm">Pilih blok untuk mengelola data, iuran, dan agenda spesifik.</p>
+    <div class="glass-card" style="padding: 20px; margin-bottom: 24px; border-radius: 20px;">
+        <p class="text-secondary" style="font-size: 0.875rem; margin: 0;">Pilih blok untuk mengelola data, iuran, dan agenda spesifik.</p>
     </div>
 
     <div class="grid-container">
@@ -12,16 +12,18 @@
         $current_year = date('Y');
 
         $stmt = $pdo->prepare("
-            SELECT b.*, 
-                   COUNT(w.id) as total_warga,
+             SELECT b.*,
+                 (
+                  SELECT COUNT(*)
+                  FROM warga w
+                  WHERE w.blok_id = b.id
+                 ) as total_warga,
                    (SELECT SUM(p.total_tagihan) 
                     FROM pembayaran_iuran p 
                     JOIN warga w2 ON p.warga_id = w2.id 
                     WHERE w2.blok_id = b.id AND p.bulan = ? AND p.tahun = ? AND p.status = 'LUNAS'
                    ) as setor_bulan_ini
-            FROM blok b 
-            LEFT JOIN warga w ON b.id = w.blok_id 
-            GROUP BY b.id
+             FROM blok b
         ");
         $stmt->execute([$current_month, $current_year]);
         $bloks = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -38,10 +40,19 @@
             $logo_text = htmlspecialchars($blok['logo_text']);
             
             // Biarkan kosong jika tidak ada gambar agar memunculkan inisial NAMA BLOK
-            $logo_image = isset($blok['logo_image']) && !empty($blok['logo_image']) ? htmlspecialchars(smart_asset($blok['logo_image']), ENT_QUOTES, 'UTF-8') : '';
+            $logo_image_raw = isset($blok['logo_image']) && !empty($blok['logo_image']) ? smart_asset($blok['logo_image']) : '';
+            $logo_image = $logo_image_raw !== '' ? htmlspecialchars($logo_image_raw, ENT_QUOTES, 'UTF-8') : '';
         ?>
         <!-- Dynamic Workspace Card -->
-        <div class="interactive-ws-card" onclick="openWorkspaceModal(<?= $blok_id ?>, '<?= $nama_blok ?>', '<?= $koordinator ?>', '<?= $total_warga ?>', '<?= $kas_format ?>', '<?= $logo_class ?>', '<?= $logo_text ?>', '<?= $logo_image ?>')">
+        <?php
+            $wsBlockNameJs = json_encode((string)($blok['nama_blok'] ?? ''), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+            $wsCoordJs = json_encode((string)($blok['koordinator'] ?? ''), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+            $wsKasJs = json_encode($kas_format, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+            $wsLogoClassJs = json_encode((string)($blok['logo_class'] ?? ''), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+            $wsLogoTextJs = json_encode((string)($blok['logo_text'] ?? ''), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+            $wsLogoImageJs = json_encode((string)($logo_image_raw ?: ''), JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+        ?>
+        <div class="interactive-ws-card" onclick='openWorkspaceModal(<?= (int)$blok_id ?>, <?= $wsBlockNameJs ?>, <?= $wsCoordJs ?>, <?= (int)$total_warga ?>, <?= $wsKasJs ?>, <?= $wsLogoClassJs ?>, <?= $wsLogoTextJs ?>, <?= $wsLogoImageJs ?>, this)'>
             <div class="ws-hero <?= $logo_class ?>">
                 <?php if ($logo_image): ?>
                     <img src="<?= $logo_image ?>" alt="Cover <?= $nama_blok ?>" class="ws-hero-img">
@@ -53,14 +64,14 @@
                 <h2><?= $nama_blok ?></h2>
                 <p>Koordinator: <?= $koordinator ?><br>Jumlah Warga: <?= $total_warga ?> KK</p>
                 <div class="card-footer">
-                    <div class="meta-stack">
-                        <span class="meta-label">Iuran Bulan Ini</span>
-                        <span class="tag text-emerald font-bold tag-plain-value"><?= $setor_format ?></span>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.65rem; color: var(--text-secondary-color); font-weight: 600; text-transform: uppercase;">Iuran Bulan Ini</span>
+                        <span class="tag text-emerald font-bold" style="padding: 0; background: transparent; font-size: 1.1rem;"><?= $setor_format ?></span>
                     </div>
-                    <div class="inline-actions">
-                        <button class="button-secondary button-sm button-secondary-accent compact-btn" onclick="event.stopPropagation(); window.currentBlokId = <?= $blok_id ?>; openMasterIuran()"><i data-lucide="settings" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Master Iuran</span></button>
-                        <button onclick="event.stopPropagation(); editBlok(<?= $blok_id ?>, '<?= addslashes($nama_blok) ?>', '<?= addslashes($koordinator) ?>', <?= $blok['periode_mulai_bulan'] ?? 'null' ?>, <?= $blok['periode_mulai_tahun'] ?? 'null' ?>)" title="Pengaturan Blok" class="icon-btn-round"><i data-lucide="settings" class="icon-16"></i></button>
-                        <button onclick="event.stopPropagation(); hapusBlok(<?= $blok_id ?>, '<?= addslashes($nama_blok) ?>', <?= $total_warga ?>)" title="Hapus Blok" class="icon-btn-round icon-btn-round-danger"><i data-lucide="trash-2" class="icon-16"></i></button>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button class="button-secondary button-sm" style="padding: 8px 16px; border-radius: 12px; background-color: color-mix(in srgb, var(--accent-color) 15%, transparent); border: 1px solid var(--accent-color); color: var(--accent-color); font-weight: 700;" onclick="event.stopPropagation(); window.currentBlokId = <?= $blok_id ?>; openMasterIuran()"><i data-lucide="settings" style="width: 18px; height: 18px; margin-right: 6px;"></i> <span class="hide-text-mobile">Master Iuran</span></button>
+                        <button onclick="event.stopPropagation(); editBlok(<?= $blok_id ?>, '<?= addslashes($nama_blok) ?>', '<?= addslashes($koordinator) ?>', <?= $blok['periode_mulai_bulan'] ?? 'null' ?>, <?= $blok['periode_mulai_tahun'] ?? 'null' ?>)" title="Pengaturan Blok" style="background: var(--secondary-bg); border: 1px solid var(--border-color); border-radius: 50%; padding: 6px; cursor: pointer; color: var(--text-secondary-color); display: flex; align-items: center; justify-content: center;"><i data-lucide="settings" style="width: 16px; height: 16px;"></i></button>
+                        <button onclick="event.stopPropagation(); hapusBlok(<?= $blok_id ?>, '<?= addslashes($nama_blok) ?>', <?= $total_warga ?>)" title="Hapus Blok" style="background: var(--secondary-bg); border: 1px solid var(--border-color); border-radius: 50%; padding: 6px; cursor: pointer; color: #ef4444; display: flex; align-items: center; justify-content: center;"><i data-lucide="trash-2" style="width: 16px; height: 16px;"></i></button>
                         <button class="ws-action-btn">Buka</button>
                     </div>
                 </div>
@@ -71,7 +82,7 @@
         <!-- Tambah Blok Baru -->
         <div class="interactive-ws-card" onclick="openAddBlockModal()">
             <div class="ws-hero logo-new">
-                <i data-lucide="plus" class="hero-letter icon-muted"></i>
+                <i data-lucide="plus" class="hero-letter" style="color: var(--text-secondary-color);"></i>
             </div>
             <section>
                 <h2>Tambah Blok</h2>
@@ -95,7 +106,7 @@
                 <div id="modal-block-logo" class="ws-logo-container logo-a">A</div>
                 <div>
                     <h2 id="modal-block-title" class="ws-title">Nama Blok</h2>
-                    <p id="modal-block-coord" class="text-secondary text-secondary-sm mt-4">Koordinator: -</p>
+                    <p id="modal-block-coord" class="text-secondary" style="font-size: 0.875rem; margin-top: 4px;">Koordinator: -</p>
                 </div>
             </div>
             <button class="modal-close-btn" onclick="closeWorkspaceModal()"><i data-lucide="x"></i></button>
@@ -119,10 +130,10 @@
                 <div id="modal-dash" class="modal-tab-content">
                     
                     <!-- Pencarian Cepat & Quick Actions -->
-                    <div class="mb-24 pos-relative">
-                        <div class="input-with-icon mb-16">
-                            <i data-lucide="search" class="icon-20 text-accent"></i>
-                            <input type="text" id="quick-search-input" class="input-field quick-search-input" placeholder="Pencarian Cepat (Ketik nama warga/NIK lalu Enter...)" onkeypress="handleQuickSearch(event)">
+                    <div style="margin-bottom: 24px; position: relative;">
+                        <div class="input-with-icon" style="margin-bottom: 16px;">
+                            <i data-lucide="search" style="color: var(--accent-color); width: 20px; height: 20px;"></i>
+                            <input type="text" id="quick-search-input" class="input-field" placeholder="Pencarian Cepat (Ketik nama warga/NIK lalu Enter...)" onkeypress="handleQuickSearch(event)" style="padding: 16px 20px 16px 48px; border-radius: 16px; box-shadow: 0 10px 30px -10px var(--shadow-color); border-color: transparent;">
                         </div>
                         <div class="quick-action-hub">
                             <button class="quick-action-btn" onclick="switchModalTab('modal-warga-list', document.querySelectorAll('.modal-tab')[1]); setTimeout(openFormWarga, 300);"><i data-lucide="user-plus" class="text-emerald"></i> Tambah Warga</button>
@@ -132,45 +143,45 @@
                         </div>
                     </div>
 
-                    <h3 class="section-title mb-16">Overview Utama</h3>
+                    <h3 class="section-title" style="margin-bottom: 16px;">Overview Utama</h3>
                     <div class="summary-3-grid">
-                        <div class="glass-card-deluxe stagger-item stagger-delay-1">
-                            <div class="card-icon-deluxe icon-tone-info">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+                            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
                                 <i data-lucide="users"></i>
                             </div>
                             <p class="card-label">Total Penghuni</p>
-                            <h3 id="dash-stat-warga" class="card-value text-color card-value-lg">0 KK</h3>
+                            <h3 id="dash-stat-warga" class="card-value text-color" style="font-size: 1.5rem;">0 KK</h3>
                             <div class="card-sub-info">Data terdaftar di blok</div>
                         </div>
-                        <div class="glass-card-deluxe stagger-item stagger-delay-2">
-                            <div class="card-icon-deluxe icon-tone-success">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+                            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
                                 <i data-lucide="banknote"></i>
                             </div>
                             <p class="card-label">Saldo Kas Internal</p>
-                            <h3 id="dash-stat-kas" class="card-value text-emerald card-value-lg">Rp 0</h3>
+                            <h3 id="dash-stat-kas" class="card-value text-emerald" style="font-size: 1.5rem;">Rp 0</h3>
                             <div class="card-sub-info">Dana kelolaan blok</div>
                         </div>
-                        <div class="glass-card-deluxe stagger-item stagger-delay-3">
-                            <div class="card-icon-deluxe icon-tone-warning">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+                            <div class="card-icon-deluxe" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
                                 <i data-lucide="activity"></i>
                             </div>
                             <p class="card-label">Status Lingkungan</p>
-                            <h3 id="dash-stat-status-main" class="card-value text-color card-value-lg">Aman</h3>
+                            <h3 id="dash-stat-status-main" class="card-value text-color" style="font-size: 1.5rem;">Aman</h3>
                             <div class="card-sub-info" id="dash-stat-status-sub">0 Laporan / 0 Agenda</div>
                         </div>
                     </div>
                     
                     <!-- Area Grafik Statistik (Charts) -->
-                    <div class="grid-container-2-col chart-grid">
-                        <div class="glass-card chart-card">
-                            <h4 class="section-title chart-title">Demografi Warga</h4>
-                            <div class="chart-frame chart-frame-center">
+                    <div class="grid-container-2-col" style="gap: 20px; margin-bottom: 24px;">
+                        <div class="glass-card" style="padding: 20px; display: flex; flex-direction: column;">
+                            <h4 class="section-title" style="font-size: 1rem; margin-bottom: 16px;">Demografi Warga</h4>
+                            <div style="position: relative; height: 220px; width: 100%; margin: auto;">
                                 <canvas id="chartDemografi"></canvas>
                             </div>
                         </div>
-                        <div class="glass-card chart-card">
-                            <h4 class="section-title chart-title">Pemasukan Kas (6 Bulan Terakhir)</h4>
-                            <div class="chart-frame">
+                        <div class="glass-card" style="padding: 20px; display: flex; flex-direction: column;">
+                            <h4 class="section-title" style="font-size: 1rem; margin-bottom: 16px;">Pemasukan Kas (6 Bulan Terakhir)</h4>
+                            <div style="position: relative; height: 220px; width: 100%;">
                                 <canvas id="chartPemasukan"></canvas>
                             </div>
                         </div>
@@ -179,60 +190,60 @@
                 
                 <!-- Tab 2: Data Warga Khusus Blok -->
                 <div id="modal-warga-list" class="modal-tab-content hidden">
-                    <div class="section-header page-filter-row mb-16 w-full">
-                        <h3 class="section-title m-0">Daftar Warga Blok</h3>
-                        <div class="inline-wrap-8">
-                            <button class="button-secondary button-sm compact-btn" onclick="downloadTemplateWarga()" title="Download Template Import"><i data-lucide="file-spreadsheet" class="icon-18"></i> <span class="hide-text-mobile">Template</span></button>
-                            <button class="button-secondary button-sm compact-btn" onclick="exportWargaCSV()" title="Export ke Excel (CSV)"><i data-lucide="download" class="icon-18"></i> <span class="hide-text-mobile">Export</span></button>
-                            <label class="button-secondary button-sm compact-btn cursor-pointer m-0" title="Import dari Excel (CSV)">
-                                <i data-lucide="upload" class="icon-18"></i> <span class="hide-text-mobile">Import</span>
+                    <div class="section-header" style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 12px;">
+                        <h3 class="section-title" style="margin: 0;">Daftar Warga Blok</h3>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;" onclick="downloadTemplateWarga()" title="Download Template Import"><i data-lucide="file-spreadsheet" style="width: 18px; height: 18px;"></i> <span class="hide-text-mobile">Template</span></button>
+                            <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;" onclick="exportWargaCSV()" title="Export ke Excel (CSV)"><i data-lucide="download" style="width: 18px; height: 18px;"></i> <span class="hide-text-mobile">Export</span></button>
+                            <label class="button-secondary button-sm" style="padding: 8px 12px; cursor: pointer; margin: 0; border-radius: 8px;" title="Import dari Excel (CSV)">
+                                <i data-lucide="upload" style="width: 18px; height: 18px;"></i> <span class="hide-text-mobile">Import</span>
                                 <input type="file" id="import-warga-csv" accept=".csv" class="hidden" onchange="importWargaCSV(this)">
                             </label>
-                            <button class="button-primary button-sm compact-btn" onclick="openFormWarga()"><i data-lucide="user-plus" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Tambah Warga</span></button>
+                            <button class="button-primary button-sm" style="padding: 8px 16px; border-radius: 8px;" onclick="openFormWarga()"><i data-lucide="user-plus" style="margin-right: 6px; width: 18px; height: 18px;"></i> <span class="hide-text-mobile">Tambah Warga</span></button>
                         </div>
                     </div>
                     
                     <!-- SUMMARY Warga (Deluxe 3-Across) -->
                     <div class="summary-3-grid">
-                        <div class="glass-card-deluxe stagger-item stagger-delay-1">
-                            <div class="card-icon-deluxe icon-tone-info">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.1s">
+                            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
                                 <i data-lucide="users"></i>
                             </div>
                             <p class="card-label">Total Warga</p>
-                            <h3 id="sum-warga-total" class="card-value text-color card-value-lg">0</h3>
+                            <h3 id="sum-warga-total" class="card-value text-color" style="font-size: 1.5rem;">0</h3>
                             <div class="card-sub-info">Data setelah filter</div>
                         </div>
-                        <div class="glass-card-deluxe stagger-item stagger-delay-2">
-                            <div class="card-icon-deluxe icon-tone-success">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.2s">
+                            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
                                 <i data-lucide="user-check"></i>
                             </div>
                             <p class="card-label">Warga Tetap</p>
-                            <h3 id="sum-warga-tetap" class="card-value text-emerald card-value-lg">0</h3>
+                            <h3 id="sum-warga-tetap" class="card-value text-emerald" style="font-size: 1.5rem;">0</h3>
                             <div class="card-sub-info">Domisili permanen</div>
                         </div>
-                        <div class="glass-card-deluxe stagger-item stagger-delay-3">
-                            <div class="card-icon-deluxe icon-tone-warning">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.3s">
+                            <div class="card-icon-deluxe" style="color: #f97316; background: rgba(249, 115, 22, 0.1);">
                                 <i data-lucide="user-minus"></i>
                             </div>
                             <p class="card-label">Warga Kontrak</p>
-                            <h3 id="sum-warga-kontrak" class="card-value text-orange card-value-lg">0</h3>
+                            <h3 id="sum-warga-kontrak" class="card-value text-orange" style="font-size: 1.5rem;">0</h3>
                             <div class="card-sub-info">Domisili sementara</div>
                         </div>
                     </div>
                         
                     <!-- Pencarian & Filter -->
-                    <div class="inline-wrap-12 w-full mb-24">
-                        <div class="input-with-icon input-grow-wide">
+                    <div style="display: flex; gap: 12px; width: 100%; flex-wrap: wrap; margin-bottom: 24px;">
+                        <div class="input-with-icon" style="flex: 2; min-width: 200px;">
                             <i data-lucide="search"></i>
-                            <input type="text" id="search-warga-input" placeholder="Cari nama atau NIK..." class="input-field input-field-compact" oninput="filterWargaList()">
+                            <input type="text" id="search-warga-input" placeholder="Cari nama atau NIK..." class="input-field" style="padding: 10px 16px 10px 40px; font-size: 0.875rem;" oninput="filterWargaList()">
                         </div>
-                        <select id="filter-pernikahan" class="input-field select-custom filter-mobile-flex compact-select flex-1 min-w-[120px]" onchange="filterWargaList()">
+                        <select id="filter-pernikahan" class="input-field select-custom filter-mobile-flex" style="font-size: 0.875rem; padding-top: 10px; padding-bottom: 10px; flex: 1; min-width: 120px;" onchange="filterWargaList()">
                             <option value="">Pernikahan (Semua)</option>
                             <option value="Lajang">Lajang</option>
                             <option value="Menikah">Menikah</option>
                             <option value="Pisah">Pisah</option>
                         </select>
-                        <select id="filter-status" class="input-field select-custom filter-mobile-flex compact-select flex-1 min-w-[120px]" onchange="filterWargaList()">
+                        <select id="filter-status" class="input-field select-custom filter-mobile-flex" style="font-size: 0.875rem; padding-top: 10px; padding-bottom: 10px; flex: 1; min-width: 120px;" onchange="filterWargaList()">
                             <option value="">Status (Semua)</option>
                             <option value="Tetap">Tetap</option>
                             <option value="Kontrak">Kontrak</option>
@@ -244,71 +255,71 @@
                         <p class="text-secondary text-center py-4">Memuat data...</p>
                     </div>
                     
-                    <div id="warga-pagination" class="pagination-bar">
-                        <span id="warga-page-info" class="text-secondary pagination-bar-info text-secondary-sm">Menampilkan 0-0 dari 0</span>
-                        <div class="pagination-actions">
-                            <button class="button-secondary button-sm compact-btn" onclick="prevPageWarga()">Sebelumnya</button>
-                            <button class="button-secondary button-sm compact-btn" onclick="nextPageWarga()">Selanjutnya</button>
+                    <div id="warga-pagination" style="display: none; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+                        <span id="warga-page-info" class="text-secondary" style="font-size: 0.875rem;">Menampilkan 0-0 dari 0</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="button-secondary button-sm" style="padding: 6px 12px; border-radius: 8px; font-size: 0.8rem;" onclick="prevPageWarga()">Sebelumnya</button>
+                            <button class="button-secondary button-sm" style="padding: 6px 12px; border-radius: 8px; font-size: 0.8rem;" onclick="nextPageWarga()">Selanjutnya</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Tab 3 & 4 (Placeholder) -->
                 <div id="modal-keuangan" class="modal-tab-content hidden">
-                    <div class="section-header page-filter-row mb-16 w-full">
-                        <h3 class="section-title m-0">Kelola Kas & Iuran Blok</h3>
-                        <div class="inline-wrap-8">
-                            <button class="button-secondary button-sm compact-btn fw-600" onclick="openRekonsiliasi()"><i data-lucide="activity" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Rekonsiliasi</span></button>
-                            <button class="button-secondary button-sm button-secondary-accent compact-btn" onclick="bayarTerpilihIuran()"><i data-lucide="check-square" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Bayar Terpilih</span></button>
-                            <button class="button-secondary button-sm compact-btn" onclick="bayarSemuaIuran()"><i data-lucide="check-circle" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Bayar Semua</span></button>
-                            <button class="button-primary button-sm compact-btn shadow-soft-blue" onclick="setorKeRT()"><i data-lucide="send" class="icon-18 mr-[6px]"></i> <span class="hide-text-mobile">Setor ke RT Pusat</span></button>
+                    <div class="section-header" style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 12px;">
+                        <h3 class="section-title" style="margin: 0;">Kelola Kas & Iuran Blok</h3>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button class="button-secondary button-sm" style="padding: 8px 16px; border-radius: 12px; font-weight: 600;" onclick="openRekonsiliasi()"><i data-lucide="activity" style="width: 18px; height: 18px; margin-right: 6px;"></i> <span class="hide-text-mobile">Rekonsiliasi</span></button>
+                            <button class="button-secondary button-sm" style="padding: 8px 16px; border-radius: 12px; border-color: #10b981; color: #10b981; font-weight: 600;" onclick="bayarTerpilihIuran()"><i data-lucide="check-square" style="width: 18px; height: 18px; margin-right: 6px;"></i> <span class="hide-text-mobile">Bayar Terpilih</span></button>
+                            <button class="button-secondary button-sm" style="padding: 8px 16px; border-radius: 12px;" onclick="bayarSemuaIuran()"><i data-lucide="check-circle" style="width: 18px; height: 18px; margin-right: 6px;"></i> <span class="hide-text-mobile">Bayar Semua</span></button>
+                            <button class="button-primary button-sm" style="padding: 8px 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);" onclick="setorKeRT()"><i data-lucide="send" style="margin-right: 6px; width: 18px; height: 18px;"></i> <span class="hide-text-mobile">Setor ke RT Pusat</span></button>
                         </div>
                     </div>
 
                     <!-- Summary Iuran Deluxe (3-Across Adaptive) -->
                     <div id="iuran-summary" class="summary-3-grid">
-                        <div class="glass-card-deluxe stagger-item stagger-delay-15">
-                            <div class="card-icon-deluxe icon-tone-success">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.15s">
+                            <div class="card-icon-deluxe" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">
                                 <i data-lucide="check-circle"></i>
                             </div>
                             <p class="card-label">Sudah Bayar</p>
-                            <h3 id="summary-lunas" class="card-value text-emerald card-value-md">Rp 0</h3>
+                            <h3 id="summary-lunas" class="card-value text-emerald" style="font-size: 1.35rem;">Rp 0</h3>
                             <div id="summary-count-lunas" class="card-sub-info">0 Warga Terdata</div>
                         </div>
 
-                        <div class="glass-card-deluxe stagger-item stagger-delay-25">
-                            <div class="card-icon-deluxe icon-tone-danger">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.25s">
+                            <div class="card-icon-deluxe" style="color: #ef4444; background: rgba(239, 68, 68, 0.1);">
                                 <i data-lucide="alert-circle"></i>
                             </div>
                             <p class="card-label">Belum Bayar</p>
-                            <h3 id="summary-menunggak" class="card-value text-red card-value-md">Rp 0</h3>
+                            <h3 id="summary-menunggak" class="card-value text-red" style="font-size: 1.35rem;">Rp 0</h3>
                             <div id="summary-count-menunggak" class="card-sub-info">0 Warga Tertunggak</div>
                         </div>
 
-                        <div class="glass-card-deluxe stagger-item stagger-delay-35">
-                            <div class="card-icon-deluxe icon-tone-info">
+                        <div class="glass-card-deluxe stagger-item" style="animation-delay: 0.35s">
+                            <div class="card-icon-deluxe" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);">
                                 <i data-lucide="send"></i>
                             </div>
                             <p class="card-label">Setoran RT</p>
-                            <h3 id="summary-setoran-status" class="card-value text-blue card-value-md">Ready</h3>
+                            <h3 id="summary-setoran-status" class="card-value text-blue" style="font-size: 1.35rem;">Ready</h3>
                             <div class="card-sub-info">Status antrean setor</div>
                         </div>
                     </div>
                     
                     <!-- Filter Tagihan -->
-                    <div class="inline-wrap-12 w-full mb-24">
-                        <div class="input-with-icon input-grow">
+                    <div style="display: flex; gap: 12px; width: 100%; flex-wrap: wrap; margin-bottom: 24px;">
+                        <div class="input-with-icon" style="flex: 1; min-width: 200px;">
                             <i data-lucide="search"></i>
-                            <input type="text" id="search-iuran-input" placeholder="Cari nama warga..." class="input-field input-field-compact" oninput="filterIuranList()">
+                            <input type="text" id="search-iuran-input" placeholder="Cari nama warga..." class="input-field" style="padding: 10px 16px 10px 40px; font-size: 0.875rem;" oninput="filterIuranList()">
                         </div>
-                        <div class="inline-wrap-8">
-                            <button class="button-secondary button-sm compact-btn-icon" onclick="prevMonthIuran()" title="Bulan Sebelumnya"><i data-lucide="chevron-left" class="icon-16"></i></button>
-                            <select id="filter-bulan-iuran" class="input-field select-custom compact-select compact-select-month" onchange="loadDataIuran()">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button class="button-secondary button-sm" style="padding: 10px; border-radius: 8px;" onclick="prevMonthIuran()" title="Bulan Sebelumnya"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
+                            <select id="filter-bulan-iuran" class="input-field select-custom" style="font-size: 0.875rem; padding-top: 10px; padding-bottom: 10px; width: auto; min-width: 150px;" onchange="loadDataIuran()">
                                 <!-- Diisi dinamis oleh JS -->
                             </select>
-                            <button class="button-secondary button-sm compact-btn-icon" onclick="nextMonthIuran()" title="Bulan Selanjutnya"><i data-lucide="chevron-right" class="icon-16"></i></button>
+                            <button class="button-secondary button-sm" style="padding: 10px; border-radius: 8px;" onclick="nextMonthIuran()" title="Bulan Selanjutnya"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
                         </div>
-                        <select id="filter-status-iuran" class="input-field select-custom compact-select compact-select-auto" onchange="filterIuranList()">
+                        <select id="filter-status-iuran" class="input-field select-custom" style="font-size: 0.875rem; padding-top: 10px; padding-bottom: 10px; width: auto; min-width: 140px;" onchange="filterIuranList()">
                             <option value="">Semua Status</option>
                             <option value="LUNAS">Sudah Bayar</option>
                             <option value="MENUNGGAK">Belum Bayar</option>
@@ -319,38 +330,38 @@
                         <p class="text-secondary text-center py-4">Memuat data iuran...</p>
                     </div>
                     
-                    <div id="iuran-pagination" class="pagination-bar">
-                        <span id="iuran-page-info" class="text-secondary pagination-bar-info text-secondary-sm">Menampilkan 0-0 dari 0</span>
-                        <div class="pagination-actions">
-                            <button class="button-secondary button-sm compact-btn" onclick="prevPageIuran()"><i data-lucide="chevron-left" class="icon-16"></i></button>
-                            <div id="iuran-page-numbers" class="row-gap-4"></div>
-                            <button class="button-secondary button-sm compact-btn" onclick="nextPageIuran()"><i data-lucide="chevron-right" class="icon-16"></i></button>
+                    <div id="iuran-pagination" style="display: none; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+                        <span id="iuran-page-info" class="text-secondary" style="font-size: 0.875rem;">Menampilkan 0-0 dari 0</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;" onclick="prevPageIuran()"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
+                            <div id="iuran-page-numbers" style="display: flex; gap: 4px;"></div>
+                            <button class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;" onclick="nextPageIuran()"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
                         </div>
                     </div>
                 </div>
 
                 <div id="modal-agenda" class="modal-tab-content hidden">
-                    <div class="section-header mb-16">
+                    <div class="section-header" style="margin-bottom: 16px;">
                         <h3 class="section-title">Agenda & Laporan</h3>
-                        <button class="button-primary button-sm compact-btn" onclick="openFormAgenda()"><i data-lucide="plus" class="mr-[6px]"></i> Buat Baru</button>
+                        <button class="button-primary button-sm" style="padding: 8px 16px; border-radius: 12px;" onclick="openFormAgenda()"><i data-lucide="plus" style="margin-right: 6px;"></i> Buat Baru</button>
                     </div>
                     
                     <!-- SUMMARY AGENDA & LAPORAN -->
                     <div class="summary-wrapper">
                         <div class="summary-card-modern">
                             <div class="summary-icon-wrapper bg-purple-light text-purple"><i data-lucide="calendar"></i></div>
-                            <p class="card-label m-0">Total Agenda</p>
-                            <div class="summary-foot">
-                                <h3 id="sum-agenda-total" class="card-value m-0">0</h3>
-                                <span id="sum-agenda-selesai" class="badge bg-purple-light text-purple badge-mini">0 Selesai</span>
+                            <p class="card-label m-0" style="margin:0;">Total Agenda</p>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                                <h3 id="sum-agenda-total" class="card-value m-0" style="margin:0;">0</h3>
+                                <span id="sum-agenda-selesai" class="badge bg-purple-light text-purple" style="font-size: 0.7rem;">0 Selesai</span>
                             </div>
                         </div>
                         <div class="summary-card-modern">
                             <div class="summary-icon-wrapper bg-orange-light text-orange"><i data-lucide="flag"></i></div>
-                            <p class="card-label m-0">Laporan Masalah</p>
-                            <div class="summary-foot">
-                                <h3 id="sum-laporan-total" class="card-value m-0">0</h3>
-                                <span id="sum-laporan-selesai" class="badge bg-emerald-light text-emerald badge-mini">0 Selesai</span>
+                            <p class="card-label m-0" style="margin:0;">Laporan Masalah</p>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                                <h3 id="sum-laporan-total" class="card-value m-0" style="margin:0;">0</h3>
+                                <span id="sum-laporan-selesai" class="badge bg-emerald-light text-emerald" style="font-size: 0.7rem;">0 Selesai</span>
                             </div>
                         </div>
                     </div>
@@ -368,12 +379,12 @@
                     <!-- Sub-tab Content -->
                     <div id="sub-tab-agenda" class="sub-tab-content">
                         <!-- Pencarian & Filter Agenda -->
-                        <div class="inline-wrap-12 w-full mb-24">
-                            <div class="input-with-icon input-grow">
+                        <div style="display: flex; gap: 12px; width: 100%; flex-wrap: wrap; margin-bottom: 24px;">
+                            <div class="input-with-icon" style="flex: 1; min-width: 200px;">
                                 <i data-lucide="search"></i>
-                                <input type="text" id="search-agenda-input" placeholder="Cari judul atau keterangan..." class="input-field input-field-compact" oninput="filterAgendaList()">
+                                <input type="text" id="search-agenda-input" placeholder="Cari judul atau keterangan..." class="input-field" style="padding: 10px 16px 10px 40px; font-size: 0.875rem;" oninput="filterAgendaList()">
                             </div>
-                            <select id="filter-status-agenda" class="input-field select-custom compact-select compact-select-auto" onchange="filterAgendaList()">
+                            <select id="filter-status-agenda" class="input-field select-custom" style="font-size: 0.875rem; padding-top: 10px; padding-bottom: 10px; width: auto; min-width: 140px;" onchange="filterAgendaList()">
                                 <option value="">Semua Status</option>
                                 <option value="Direncanakan">Direncanakan</option>
                                 <option value="Selesai">Selesai</option>
@@ -383,22 +394,22 @@
                         
                         <div id="agenda-list-container"></div>
                         
-                        <div id="agenda-pagination" class="pagination-bar">
-                            <span id="agenda-page-info" class="text-secondary pagination-bar-info text-secondary-sm">Menampilkan 0-0 dari 0</span>
-                            <div class="pagination-actions">
-                                <button class="button-secondary button-sm compact-btn" onclick="prevPageAgenda()">Sebelumnya</button>
-                                <button class="button-secondary button-sm compact-btn" onclick="nextPageAgenda()">Selanjutnya</button>
+                        <div id="agenda-pagination" style="display: none; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+                            <span id="agenda-page-info" class="text-secondary" style="font-size: 0.875rem;">Menampilkan 0-0 dari 0</span>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="button-secondary button-sm" style="padding: 6px 12px; border-radius: 8px; font-size: 0.8rem;" onclick="prevPageAgenda()">Sebelumnya</button>
+                                <button class="button-secondary button-sm" style="padding: 6px 12px; border-radius: 8px; font-size: 0.8rem;" onclick="nextPageAgenda()">Selanjutnya</button>
                             </div>
                         </div>
                     </div>
                     <div id="sub-tab-laporan" class="sub-tab-content hidden">
                         <!-- Pencarian & Filter Laporan -->
-                        <div class="inline-wrap-12 w-full mb-24">
-                            <div class="input-with-icon input-grow">
+                        <div style="display: flex; gap: 12px; width: 100%; flex-wrap: wrap; margin-bottom: 24px;">
+                            <div class="input-with-icon" style="flex: 1; min-width: 200px;">
                                 <i data-lucide="search"></i>
-                                <input type="text" id="search-laporan-input" placeholder="Cari judul laporan..." class="input-field input-field-compact" oninput="filterLaporanList()">
+                                <input type="text" id="search-laporan-input" placeholder="Cari judul laporan..." class="input-field" style="padding: 10px 16px 10px 40px; font-size: 0.875rem;" oninput="filterLaporanList()">
                             </div>
-                            <select id="filter-status-laporan" class="input-field select-custom compact-select compact-select-auto" onchange="filterLaporanList()">
+                            <select id="filter-status-laporan" class="input-field select-custom" style="font-size: 0.875rem; padding-top: 10px; padding-bottom: 10px; width: auto; min-width: 140px;" onchange="filterLaporanList()">
                                 <option value="">Semua Status</option>
                                 <option value="Baru">Baru</option>
                                 <option value="Diproses">Diproses</option>
@@ -408,11 +419,11 @@
                         
                         <div id="laporan-list-container"></div>
                         
-                        <div id="laporan-pagination" class="pagination-bar">
-                            <span id="laporan-page-info" class="text-secondary pagination-bar-info text-secondary-sm">Menampilkan 0-0 dari 0</span>
-                            <div class="pagination-actions">
-                                <button class="button-secondary button-sm compact-btn" onclick="prevPageLaporan()">Sebelumnya</button>
-                                <button class="button-secondary button-sm compact-btn" onclick="nextPageLaporan()">Selanjutnya</button>
+                        <div id="laporan-pagination" style="display: none; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+                            <span id="laporan-page-info" class="text-secondary" style="font-size: 0.875rem;">Menampilkan 0-0 dari 0</span>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="button-secondary button-sm" style="padding: 6px 12px; border-radius: 8px; font-size: 0.8rem;" onclick="prevPageLaporan()">Sebelumnya</button>
+                                <button class="button-secondary button-sm" style="padding: 6px 12px; border-radius: 8px; font-size: 0.8rem;" onclick="nextPageLaporan()">Selanjutnya</button>
                             </div>
                         </div>
                     </div>
@@ -420,16 +431,16 @@
 
                 <!-- Tab 5: Laporan & Relasi (Spesifik Blok) -->
                 <div id="modal-laporan-relasi" class="modal-tab-content hidden">
-                    <div class="section-header page-filter-row mb-24 w-full gap-12">
-                        <h3 class="section-title m-0">Laporan & Relasi Iuran Blok</h3>
-                        <div class="page-filter-actions gap-12">
-                            <div class="input-with-icon min-w-[200px]">
+                    <div class="section-header" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 12px;">
+                        <h3 class="section-title" style="margin: 0;">Laporan & Relasi Iuran Blok</h3>
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <div class="input-with-icon" style="min-width: 200px;">
                                 <i data-lucide="search"></i>
-                                <input type="text" id="search-ws-laporan-warga" placeholder="Cari warga..." class="input-field input-field-compact text-sm rounded-12" oninput="filterWsLaporanWarga()">
+                                <input type="text" id="search-ws-laporan-warga" placeholder="Cari warga..." class="input-field" style="padding: 10px 16px 10px 40px; font-size: 0.875rem; border-radius: 12px;" oninput="filterWsLaporanWarga()">
                             </div>
-                            <label class="text-secondary text-[0.8rem] fw-600">Tahun:</label>
-                            <input type="number" id="ws-relasi-year" class="input-field compact-control input-year-center" value="<?= date('Y') ?>" onchange="loadLaporanWargaWorkspace()">
-                            <button class="button-secondary button-sm compact-btn btn-compact-rounded btn-pad-10-16" onclick="exportWsLaporanWargaCSV()"><i data-lucide="download" class="icon-18 mr-[6px]"></i> Export</button>
+                            <label class="text-secondary" style="font-size: 0.8rem; font-weight: 600;">Tahun:</label>
+                            <input type="number" id="ws-relasi-year" class="input-field" style="width: 100px; padding: 10px; text-align: center; border-radius: 12px;" value="<?= date('Y') ?>" onchange="loadLaporanWargaWorkspace()">
+                            <button class="button-secondary button-sm" style="padding: 10px 16px; border-radius: 12px;" onclick="exportWsLaporanWargaCSV()"><i data-lucide="download" style="width: 18px; height: 18px;"></i> Export</button>
                         </div>
                     </div>
 
@@ -437,53 +448,53 @@
                     <div class="summary-wrapper" id="ws-relasi-summary-wrapper">
                         <div class="summary-card-modern">
                             <div class="summary-icon-wrapper bg-blue-light text-blue"><i data-lucide="users"></i></div>
-                            <p class="card-label m-0">Total Warga</p>
-                            <h3 id="ws-laporan-warga-total" class="card-value m-0">0</h3>
+                            <p class="card-label m-0" style="margin:0;">Total Warga</p>
+                            <h3 id="ws-laporan-warga-total" class="card-value m-0" style="margin:0;">0</h3>
                         </div>
                         <div class="summary-card-modern">
                             <div class="summary-icon-wrapper bg-emerald-light text-emerald"><i data-lucide="check-circle"></i></div>
-                            <p class="card-label m-0">Lunas 1 Tahun</p>
-                            <h3 id="ws-laporan-warga-lunas" class="card-value m-0">0</h3>
+                            <p class="card-label m-0" style="margin:0;">Lunas 1 Tahun</p>
+                            <h3 id="ws-laporan-warga-lunas" class="card-value m-0" style="margin:0;">0</h3>
                         </div>
                         <div class="summary-card-modern">
                             <div class="summary-icon-wrapper bg-red-light text-red"><i data-lucide="alert-circle"></i></div>
-                            <p class="card-label m-0">Menunggak</p>
-                            <h3 id="ws-laporan-warga-menunggak" class="card-value m-0">0</h3>
+                            <p class="card-label m-0" style="margin:0;">Menunggak</p>
+                            <h3 id="ws-laporan-warga-menunggak" class="card-value m-0" style="margin:0;">0</h3>
                         </div>
                     </div>
 
-                    <div class="glass-card table-panel pos-relative">
-                        <div class="table-responsive table-scroll-shell pos-relative">
-                            <div id="ws-laporan-scroll-wrapper" class="scroll-relasi-wrapper">
-                                <svg id="ws-svg-relations" class="svg-relasi-overlay">
+                    <div class="glass-card" style="padding: 0; border-radius: 20px; position: relative; overflow: hidden;">
+                        <div class="table-responsive" style="overflow-x: auto; position: relative;">
+                            <div id="ws-laporan-scroll-wrapper" style="position: relative; min-width: 1100px; padding-bottom: 40px;">
+                                <svg id="ws-svg-relations" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;">
                                     <defs>
                                         <marker id="ws-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
                                             <polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)" opacity="0.6" />
                                         </marker>
                                         <marker id="ws-arrowhead-advance" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                            <polygon points="0 0, 10 3.5, 0 7" fill="var(--status-info)" opacity="0.6" />
+                                            <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" opacity="0.6" />
                                         </marker>
                                     </defs>
                                 </svg>
 
-                                <table id="ws-laporan-warga-table" class="modern-table rekon-table ws-relasi-table">
-                                    <thead class="ws-relasi-thead">
+                                <table id="ws-laporan-warga-table" class="modern-table rekon-table" style="width: 100%; border-collapse: collapse;">
+                                    <thead style="position: sticky; top: 0; z-index: 30; background: var(--secondary-bg);">
                                         <tr>
-                                            <th class="ws-col-warga">Nama Warga</th>
-                                            <th class="ws-col-blok">NO/Blok</th>
-                                            <th class="text-center ws-col-status">Status</th>
-                                            <th class="text-center ws-col-month">Jan</th>
-                                            <th class="text-center ws-col-month">Feb</th>
-                                            <th class="text-center ws-col-month">Mar</th>
-                                            <th class="text-center ws-col-month">Apr</th>
-                                            <th class="text-center ws-col-month">Mei</th>
-                                            <th class="text-center ws-col-month">Jun</th>
-                                            <th class="text-center ws-col-month">Jul</th>
-                                            <th class="text-center ws-col-month">Agu</th>
-                                            <th class="text-center ws-col-month">Sep</th>
-                                            <th class="text-center ws-col-month">Okt</th>
-                                            <th class="text-center ws-col-month">Nov</th>
-                                            <th class="text-center ws-col-month">Des</th>
+                                            <th style="width: 180px; min-width: 180px; position: sticky; left: 0; z-index: 20; background: var(--secondary-bg);">Nama Warga</th>
+                                            <th style="width: 100px; min-width: 100px;">NO/Blok</th>
+                                            <th class="text-center" style="width: 100px; min-width: 100px;">Status</th>
+                                            <th class="text-center" style="width: 60px;">Jan</th>
+                                            <th class="text-center" style="width: 60px;">Feb</th>
+                                            <th class="text-center" style="width: 60px;">Mar</th>
+                                            <th class="text-center" style="width: 60px;">Apr</th>
+                                            <th class="text-center" style="width: 60px;">Mei</th>
+                                            <th class="text-center" style="width: 60px;">Jun</th>
+                                            <th class="text-center" style="width: 60px;">Jul</th>
+                                            <th class="text-center" style="width: 60px;">Agu</th>
+                                            <th class="text-center" style="width: 60px;">Sep</th>
+                                            <th class="text-center" style="width: 60px;">Okt</th>
+                                            <th class="text-center" style="width: 60px;">Nov</th>
+                                            <th class="text-center" style="width: 60px;">Des</th>
                                         </tr>
                                     </thead>
                                     <tbody id="ws-laporan-warga-table-body">
@@ -493,11 +504,11 @@
                             </div>
                         </div>
                         
-                        <div id="ws-laporan-pagination" class="glass-card pagination-card-shell panel-soft-float">
-                            <div id="ws-laporan-page-info" class="text-secondary pagination-bar-info text-[0.8rem]">Menampilkan 1-20 data</div>
-                            <div class="pagination-actions">
-                                <button onclick="prevWsLaporanPage()" class="button-secondary button-sm compact-btn"><i data-lucide="chevron-left" class="icon-16"></i></button>
-                                <button onclick="nextWsLaporanPage()" class="button-secondary button-sm compact-btn"><i data-lucide="chevron-right" class="icon-16"></i></button>
+                        <div id="ws-laporan-pagination" class="glass-card" style="margin: 12px; padding: 12px 24px; border-radius: 12px; display: none; align-items: center; justify-content: space-between; gap: 16px; background: rgba(255,255,255,0.02); border: none;">
+                            <div id="ws-laporan-page-info" class="text-secondary" style="font-size: 0.8rem;">Menampilkan 1-20 data</div>
+                            <div style="display: flex; gap: 8px;">
+                                <button onclick="prevWsLaporanPage()" class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;"><i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i></button>
+                                <button onclick="nextWsLaporanPage()" class="button-secondary button-sm" style="padding: 8px 12px; border-radius: 8px;"><i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i></button>
                             </div>
                         </div>
                     </div>
@@ -509,35 +520,35 @@
 </div>
 
 <!-- Modal Rekonsiliasi & Periode -->
-<div id="modal-rekonsiliasi" class="modal-overlay hidden overlay-z10005">
-    <div class="glass-card modal-shell modal-shell-md modal-shell-scroll">
-        <button class="modal-close-btn modal-close-top-right" onclick="document.getElementById('modal-rekonsiliasi').classList.add('hidden')"><i data-lucide="x"></i></button>
-        <h2 class="section-title mb-8">Audit & Rekonsiliasi Kas</h2>
-        <p class="text-secondary modal-desc">Deteksi otomatis warga yang menunggak berdasarkan periode pencatatan awal.</p>
+<div id="modal-rekonsiliasi" class="modal-overlay hidden" style="z-index: 10005 !important;">
+    <div class="glass-card" style="width: 100%; max-width: 500px; padding: 32px; position: relative; max-height: 90vh; display: flex; flex-direction: column;">
+        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="document.getElementById('modal-rekonsiliasi').classList.add('hidden')"><i data-lucide="x"></i></button>
+        <h2 class="section-title" style="margin-bottom: 8px;">Audit & Rekonsiliasi Kas</h2>
+        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Deteksi otomatis warga yang menunggak berdasarkan periode pencatatan awal.</p>
         
-        <div class="glass-card page-filter-card mb-24 bg-hover rounded-16 items-end">
-            <div class="flex-1 min-w-[120px]">
+        <div style="background: var(--hover-bg); padding: 16px; border-radius: 16px; margin-bottom: 24px; display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 120px;">
                 <label class="card-label">Bulan Mulai Mencatat</label>
-                <select id="rekon-bulan" class="input-field select-custom mt-8 select-left-16">
+                <select id="rekon-bulan" class="input-field select-custom" style="margin-top: 8px; padding-left: 16px;">
                     <option value="0">Januari</option><option value="1">Februari</option><option value="2">Maret</option>
                     <option value="3">April</option><option value="4">Mei</option><option value="5">Juni</option>
                     <option value="6">Juli</option><option value="7">Agustus</option><option value="8">September</option>
                     <option value="9">Oktober</option><option value="10">November</option><option value="11">Desember</option>
                 </select>
             </div>
-            <div class="flex-1 min-w-[100px]">
+            <div style="flex: 1; min-width: 100px;">
                 <label class="card-label">Tahun</label>
-                <input type="number" id="rekon-tahun" class="input-field mt-8 select-left-16">
+                <input type="number" id="rekon-tahun" class="input-field" style="margin-top: 8px; padding-left: 16px;">
             </div>
-            <button class="button-primary btn-rekon-save" onclick="simpanPeriodeRekon(this)"><i data-lucide="save"></i></button>
+            <button class="button-primary" style="height: 46px; border-radius: 12px; margin-top: auto;" onclick="simpanPeriodeRekon(this)"><i data-lucide="save"></i></button>
         </div>
 
-        <div class="section-divider-row">
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
             <span class="font-bold text-color">Daftar Penunggak (Diurutkan Terlama)</span>
-            <span id="rekon-total-warga" class="badge bg-red-light text-red text-[0.75rem]">Memuat...</span>
+            <span id="rekon-total-warga" class="badge bg-red-light text-red" style="font-size: 0.75rem;">Memuat...</span>
         </div>
 
-        <div id="rekonsiliasi-list" class="hide-scrollbar scroll-flex-col">
+        <div id="rekonsiliasi-list" class="hide-scrollbar" style="overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px;">
             <!-- Data akan diisi oleh JS -->
             <p class="text-center text-secondary py-4">Memuat data rekonsiliasi...</p>
         </div>
@@ -545,131 +556,131 @@
 </div>
 
 <!-- Modal Bayar Iuran -->
-<div id="modal-bayar-iuran" class="modal-overlay hidden overlay-z10005">
-    <div class="glass-card modal-shell modal-shell-sm">
-        <button class="modal-close-btn modal-close-top-right" onclick="document.getElementById('modal-bayar-iuran').classList.add('hidden')"><i data-lucide="x"></i></button>
-        <h2 class="section-title mb-8">Tandai Dibayar</h2>
-        <p class="text-secondary modal-desc">Konfirmasi pembayaran iuran untuk bulan ini.</p>
+<div id="modal-bayar-iuran" class="modal-overlay hidden" style="z-index: 10005 !important;">
+    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative;">
+        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="document.getElementById('modal-bayar-iuran').classList.add('hidden')"><i data-lucide="x"></i></button>
+        <h2 class="section-title" style="margin-bottom: 8px;">Tandai Dibayar</h2>
+        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Konfirmasi pembayaran iuran untuk bulan ini.</p>
         
         <input type="hidden" id="bayar-iuran-id">
-        <div class="mb-16">
+        <div style="margin-bottom: 16px;">
             <label class="card-label">Tanggal Pembayaran</label>
-            <input type="date" id="bayar-tanggal" class="input-field mt-8 input-left-20">
+            <input type="date" id="bayar-tanggal" class="input-field" style="margin-top: 8px; padding-left: 20px;">
         </div>
-        <div class="mb-32">
+        <div style="margin-bottom: 32px;">
             <label class="card-label">Metode Pembayaran</label>
-            <select id="bayar-metode" class="input-field select-custom mt-8">
+            <select id="bayar-metode" class="input-field select-custom" style="margin-top: 8px;">
                 <option value="Cash">Tunai (Cash)</option>
                 <option value="Transfer">Transfer Bank / E-Wallet</option>
             </select>
         </div>
-        <button class="button-primary button-full-center" onclick="submitBayarIuran(this)"><i data-lucide="check-circle" class="mr-2"></i> Konfirmasi Pembayaran</button>
+        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="submitBayarIuran(this)"><i data-lucide="check-circle" style="margin-right: 8px;"></i> Konfirmasi Pembayaran</button>
     </div>
 </div>
 
 <!-- Modal Setor ke Kas RT -->
-<div id="modal-setor-rt" class="modal-overlay hidden overlay-z10005">
-    <div class="glass-card modal-shell modal-shell-sm">
-        <button class="modal-close-btn modal-close-top-right" onclick="document.getElementById('modal-setor-rt').classList.add('hidden')"><i data-lucide="x"></i></button>
-        <h2 class="section-title mb-8">Setor ke Kas RT</h2>
-        <p class="text-secondary modal-desc">Setorkan semua dana iuran yang sudah <b class="text-emerald">LUNAS</b> di bulan ini ke Kas Pusat RT.</p>
+<div id="modal-setor-rt" class="modal-overlay hidden" style="z-index: 10005 !important;">
+    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative;">
+        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="document.getElementById('modal-setor-rt').classList.add('hidden')"><i data-lucide="x"></i></button>
+        <h2 class="section-title" style="margin-bottom: 8px;">Setor ke Kas RT</h2>
+        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Setorkan semua dana iuran yang sudah <b class="text-emerald">LUNAS</b> di bulan ini ke Kas Pusat RT.</p>
         
-        <div class="mb-32">
+        <div style="margin-bottom: 32px;">
             <label class="card-label">Tanggal Setor</label>
-            <input type="date" id="setor-tanggal" class="input-field mt-8 input-left-20">
+            <input type="date" id="setor-tanggal" class="input-field" style="margin-top: 8px; padding-left: 20px;">
         </div>
-        <div class="glass-card mb-24 text-[0.8rem] note-info-blue">
-            <i data-lucide="info" class="icon-inline icon-16 icon-mr-4 text-blue"></i> Hanya tagihan berstatus LUNAS yang akan disetorkan.
+        <div class="glass-card" style="padding: 12px 16px; background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; margin-bottom: 24px; font-size: 0.8rem; color: var(--text-color);">
+            <i data-lucide="info" style="display:inline; width:16px; height:16px; margin-right:4px; color: #3b82f6;"></i> Hanya tagihan berstatus LUNAS yang akan disetorkan.
         </div>
-        <button class="button-primary button-full-center" onclick="submitSetorRT(this)"><i data-lucide="send" class="mr-2"></i> Konfirmasi Setoran</button>
+        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="submitSetorRT(this)"><i data-lucide="send" style="margin-right: 8px;"></i> Konfirmasi Setoran</button>
     </div>
 </div>
 
 <!-- Modal Edit Iuran -->
-<div id="modal-edit-iuran" class="modal-overlay hidden overlay-z10005">
-    <div class="glass-card modal-shell modal-shell-sm">
-        <button class="modal-close-btn modal-close-top-right" onclick="document.getElementById('modal-edit-iuran').classList.add('hidden')"><i data-lucide="x"></i></button>
-        <h2 class="section-title mb-8">Edit Tagihan</h2>
-        <p class="text-secondary modal-desc">Ubah nominal atau status tagihan.</p>
+<div id="modal-edit-iuran" class="modal-overlay hidden" style="z-index: 10005 !important;">
+    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative;">
+        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="document.getElementById('modal-edit-iuran').classList.add('hidden')"><i data-lucide="x"></i></button>
+        <h2 class="section-title" style="margin-bottom: 8px;">Edit Tagihan</h2>
+        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Ubah nominal atau status tagihan.</p>
         
         <input type="hidden" id="edit-iuran-id">
-        <div class="mb-16">
+        <div style="margin-bottom: 16px;">
             <label class="card-label">Total Tagihan (Rp)</label>
-            <input type="number" id="edit-iuran-nominal" class="input-field mt-8 input-left-20">
+            <input type="number" id="edit-iuran-nominal" class="input-field" style="margin-top: 8px; padding-left: 20px;">
         </div>
-        <div class="mb-16">
+        <div style="margin-bottom: 16px;">
             <label class="card-label">Status</label>
-            <select id="edit-iuran-status" class="input-field select-custom mt-8" onchange="toggleEditIuranDates(this.value)">
+            <select id="edit-iuran-status" class="input-field select-custom" style="margin-top: 8px;" onchange="toggleEditIuranDates(this.value)">
                 <option value="MENUNGGAK">Belum Bayar</option>
                 <option value="LUNAS">Lunas</option>
             </select>
         </div>
-        <div class="mb-16">
+        <div style="margin-bottom: 16px;">
             <label class="card-label">Metode Pembayaran</label>
-            <select id="edit-iuran-metode" class="input-field select-custom mt-8">
+            <select id="edit-iuran-metode" class="input-field select-custom" style="margin-top: 8px;">
                 <option value="Cash">Tunai (Cash)</option>
                 <option value="Transfer">Transfer Bank / E-Wallet</option>
             </select>
         </div>
-        <div id="edit-iuran-dates-container" class="hidden">
-            <div class="mb-16">
+        <div id="edit-iuran-dates-container" style="display: none;">
+            <div style="margin-bottom: 16px;">
                 <label class="card-label">Tanggal Bayar</label>
-                <input type="date" id="edit-iuran-tgl-bayar" class="input-field mt-8 input-left-20">
+                <input type="date" id="edit-iuran-tgl-bayar" class="input-field" style="margin-top: 8px; padding-left: 20px;">
             </div>
-            <div class="mb-32">
+            <div style="margin-bottom: 32px;">
                 <label class="card-label">Tanggal Setor RT (Opsional/Kosongkan jika belum)</label>
-                <input type="date" id="edit-iuran-tgl-setor" class="input-field mt-8 input-left-20">
+                <input type="date" id="edit-iuran-tgl-setor" class="input-field" style="margin-top: 8px; padding-left: 20px;">
             </div>
         </div>
-        <button class="button-primary button-full-center" onclick="submitEditIuran(this)">Simpan Perubahan</button>
+        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="submitEditIuran(this)">Simpan Perubahan</button>
     </div>
 </div>
 
 <!-- Modal Detail Iuran -->
-<div id="modal-detail-iuran" class="modal-overlay hidden overlay-z10005">
-    <div class="glass-card modal-shell modal-shell-sm">
-        <button class="modal-close-btn modal-close-top-right" onclick="document.getElementById('modal-detail-iuran').classList.add('hidden')"><i data-lucide="x"></i></button>
-        <h2 class="section-title mb-8">Rincian Tagihan</h2>
-        <p class="text-secondary modal-desc">Rincian alokasi dana iuran bulan ini.</p>
+<div id="modal-detail-iuran" class="modal-overlay hidden" style="z-index: 10005 !important;">
+    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative;">
+        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="document.getElementById('modal-detail-iuran').classList.add('hidden')"><i data-lucide="x"></i></button>
+        <h2 class="section-title" style="margin-bottom: 8px;">Rincian Tagihan</h2>
+        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Rincian alokasi dana iuran bulan ini.</p>
         
-        <div id="detail-iuran-list" class="list-col-gap-sm mb-24 mt-0">
+        <div id="detail-iuran-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
             <!-- Diisi oleh JS -->
         </div>
-        <div class="section-top-divider-strong">
+        <div style="border-top: 2px dashed var(--border-color); padding-top: 16px; display: flex; justify-content: space-between; align-items: center;">
             <span class="font-bold text-color">Total Tagihan</span>
-            <h3 id="detail-iuran-total" class="text-emerald m-0">Rp 0</h3>
+            <h3 id="detail-iuran-total" class="text-emerald m-0" style="margin:0;">Rp 0</h3>
         </div>
     </div>
 </div>
 
 <!-- Drawer Modal: Master Iuran -->
-<div id="drawer-master-iuran" class="modal-overlay hidden overlay-z10010-drawer">
+<div id="drawer-master-iuran" class="modal-overlay hidden" style="z-index: 10010 !important; align-items: flex-end; justify-content: flex-end; padding: 0;">
     <div class="drawer-panel glass-card">
         <div class="drawer-header">
             <div>
                 <h2 class="ws-title">Master Pembayaran</h2>
-                <p class="text-secondary drawer-subtitle">Kelola komponen iuran wajib bulanan blok.</p>
+                <p class="text-secondary" style="font-size: 0.875rem; margin-top: 4px;">Kelola komponen iuran wajib bulanan blok.</p>
             </div>
             <button class="modal-close-btn" onclick="closeMasterIuran()"><i data-lucide="x"></i></button>
         </div>
         
-        <div class="drawer-body hide-scrollbar pt-16">
-            <div class="glass-card panel-soft-success">
-                <p class="text-emerald font-bold m-0 text-sm"><i data-lucide="info" class="icon-inline icon-16 icon-mr-4"></i> Total Tagihan Per Bulan: <span id="total-master-iuran" class="text-size-12-float-right">Rp 0</span></p>
+        <div class="drawer-body hide-scrollbar" style="padding-top: 16px;">
+            <div class="glass-card" style="padding: 16px; background: rgba(16, 185, 129, 0.1); border-color: var(--accent-color); margin-bottom: 24px;">
+                <p class="text-emerald font-bold" style="margin: 0; font-size: 0.875rem;"><i data-lucide="info" style="display:inline; width:16px; height:16px; margin-right:4px;"></i> Total Tagihan Per Bulan: <span id="total-master-iuran" style="font-size: 1.2rem; float:right;">Rp 0</span></p>
             </div>
 
-            <div id="master-iuran-list" class="list-container gap-12">
+            <div id="master-iuran-list" class="list-container" style="gap: 12px;">
                 <!-- List Komponen dari JS -->
             </div>
 
             <div class="dynamic-add-section">
-                <button type="button" class="button-secondary button-full-width button-dashed-accent" onclick="addMasterIuranField()"><i data-lucide="plus"></i> Tambah Komponen Baru</button>
+                <button type="button" class="button-secondary button-full-width" style="border-style: dashed; color: var(--accent-color); border-color: var(--accent-color);" onclick="addMasterIuranField()"><i data-lucide="plus"></i> Tambah Komponen Baru</button>
             </div>
         </div>
         
         <div class="drawer-footer">
             <button type="button" class="button-secondary" onclick="closeMasterIuran()">Tutup</button>
-            <button type="button" class="button-primary flex-grow" onclick="simpanMasterIuran()"><i data-lucide="save" class="mr-2"></i> Simpan Pengaturan</button>
+            <button type="button" class="button-primary flex-grow" onclick="simpanMasterIuran()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Pengaturan</button>
         </div>
     </div>
 </div>
@@ -678,178 +689,178 @@
 <?php include 'views/pages/datawargablok.php'; ?>
 
 <!-- Drawer Form Agenda -->
-<div id="drawer-agenda" class="modal-overlay hidden overlay-z10010-drawer">
+<div id="drawer-agenda" class="modal-overlay hidden" style="z-index: 10010 !important; align-items: flex-end; justify-content: flex-end; padding: 0;">
     <div class="drawer-panel glass-card">
         <div class="drawer-header">
             <div>
                 <h2 id="drawer-agenda-title" class="ws-title">Tambah Agenda</h2>
-                <p class="text-secondary drawer-subtitle">Kelola jadwal dan kegiatan blok.</p>
+                <p class="text-secondary" style="font-size: 0.875rem; margin-top: 4px;">Kelola jadwal dan kegiatan blok.</p>
             </div>
             <button class="modal-close-btn" onclick="closeFormAgendaDrawer()"><i data-lucide="x"></i></button>
         </div>
         
         <div class="drawer-body hide-scrollbar">
             <input type="hidden" id="agenda_id" value="0">
-            <div class="form-group mb-20">
+            <div class="form-group" style="margin-bottom: 20px;">
                 <label class="card-label">Unggah Dokumen Warga</label>
                 <div class="upload-premium-container">
                     <input type="file" class="upload-premium-input dokumen-file">
-                    <div class="upload-premium-label upload-label-pad">
-                        <i data-lucide="file-text" class="text-secondary mb-2 icon-24"></i>
-                        <span class="text-color font-bold text-compact">Pilih File (PDF/Gambar)</span>
+                    <div class="upload-premium-label" style="padding: 24px;">
+                        <i data-lucide="file-text" class="text-secondary mb-2" style="width: 24px; height: 24px;"></i>
+                        <span class="text-color font-bold" style="font-size: 0.8125rem;">Pilih File (PDF/Gambar)</span>
                     </div>
                 </div>
                 <div id="container-dokumen"></div>
             </div>
-            <div class="form-group mb-16">
+            <div class="form-group" style="margin-bottom: 16px;">
                 <label class="card-label">Tanggal & Waktu</label>
-                <input type="datetime-local" id="agenda_tanggal" class="input-field mt-8 input-left-20">
+                <input type="datetime-local" id="agenda_tanggal" class="input-field" style="margin-top: 8px; padding-left: 20px;">
             </div>
-            <div class="form-group mb-16">
+            <div class="form-group" style="margin-bottom: 16px;">
                 <label class="card-label">Estimasi Biaya (Rp)</label>
-                <input type="number" id="agenda_biaya" class="input-field mt-8 input-left-20">
+                <input type="number" id="agenda_biaya" class="input-field" style="margin-top: 8px; padding-left: 20px;">
             </div>
-            <div class="form-group mb-16">
+            <div class="form-group" style="margin-bottom: 16px;">
                 <label class="card-label">Keterangan</label>
-                <textarea id="agenda_keterangan" class="input-field mt-8 textarea-compact textarea-100"></textarea>
+                <textarea id="agenda_keterangan" class="input-field" style="margin-top: 8px; padding: 12px 20px; min-height: 100px; border-radius: 16px; resize: vertical;"></textarea>
             </div>
-            <div class="form-group mb-16">
+            <div class="form-group" style="margin-bottom: 16px;">
                 <label class="card-label">Status</label>
-                <select id="agenda_status" class="input-field select-custom mt-8" onchange="toggleAgendaGallery(this.value)">
+                <select id="agenda_status" class="input-field select-custom" style="margin-top: 8px;" onchange="toggleAgendaGallery(this.value)">
                     <option value="Direncanakan">Direncanakan</option>
                     <option value="Selesai">Selesai</option>
                     <option value="Dibatalkan">Dibatalkan</option>
                 </select>
             </div>
             
-            <div class="form-group section-top-divider mb-20">
+            <div class="form-group" style="margin-bottom: 20px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
                 <label class="card-label">Lampiran Berkas Agenda</label>
                 <div class="upload-premium-container">
                     <input type="file" id="agenda_lampiran_files" multiple class="upload-premium-input">
-                    <div class="upload-premium-label upload-label-pad">
-                        <i data-lucide="file-plus" class="text-secondary mb-2 icon-24"></i>
-                        <span class="text-color font-bold text-compact">Klik untuk Unggah Berkas</span>
+                    <div class="upload-premium-label" style="padding: 24px;">
+                        <i data-lucide="file-plus" class="text-secondary mb-2" style="width: 24px; height: 24px;"></i>
+                        <span class="text-color font-bold" style="font-size: 0.8125rem;">Klik untuk Unggah Berkas</span>
                     </div>
                 </div>
                 <div id="agenda-lampiran-preview" class="mt-1"></div>
-                <div id="agenda_existing_lampiran" class="list-col-gap-sm"></div>
+                <div id="agenda_existing_lampiran" style="display: flex; gap: 8px; flex-direction: column; margin-top: 12px;"></div>
             </div>
             
-            <div id="agenda_gallery_section" class="hidden section-top-divider">
+            <div id="agenda_gallery_section" class="hidden" style="margin-bottom: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
                 <label class="card-label">Unggah Galeri (Foto & Video Sekaligus)</label>
-                <input type="file" id="agenda_gallery_files" accept="image/*,video/mp4,video/webm" multiple class="input-field file-input-modern mt-8 w-full" onchange="previewAgendaGallery(this)">
-                <div id="agenda_gallery_preview" class="list-wrap-gap-sm"></div>
-                <div id="agenda_existing_gallery" class="list-wrap-gap-sm"></div>
+                <input type="file" id="agenda_gallery_files" accept="image/*,video/mp4,video/webm" multiple class="input-field file-input-modern" style="margin-top: 8px; width: 100%;" onchange="previewAgendaGallery(this)">
+                <div id="agenda_gallery_preview" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;"></div>
+                <div id="agenda_existing_gallery" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;"></div>
             </div>
         </div>
         
         <div class="drawer-footer">
             <button type="button" class="button-secondary" onclick="closeFormAgendaDrawer()">Batal</button>
-            <button type="button" class="button-primary flex-grow" onclick="simpanAgenda()"><i data-lucide="save" class="mr-2"></i> Simpan Agenda</button>
+            <button type="button" class="button-primary flex-grow" onclick="simpanAgenda()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Agenda</button>
         </div>
     </div>
 </div>
 
 <!-- Drawer Form Laporan -->
-<div id="drawer-laporan" class="modal-overlay hidden overlay-z10010-drawer">
+<div id="drawer-laporan" class="modal-overlay hidden" style="z-index: 10010 !important; align-items: flex-end; justify-content: flex-end; padding: 0;">
     <div class="drawer-panel glass-card">
         <div class="drawer-header">
             <div>
                 <h2 id="drawer-laporan-title" class="ws-title">Buat Laporan</h2>
-                <p class="text-secondary drawer-subtitle">Catat permasalahan atau keluhan di lingkungan.</p>
+                <p class="text-secondary" style="font-size: 0.875rem; margin-top: 4px;">Catat permasalahan atau keluhan di lingkungan.</p>
             </div>
             <button class="modal-close-btn" onclick="closeFormLaporanDrawer()"><i data-lucide="x"></i></button>
         </div>
         
         <div class="drawer-body hide-scrollbar">
             <input type="hidden" id="laporan_id" value="0">
-            <div class="form-group mb-16">
+            <div class="form-group" style="margin-bottom: 16px;">
                 <label class="card-label">Judul Laporan</label>
-                <input type="text" id="laporan_judul" class="input-field mt-8">
+                <input type="text" id="laporan_judul" class="input-field" style="margin-top: 8px;">
             </div>
-            <div class="form-group mb-16">
+            <div class="form-group" style="margin-bottom: 16px;">
                 <label class="card-label">Tanggal Laporan</label>
-                <input type="datetime-local" id="laporan_tanggal" class="input-field mt-8 input-left-20">
+                <input type="datetime-local" id="laporan_tanggal" class="input-field" style="margin-top: 8px; padding-left: 20px;">
             </div>
-            <div class="form-group mb-16">
+            <div class="form-group" style="margin-bottom: 16px;">
                 <label class="card-label">Keterangan / Detail Masalah</label>
-                <textarea id="laporan_keterangan" class="input-field mt-8 textarea-compact textarea-120"></textarea>
+                <textarea id="laporan_keterangan" class="input-field" style="margin-top: 8px; padding: 12px 20px; min-height: 120px; border-radius: 16px; resize: vertical;"></textarea>
             </div>
-            <div class="form-group mb-16">
+            <div class="form-group" style="margin-bottom: 16px;">
                 <label class="card-label">Status</label>
-                <select id="laporan_status" class="input-field select-custom mt-8" onchange="toggleLaporanSelesai(this.value)">
+                <select id="laporan_status" class="input-field select-custom" style="margin-top: 8px;" onchange="toggleLaporanSelesai(this.value)">
                     <option value="Baru">Baru</option>
                     <option value="Diproses">Diproses</option>
                     <option value="Selesai">Selesai</option>
                 </select>
             </div>
-            <div id="laporan_tanggal_selesai_section" class="form-group hidden mb-16">
+            <div id="laporan_tanggal_selesai_section" class="form-group hidden" style="margin-bottom: 16px;">
                 <label class="card-label">Tanggal Selesai</label>
-                <input type="datetime-local" id="laporan_tanggal_selesai" class="input-field mt-8 input-left-20">
+                <input type="datetime-local" id="laporan_tanggal_selesai" class="input-field" style="margin-top: 8px; padding-left: 20px;">
             </div>
             
-            <div class="form-group section-top-divider mb-20">
+            <div class="form-group" style="margin-bottom: 20px; padding-top: 16px; border-top: 1px dashed var(--border-color);">
                 <label class="card-label">Lampiran Bukti Kejadian</label>
                 <div class="upload-premium-container">
                     <input type="file" id="laporan_lampiran_files" multiple class="upload-premium-input">
-                    <div class="upload-premium-label upload-label-pad">
-                        <i data-lucide="camera" class="text-secondary mb-2 icon-24"></i>
-                        <span class="text-color font-bold text-compact">Foto atau Video Kejadian</span>
+                    <div class="upload-premium-label" style="padding: 24px;">
+                        <i data-lucide="camera" class="text-secondary mb-2" style="width: 24px; height: 24px;"></i>
+                        <span class="text-color font-bold" style="font-size: 0.8125rem;">Foto atau Video Kejadian</span>
                     </div>
                 </div>
-                <div id="laporan_existing_lampiran" class="list-col-gap-sm"></div>
+                <div id="laporan_existing_lampiran" style="display: flex; gap: 8px; flex-direction: column; margin-top: 12px;"></div>
             </div>
         </div>
         
         <div class="drawer-footer">
             <button type="button" class="button-secondary" onclick="closeFormLaporanDrawer()">Batal</button>
-            <button type="button" class="button-primary flex-grow" onclick="simpanLaporan()"><i data-lucide="save" class="mr-2"></i> Simpan Laporan</button>
+            <button type="button" class="button-primary flex-grow" onclick="simpanLaporan()"><i data-lucide="save" style="margin-right: 8px;"></i> Simpan Laporan</button>
         </div>
     </div>
 </div>
 
 <!-- Modal Edit Workspace -->
-<div id="edit-block-modal" class="modal-overlay hidden overlay-z10005">
-    <div class="glass-card modal-shell modal-shell-sm">
-        <button class="modal-close-btn modal-close-top-right" onclick="closeEditBlockModal()"><i data-lucide="x"></i></button>
-        <h2 class="section-title mb-8">Pengaturan Blok</h2>
-        <p class="text-secondary modal-desc">Perbarui profil blok dan periode awal pembukuan (General Settings).</p>
+<div id="edit-block-modal" class="modal-overlay hidden" style="z-index: 10005 !important;">
+    <div class="glass-card" style="width: 100%; max-width: 400px; padding: 32px; position: relative;">
+        <button class="modal-close-btn" style="position: absolute; top: 16px; right: 16px;" onclick="closeEditBlockModal()"><i data-lucide="x"></i></button>
+        <h2 class="section-title" style="margin-bottom: 8px;">Pengaturan Blok</h2>
+        <p class="text-secondary" style="font-size: 0.875rem; margin-bottom: 24px;">Perbarui profil blok dan periode awal pembukuan (General Settings).</p>
         
         <input type="hidden" id="edit-blok-id">
-        <div class="mb-16">
+        <div style="margin-bottom: 16px;">
             <label class="card-label">Nama Blok</label>
-            <input type="text" id="edit-nama-blok" class="input-field mt-8 input-left-20">
+            <input type="text" id="edit-nama-blok" class="input-field" style="margin-top: 8px; padding-left: 20px;">
         </div>
-        <div class="mb-16">
+        <div style="margin-bottom: 16px;">
             <label class="card-label">Koordinator</label>
-            <input type="text" id="edit-koordinator-blok" class="input-field mt-8 input-left-20">
+            <input type="text" id="edit-koordinator-blok" class="input-field" style="margin-top: 8px; padding-left: 20px;">
         </div>
-        <div class="mb-16 inline-form-row">
-            <div class="flex-1">
+        <div style="margin-bottom: 16px; display: flex; gap: 12px; align-items: center;">
+            <div style="flex: 1;">
                 <label class="card-label">Bulan Mulai Iuran</label>
-                <select id="edit-periode-bulan" class="input-field select-custom mt-8 input-left-20">
+                <select id="edit-periode-bulan" class="input-field select-custom" style="margin-top: 8px; padding-left: 20px;">
                     <option value="0">Januari</option><option value="1">Februari</option><option value="2">Maret</option>
                     <option value="3">April</option><option value="4">Mei</option><option value="5">Juni</option>
                     <option value="6">Juli</option><option value="7">Agustus</option><option value="8">September</option>
                     <option value="9">Oktober</option><option value="10">November</option><option value="11">Desember</option>
                 </select>
             </div>
-            <div class="flex-1">
+            <div style="flex: 1;">
                 <label class="card-label">Tahun Mulai</label>
-                <input type="number" id="edit-periode-tahun" class="input-field mt-8 input-left-20" placeholder="Cth: 2026">
+                <input type="number" id="edit-periode-tahun" class="input-field" style="margin-top: 8px; padding-left: 20px;" placeholder="Cth: 2026">
             </div>
         </div>
-        <div class="mb-32">
+        <div style="margin-bottom: 32px;">
             <label class="card-label">Ubah Logo Blok (Opsional)</label>
-            <input type="file" id="edit-logo-blok" accept="image/*" class="input-field mt-8 input-file-pad">
+            <input type="file" id="edit-logo-blok" accept="image/*" class="input-field" style="margin-top: 8px; padding: 10px 20px;">
         </div>
-        <button class="button-primary button-full-center" onclick="submitEditBlock(this)">Simpan Pengaturan</button>
+        <button class="button-primary" style="width: 100%; justify-content: center;" onclick="submitEditBlock(this)">Simpan Pengaturan</button>
     </div>
 </div>
 
 <!-- Modal Add Workspace (Card Stack Form) dipindah ke luar agar tidak nyangkut -->
-<div id="add-block-modal" class="modal-overlay hidden modal-stack-bg overlay-z10005">
-    <button class="modal-close-btn modal-close-floating" onclick="closeAddBlockModal()"><i data-lucide="x"></i></button>
+<div id="add-block-modal" class="modal-overlay hidden modal-stack-bg" style="z-index: 10005 !important;">
+    <button class="modal-close-btn" style="position: absolute; top: 24px; right: 24px; z-index: 10001;" onclick="closeAddBlockModal()"><i data-lucide="x"></i></button>
 
     <div class="stack-container" id="form-stack">
         <!-- Step 1: Nama Blok -->
@@ -861,10 +872,10 @@
             <div>
                 <h2>Blok Baru</h2>
                 <p>Tentukan nama blok atau area yang ingin Anda tambahkan ke dalam sistem SmaRT.</p>
-                <input type="text" id="input-nama-blok" class="input-field input-stack" placeholder="Contoh: Blok C">
+                <input type="text" id="input-nama-blok" class="input-field" placeholder="Contoh: Blok C" style="width: 100%; margin-top: 10px;">
             </div>
             <div class="stack-card-footer">
-                <button class="button-secondary next-stack-btn rounded-12">Lanjut <i data-lucide="arrow-right" class="icon-16 ml-2"></i></button>
+                <button class="button-secondary next-stack-btn" style="border-radius: 12px;">Lanjut <i data-lucide="arrow-right" style="width:16px;height:16px;margin-left:8px;"></i></button>
             </div>
         </div>
 
@@ -877,10 +888,10 @@
             <div>
                 <h2>Koordinator</h2>
                 <p>Siapa yang akan mengelola dan bertanggung jawab penuh atas blok ini?</p>
-                <input type="text" id="input-koordinator-blok" class="input-field input-stack" placeholder="Nama Lengkap...">
+                <input type="text" id="input-koordinator-blok" class="input-field" placeholder="Nama Lengkap..." style="width: 100%; margin-top: 10px;">
             </div>
             <div class="stack-card-footer">
-                <button class="button-secondary next-stack-btn rounded-12">Lanjut <i data-lucide="arrow-right" class="icon-16 ml-2"></i></button>
+                <button class="button-secondary next-stack-btn" style="border-radius: 12px;">Lanjut <i data-lucide="arrow-right" style="width:16px;height:16px;margin-left:8px;"></i></button>
             </div>
         </div>
 
@@ -903,7 +914,7 @@
                 </div>
             </div>
             <div class="stack-card-footer">
-                <button class="button-secondary next-stack-btn rounded-12">Lewati / Lanjut <i data-lucide="arrow-right" class="icon-16 ml-2"></i></button>
+                <button class="button-secondary next-stack-btn" style="border-radius: 12px;">Lewati / Lanjut <i data-lucide="arrow-right" style="width:16px;height:16px;margin-left:8px;"></i></button>
             </div>
         </div>
 
@@ -918,7 +929,7 @@
                 <p>Periksa kembali data yang dimasukkan. Simpan data workspace baru ke dalam database?</p>
             </div>
             <div class="stack-card-footer">
-                <button class="button-primary button-full-center" onclick="submitNewBlock(this)">Simpan Blok <i data-lucide="check-circle" class="icon-16 ml-2"></i></button>
+                <button class="button-primary" style="width: 100%; justify-content: center;" onclick="submitNewBlock(this)">Simpan Blok <i data-lucide="check-circle" style="width:16px;height:16px;margin-left:8px;"></i></button>
             </div>
         </div>
     </div>
@@ -933,7 +944,7 @@
     <div class="gsap-bg-noise"></div>
     
     <!-- Area Scroll Palsu (Untuk memicu ScrollTrigger) -->
-    <div class="gsap-scroll-container hide-scrollbar"><div class="gsap-scroll-spacer"></div></div>
+    <div class="gsap-scroll-container hide-scrollbar"><div style="height: 6000px;"></div></div>
 
     <div class="gsap-ui-layer">
         <div class="gsap-header">

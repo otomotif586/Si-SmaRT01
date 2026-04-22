@@ -12,11 +12,7 @@ function openGsapGallery(el) {
     // Dapatkan array gambar yang diklik dan perbanyak agar efek loop 3D terasa panjang
     const originalImages = JSON.parse(decodeURIComponent(el.getAttribute('data-gallery')));
     let imageUrls = [];
-    if (!Array.isArray(originalImages) || originalImages.length === 0) {
-        imageUrls = ['/public/images/placeholder-gallery.jpg'];
-    } else {
-        while (imageUrls.length < 12) { imageUrls = imageUrls.concat(originalImages); }
-    }
+    while (imageUrls.length < 12) { imageUrls = imageUrls.concat(originalImages); }
 
     const cardContainer = document.querySelector('.gsap-cards');
     cardContainer.innerHTML = ''; 

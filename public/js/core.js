@@ -1,82 +1,13 @@
-// Initialize Lucide Icons safely (CDN may be delayed/blocked on some browsers)
+// Initialize icons safely; do not block app bootstrap if CDN is late.
 function safeCreateIcons(root) {
     if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
-        lucide.createIcons(root ? { root: root } : undefined);
+        lucide.createIcons(root ? { root } : undefined);
         return true;
-    }
-    if (typeof window.__ensureLucide === 'function') {
-        window.__ensureLucide();
     }
     return false;
 }
 
 safeCreateIcons();
-
-function safeStorageGet(key, fallbackValue = null) {
-    try {
-        const value = localStorage.getItem(key);
-        return value === null ? fallbackValue : value;
-    } catch (e) {
-        return fallbackValue;
-    }
-}
-
-function safeStorageSet(key, value) {
-    try {
-        localStorage.setItem(key, value);
-    } catch (e) {
-        // Ignore storage errors so navigation/theme still works.
-    }
-}
-
-function safeRun(label, fn) {
-    try {
-        if (typeof fn === 'function') fn();
-    } catch (e) {
-        console.error('[Si-SmaRT] Module init failed:', label, e);
-    }
-}
-
-function bindSidebarNavFallback() {
-    const sidebar = document.getElementById('sidebar');
-    if (!sidebar) return;
-
-    sidebar.querySelectorAll('.sidebar-nav button[id^="nav-"]').forEach((btn) => {
-        if (btn.dataset.fallbackBound === '1') return;
-        btn.dataset.fallbackBound = '1';
-
-        btn.addEventListener('click', (event) => {
-            // If inline handler already worked and prevented default flow, keep this no-op.
-            if (event.defaultPrevented) return;
-
-            const id = btn.id || '';
-            if (id.startsWith('nav-group-')) {
-                const submenuId = 'submenu-' + id.replace('nav-group-', '');
-                const submenu = document.getElementById(submenuId);
-                if (submenu) {
-                    toggleSubmenu(submenuId);
-                }
-                return;
-            }
-
-            const pageId = id.replace(/^nav-/, '');
-            if (pageId) {
-                showPage(pageId);
-            }
-        });
-    });
-}
-
-const nativeFetch = window.fetch ? window.fetch.bind(window) : null;
-if (nativeFetch) {
-    window.fetch = function (input, init = {}) {
-        const requestInit = Object.assign({
-            credentials: 'same-origin',
-            cache: 'no-store'
-        }, init || {});
-        return nativeFetch(input, requestInit);
-    };
-}
 
 /**
  * Applies the specified theme to the document and updates the theme toggle icon.
@@ -85,7 +16,7 @@ if (nativeFetch) {
 function applyTheme(theme) {
     document.documentElement.classList.remove('light-theme', 'dark-theme');
     document.documentElement.classList.add(theme);
-    safeStorageSet('theme', theme);
+    localStorage.setItem('theme', theme);
 
     const themeToggleButton = document.getElementById('theme-toggle');
     if (themeToggleButton) {
@@ -112,18 +43,14 @@ function applyTheme(theme) {
  */
 function toggleTheme() {
     // Default to light if no theme is saved, or if the saved theme is invalid
-    const currentTheme = safeStorageGet('theme', 'light-theme') || 'light-theme';
+    const currentTheme = localStorage.getItem('theme') || 'light-theme';
     const newTheme = currentTheme === 'dark-theme' ? 'light-theme' : 'dark-theme';
     applyTheme(newTheme);
 }
 
-let coreBooted = false;
-
-function bootCore() {
-    if (coreBooted) return;
-    coreBooted = true;
-
-    const savedTheme = safeStorageGet('theme');
+// Apply theme on initial load
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
         applyTheme(savedTheme);
     } else {
@@ -140,16 +67,7 @@ function bootCore() {
     if (themeToggleButton) {
         themeToggleButton.addEventListener('click', toggleTheme);
     }
-
-    // Retry icon render when fallback script arrives later than initial parse.
-    setTimeout(() => safeCreateIcons(), 250);
-    setTimeout(() => safeCreateIcons(), 1200);
-}
-
-bootCore();
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bootCore, { once: true });
-}
+});
 
 /**
  * Toggles the collapsed state of the sidebar (for desktop).
@@ -162,7 +80,21 @@ function toggleDesktopSidebar() {
         if (mainContent) {
             mainContent.classList.toggle('sidebar-collapsed');
         }
+        updateDesktopToggleIcon();
     }
+}
+
+function updateDesktopToggleIcon() {
+    const sidebar = document.getElementById('sidebar');
+    const button = document.getElementById('desktop-sidebar-toggle');
+    if (!sidebar || !button) return;
+
+    const iconElement = button.querySelector('i');
+    if (!iconElement) return;
+
+    const isCollapsed = sidebar.classList.contains('collapsed');
+    iconElement.setAttribute('data-lucide', isCollapsed ? 'chevron-right' : 'chevron-left');
+    safeCreateIcons(button);
 }
 
 // --- Sidebar Toggling ---
@@ -215,13 +147,15 @@ function toggleSubmenu(submenuId) {
     }
 }
 
-function bootCoreNavigation() {
-    if (coreBooted === false) bootCore();
+window.toggleSubmenu = toggleSubmenu;
 
+// Attach event listeners
+document.addEventListener('DOMContentLoaded', () => {
     // Desktop sidebar toggle button (inside sidebar)
     const desktopSidebarToggleButton = document.getElementById('desktop-sidebar-toggle');
     if (desktopSidebarToggleButton) {
         desktopSidebarToggleButton.addEventListener('click', toggleDesktopSidebar);
+        updateDesktopToggleIcon();
     }
 
     // Mobile sidebar toggle button (inside header)
@@ -236,28 +170,16 @@ function bootCoreNavigation() {
         sidebarOverlay.addEventListener('click', closeMobileSidebar);
     }
 
-    // Fallback binding for browsers/extensions that block inline onclick handlers.
-    bindSidebarNavFallback();
-
     // Mengembalikan pengguna ke halaman terakhir setelah reload
-    const preferredDefaultPage = document.getElementById('page-dashboard') ? 'dashboard' : 'ruang-warga';
-    const storedPage = safeStorageGet('activePage', preferredDefaultPage) || preferredDefaultPage;
-    const activePage = document.getElementById('page-' + storedPage) ? storedPage : preferredDefaultPage;
-    safeStorageSet('activePage', activePage);
+    const preferredDefaultPage = (window.currentUserRole === 'warga') ? 'ruang-warga' : 'dashboard';
+    const activePage = localStorage.getItem('activePage') || preferredDefaultPage;
     setTimeout(() => showPage(activePage), 50); // Sedikit delay agar DOM siap
-    safeRun('loadAllBloks', () => {
-        if (typeof window.loadAllBloks === 'function') window.loadAllBloks();
-    });
-}
-
-bootCoreNavigation();
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bootCoreNavigation, { once: true });
-}
+    if (typeof loadAllBloks === 'function') loadAllBloks();
+});
 
 function showPage(pageId) {
     // Simpan halaman yang sedang dibuka ke Local Storage
-    safeStorageSet('activePage', pageId);
+    localStorage.setItem('activePage', pageId);
 
     // Di Mobile: Tutup sidebar otomatis saat berpindah halaman
     if (window.innerWidth < 1024) {
@@ -274,23 +196,11 @@ function showPage(pageId) {
     document.querySelectorAll('#sidebar .sidebar-nav button').forEach(b => b.classList.remove('active-tab'));
 
     // Show requested page
-    let resolvedPageId = pageId;
-    let targetPage = document.getElementById('page-' + resolvedPageId);
-    if (!targetPage) {
-        resolvedPageId = document.getElementById('page-dashboard') ? 'dashboard' : '';
-        targetPage = resolvedPageId ? document.getElementById('page-' + resolvedPageId) : null;
-    }
-    if (!targetPage) {
-        targetPage = document.querySelector('.page-content');
-        if (!targetPage) return;
-        resolvedPageId = targetPage.id.replace(/^page-/, '');
-    }
+    const targetPage = document.getElementById('page-' + pageId);
+    if (!targetPage) return;
 
     targetPage.classList.remove('hidden');
     targetPage.style.display = 'block';
-    if (resolvedPageId !== pageId) {
-        safeStorageSet('activePage', resolvedPageId);
-    }
 
     // Trigger fade-in animation
     targetPage.classList.remove('page-enter', 'stagger-ready');
@@ -298,7 +208,7 @@ function showPage(pageId) {
     targetPage.classList.add('page-enter', 'stagger-ready');
 
     // Set active state to nav
-    const activeNav = document.getElementById('nav-' + resolvedPageId);
+    const activeNav = document.getElementById('nav-' + pageId);
     if (activeNav) {
         activeNav.classList.add('active-tab');
 
@@ -346,74 +256,48 @@ function showPage(pageId) {
         'users': ['Master User', 'Manajemen akun & akses']
     };
 
-    if (titles[resolvedPageId]) {
-        if (document.getElementById('page-title')) document.getElementById('page-title').innerText = titles[resolvedPageId][0];
-        if (document.getElementById('page-subtitle')) document.getElementById('page-subtitle').innerText = titles[resolvedPageId][1];
+    if (titles[pageId]) {
+        if (document.getElementById('page-title')) document.getElementById('page-title').innerText = titles[pageId][0];
+        if (document.getElementById('page-subtitle')) document.getElementById('page-subtitle').innerText = titles[pageId][1];
     }
 
     // Re-render icons for dynamic content if any
-    safeCreateIcons();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 
-    if (resolvedPageId === 'global-warga') {
-        safeRun('loadGlobalWarga', () => {
-            if (typeof window.loadGlobalWarga === 'function') window.loadGlobalWarga();
-        });
-    } else if (resolvedPageId === 'ruang-warga') {
-        safeRun('initRuangWarga', () => {
-            if (typeof window.initRuangWarga === 'function') window.initRuangWarga();
-        });
-    } else if (resolvedPageId === 'laporan-iuran-blok') {
-        safeRun('initLaporanIuranBlok', () => {
-            if (typeof window.initLaporanIuranBlok === 'function') window.initLaporanIuranBlok();
-        });
-    } else if (resolvedPageId === 'rekonsiliasi') {
-        safeRun('initRekonsiliasi', () => {
-            if (typeof window.initRekonsiliasi === 'function') window.initRekonsiliasi();
-        });
-    } else if (resolvedPageId === 'laporan-iuran-warga') {
-        safeRun('initLaporanIuranWarga', () => {
-            if (typeof window.initLaporanIuranWarga === 'function') window.initLaporanIuranWarga();
-        });
-    } else if (resolvedPageId === 'keuangan') {
-        safeRun('initKeuanganGlobal', () => {
-            if (typeof window.initKeuanganGlobal === 'function') window.initKeuanganGlobal();
-        });
-    } else if (resolvedPageId === 'detail-keuangan') {
-        safeRun('initDetailKeuangan', () => {
-            if (typeof window.initDetailKeuangan === 'function') window.initDetailKeuangan();
-        });
-    } else if (resolvedPageId === 'pos-keuangan') {
-        safeRun('initPosKeuangan', () => {
-            if (typeof window.initPosKeuangan === 'function') window.initPosKeuangan();
-        });
-    } else if (resolvedPageId === 'pembukuan') {
-        safeRun('initPembukuan', () => {
-            if (typeof window.initPembukuan === 'function') window.initPembukuan();
-        });
-    } else if (resolvedPageId === 'keamanan') {
-        safeRun('initKeamanan', () => {
-            if (typeof window.initKeamanan === 'function') window.initKeamanan();
-        });
-    } else if (resolvedPageId === 'info') {
-        safeRun('initInfo', () => {
-            if (typeof window.initInfo === 'function') window.initInfo();
-        });
-    } else if (resolvedPageId === 'users') {
-        safeRun('loadCmsUsers', () => {
-            if (typeof window.loadCmsUsers === 'function') window.loadCmsUsers();
-        });
-    } else if (resolvedPageId === 'pasar') {
-        safeRun('initPasarPage', () => {
-            if (typeof window.initPasarPage === 'function') window.initPasarPage();
-        });
-        safeRun('initPasar', () => {
-            if (typeof window.initPasar === 'function') window.initPasar();
-        });
+    if (pageId === 'global-warga') {
+        if (typeof loadGlobalWarga === 'function') loadGlobalWarga();
+    } else if (pageId === 'ruang-warga') {
+        if (typeof initRuangWarga === 'function') initRuangWarga();
+    } else if (pageId === 'laporan-iuran-blok') {
+        initLaporanIuranBlok();
+    } else if (pageId === 'rekonsiliasi') {
+        initRekonsiliasi();
+    } else if (pageId === 'laporan-iuran-warga') {
+        initLaporanIuranWarga();
+    } else if (pageId === 'keuangan') {
+        initKeuanganGlobal();
+    } else if (pageId === 'detail-keuangan') {
+        if (typeof initDetailKeuangan === 'function') initDetailKeuangan();
+    } else if (pageId === 'pos-keuangan') {
+        if (typeof initPosKeuangan === 'function') initPosKeuangan();
+    } else if (pageId === 'pembukuan') {
+        if (typeof initPembukuan === 'function') initPembukuan();
+    } else if (pageId === 'keamanan') {
+        if (typeof initKeamanan === 'function') initKeamanan();
+    } else if (pageId === 'info') {
+        if (typeof initInfo === 'function') initInfo();
+    } else if (pageId === 'users') {
+        if (typeof loadCmsUsers === 'function') loadCmsUsers();
+    } else if (pageId === 'pasar') {
+        if (typeof initPasarPage === 'function') initPasarPage();
+        if (typeof initPasar === 'function') initPasar();
     }
 
     // Scroll to top
     window.scrollTo(0, 0);
 }
+
+window.showPage = showPage;
 
 // Fungsi pembantu untuk mendapatkan format YYYY-MM-DD sesuai zona waktu komputer Anda
 function getLocalDateString() {
