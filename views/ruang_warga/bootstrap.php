@@ -2,6 +2,7 @@
 session_start();
 require_once 'config/database.php';
 require_once __DIR__ . '/../../config/asset_url.php';
+smart_send_html_no_cache_headers();
 
 $alertMessage = '';
 $alertType = '';
@@ -372,7 +373,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $up = $pdo->prepare("UPDATE ruang_warga_accounts SET last_login_at = NOW(), penjual_id = ? WHERE id = ?");
                 $up->execute([$penjual['id'], $account['id']]);
 
-                header('Location: ruang_warga.php');
+                header('Location: ruang_warga.php?ref=' . rawurlencode((string)time()));
                 exit;
             }
         }
@@ -418,7 +419,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['penjual_id'] = (int)$penjual['id'];
                 $_SESSION['penjual_nama_toko'] = $penjual['nama_toko'];
 
-                header('Location: ruang_warga.php');
+                header('Location: ruang_warga.php?ref=' . rawurlencode((string)time()));
                 exit;
             }
         }
@@ -665,7 +666,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action !== 'login' && $action !== 'register') {
-        header('Location: ruang_warga.php?ref=1');
+        header('Location: ruang_warga.php?ref=' . rawurlencode((string)time()));
         exit;
     }
 }

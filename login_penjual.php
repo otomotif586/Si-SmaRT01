@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_POST['action'] ?? '';
     
     if ($action === 'login') {
-        $user = trim((string)($_POST['username'] ?? ''));
+        $user = $_POST['username'] ?? '';
         $pass = $_POST['password'] ?? '';
 
         if ($user && $pass) {
@@ -135,36 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute([$user]);
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $isValidPassword = false;
-            $needsUpgradeHash = false;
-
-            if ($row) {
-                $storedPassword = (string)($row['password'] ?? '');
-
-                if ($storedPassword !== '' && password_verify($pass, $storedPassword)) {
-                    $isValidPassword = true;
-                    if (password_needs_rehash($storedPassword, PASSWORD_DEFAULT)) {
-                        $needsUpgradeHash = true;
-                    }
-                } elseif ($storedPassword !== '' && hash_equals($storedPassword, (string)$pass)) {
-                    $isValidPassword = true;
-                    $needsUpgradeHash = true;
-                } elseif (preg_match('/^[a-f0-9]{32}$/i', $storedPassword) && hash_equals(strtolower($storedPassword), md5((string)$pass))) {
-                    $isValidPassword = true;
-                    $needsUpgradeHash = true;
-                } elseif (preg_match('/^[a-f0-9]{40}$/i', $storedPassword) && hash_equals(strtolower($storedPassword), sha1((string)$pass))) {
-                    $isValidPassword = true;
-                    $needsUpgradeHash = true;
-                }
-            }
-
-            if ($row && $isValidPassword) {
-                if ($needsUpgradeHash) {
-                    $newHash = password_hash((string)$pass, PASSWORD_DEFAULT);
-                    $stmtUp = $pdo->prepare("UPDATE pasar_penjual SET password = ? WHERE id = ?");
-                    $stmtUp->execute([$newHash, (int)$row['id']]);
-                }
-
+            if ($row && password_verify($pass, $row['password'])) {
                 if ($row['status'] == 'Pending') {
                     $alertMessage = "Toko Anda sedang dalam tahap review dan menunggu persetujuan Admin RT.";
                     $alertType = "warning";
@@ -1293,7 +1264,7 @@ $alertType = $alertType ?? 'info';
                 <form action="login_penjual.php" method="POST" id="nikLoginFormPenjual">
                     <input type="hidden" name="action" value="login_nik">
                     <input type="text" name="nik" placeholder="Masuk Cepat dengan NIK (16 digit)" maxlength="16" inputmode="numeric" pattern="[0-9]{16}" required />
-                    <button type="submit" id="btnSubmitNikLogin">Masuk Tanpa Password</button>
+                    <button type="submit" id="btnSubmitNikLogin" style="width:100%;">Masuk Tanpa Password</button>
                 </form>
             </div>
         </div>

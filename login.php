@@ -14,7 +14,7 @@ $error = "";
 
 // Proses Login
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user = trim((string)($_POST['username'] ?? ''));
+    $user = $_POST['username'] ?? '';
     $pass = $_POST['password'] ?? '';
 
     if ($user && $pass) {
@@ -22,36 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute([$user]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $isValidPassword = false;
-        $needsUpgradeHash = false;
-
-        if ($row) {
-            $storedPassword = (string)($row['password'] ?? '');
-
-            if ($storedPassword !== '' && password_verify($pass, $storedPassword)) {
-                $isValidPassword = true;
-                if (password_needs_rehash($storedPassword, PASSWORD_DEFAULT)) {
-                    $needsUpgradeHash = true;
-                }
-            } elseif ($storedPassword !== '' && hash_equals($storedPassword, (string)$pass)) {
-                $isValidPassword = true;
-                $needsUpgradeHash = true;
-            } elseif (preg_match('/^[a-f0-9]{32}$/i', $storedPassword) && hash_equals(strtolower($storedPassword), md5((string)$pass))) {
-                $isValidPassword = true;
-                $needsUpgradeHash = true;
-            } elseif (preg_match('/^[a-f0-9]{40}$/i', $storedPassword) && hash_equals(strtolower($storedPassword), sha1((string)$pass))) {
-                $isValidPassword = true;
-                $needsUpgradeHash = true;
-            }
-        }
-
-        if ($row && $isValidPassword) {
-            if ($needsUpgradeHash) {
-                $newHash = password_hash((string)$pass, PASSWORD_DEFAULT);
-                $stmtUp = $pdo->prepare("UPDATE web_users SET password = ? WHERE id = ?");
-                $stmtUp->execute([$newHash, (int)$row['id']]);
-            }
-
+        if ($row && password_verify($pass, $row['password'])) {
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['username'] = $row['username'];
             $_SESSION['nama_lengkap'] = $row['nama_lengkap'];

@@ -6,14 +6,13 @@ html, body {
 
 body {
     margin: 0;
-    font-family: var(--font-sans);
+    font-family: 'Inter', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Theme Variables - Light Mode (Default) */
 :root,
 :root.light-theme {
-    --font-sans: 'Plus Jakarta Sans', 'Inter', 'Segoe UI', sans-serif;
     --primary-bg: #f8fafc;
     --secondary-bg: #ffffff;
     --text-color: #0f172a;
@@ -28,10 +27,6 @@ body {
     --card-border: rgba(255, 255, 255, 0.6);
     --input-bg: #ffffff;
     --input-border: #e2e8f0;
-    --status-info: #3b82f6;
-    --status-success: #10b981;
-    --status-warning: #f59e0b;
-    --status-danger: #ef4444;
     --bezier: cubic-bezier(0.4, 0, 0.2, 1);
 }
 

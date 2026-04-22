@@ -2,6 +2,82 @@ const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
 const dockButtons = Array.from(document.querySelectorAll('.tab-dock-btn'));
 const goTabLinks = Array.from(document.querySelectorAll('[data-go-tab]'));
 const tabPanels = Array.from(document.querySelectorAll('.tab-panel'));
+const modalTriggers = Array.from(document.querySelectorAll('[data-open-modal]'));
+const modalClosers = Array.from(document.querySelectorAll('[data-close-modal]'));
+const RW_STANDALONE_TAB_KEY = 'rw.standalone.activeTab';
+let rwActivePanel = tabPanels.find((panel) => panel.classList.contains('active')) || null;
+
+function rwStandaloneSaveTab(tabId) {
+    if (!tabId) return;
+    try {
+        window.localStorage.setItem(RW_STANDALONE_TAB_KEY, tabId);
+    } catch (e) {
+        // Ignore storage restrictions silently.
+    }
+}
+
+function rwStandaloneReadTab() {
+    try {
+        return window.localStorage.getItem(RW_STANDALONE_TAB_KEY) || '';
+    } catch (e) {
+        return '';
+    }
+}
+
+function rwStandalonePulse(target) {
+    if (!target) return;
+    target.classList.remove('rw-haptic-hit');
+    window.requestAnimationFrame(() => {
+        target.classList.add('rw-haptic-hit');
+        window.setTimeout(() => target.classList.remove('rw-haptic-hit'), 220);
+    });
+}
+
+function rwStandaloneRipple(target, event) {
+    if (!target || !event) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const rect = target.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 1.2;
+    const x = (event.clientX || (rect.left + (rect.width / 2))) - rect.left;
+    const y = (event.clientY || (rect.top + (rect.height / 2))) - rect.top;
+
+    target.classList.add('rw-ripple-host');
+
+    const ripple = document.createElement('span');
+    ripple.className = 'rw-ripple-dot';
+    ripple.style.width = `${size}px`;
+    ripple.style.height = `${size}px`;
+    ripple.style.left = `${x - (size / 2)}px`;
+    ripple.style.top = `${y - (size / 2)}px`;
+
+    target.appendChild(ripple);
+    window.setTimeout(() => ripple.remove(), 520);
+}
+
+function rwStandaloneStaggerReveal(scope) {
+    const root = scope || document;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const nodes = root.querySelectorAll([
+        '.hero',
+        '.tabs .tab-btn',
+        '.section',
+        '.list-item',
+        '.info-important-item',
+        '.pantau-info-mini-item',
+        '.table-wrap tr'
+    ].join(', '));
+
+    nodes.forEach((node, index) => {
+        node.classList.remove('rw-reveal-ready');
+        node.style.setProperty('--rw-reveal-delay', `${Math.min(index * 24, 320)}ms`);
+    });
+
+    window.requestAnimationFrame(() => {
+        nodes.forEach((node) => node.classList.add('rw-reveal-ready'));
+    });
+}
 
 function activateTab(tabId, shouldScroll = false) {
     if (!tabId) return;
@@ -14,16 +90,102 @@ function activateTab(tabId, shouldScroll = false) {
         btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
     });
 
-    tabPanels.forEach((panel) => {
-        panel.classList.toggle('active', panel.getAttribute('data-panel') === tabId);
-    });
+    const targetPanel = tabPanels.find((panel) => panel.getAttribute('data-panel') === tabId) || null;
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (shouldScroll) {
-        const targetPanel = document.querySelector(`.tab-panel[data-panel="${tabId}"]`);
-        if (targetPanel) {
-            targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!targetPanel) return;
+
+    if (rwActivePanel && rwActivePanel !== targetPanel) {
+        if (reduceMotion) {
+            rwActivePanel.classList.remove('active');
+        } else {
+            rwActivePanel.classList.add('rw-panel-exit');
+            window.setTimeout(() => {
+                rwActivePanel.classList.remove('active', 'rw-panel-exit');
+            }, 180);
         }
     }
+
+    if (!targetPanel.classList.contains('active')) {
+        targetPanel.classList.add('active');
+    }
+
+    if (!reduceMotion) {
+        targetPanel.classList.remove('rw-panel-enter-active');
+        targetPanel.classList.add('rw-panel-enter');
+        window.requestAnimationFrame(() => {
+            targetPanel.classList.add('rw-panel-enter-active');
+        });
+        window.setTimeout(() => {
+            targetPanel.classList.remove('rw-panel-enter', 'rw-panel-enter-active');
+        }, 220);
+    }
+
+    rwActivePanel = targetPanel;
+
+    if (shouldScroll) {
+        const scrollPanel = document.querySelector(`.tab-panel[data-panel="${tabId}"]`);
+        if (scrollPanel) {
+            scrollPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    rwStandaloneSaveTab(tabId);
+    rwStandaloneStaggerReveal(document.querySelector(`.tab-panel[data-panel="${tabId}"]`) || document);
+}
+
+function bindProfileWizard() {
+    const form = document.getElementById('formWargaLengkap');
+    if (!form) return;
+
+    const steps = Array.from(form.querySelectorAll('.rw-profile-step'));
+    const dots = Array.from(form.querySelectorAll('.rw-profile-step-dot'));
+    const progressFill = form.querySelector('.rw-profile-progress-fill');
+    if (!steps.length) return;
+
+    let stepIndex = 0;
+
+    const updateStep = () => {
+        steps.forEach((step, index) => {
+            step.classList.toggle('active', index === stepIndex);
+        });
+
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index <= stepIndex);
+            dot.classList.toggle('current', index === stepIndex);
+        });
+
+        if (progressFill) {
+            const progress = ((stepIndex + 1) / steps.length) * 100;
+            progressFill.style.width = `${progress}%`;
+        }
+    };
+
+    form.querySelectorAll('[data-profile-next]').forEach((button) => {
+        button.addEventListener('click', () => {
+            stepIndex = Math.min(steps.length - 1, stepIndex + 1);
+            updateStep();
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    form.querySelectorAll('[data-profile-prev]').forEach((button) => {
+        button.addEventListener('click', () => {
+            stepIndex = Math.max(0, stepIndex - 1);
+            updateStep();
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            stepIndex = index;
+            updateStep();
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    updateStep();
 }
 
 function bindTabNavigation() {
@@ -40,6 +202,128 @@ function bindTabNavigation() {
             event.preventDefault();
             activateTab(link.getAttribute('data-go-tab'), true);
         });
+    });
+}
+
+function bindStandaloneHaptic() {
+    const selector = [
+        '.btn',
+        '.rw-action-btn',
+        '.rw-sheet-trigger',
+        '.tab-btn',
+        '.tab-dock-btn',
+        '.info-important-item',
+        '.pantau-info-mini-item'
+    ].join(', ');
+
+    document.addEventListener('pointerdown', (event) => {
+        const target = event.target.closest(selector);
+        if (!target) return;
+        rwStandalonePulse(target);
+        rwStandaloneRipple(target, event);
+    });
+}
+
+function openStandaloneModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('rw-sheet-open');
+
+    const sheet = modal.querySelector('.rw-form-sheet');
+    const scrollWrap = modal.querySelector('.rw-sheet-scroll');
+    const form = modal.querySelector('.rw-sheet-form');
+    if (sheet) sheet.scrollTop = 0;
+    if (scrollWrap) scrollWrap.scrollTop = 0;
+    if (form) form.scrollTop = 0;
+}
+
+function closeStandaloneModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden', 'true');
+    const hasOpenModal = document.querySelector('.rw-form-modal:not(.hidden)');
+    if (!hasOpenModal) {
+        document.body.classList.remove('rw-sheet-open');
+    }
+}
+
+function bindSheetDrag(modal) {
+    if (!modal) return;
+    const sheet = modal.querySelector('.rw-form-sheet');
+    if (!sheet) return;
+
+    let startY = 0;
+    let deltaY = 0;
+    let dragging = false;
+
+    const onMove = (event) => {
+        if (!dragging) return;
+        const currentY = event.touches ? event.touches[0].clientY : event.clientY;
+        deltaY = Math.max(0, currentY - startY);
+        sheet.style.transform = `translateY(${deltaY}px)`;
+    };
+
+    const onEnd = () => {
+        if (!dragging) return;
+        dragging = false;
+        sheet.style.transform = '';
+        if (deltaY > 90) {
+            closeStandaloneModal(modal.id);
+        }
+        deltaY = 0;
+    };
+
+    const onStart = (event) => {
+        const origin = event.target.closest('.rw-form-handle, .rw-form-header');
+        if (!origin) return;
+        dragging = true;
+        startY = event.touches ? event.touches[0].clientY : event.clientY;
+        deltaY = 0;
+    };
+
+    sheet.addEventListener('touchstart', onStart, { passive: true });
+    sheet.addEventListener('touchmove', onMove, { passive: true });
+    sheet.addEventListener('touchend', onEnd);
+    sheet.addEventListener('mousedown', onStart);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onEnd);
+}
+
+function bindStandaloneModals() {
+    modalTriggers.forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+            const modalId = trigger.getAttribute('data-open-modal');
+            if (!modalId) return;
+            openStandaloneModal(modalId);
+        });
+    });
+
+    modalClosers.forEach((closer) => {
+        closer.addEventListener('click', () => {
+            const modalId = closer.getAttribute('data-close-modal');
+            if (!modalId) return;
+            closeStandaloneModal(modalId);
+        });
+    });
+
+    document.querySelectorAll('.rw-form-modal').forEach((modal) => {
+        bindSheetDrag(modal);
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeStandaloneModal(modal.id);
+            }
+        });
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        const activeModal = document.querySelector('.rw-form-modal:not(.hidden)');
+        if (activeModal) {
+            closeStandaloneModal(activeModal.id);
+        }
     });
 }
 
@@ -166,8 +450,11 @@ function bindAvatarPreview() {
 (function initRuangWargaStandalone() {
     initBootLoader();
     bindTabNavigation();
+    bindStandaloneModals();
     bindDynamicRows();
     bindAvatarPreview();
+    bindProfileWizard();
+    bindStandaloneHaptic();
     statusPernikahan?.addEventListener('change', togglePasangan);
     togglePasangan();
 
@@ -175,5 +462,12 @@ function bindAvatarPreview() {
     const forcedTab = params.get('tab');
     if (forcedTab === 'aduan' || params.has('aduan_page')) {
         activateTab('aduan');
+    } else {
+        const savedTab = rwStandaloneReadTab();
+        if (savedTab) {
+            activateTab(savedTab);
+        }
     }
+
+    rwStandaloneStaggerReveal(document);
 })();
