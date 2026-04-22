@@ -868,4 +868,5 @@ Swal.fire({
 <script src="<?= htmlspecialchars(smart_asset('public/js/file-source-picker.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
 <script src="<?= htmlspecialchars(smart_asset('public/js/ruang-warga-standalone.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
-</html>
+</html
+

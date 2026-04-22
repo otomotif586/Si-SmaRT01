@@ -271,3 +271,5 @@ $penjualData = $stmtPenjual->fetch(PDO::FETCH_ASSOC);
     <script src="<?= htmlspecialchars(smart_asset('public/js/ruang-penjual.js', smart_asset_version()), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>
+
+
