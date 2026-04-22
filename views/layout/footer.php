@@ -17,6 +17,7 @@
 <script src="<?= htmlspecialchars(smart_asset('public/js/pos-keuangan.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
 <script src="<?= htmlspecialchars(smart_asset('public/js/pembukuan.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
 <script src="<?= htmlspecialchars(smart_asset('public/js/keamanan.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
+<<<<<<< HEAD
 <script src="<?= htmlspecialchars(smart_asset('public/js/info.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
 <script src="<?= htmlspecialchars(smart_asset('public/js/smart-installer-theme.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
 =======
@@ -56,3 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 >>>>>>> 2cfa5c83922f435094998b0ddbe53f3f01287bcf
+=======
+<script src="<?= htmlspecialchars(smart_asset('public/js/info.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
+>>>>>>> parent of 6a655ba (revert)

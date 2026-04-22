@@ -10,34 +10,18 @@
     <title>Ruang Warga</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Outfit:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/ruang-warga-standalone.css', 'auto'), ENT_QUOTES, 'UTF-8') ?>">
-    <link rel="stylesheet" href="<?= htmlspecialchars(smart_asset('public/css/smart-installer-theme.css', 'auto'), ENT_QUOTES, 'UTF-8') ?>">
 </head>
-<body class="rw-fintech-theme smart-installer-rw sx-font-body sx-installer-shell">
+<body class="rw-fintech-theme">
 <div id="rwBootLoader" class="rw-boot-loader" aria-hidden="true">
     <div class="rw-boot-card">
         <div class="rw-boot-logo"><i class="fas fa-house-user"></i></div>
         <h3>Ruang Warga</h3>
         <p>Menyiapkan dashboard personal Anda...</p>
         <div class="rw-boot-track"><span id="rwBootFill"></span></div>
-    </div>
-</div>
-
-<div class="smart-installer-navbar">
-    <div class="si-nav-inner">
-        <a href="index.php" class="si-logo">
-            <span class="si-logo-badge"><i class="fas fa-rocket"></i></span>
-            <span>Si SmaRT</span>
-        </a>
-        <div class="si-nav-links">
-            <a href="#si-rw-hero">Install</a>
-            <a href="#si-rw-feature">Features</a>
-            <a href="#si-rw-changelog">v2.0</a>
-        </div>
-        <a href="ruang_warga.php" class="si-download-btn" data-si-install>Download Now</a>
     </div>
 </div>
 
@@ -55,49 +39,6 @@
                 </form>
             <?php endif; ?>
         </div>
-    </div>
-
-    <section id="si-rw-hero" class="smart-installer-hero">
-        <div class="si-panel si-main-card">
-            <div class="si-app-meta">
-                <div class="si-app-icon"><i class="fas fa-house-user"></i></div>
-                <div>
-                    <h2 class="si-app-title">Si SmaRT</h2>
-                    <p class="si-app-publisher">Go Digital</p>
-                </div>
-            </div>
-            <div class="si-badges">
-                <span class="si-badge">4.9 ★</span>
-                <span class="si-badge">Ruang Warga Installer</span>
-                <span class="si-badge">Realtime Sync</span>
-            </div>
-            <button class="si-cta" type="button" data-si-install>Install / Get Started</button>
-            <div class="si-install-track"><span class="si-install-fill"></span></div>
-            <div class="si-steps">
-                <div class="si-step is-active">Downloading</div>
-                <div class="si-step">Verifying</div>
-                <div class="si-step">Installing</div>
-                <div class="si-step">Ready</div>
-            </div>
-        </div>
-        <div class="si-panel si-right-stack">
-            <div class="si-phone-shot">Mobile Installer Card</div>
-            <div class="si-phone-shot">Permissions Prompt</div>
-            <div class="si-phone-shot">Review Snapshot</div>
-        </div>
-    </section>
-
-    <div class="sx-permission-list">
-        <h4 class="sx-font-display">Permissions</h4>
-        <div class="sx-permission-row"><span><i class="fas fa-camera"></i> Kamera</span><strong>Upload lampiran aduan</strong></div>
-        <div class="sx-permission-row"><span><i class="fas fa-folder-open"></i> File</span><strong>Unggah dokumen warga</strong></div>
-        <div class="sx-permission-row"><span><i class="fas fa-comment-dots"></i> Notifikasi</span><strong>Status update realtime</strong></div>
-    </div>
-
-    <div class="sx-screens">
-        <div class="sx-screen"><span>Login NIK</span></div>
-        <div class="sx-screen"><span>History Iuran</span></div>
-        <div class="sx-screen"><span>Aduan Warga</span></div>
     </div>
 
     <?php if (!$isLoggedIn): ?>
@@ -800,54 +741,6 @@
     <?php endif; ?>
 </div>
 
-<section id="si-rw-feature" class="si-sections">
-    <div class="si-grid-3">
-        <article class="si-card"><h4>Mobile Installer Feel</h4><p>Tampilan onboarding dan install flow dibuat mirip app store modern.</p></article>
-        <article class="si-card"><h4>Desktop Split Hero</h4><p>Layout lebih luas untuk PC tanpa mempengaruhi fitur form dan API yang ada.</p></article>
-        <article class="si-card"><h4>Glassmorphism UI</h4><p>Dark startup theme dengan card blur dan accent electric indigo.</p></article>
-    </div>
-    <article class="si-card">
-        <h4>Compatible With</h4>
-        <div class="si-compat">
-            <span class="si-chip">Windows</span>
-            <span class="si-chip">macOS</span>
-            <span class="si-chip">Linux</span>
-            <span class="si-chip">Android</span>
-            <span class="si-chip">iOS</span>
-        </div>
-    </article>
-    <article class="si-card">
-        <h4>Download Options</h4>
-        <div class="si-download-options">
-            <a href="ruang_warga.php" class="si-os-btn" data-si-install>.exe <small>Windows</small></a>
-            <a href="ruang_warga.php" class="si-os-btn" data-si-install>.dmg <small>macOS</small></a>
-            <a href="ruang_warga.php" class="si-os-btn" data-si-install>.AppImage <small>Linux</small></a>
-        </div>
-    </article>
-    <article id="si-rw-changelog" class="si-card">
-        <h4>What's New In v2.0</h4>
-        <ul class="si-release-list">
-            <li>Startup dark mobile-first visual pada Ruang Warga.</li>
-            <li>Animated install progress dengan step transition easing.</li>
-            <li>Sticky floating install bar dan release notes section.</li>
-        </ul>
-    </article>
-    <div class="sx-reviews">
-        <article class="sx-review-card"><strong>Dina A.</strong><div class="sx-review-stars">★★★★★</div><p>Login dan menu warga sekarang lebih modern seperti native app.</p></article>
-        <article class="sx-review-card"><strong>Rio M.</strong><div class="sx-review-stars">★★★★★</div><p>Mode mobile jadi lebih enak dan CTA install jelas.</p></article>
-        <article class="sx-review-card"><strong>Nadya S.</strong><div class="sx-review-stars">★★★★★</div><p>Tampilan baru tetap mempertahankan fitur lama tanpa error.</p></article>
-    </div>
-    <footer class="sx-footer">
-        <div><a href="index.php">Portal</a><a href="pasar.php">Pasar</a><a href="ruang_penjual.php">Penjual</a></div>
-        <span>Made with ❤</span>
-    </footer>
-</section>
-
-<div class="si-mobile-install-bar">
-    <p>Install Si SmaRT v2.0</p>
-    <button type="button" data-si-install>Install</button>
-</div>
-
 <?php if ($isLoggedIn): ?>
 <div class="mobile-tab-dock" aria-label="Navigasi cepat Ruang Warga">
     <button class="tab-dock-btn active" data-tab="ringkasan"><i class="fas fa-house"></i><span>Ringkasan</span></button>
@@ -930,7 +823,6 @@ Swal.fire({
 </script>
 
 <script src="<?= htmlspecialchars(smart_asset('public/js/file-source-picker.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
-<script src="<?= htmlspecialchars(smart_asset('public/js/smart-installer-theme.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
 <script src="<?= htmlspecialchars(smart_asset('public/js/ruang-warga-standalone.js', 'auto'), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>
